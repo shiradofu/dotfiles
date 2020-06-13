@@ -1,0 +1,25 @@
+[filter "lfs"]
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
+[user]
+  name = shiradofu
+  email = 43514606+shiradofu@users.noreply.github.com
+[color]
+  ui = true
+[alias]
+  aa = add -A
+  cm = "!f() { git commit -m $1; }; f"
+  st = status
+  co = checkout
+  br = branch
+  lg = log --graph --date=relative --pretty=tformat:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%an %ad)%Creset'
+[push]
+  default = simple
+[core]
+  editor = nvim
+  autocrlf = false
+  ignorecase = false
+  quotepath = false
+  pager = less -R -F -X

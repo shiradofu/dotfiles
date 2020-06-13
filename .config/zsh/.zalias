@@ -1,0 +1,89 @@
+### alias
+alias dc="cd"
+alias ll="ls -lahFG"
+alias vim="nvim"
+
+# tmux
+alias tmns='tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf new -s'
+alias tmls='tmux ls'
+alias tmat='tmux a -t'
+alias tmkt='tmux kill-session -t'
+
+# miscellaneous
+alias ansic='for fore in `seq 30 37`; do printf "\e[${fore}m \\\e[${fore}m \e[m\n"; for mode in 1 4 5; do printf "\e[${fore};${mode}m \\\e[${fore};${mode}m \e[m"; for back in `seq 40 47`; do printf "\e[${fore};${back};${mode}m \\\e[${fore};${back};${mode}m \e[m"; done; echo; done; echo; done; printf " \\\e[m\n"'
+alias 256c='for code in {000..255}; do print -nP -- "%F{$code}$code %f"; [ $((${code} % 16)) -eq 15 ] && echo; done'
+
+# mac用の設定
+if [ `uname` = "Darwin" ]; then
+  alias sed="gsed"
+  alias showhiddenfiles='defaults write com.apple.finder AppleShowAllFiles FALSE && killall Finder'
+  alias hidehiddenfiles='defaults write com.apple.finder AppleShowAllFiles TRUE && killall Finder'
+  alias clcl='osascript -e "set the clipboard to {}" && echo "cleared clipboard"'
+  alias disable-dock='defaults write com.apple.Dock autohide-delay -float 30; killall Dock'
+  alias enable-dock='defaults write com.apple.Dock autohide-delay; killall Dock'
+fi
+
+### suffix alias
+# ref: https://itchyny.hatenablog.com/entry/20130227/1361933011
+function extract() {
+  case $1 in
+    *.tar.gz|*.tgz) tar xzvf $1;;
+    *.tar.xz) tar Jxvf $1;;
+    *.zip) unzip $1;;
+    # *.lzh) lha e $1;;
+    *.tar.bz2|*.tbz) tar xjvf $1;;
+    *.tar.Z) tar zxvf $1;;
+    *.gz) gzip -d $1;;
+    *.bz2) bzip2 -dc $1;;
+    *.Z) uncompress $1;;
+    *.tar) tar xvf $1;;
+    # *.arj) unarj $1;;
+  esac
+}
+alias -s {gz,tgz,zip,bz2,tbz,Z,tar,xz}=extract
+
+### global alias
+# ref: https://qiita.com/matsu_chara/items/8372616f52934c657214
+typeset -A abbreviations
+abbreviations=(
+    # directory
+    "..."       "../.."
+    "...."      "../../.."
+    "....."     "../../../.."
+    "zshenv"    "$HOME/.zshenv"
+    "zshrc"     "$XDG_CONFIG_HOME/zsh/.zshrc"
+    "zalias"    "$XDG_CONFIG_HOME/zsh/.zalias"
+    "vim"      "$XDG_CONFIG_HOME/nvim/"
+
+    # pipe
+    "G"        "| grep"
+    "R"        "| rg"
+    "X"        "| xargs"
+    "C"        "| cat"
+    "L"        "| less"
+    "A"        "| awk"
+    "S"        "| sed"
+    "E"        "2>&1 > /dev/null"
+    "N"        "> /dev/null"
+)
+
+# create aliases for the abbreviations too
+for abbr in ${(k)abbreviations}; do
+   alias -g $abbr="${abbreviations[$abbr]}"
+done
+
+magic-abbrev-expand() {
+    local MATCH
+    LBUFFER=${LBUFFER%%(#m)[-_a-zA-Z0-9\.]#}
+    LBUFFER+=${abbreviations[$MATCH]:-$MATCH}
+    zle self-insert
+}
+
+no-magic-abbrev-expand() {
+    LBUFFER+=' '
+}
+
+zle -N magic-abbrev-expand
+zle -N no-magic-abbrev-expand
+bindkey " " magic-abbrev-expand
+bindkey "^x " no-magic-abbrev-expand
