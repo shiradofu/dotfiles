@@ -14,7 +14,7 @@ alias ansic='for fore in `seq 30 37`; do printf "\e[${fore}m \\\e[${fore}m \e[m\
 alias 256c='for code in {000..255}; do print -nP -- "%F{$code}$code %f"; [ $((${code} % 16)) -eq 15 ] && echo; done'
 
 # mac用の設定
-if [ `uname` = "Darwin" ]; then
+if [ $(uname) = "Darwin" ]; then
   alias sed="gsed"
   alias showhiddenfiles='defaults write com.apple.finder AppleShowAllFiles FALSE && killall Finder'
   alias hidehiddenfiles='defaults write com.apple.finder AppleShowAllFiles TRUE && killall Finder'
@@ -22,6 +22,7 @@ if [ `uname` = "Darwin" ]; then
   alias disable-dock='defaults write com.apple.Dock autohide-delay -float 30; killall Dock'
   alias enable-dock='defaults write com.apple.Dock autohide-delay; killall Dock'
 fi
+### end of alias
 
 ### suffix alias
 # ref: https://itchyny.hatenablog.com/entry/20130227/1361933011

@@ -19,6 +19,7 @@ setopt no_beep
 setopt no_hist_beep
 setopt no_list_beep
 setopt correct
+typeset -U path PATH
 # 単語の一部として扱う文字のセットから/を除外: Ctrl-w(単語削除)が/で止まる
 WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 KEYTIMEOUT=1
