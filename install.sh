@@ -58,6 +58,7 @@ while read formula; do
   [ -z "${formula}" ] && continue
   exists "${formula}" && continue
   # [ "${formula}" = "rg" ] && brew install ripgrep; continue
+  # [ "${formula}" = "nvim" ] && brew install neovim; continue
   # [ "${formula}" = "yarn" ] && brew install yarn --ignore-dependencies; continue
   echo ${formula}
 done <<EOS
@@ -65,7 +66,7 @@ git
 rg
 fzf
 tmux
-neovim
+nvim
 nodenv
 pyenv
 pyenv-virtualenv
