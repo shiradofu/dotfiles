@@ -65,6 +65,7 @@ done <<EOS
 git
 rg
 fzf
+exa
 tmux
 nvim
 nodenv
