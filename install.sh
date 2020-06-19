@@ -71,6 +71,7 @@ nodenv
 pyenv
 pyenv-virtualenv
 yarn
+hub
 $([ ${OS} = "Mac" ] && echo "gnu-sed")
 $([ ${OS} = "WSL" ] && echo "zsh")
 EOS
