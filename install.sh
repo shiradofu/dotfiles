@@ -57,10 +57,11 @@ info_m "installing formulae with homebrew..."
 while read formula; do
   [ -z "${formula}" ] && continue
   exists "${formula}" && continue
-  # [ "${formula}" = "rg" ] && brew install ripgrep; continue
-  # [ "${formula}" = "nvim" ] && brew install neovim; continue
-  # [ "${formula}" = "yarn" ] && brew install yarn --ignore-dependencies; continue
-  echo ${formula}
+  case ${formula} in
+    yarn ) brew install yarn --ignore-dependencies;;
+    aws  ) brew install awscli;;
+    *    ) brew install ${formula};;
+  esac
 done <<EOS
 git
 rg
