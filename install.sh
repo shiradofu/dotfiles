@@ -66,6 +66,7 @@ git
 rg
 fzf
 exa
+bat
 tmux
 nvim
 nodenv
@@ -73,6 +74,7 @@ pyenv
 pyenv-virtualenv
 yarn
 hub
+aws
 $([ ${OS} = "Mac" ] && echo "gnu-sed")
 $([ ${OS} = "WSL" ] && echo "zsh")
 EOS
