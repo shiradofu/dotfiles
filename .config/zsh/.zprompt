@@ -45,6 +45,9 @@ git_info() {
   if ! git diff --cached --quiet 2> /dev/null; then
     FLAGS+=( "$STAGED" )
   fi
+  if [ -n "$(git stash list)" ]; then
+    STASH="%F{yellow}≡%f"
+  fi
 
   local -a GIT_INFO
   GIT_INFO+=( "%B±%b" )
@@ -52,10 +55,10 @@ git_info() {
   [[ ${#DIVERGENCES[@]} -ne 0 ]] && GIT_INFO+=( "${(j::)DIVERGENCES}" )
   [[ ${#FLAGS[@]} -ne 0 ]] && GIT_INFO+=( "${(j::)FLAGS}" )
   GIT_INFO+=( "%B$GIT_LOCATION%b" )
+  [ -n "$STASH" ] && GIT_INFO+=( "$STASH" )
   echo " ${(j: :)GIT_INFO}"
 }
 
 # Use ❯ as the non-root prompt character; # for root
 # Change the prompt character color if the last command had a nonzero exit code
 PROMPT=' %B$(ssh_info)%{$fg[magenta]%}%~%u%b$(git_info) %(?.%{$fg[blue]%}.%{$fg[red]%})%(!.#.❯❯❯)%{$reset_color%} '
-
