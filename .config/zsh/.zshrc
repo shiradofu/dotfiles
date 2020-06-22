@@ -1,4 +1,4 @@
-## STATS
+### STATS
 #zmodload zsh/zprof && zprof
 
 # If not running interactively, don't do anything
@@ -34,7 +34,6 @@ source $ZDOTDIR/.zprompt
 
 
 ### COMPLETION_SETTINGS
-autoload -Uz compinit; compinit -u
 setopt auto_list		              # 補完候補を一覧表示にする
 setopt auto_menu		              # TABで順に補完候補を切り替える
 zstyle ':completion:*:default' menu select=2  # 補完一覧をTab/矢印で選択
@@ -53,6 +52,79 @@ setopt extended_history
 setopt hist_ignore_all_dups     # ZSH_AUTOSUGGEST_STRATEGY=match_prev_cmdを使用する際は無効化
 setopt hist_ignore_space        # spaceで始まる場合、コマンド履歴に追加しない
 setopt hist_reduce_blanks       # 余分なスペースを削除してヒストリに記録する
+
+
+### FZF SETTINGS
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!.git'" # rigprep required
+export FZF_DEFAULT_OPTS="--height 40% --reverse --border"
+
+repo() {
+  moveto=$(ghq root)/$(ghq list | fzf)
+  cd $moveto
+}
+
+# CTRL-R - Paste the selected command from history into the command line
+__fzfcmd() {
+  [ -n "$TMUX_PANE" ] && { [ "${FZF_TMUX:-0}" != 0 ] || [ -n "$FZF_TMUX_OPTS" ]; } &&
+    echo "fzf-tmux ${FZF_TMUX_OPTS:--d${FZF_TMUX_HEIGHT:-40%}} -- " || echo "fzf"
+}
+fzf-history-widget() {
+  local selected num
+  setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
+  selected=( $(fc -rl 1 | perl -ne 'print if !$seen{(/^\s*[0-9]+\s+(.*)/, $1)}++' |
+    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index \
+    --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(__fzfcmd)) )
+  local ret=$?
+  if [ -n "$selected" ]; then
+    num=$selected[1]
+    if [ -n "$num" ]; then
+      zle vi-fetch-history -n $num
+    fi
+  fi
+  zle reset-prompt
+  return $ret
+}
+zle     -N   fzf-history-widget
+bindkey '^R' fzf-history-widget
+
+
+### Added by Zinit's installer
+if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
+    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} \
+      Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
+    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
+        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
+        print -P "%F{160}▓▒░ The clone has failed.%f%b"
+fi
+
+source "$HOME/.zinit/bin/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit light-mode for \
+    zinit-zsh/z-a-as-monitor \
+    zinit-zsh/z-a-patch-dl \
+    zinit-zsh/z-a-bin-gem-node
+
+### End of Zinit's installer chunk
+zinit wait'0' lucid light-mode for atinit"zicompinit; zicdreplay" \
+  zdharma/fast-syntax-highlighting
+zinit ice wait'0' lucid blockf light-mode for zsh-users/zsh-completions
+zinit wait'0' lucid atload'_zsh_autosuggest_start' light-mode for \
+    zsh-users/zsh-autosuggestions
+ZSH_AUTOSUGGEST_STRATEGY=completion
+ZSH_AUTOSUGGEST_USE_ASYNC=1
+
+zinit ice wait'0' lucid as"completion" for \
+  https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker \
+  https://github.com/docker/compose/blob/master/contrib/completion/zsh/_docker-compose
+
+autoload bashcompinit && bashcompinit
+# complete -C '/usr/local/bin/aws_completer' aws
 
 
 ### STATS
