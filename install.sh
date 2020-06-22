@@ -70,10 +70,14 @@ exa
 bat
 tmux
 nvim
+deno
 nodenv
+yarn
+rbenv
+phpbrew
 pyenv
 pyenv-virtualenv
-yarn
+ghq
 hub
 aws
 $([ ${OS} = "Mac" ] && echo "gnu-sed")
