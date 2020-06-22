@@ -1,10 +1,10 @@
 #!/bin/sh
 
 NC="\033[0m"
-ok_m()    { printf "\033[0;32m$1\n${NC}"; }      # green
-err_m()   { printf "\033[1;31m$1\n${NC}" 1>&2; } # red
-info_m()  { printf "\033[0;34m$1\n${NC}"; }      # blue
-other_m() { printf "\033[1;35m$1\n${NC}"; }      # purple
+ok_m()    { printf "\033[0;32m$1\n${NC}"; }                # green
+err_m()   { printf "\033[1;31m$1\n${NC}" 1>&2; return 1; } # red
+info_m()  { printf "\033[0;34m$1\n${NC}"; }                # blue
+other_m() { printf "\033[1;35m$1\n${NC}"; }                # purple
 exists()  { type $1 > /dev/null 2>&1; }
 required() if ! exists $1; then err_m "$1 required."; exit 1; fi
 
@@ -21,16 +21,28 @@ esac
 
 hash -r
 
+if ! exists "sudo"; then
+  err_m "please enable 'sudo' command."
+  exit 1
+fi
+echo "Please input sudo password"
+stty -echo
+read password
+stty echo
+printf "\n"
+echo "${password}" | sudo -S echo -n "" >/dev/null 2>&1 || err_m "password is wrong" || exit 1
+
+info_m "installing basic packages..."
 if "${Linux}" || "${WSL}"; then
   if exists "apt"; then
-    sudo apt update -y
-    sudo apt upgrade -y
-    sudo apt install build-essential curl file git bash sudo -y
+    echo "${password}" | sudo -S apt update -y
+    echo "${password}" | sudo -S apt upgrade -y
+    echo "${password}" | sudo -S apt install build-essential curl file git bash -y
   elif exists "yum"; then
-    sudo yum update -y
-    sudo yum groupinstall 'Development Tools' -y
-    sudo yum install curl file git bash sudo -y
-    sudo yum install libxcrypt-compat -y
+    echo "${password}" | sudo -S yum update -y
+    echo "${password}" | sudo -S yum groupinstall 'Development Tools' -y
+    echo "${password}" | sudo -S yum install curl file git bash -y
+    echo "${password}" | sudo -S yum install libxcrypt-compat -y
   fi
 fi
 
@@ -56,8 +68,7 @@ while read formula; do
   [ -z "${formula}" ] && continue
   exists "${formula}" && continue
   case ${formula} in
-    fzf  ) (brew --prefix)/opt/fzf/install --no-key-bindings --completion --no-update-rc
-    yarn ) brew install yarn --ignore-dependencies;;
+    fzf  ) $(brew --prefix)/opt/fzf/install --no-key-bindings --completion --no-update-rc;;
     aws  ) brew install awscli;;
     *    ) brew install ${formula};;
   esac
