@@ -7,46 +7,44 @@ info_m()  { printf "\033[0;34m$1\n${NC}"; }      # blue
 other_m() { printf "\033[1;35m$1\n${NC}"; }      # purple
 exists()  { type $1 > /dev/null 2>&1; }
 required() if ! exists $1; then err_m "$1 required."; exit 1; fi
-# pkg_initialized=false
+
+MacOS=false
+WSL=false
+Linux=false
 
 case $(uname) in
-  Darwin*     ) OS="Mac"  ;;
-  *microsoft* ) OS="WSL"  ;;
-  Linux*      ) OS="Linux";;
+  Darwin*     ) MacOS=true ;;
+  *microsoft* ) WSL=true   ;;
+  Linux*      ) Linux=true ;;
   * ) err_m "$(uname -a) not supported."; exit 1;;
 esac
 
 hash -r
-required "bash"
-required "sudo"
+
+if "${Linux}" || "${WSL}"; then
+  if exists "apt"; then
+    sudo apt update -y
+    sudo apt upgrade -y
+    sudo apt install build-essential curl file git bash sudo -y
+  elif exists "yum"; then
+    sudo yum update -y
+    sudo yum groupinstall 'Development Tools' -y
+    sudo yum install curl file git bash sudo -y
+    sudo yum install libxcrypt-compat -y
+  fi
+fi
 
 # install homebrew
 if ! exists "brew"; then
   info_m "preparing before installing homebrew..."
-  case ${OS} in
-    Mac )
-      if ! exists "xcode-select"; then
-        info_m "installing xcode-select..."
-        xcode-select --install
-      fi
-      ;;
-    WSL | Linux )
-      if exists "apt"; then
-        sudo apt update
-        sudo apt upgrade
-        sudo apt install build-essential curl file git -y
-      elif exists "yum"; then
-        sudo yum update
-        sudo yum groupinstall 'Development Tools' -y
-        sudo yum install curl file git -y
-        sudo yum install libxcrypt-compat -y
-      fi
-      ;;
-  esac
+  if "${MacOS}"; then
+    if ! exists "xcode-select"; then
+      info_m "installing xcode-select..."
+      xcode-select --install
+    fi
   info_m "installing homebrew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-  if [ ${OS} = "WSL" -o ${OS} = "Linux" ]; then
-    eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+  "${WSL}" || "${Linux}" && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
   fi
 fi
 
@@ -57,23 +55,31 @@ info_m "installing formulae with homebrew..."
 while read formula; do
   [ -z "${formula}" ] && continue
   exists "${formula}" && continue
-  # [ "${formula}" = "rg" ] && brew install ripgrep; continue
-  # [ "${formula}" = "nvim" ] && brew install neovim; continue
-  # [ "${formula}" = "yarn" ] && brew install yarn --ignore-dependencies; continue
-  echo ${formula}
+  case ${formula} in
+    fzf  ) (brew --prefix)/opt/fzf/install --no-key-bindings --completion --no-update-rc
+    yarn ) brew install yarn --ignore-dependencies;;
+    aws  ) brew install awscli;;
+    *    ) brew install ${formula};;
+  esac
 done <<EOS
 git
 rg
 fzf
 exa
+bat
 tmux
 nvim
+deno
 nodenv
+yarn
+rbenv
+phpbrew
 pyenv
 pyenv-virtualenv
-yarn
+ghq
 hub
-$([ ${OS} = "Mac" ] && echo "gnu-sed")
-$([ ${OS} = "WSL" ] && echo "zsh")
+aws
+$("${MacOS}" && echo "gnu-sed")
+$("${Linux}" || "${WSL}" && echo "zsh")
 EOS
 ok_m "brew install completed."
