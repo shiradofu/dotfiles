@@ -64,6 +64,7 @@ other_m "\nOK, now you can leave the computer!\n"
 sleep 5
 
 info_m "installing formulae with homebrew..."
+brew update
 while read formula; do
   [ -z "${formula}" ] && continue
   exists "${formula}" && continue
@@ -84,7 +85,7 @@ deno
 nodenv
 yarn
 rbenv
-phpbrew
+php
 pyenv
 pyenv-virtualenv
 ghq
@@ -94,3 +95,31 @@ $("${MacOS}" && echo "gnu-sed")
 $("${Linux}" || "${WSL}" && echo "zsh")
 EOS
 ok_m "brew install completed."
+
+info_m "setting language enviroment..."
+info_m "nodenv:"
+eval "$(nodenv init -)"
+nodenv install 12.18.0
+nodenv global 12.18.0
+
+info_m "rbenv:"
+eval "$(rbenv init -)"
+rb_latest=$(rbenv install --list-all | grep '^[0-9.]\+$' | tail -1)
+rbenv install ${rb_latest}
+rbenv global ${rb_latest}
+
+info_m "pyenv:"
+eval "$(pyenv init -)"
+pyenv install 2.7.15
+pyenv virtualenv 2.7.15 neovim-python2
+pyenv activate neovim-python2
+pip2 install neovim
+pyenv deactivate
+
+py_latest=$(pyenv install -l | grep '^  [0-9.]\+$' | tail -1)
+pyenv install ${py_latest}
+pyenv virtualenv ${py_latest} neovim-python3
+pyenv activate neovim-python3
+pip install neovim
+pyenv deactivate
+pyenv global ${py_latest}

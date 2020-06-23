@@ -4,14 +4,13 @@ augroup END
 
 " for only neovim. in pyenv virtualenv named 'neovim-python3'
 if has('nvim') && isdirectory( $PYENV_ROOT."/versions/neovim-python3" )
+  let g:python_host_prog = $PYENV_ROOT.'/versions/neovim-python2/bin/python'
   let g:python3_host_prog = $PYENV_ROOT.'/versions/neovim-python3/bin/python'
 endif
 
-" プラグインがインストールされるディレクトリ
-let s:dein_dir = expand('~/.cache/dein')
-" dein.vim 本体
+" dir for plugin entities
+let s:dein_dir = expand($XDG_CACHE_HOME.'/dein')
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
-" dein.vim がなければ github から取得
 if &runtimepath !~# '/dein.vim'
   if !isdirectory(s:dein_repo_dir)
     execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
@@ -65,5 +64,3 @@ call plug#begin('~/.local/share/nvim/plugged')
   Plug 'mtth/scratch.vim'
 call plug#end()
 nnoremap <silent> sf :Files<CR>
-
-

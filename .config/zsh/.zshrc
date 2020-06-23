@@ -127,6 +127,27 @@ autoload bashcompinit && bashcompinit
 # complete -C '/usr/local/bin/aws_completer' aws
 
 
+### LANGUAGE SETTINGS
+
+nodenv() {
+  unfunction "$0"
+  source <(nodenv init -)
+  $0 "$@"
+}
+
+rbenv() {
+  unfunction "$0"
+  source <(rbenv init -)
+  $0 "$@"
+}
+
+pyenv() {
+  unfunction "$0"
+  source <(pyenv init -)
+  source <(pyenv virtualenv-init -)
+  $0 "$@"
+}
+
 ### STATS
 #if (which zprof > /dev/null) ;then
 #  zprof | less
