@@ -136,3 +136,10 @@ if ! exists "tmuximum"; then
   git clone https://github.com/arks22/tmuximum.git $HOME/.tmuximum
   echo "${password}" | sudo -S ln -sf $HOME/tmuximum/tmuximum /usr/local/bin/tmuximum
 fi
+
+while read path; do
+  ln -s "${path}" ~
+done <<EOS
+$(dirname $0)/.zshenv
+$(dirname $0)/.config
+EOS
