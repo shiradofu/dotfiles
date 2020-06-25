@@ -23,6 +23,7 @@ if ! exists "sudo"; then
   err_m "please enable 'sudo' command."
   exit 1
 fi
+[ -t 1 ] && exec < /dev/tty
 echo "Please input sudo password"
 stty -echo
 read password
@@ -90,7 +91,7 @@ ghq
 hub
 aws
 $("${MacOS}" && echo "gnu-sed")
-$("${Linux}" || "${WSL}" && echo "zsh")
+$("${Linux}" && echo "zsh")
 EOS
 ok_m "brew install completed."
 
