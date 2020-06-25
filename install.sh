@@ -9,12 +9,10 @@ exists()  { type $1 > /dev/null 2>&1; }
 required() if ! exists $1; then err_m "$1 required."; exit 1; fi
 
 MacOS=false
-WSL=false
 Linux=false
 
 case $(uname) in
   Darwin*     ) MacOS=true ;;
-  *microsoft* ) WSL=true   ;;
   Linux*      ) Linux=true ;;
   * ) err_m "$(uname -a) not supported."; exit 1;;
 esac
@@ -33,7 +31,7 @@ printf "\n"
 echo "${password}" | sudo -S echo -n "" >/dev/null 2>&1 || err_m "password is wrong" || exit 1
 
 info_m "installing basic packages..."
-if "${Linux}" || "${WSL}"; then
+if "${Linux}"; then
   if exists "apt"; then
     echo "${password}" | sudo -S apt update -y
     echo "${password}" | sudo -S apt upgrade -y
@@ -56,7 +54,7 @@ if ! exists "brew"; then
     fi
   info_m "installing homebrew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-  "${WSL}" || "${Linux}" && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+  "${Linux}" && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
   fi
 fi
 
