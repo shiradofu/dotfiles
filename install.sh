@@ -36,11 +36,11 @@ if "${Linux}"; then
   if exists "apt"; then
     echo "${password}" | sudo -S apt update -y
     echo "${password}" | sudo -S apt upgrade -y
-    echo "${password}" | sudo -S apt install build-essential curl file git bash -y
+    echo "${password}" | sudo -S apt install build-essential curl file git bash zlib1g-dev openssl -y
   elif exists "yum"; then
     echo "${password}" | sudo -S yum update -y
     echo "${password}" | sudo -S yum groupinstall 'Development Tools' -y
-    echo "${password}" | sudo -S yum install curl file git bash -y
+    echo "${password}" | sudo -S yum install curl file git bash zlib1g-dev openssl -y
     echo "${password}" | sudo -S yum install libxcrypt-compat -y
   fi
 fi
