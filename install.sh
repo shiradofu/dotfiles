@@ -80,7 +80,6 @@ exa
 bat
 tmux
 nvim
-deno
 nodenv
 yarn
 rbenv
@@ -91,6 +90,7 @@ ghq
 hub
 aws
 $("${MacOS}" && echo "gnu-sed")
+$("${MacOS}" && echo "deno")
 $("${Linux}" && echo "zsh")
 EOS
 ok_m "brew install completed."
