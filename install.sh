@@ -12,8 +12,8 @@ MacOS=false
 Linux=false
 
 case $(uname) in
-  Darwin*     ) MacOS=true ;;
-  Linux*      ) Linux=true ;;
+  Darwin* ) MacOS=true ;;
+  Linux*  ) Linux=true ;;
   * ) err_m "$(uname -a) not supported."; exit 1;;
 esac
 
