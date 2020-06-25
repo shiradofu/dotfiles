@@ -95,19 +95,19 @@ $("${Linux}" && echo "zsh")
 EOS
 ok_m "brew install completed."
 
-info_m "setting language enviroment..."
-info_m "nodenv:"
+info_m "installing languages..."
+info_m "node.js:"
 eval "$(nodenv init -)"
 nodenv install 12.18.0
 nodenv global 12.18.0
 
-info_m "rbenv:"
+info_m "Ruby:"
 eval "$(rbenv init -)"
 rb_latest=$(rbenv install --list-all | grep '^[0-9.]\+$' | tail -1)
 rbenv install ${rb_latest}
 rbenv global ${rb_latest}
 
-info_m "pyenv:"
+info_m "Python2:"
 eval "$(pyenv init -)"
 pyenv install 2.7.15
 pyenv virtualenv 2.7.15 neovim-python2
@@ -115,6 +115,7 @@ pyenv activate neovim-python2
 pip2 install neovim
 pyenv deactivate
 
+info_m "Python3:"
 py_latest=$(pyenv install -l | grep '^  [0-9.]\+$' | tail -1)
 pyenv install ${py_latest}
 pyenv virtualenv ${py_latest} neovim-python3
