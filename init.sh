@@ -37,7 +37,7 @@ echo "Please input password"
 stty -echo
 read password
 stty echo
-printf "\n"
+sudo -K
 echo "${password}" | sudo -S echo -n "" >/dev/null 2>&1 || err_m "password is wrong" || exit 1
 
 info_m "installing basic packages..."
