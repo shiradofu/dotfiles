@@ -133,8 +133,9 @@ fi
 
 if ! exists "tmuximum"; then
   info_m "installing tpm and tmuximum..."
-  git clone https://github.com/arks22/tmuximum.git $HOME/.tmuximum
-  echo "${password}" | sudo -S ln -sf $HOME/tmuximum/tmuximum /usr/local/bin/tmuximum
+  git clone https://github.com/arks22/tmuximum.git ~/tmuximum
+  echo "${password}" | sudo -S ln -sf ~/tmuximum/tmuximum /usr/local/bin/tmuximum
+  rm -rf ~/tmuximum
 fi
 
 while read path; do
