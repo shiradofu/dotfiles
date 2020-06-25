@@ -19,6 +19,6 @@
 !.zshenv
 
 !install.sh
-!boot.sh
+!init.sh
 
 !README.md
