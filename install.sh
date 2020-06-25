@@ -123,3 +123,16 @@ pyenv activate neovim-python3
 pip install neovim
 pyenv deactivate
 pyenv global ${py_latest}
+
+
+if [ -d ~/.tmux/plugins/tpm ]; then
+  info_m "installing tpm and tmux plugins..."
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+  bash ~/.tmux/plugins/tpm/bin/install_plugins
+fi
+
+if ! exists "tmuximum"; then
+  info_m "installing tpm and tmuximum..."
+  git clone https://github.com/arks22/tmuximum.git $HOME/.tmuximum
+  echo "${password}" | sudo -S ln -sf $HOME/tmuximum/tmuximum /usr/local/bin/tmuximum
+fi
