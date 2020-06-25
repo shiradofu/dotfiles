@@ -53,10 +53,10 @@ if ! exists "brew"; then
       info_m "installing xcode-select..."
       xcode-select --install
     fi
+  fi
   info_m "installing homebrew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
   "${Linux}" && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-  fi
 fi
 
 other_m "\nOK, now you can leave the computer!\n"
