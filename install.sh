@@ -1,5 +1,6 @@
 #!/bin/sh
 
+password=$1
 NC="\033[0m"
 ok_m()    { printf "\033[0;32m$1\n${NC}"; }                # green
 err_m()   { printf "\033[1;31m$1\n${NC}" 1>&2; return 1; } # red
@@ -18,32 +19,6 @@ case $(uname) in
 esac
 
 hash -r
-
-if ! exists "sudo"; then
-  err_m "please enable 'sudo' command."
-  exit 1
-fi
-[ -t 1 ] && exec < /dev/tty
-echo "Please input sudo password"
-stty -echo
-read password
-stty echo
-printf "\n"
-echo "${password}" | sudo -S echo -n "" >/dev/null 2>&1 || err_m "password is wrong" || exit 1
-
-info_m "installing basic packages..."
-if "${Linux}"; then
-  if exists "apt"; then
-    echo "${password}" | sudo -S apt update -y
-    echo "${password}" | sudo -S apt upgrade -y
-    echo "${password}" | sudo -S apt install build-essential curl file git bash zlib1g-dev openssl -y
-  elif exists "yum"; then
-    echo "${password}" | sudo -S yum update -y
-    echo "${password}" | sudo -S yum groupinstall 'Development Tools' -y
-    echo "${password}" | sudo -S yum install curl file git bash zlib1g-dev openssl -y
-    echo "${password}" | sudo -S yum install libxcrypt-compat -y
-  fi
-fi
 
 # install homebrew
 if ! exists "brew"; then
