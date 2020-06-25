@@ -1,5 +1,7 @@
 #!/bin/sh
 
+NC="\033[0m"
+info_m()  { printf "\033[0;34m$1\n${NC}"; }
 err_m() { printf "\033[1;31m$1\n${NC}" 1>&2; return 1; }
 
 if ! type sudo > /dev/null 2>&1; then
@@ -33,7 +35,7 @@ if [ -z "${DIST}" ]; then
 fi
 
 [ -t 1 ] && exec < /dev/tty
-echo "Please input password"
+info_m "\nPlease input password\n"
 stty -echo
 read password
 stty echo
