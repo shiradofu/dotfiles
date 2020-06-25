@@ -16,8 +16,6 @@
 !.config/zsh/.zalias
 !.config/zsh/.zprompt
 !.config/zsh/.zshrc
-!.bash_profile
-!.bashrc
 !.zshenv
 
 !install.sh
