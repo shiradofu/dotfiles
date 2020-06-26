@@ -35,7 +35,7 @@ if [ -z "${DIST}" ]; then
 fi
 
 [ -t 1 ] && exec < /dev/tty
-info_m "\nPlease input password\n"
+info_m "Please input password"
 stty -echo
 read password
 stty echo

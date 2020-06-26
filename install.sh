@@ -22,7 +22,7 @@ hash -r
 
 # install homebrew
 if ! exists "brew"; then
-  info_m "preparing before installing homebrew..."
+  info_m "\npreparing before installing homebrew..."
   if "${MacOS}"; then
     if ! exists "xcode-select"; then
       info_m "installing xcode-select..."
@@ -37,8 +37,7 @@ fi
 other_m "\nOK, now you can leave the computer!\n"
 sleep 5
 
-info_m "installing formulae with homebrew..."
-brew update
+info_m "🍺  installing formulae with homebrew..."
 while read formula; do
   [ -z "${formula}" ] && continue
   exists "${formula}" && continue
@@ -68,10 +67,10 @@ $("${MacOS}" && echo "gnu-sed")
 $("${MacOS}" && echo "deno")
 $("${Linux}" && echo "zsh")
 EOS
-ok_m "brew install completed."
+ok_m "\n🍺  brew install completed."
 
-info_m "installing languages..."
-info_m "node.js:"
+info_m "\ninstalling languages..."
+info_m "Node.js:"
 eval "$(nodenv init -)"
 nodenv install 12.18.0
 nodenv global 12.18.0
