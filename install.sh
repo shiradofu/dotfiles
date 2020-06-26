@@ -103,3 +103,14 @@ done <<EOS
 $(dirname $0)/.zshenv
 $(dirname $0)/.config
 EOS
+
+cat << 'EOF' > ~/post-install
+[ -d /home/linuxbrew ] && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+eval "$(command nodenv init -)"
+eval "$(command rbenv init -)"
+eval "$(command pyenv init -)"
+eval "$(command pyenv virtualenv-init -)"
+EOF
+
+ok_m "\n🎉 All installation are completed!🎉\n"
+printf "run 'source ~/post-install && rm ~/post-install'.\n"
