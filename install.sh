@@ -97,10 +97,9 @@ pip install neovim
 pyenv deactivate
 pyenv global ${py_latest}
 
-
-if [ -d ~/.tmux/plugins/tpm ]; then
+if [ ! -d ~/.tmux/plugins/tpm ]; then
   info_m "installing tpm and tmux plugins..."
-  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+  git clone https://github.com/arks22/tmuximum.git ~/.tmux/plugins/tpm
   bash ~/.tmux/plugins/tpm/bin/install_plugins
 fi
 
