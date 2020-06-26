@@ -80,14 +80,6 @@ rb_latest=$(rbenv install --list-all | grep '^[0-9.]\+$' | tail -1)
 rbenv install ${rb_latest}
 rbenv global ${rb_latest}
 
-info_m "Python2:"
-eval "$(pyenv init -)"
-pyenv install 2.7.15
-pyenv virtualenv 2.7.15 neovim-python2
-pyenv activate neovim-python2
-pip2 install neovim
-pyenv deactivate
-
 info_m "Python3:"
 py_latest=$(pyenv install -l | grep '^  [0-9.]\+$' | tail -1)
 pyenv install ${py_latest}

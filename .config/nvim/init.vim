@@ -4,7 +4,6 @@ augroup END
 
 " for only neovim. in pyenv virtualenv named 'neovim-python3'
 if has('nvim') && isdirectory( $PYENV_ROOT."/versions/neovim-python3" )
-  let g:python_host_prog = $PYENV_ROOT.'/versions/neovim-python2/bin/python'
   let g:python3_host_prog = $PYENV_ROOT.'/versions/neovim-python3/bin/python'
 endif
 
