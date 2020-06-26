@@ -74,4 +74,4 @@ export LANGUAGE="ja_JP:ja"
 export LC_ALL="ja_JP.UTF-8"
 
 cd && git clone https://github.com/shiradofu/dotfiles.git
-sh dotfiles/install.sh "${password}"
+sh ~/dotfiles/install.sh

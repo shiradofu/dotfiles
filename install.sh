@@ -1,6 +1,5 @@
 #!/bin/sh
 
-password=$1
 NC="\033[0m"
 ok_m()    { printf "\033[1;32m$1\n${NC}"; }                # green
 err_m()   { printf "\033[1;31m$1\n${NC}" 1>&2; return 1; } # red
@@ -103,13 +102,6 @@ if [ -d ~/.tmux/plugins/tpm ]; then
   info_m "installing tpm and tmux plugins..."
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
   bash ~/.tmux/plugins/tpm/bin/install_plugins
-fi
-
-if ! exists "tmuximum"; then
-  info_m "installing tpm and tmuximum..."
-  git clone https://github.com/arks22/tmuximum.git ~/tmuximum
-  echo "${password}" | sudo -S ln -sf ~/tmuximum/tmuximum /usr/local/bin/tmuximum
-  rm -rf ~/tmuximum
 fi
 
 while read path; do
