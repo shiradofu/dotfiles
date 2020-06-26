@@ -81,11 +81,13 @@ rbenv install ${rb_latest}
 rbenv global ${rb_latest}
 
 info_m "Python3:"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
 py_latest=$(pyenv install -l | grep '^  [0-9.]\+$' | tail -1)
 pyenv install ${py_latest}
 pyenv virtualenv ${py_latest} neovim-python3
 pyenv activate neovim-python3
-pip install neovim
+pip3 install neovim
 pyenv deactivate
 pyenv global ${py_latest}
 
