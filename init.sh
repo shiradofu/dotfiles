@@ -44,18 +44,17 @@ echo "${password}" | sudo -S echo -n "" >/dev/null 2>&1 || err_m "password is wr
 
 info_m "installing basic packages..."
 # zlib1g-dev: for languages installation
-# openssl: for python2 installation
+# libffi-dev: for python
 case "${DIST}" in
   debian )
     echo "${password}" | sudo -S apt update -y
-    echo "${password}" | sudo -S apt upgrade -y
     echo "${password}" | sudo -S apt install build-essential -y
-    echo "${password}" | sudo -S apt install curl file git bash zlib1g-dev openssl locales -y
+    echo "${password}" | sudo -S apt install curl file git bash zlib1g-dev libffi-dev locales -y
     ;;
   redhat | fedora )
     echo "${password}" | sudo -S yum update -y
     echo "${password}" | sudo -S yum groupinstall 'Development Tools' -y
-    echo "${password}" | sudo -S yum install curl file git bash zlib1g-dev openssl locales -y
+    echo "${password}" | sudo -S yum install curl file git bash zlib1g-dev libffi-dev locales -y
     echo "${password}" | sudo -S yum install libxcrypt-compat -y
     ;;
   MacOS ) ;;
