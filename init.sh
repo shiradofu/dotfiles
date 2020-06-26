@@ -61,17 +61,5 @@ case "${DIST}" in
   * ) err_m "Oops, something went wrong."; exit 1;;
 esac
 
-if ! locale -a | grep "ja_JP.UTF-8" >/dev/null 2>&1; then
-  localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
-fi
-
-if ! locale -a | grep "en_US.UTF-8" >/dev/null 2>&1; then
-  localedef -f UTF-8 -i en_US en_US.UTF-8
-fi
-
-export LANG="ja_JP.UTF-8"
-export LANGUAGE="ja_JP:ja"
-export LC_ALL="ja_JP.UTF-8"
-
 cd && git clone https://github.com/shiradofu/dotfiles.git
 sh ~/dotfiles/install.sh
