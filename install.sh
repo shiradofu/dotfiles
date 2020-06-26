@@ -2,9 +2,9 @@
 
 password=$1
 NC="\033[0m"
-ok_m()    { printf "\033[0;32m$1\n${NC}"; }                # green
+ok_m()    { printf "\033[1;32m$1\n${NC}"; }                # green
 err_m()   { printf "\033[1;31m$1\n${NC}" 1>&2; return 1; } # red
-info_m()  { printf "\033[0;34m$1\n${NC}"; }                # blue
+info_m()  { printf "\033[1;34m$1\n${NC}"; }                # blue
 other_m() { printf "\033[1;35m$1\n${NC}"; }                # purple
 exists()  { type $1 > /dev/null 2>&1; }
 required() if ! exists $1; then err_m "$1 required."; exit 1; fi

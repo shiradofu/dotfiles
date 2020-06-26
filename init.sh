@@ -1,7 +1,7 @@
 #!/bin/sh
 
 NC="\033[0m"
-info_m()  { printf "\033[0;34m$1\n${NC}"; }
+info_m()  { printf "\033[1;34m$1\n${NC}"; }
 err_m() { printf "\033[1;31m$1\n${NC}" 1>&2; return 1; }
 
 if ! type sudo > /dev/null 2>&1; then
