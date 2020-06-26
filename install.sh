@@ -29,6 +29,7 @@ if ! exists "brew"; then
     fi
   fi
   info_m "installing homebrew..."
+  "${Linux}" && export PATH=/home/linuxbrew/.linuxbrew/bin:$PATH
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
   "${Linux}" && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 fi
