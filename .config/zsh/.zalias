@@ -4,7 +4,8 @@ alias ll="ls -lahFG"
 alias vim="nvim"
 
 # tmux
-alias tmns='tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf new -s'
+alias tmux='tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf'
+alias tmns='tmux new -s'
 alias tmls='tmux ls'
 alias tmat='tmux a -t'
 alias tmkt='tmux kill-session -t'
