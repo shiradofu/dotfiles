@@ -1,8 +1,8 @@
 #!/bin/sh
 
 NC="\033[0m"
-info_m()  { printf "\033[1;34m$1\n${NC}"; }
-err_m() { printf "\033[1;31m$1\n${NC}" 1>&2; return 1; }
+err_m()   { printf "\033[1;31m%$2s${NC}\n" "$1" 1>&2; return 1; } # red
+info_m()  { printf "\033[1;34m%$2s${NC}\n" "$1"; }                # blue
 
 if ! type sudo > /dev/null 2>&1; then
   err_m "Please install 'sudo' command first."

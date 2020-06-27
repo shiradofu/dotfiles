@@ -1,10 +1,10 @@
 #!/bin/sh
 
 NC="\033[0m"
-ok_m()    { printf "\033[1;32m$1\n${NC}"; }                # green
-err_m()   { printf "\033[1;31m$1\n${NC}" 1>&2; return 1; } # red
-info_m()  { printf "\033[1;34m$1\n${NC}"; }                # blue
-other_m() { printf "\033[1;35m$1\n${NC}"; }                # purple
+ok_m()    { printf "\033[1;32m%$2s${NC}\n" "$1"; }                # green
+err_m()   { printf "\033[1;31m%$2s${NC}\n" "$1" 1>&2; return 1; } # red
+info_m()  { printf "\033[1;34m%$2s${NC}\n" "$1"; }                # blue
+other_m() { printf "\033[1;35m%$2s${NC}\n" "$1"; }                # purple
 exists()  { type $1 > /dev/null 2>&1; }
 required() if ! exists $1; then err_m "$1 required."; exit 1; fi
 
@@ -21,7 +21,8 @@ hash -r
 
 # install homebrew
 if ! exists "brew"; then
-  info_m "\npreparing before installing homebrew..."
+  printf "\n"
+  info_m "preparing before installing homebrew..."
   if "${MacOS}"; then
     if ! exists "xcode-select"; then
       info_m "installing xcode-select..."
@@ -34,18 +35,23 @@ if ! exists "brew"; then
   "${Linux}" && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 fi
 
-other_m "\nOK, now you can leave the computer!\n"
+printf "\n"
+other_m "OK, now you can leave the computer!"
+printf "\n"
 sleep 5
 
 info_m "🍺  installing formulae with homebrew..."
 while read formula; do
   [ -z "${formula}" ] && continue
   exists "${formula}" && continue
+  printf "\n"
+  info_m "== brew install ${formula} =============================================================" .80
   case ${formula} in
     fzf  ) brew install fzf && $(brew --prefix)/opt/fzf/install --no-key-bindings --completion --no-update-rc;;
     aws  ) brew install awscli;;
     *    ) brew install ${formula};;
   esac
+  ok_m "== ${formula} has been installed. ========================================================" .80
 done <<EOS
 git
 rg
@@ -54,10 +60,10 @@ exa
 bat
 tmux
 nvim
+php
 nodenv
 yarn
 rbenv
-php
 pyenv
 pyenv-virtualenv
 ghq
@@ -67,9 +73,11 @@ $("${MacOS}" && echo "gnu-sed")
 $("${MacOS}" && echo "deno")
 $("${Linux}" && echo "zsh")
 EOS
-ok_m "\n🍺  brew install completed."
+printf "\n"
+ok_m "🍺  brew install completed!"
 
-info_m "\ninstalling languages..."
+printf "\n"
+info_m "installing languages..."
 info_m "Node.js:"
 eval "$(nodenv init -)"
 nodenv install 12.18.0
@@ -113,5 +121,11 @@ eval "$(command pyenv init -)"
 eval "$(command pyenv virtualenv-init -)"
 EOF
 
-ok_m "\n🎉 All installation are completed!🎉\n"
-printf "run 'source ~/post-install && rm ~/post-install'.\n"
+printf "\n"
+ok_m "🎉  All installation are completed! 🎉"
+printf "\n"
+info_m " Please run following commnad."
+printf "\n"
+other_m "   source ~/post-install && rm ~/post-install"
+printf "\n"
+exit 0
