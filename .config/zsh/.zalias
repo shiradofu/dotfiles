@@ -1,7 +1,5 @@
 ### alias
-alias dc="cd"
 alias ll="ls -lahFG"
-alias vim="nvim"
 
 # tmux
 alias tmux='tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf'
@@ -52,10 +50,6 @@ abbreviations=(
     "..."       "../.."
     "...."      "../../.."
     "....."     "../../../.."
-    "zshenv"    "$HOME/.zshenv"
-    "zshrc"     "$XDG_CONFIG_HOME/zsh/.zshrc"
-    "zalias"    "$XDG_CONFIG_HOME/zsh/.zalias"
-    "vim"      "$XDG_CONFIG_HOME/nvim/"
 
     # pipe
     "G"        "| grep"
@@ -69,7 +63,7 @@ abbreviations=(
     "N"        "> /dev/null"
 )
 
-# create aliases for the abbreviations too
+# create aliases for the abbreviations
 for abbr in ${(k)abbreviations}; do
    alias -g $abbr="${abbreviations[$abbr]}"
 done
