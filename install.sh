@@ -42,7 +42,7 @@ while read formula; do
   [ -z "${formula}" ] && continue
   exists "${formula}" && continue
   case ${formula} in
-    fzf  ) $(brew --prefix)/opt/fzf/install --no-key-bindings --completion --no-update-rc;;
+    fzf  ) brew install fzf && $(brew --prefix)/opt/fzf/install --no-key-bindings --completion --no-update-rc;;
     aws  ) brew install awscli;;
     *    ) brew install ${formula};;
   esac
