@@ -14,6 +14,7 @@
 !.config/nvim/init.vim
 !.config/tmux/tmux.conf
 !.config/zsh/.zalias
+!.config/zsh/.zcli
 !.config/zsh/.zprompt
 !.config/zsh/.zshrc
 !.zshenv
