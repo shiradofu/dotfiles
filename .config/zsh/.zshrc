@@ -8,6 +8,7 @@ case $- in
 esac
 
 zmodload zsh/zpty
+exists()  { type $1 > /dev/null 2>&1; }
 
 ### GENERAL SETTINGS
 bindkey -e
