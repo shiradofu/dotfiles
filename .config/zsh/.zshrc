@@ -93,8 +93,8 @@ zinit ice wait'0' lucid as"completion" for \
   https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker \
   https://github.com/docker/compose/blob/master/contrib/completion/zsh/_docker-compose
 
-autoload bashcompinit && bashcompinit
-complete -C '/usr/local/bin/aws_completer' aws
+# autoload bashcompinit && bashcompinit
+# TODO: add aws completion after installing
 
 
 ### STATS
