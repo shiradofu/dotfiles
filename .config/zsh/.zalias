@@ -1,18 +1,8 @@
-### alias
 alias ll="ls -lahFG"
-
-# tmux
 alias tmux='tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf'
-alias tmns='tmux new -s'
-alias tmls='tmux ls'
-alias tmat='tmux a -t'
-alias tmkt='tmux kill-session -t'
-
-# miscellaneous
 alias ansic='for fore in `seq 30 37`; do printf "\e[${fore}m \\\e[${fore}m \e[m\n"; for mode in 1 4 5; do printf "\e[${fore};${mode}m \\\e[${fore};${mode}m \e[m"; for back in `seq 40 47`; do printf "\e[${fore};${back};${mode}m \\\e[${fore};${back};${mode}m \e[m"; done; echo; done; echo; done; printf " \\\e[m\n"'
 alias 256c='for code in {000..255}; do print -nP -- "%F{$code}$code %f"; [ $((${code} % 16)) -eq 15 ] && echo; done'
 
-# mac用の設定
 if [ $(uname) = "Darwin" ]; then
   alias sed="gsed"
   alias showhiddenfiles='defaults write com.apple.finder AppleShowAllFiles FALSE && killall Finder'
@@ -21,7 +11,75 @@ if [ $(uname) = "Darwin" ]; then
   alias disable-dock='defaults write com.apple.Dock autohide-delay -float 30; killall Dock'
   alias enable-dock='defaults write com.apple.Dock autohide-delay; killall Dock'
 fi
-### end of alias
+
+typeset -A r_aliases
+r_aliases=(
+  # tmux
+  "tmns"  "tmux new -s"
+  "tmls"  "tmux ls"
+  "tmat"  "tmux a -t"
+  "tmkt"  "tmux kill-session -t"
+  # docker-compose
+  "dc"    "docker-compose"
+  "dce"   "docker-compose exec"
+)
+
+typeset -A g_aliases
+g_aliases=(
+  # directory
+  "..."       "../.."
+  "...."      "../../.."
+  "....."     "../../../.."
+  # pipe
+  "G"        "| grep"
+  "R"        "| rg"
+  "X"        "| xargs"
+  "C"        "| cat"
+  "L"        "| less"
+  "A"        "| awk"
+  "S"        "| sed"
+  "E"        "2>&1 > /dev/null"
+  "N"        "> /dev/null"
+)
+
+for abbr in ${(k)r_aliases}; do alias $abbr="${r_aliases[$abbr]}"; done
+for abbr in ${(k)g_aliases}; do alias -g $abbr="${g_aliases[$abbr]}"; done
+
+abbrev-expand() {
+  local MATCH
+  [[ $LBUFFER =~ "[^ ]  *[^ ]" ]] && first=false || first=true
+  LBUFFER=${LBUFFER%%(#m)[-_a-zA-Z0-9\.]#}
+  if "${first}" && [ -n "${r_aliases[$MATCH]}" ]; then
+    LBUFFER+=${r_aliases[$MATCH]}
+  elif [ -n "${g_aliases[$MATCH]}" ]; then
+    LBUFFER+=${g_aliases[$MATCH]}
+  else
+    LBUFFER+=${MATCH}
+  fi
+}
+
+spacekey() {
+  abbrev-expand
+  zle self-insert
+}
+zle -N spacekey
+bindkey " " spacekey
+
+enterkey() {
+  abbrev-expand
+  zle accept-line
+}
+zle -N enterkey
+bindkey "^m" enterkey
+
+no-expand-space() {
+  LBUFFER+=' '
+}
+zle -N no-expand-space
+bindkey "^x " no-expand-space
+
+bindkey "^x^m" accept-line
+
 
 ### suffix alias
 # ref: https://itchyny.hatenablog.com/entry/20130227/1361933011
@@ -41,45 +99,3 @@ function extract() {
   esac
 }
 alias -s {gz,tgz,zip,bz2,tbz,Z,tar,xz}=extract
-
-### global alias
-# ref: https://qiita.com/matsu_chara/items/8372616f52934c657214
-typeset -A abbreviations
-abbreviations=(
-    # directory
-    "..."       "../.."
-    "...."      "../../.."
-    "....."     "../../../.."
-
-    # pipe
-    "G"        "| grep"
-    "R"        "| rg"
-    "X"        "| xargs"
-    "C"        "| cat"
-    "L"        "| less"
-    "A"        "| awk"
-    "S"        "| sed"
-    "E"        "2>&1 > /dev/null"
-    "N"        "> /dev/null"
-)
-
-# create aliases for the abbreviations
-for abbr in ${(k)abbreviations}; do
-   alias -g $abbr="${abbreviations[$abbr]}"
-done
-
-magic-abbrev-expand() {
-    local MATCH
-    LBUFFER=${LBUFFER%%(#m)[-_a-zA-Z0-9\.]#}
-    LBUFFER+=${abbreviations[$MATCH]:-$MATCH}
-    zle self-insert
-}
-
-no-magic-abbrev-expand() {
-    LBUFFER+=' '
-}
-
-zle -N magic-abbrev-expand
-zle -N no-magic-abbrev-expand
-bindkey " " magic-abbrev-expand
-bindkey "^x " no-magic-abbrev-expand
