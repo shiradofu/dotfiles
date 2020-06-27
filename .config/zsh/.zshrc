@@ -84,6 +84,11 @@ zinit light-mode for \
 zinit wait'0' lucid light-mode for atinit"zicompinit; zicdreplay" \
   zdharma/fast-syntax-highlighting
 zinit ice wait'0' lucid blockf light-mode for zsh-users/zsh-completions
+zinit wait'0' lucid atload'_zsh_autosuggest_start' light-mode for \
+    zsh-users/zsh-autosuggestions
+ZSH_AUTOSUGGEST_STRATEGY=completion
+ZSH_AUTOSUGGEST_USE_ASYNC=1
+ZSH_AUTOSUGGEST_CLEAR_WIDGETS=(enterkey $ZSH_AUTOSUGGEST_CLEAR_WIDGETS)
 
 zinit ice wait'0' lucid as"completion" for \
   https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker \
