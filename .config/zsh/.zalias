@@ -46,15 +46,14 @@ for abbr in ${(k)r_aliases}; do alias $abbr="${r_aliases[$abbr]}"; done
 for abbr in ${(k)g_aliases}; do alias -g $abbr="${g_aliases[$abbr]}"; done
 
 abbrev-expand() {
-  local MATCH
   [[ $LBUFFER =~ "[^ ]  *[^ ]" ]] && first=false || first=true
-  LBUFFER=${LBUFFER%%(#m)[-_a-zA-Z0-9\.]#}
-  if "${first}" && [ -n "${r_aliases[$MATCH]}" ]; then
-    LBUFFER+=${r_aliases[$MATCH]}
-  elif [ -n "${g_aliases[$MATCH]}" ]; then
-    LBUFFER+=${g_aliases[$MATCH]}
-  else
-    LBUFFER+=${MATCH}
+  abbr=$(echo ${LBUFFER} | grep -o '[-_a-zA-Z0-9\.]*$')
+  if "${first}" && [ -n "${r_aliases[$abbr]}" ]; then
+    zle backward-kill-word
+    LBUFFER+=${r_aliases[$abbr]}
+  elif [ -n "${g_aliases[$abbr]}" ]; then
+    zle backward-kill-word
+    LBUFFER+=${g_aliases[$abbr]}
   fi
 }
 
