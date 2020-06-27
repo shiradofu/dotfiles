@@ -9,7 +9,7 @@ if ! type sudo > /dev/null 2>&1; then
   exit 1
 fi
 
-if [ -d "~/dotfiles" ]; then
+if [ -d ~/dotfiles ]; then
   err_m "'~/dotfiles' already exists."
   exit 1
 fi
