@@ -66,6 +66,7 @@ bindkey " " spacekey
 
 enterkey() {
   abbrev-expand
+  [[ $LBUFFER =~ " $" ]] && LBUFFER=${LBUFFER%% }
   zle accept-line
 }
 zle -N enterkey
