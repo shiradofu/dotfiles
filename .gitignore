@@ -19,6 +19,8 @@
 !.config/zsh/.zshrc
 !.zshenv
 
+!bin/tmsl
+
 !install.sh
 !init.sh
 
