@@ -22,7 +22,7 @@ case $1 in
     [ -z "$diff_files" ] && echo "0 | 0[+] | 0[-]" && exit 0
     echo $( git diff --stat HEAD $diff_files |
       tail -n 1 | awk '{printf "%s | %s[+] | %s[-]", \
-      ($1==""?"0":$1),($4==""?"0":$4),($6==""?"0":$6)}' \
+      $1,($4==""?"0":$4),($6==""?"0":$6)}' \
     )
     ;;
   -l )
