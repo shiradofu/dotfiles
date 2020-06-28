@@ -13,16 +13,16 @@ case $1 in
     echo "$NUM_BEHIND"
     ;;
   -d )
-    echo $( \
-      git diff --stat HEAD $( \
-        git diff --name-only HEAD | grep -v \
-        -e 'composer.lock' \
-        -e 'package-lock.json' \
-        -e 'yarn.lock' \
-        -e '\(\.png\|\.jpg\|\.jpeg\)' \
-      )| \
-      tail -n 1 | awk '{printf "%s | %s[+] | %s[-]",$1,$4,$6}' \
-      || ""
+    diff_files=$(git diff --name-only HEAD | grep -v \
+      -e 'composer.lock' \
+      -e 'package-lock.json' \
+      -e 'yarn.lock' \
+      -e '\(\.png\|\.jpg\|\.jpeg\)' \
+    )
+    [ -z "$diff_files" ] && echo "0 | 0[+] | 0[-]" && exit 0
+    echo $( git diff --stat HEAD $diff_files |
+      tail -n 1 | awk '{printf "%s | %s[+] | %s[-]", \
+      ($1==""?"0":$1),($4==""?"0":$4),($6==""?"0":$6)}' \
     )
     ;;
   -l )
