@@ -5,6 +5,37 @@
 basic_colour="#[fg=colour248]"
 cd $2
 
+diff_exclude() {
+  echo \
+  ':(exclude)**/composer.lock' \
+  ':(exclude)**/package-lock.json' \
+  ':(exclude)**/yarn.lock' \
+  ':(exclude)**/.png' \
+  ':(exclude)**/.jpg' \
+  ':(exclude)**/.jpeg'
+}
+
+diff_head() {
+  git diff --stat HEAD "$(diff_exclude)" | \
+    tail -n 1 | awk '{printf "%s | %s[+] | %s[-]", \
+    ($1==""?"#[fg=colour248] 0":($1>10?"#[fg=colour001] "$1:($1>7?"#[fg=colour011] "$1:"#[fg=colour248] "$1))), \
+    ($4==""?"#[fg=colour248]0":($4>300?"#[fg=colour001]"$4:($4>200?"#[fg=colour011]"$4:"#[fg=colour248]"$4))), \
+    ($6==""?"#[fg=colour248]0":($6>300?"#[fg=colour001]"$6:($6>200?"#[fg=colour011]"$6:"#[fg=colour248]"$6)))  \
+  }'
+}
+
+diff_junction() {
+  junction=$(git show-branch | grep '*[^[]\+\[' | \
+    grep -vF "[$(git rev-parse --abbrev-ref HEAD)" | \
+    head -1 | awk -F'[]~^[]' '{print $2}' \
+  )
+
+  git diff --stat "$junction" "$(diff_exclude)" |
+    tail -n 1 | awk '{printf "%s", \
+    ($1==""?"#[fg=colour248] 0":($1>20?"#[fg=colour001] "$1:($1>10?"#[fg=colour011] "$1:"#[fg=colour248] "$1)))
+  }'
+}
+
 case "$1" in
 -l )
 if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
@@ -48,26 +79,10 @@ if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
     behind="${basic_colour}⇣${num_behind}${basic_colour}"
   fi
 
-  diff_files=$(git diff --name-only HEAD | grep -v \
-    -e 'composer.lock' \
-    -e 'package-lock.json' \
-    -e 'yarn.lock' \
-    -e '\(\.png\|\.jpg\|\.jpeg\)' \
-  )
-  [ -z "$diff_files" ] && echo "0 | 0[+] | 0[-]" && exit 0
-  echo $( git diff --stat HEAD $diff_files |
-    tail -n 1 | awk '{printf "%s | %s[+] | %s[-]", \
-    $1,($4==""?"0":$4),($6==""?"0":$6)}' \
-  )
-
-  junction=$(git show-branch | grep '*[^[]\+\[' | \
-    grep -vF "[$(git rev-parse --abbrev-ref HEAD)" | \
-    head -1 | awk -F'[]~^[]' '{print $2}' \
-  )
-
-  result="${stash}  ${merging}${ahead} ${behind} "
+  result="${stash}   ${merging} ${ahead} ${behind}  $(diff_head)  $(diff_junction)"
 else
   result=""
 fi
 esac
+
 echo "$result"
