@@ -25,16 +25,21 @@ diff_head() {
 }
 
 diff_junction() {
-  junction=$(git show-branch | grep '*[^[]\+\[' | \
-    grep -vF "[$(git rev-parse --abbrev-ref HEAD)" | \
-    head -1 | awk -F'[]~^[]' '{print $2}' \
-  )
+  branch="$(git branch --contains | cut -c 3-)"
+  if [ "$branch" = "master" ]; then
+    [ -n "$dj" ] && echo "$dj" || echo "${basic_colour}  "
+  else
+    junction=$(git show-branch | grep '*[^[]\+\[' | \
+      grep -vF "[$(git rev-parse --abbrev-ref HEAD)" | \
+      head -1 | awk -F'[]~^[]' '{print $2}' \
+    )
 
-  dj=$(git diff --stat "$junction" -- ':(top,glob)**/*' "${diff_exclude}" |
-    tail -n 1 | awk '{printf "%s", \
-    ($1==""?"#[fg=colour248] 0":($1>20?"#[fg=colour001] "$1:($1>10?"#[fg=colour011] "$1:"#[fg=colour248] "$1)))
-  }')
-  [ -n "$dj" ] && echo "$dj" || echo "${basic_colour} 0"
+    dj=$(git diff --stat "$junction" -- ':(top,glob)**/*' "${diff_exclude}" |
+      tail -n 1 | awk '{printf "%s", \
+      ($1==""?"#[fg=colour248] 0":($1>20?"#[fg=colour001] "$1:($1>10?"#[fg=colour011] "$1:"#[fg=colour248] "$1)))
+    }')
+    [ -n "$dj" ] && echo "$dj" || echo "${basic_colour} 0"
+  fi
 }
 
 case "$1" in
@@ -42,8 +47,15 @@ case "$1" in
 if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
   git_dir=$(basename $(git rev-parse --show-toplevel))
   branch="$(git branch --contains | cut -c 3-)"
-  [ -z "$(git status -s)" ] && status="" || status="⚹"
-  result="${basic_colour} ${git_dir} → ${branch}${status}"
+  if [ -z "$(git status -s)" ]; then
+    result="${basic_colour} ${git_dir} → ${branch}"
+  else
+    if [ "$branch" = "master" ]; then
+      result="#[fg=colour001] ${git_dir} → ${branch}⚹"
+    else
+      result="${basic_colour} ${git_dir} → ${branch}⚹"
+    fi
+  fi
 else
   result="${basic_colour}--- not in git directory ---"
 fi
@@ -55,16 +67,13 @@ if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
     stash="#[fg=colour011]${basic_colour}"
   else
     stash=""
-    stash="#[fg=colour011]${basic_colour}"
   fi
 
   GIT_DIR="$(git rev-parse --git-dir 2> /dev/null)"
   if [ -d $GIT_DIR ] && test -r $GIT_DIR/MERGE_HEAD; then
-    merging="#[fg=colour011]${basic_colour}"
+    merging="#[fg=colour011]${basic_colour}"
   else
     merging=""
-    # merging="#[fg=colour011]⚡︎${basic_colour}"
-    merging="#[fg=colour011]${basic_colour}"
   fi
 
   num_ahead="$(git log --oneline @{u}.. 2> /dev/null | wc -l | tr -d ' ')"
