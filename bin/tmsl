@@ -69,17 +69,15 @@ if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
 
   num_ahead="$(git log --oneline @{u}.. 2> /dev/null | wc -l | tr -d ' ')"
   if [ "$num_ahead" -gt 0 ]; then
-    ahead="#[fg=colour001]⇡${num_ahead}${basic_colour}"
+    ahead="#[fg=colour001] ${num_ahead}${basic_colour}"
   else
-    ahead="${basic_colour}⇡${num_ahead}${basic_colour}"
     ahead="${basic_colour} ${num_ahead}${basic_colour}"
   fi
 
   num_behind="$(git log --oneline ..@{u} 2> /dev/null | wc -l | tr -d ' ')"
   if [ "$num_behind" -gt 0 ]; then
-    behind="#[fg=colour004]⇣${num_behind$}${basic_colour}"
+    behind="#[fg=colour004] ${num_behind$}${basic_colour}"
   else
-    behind="${basic_colour}⇣${num_behind}${basic_colour}"
     behind="${basic_colour} ${num_behind}${basic_colour}"
   fi
 
