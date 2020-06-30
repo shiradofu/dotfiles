@@ -15,7 +15,7 @@ diff_exclude=" \
 "
 
 diff_head() {
-  df=$(git diff --stat HEAD -- ':(top)' "${diff_exclude}" | \
+  df=$(git diff --stat HEAD -- ':(top,glob)**/*' "${diff_exclude}" | \
     tail -n 1 | awk '{printf "%s#[fg=colour248] | %s[+]#[fg=colour248] | %s[-]#[fg=colour248]", \
     ($1==""?"#[fg=colour248] 0":($1>10?"#[fg=colour001] "$1:($1>7?"#[fg=colour011] "$1:"#[fg=colour248] "$1))), \
     ($4==""?"#[fg=colour248]0":($4>300?"#[fg=colour001]"$4:($4>200?"#[fg=colour011]"$4:"#[fg=colour248]"$4))), \
@@ -30,7 +30,7 @@ diff_junction() {
     head -1 | awk -F'[]~^[]' '{print $2}' \
   )
 
-  dj=$(git diff --stat "$junction" -- ':(top)' "${diff_exclude}" |
+  dj=$(git diff --stat "$junction" -- ':(top,glob)**/*' "${diff_exclude}" |
     tail -n 1 | awk '{printf "%s", \
     ($1==""?"#[fg=colour248] 0":($1>20?"#[fg=colour001] "$1:($1>10?"#[fg=colour011] "$1:"#[fg=colour248] "$1)))
   }')
