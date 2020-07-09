@@ -94,7 +94,7 @@ if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
 else
   info=""
 fi
-output="$(echo ${result}"
+;;
 esac
 
-echo "$result"
+echo "$info"
