@@ -1,7 +1,12 @@
-alias ll="ls -lahFG"
+alias ll='ls -lahFG'
 alias tmux='tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf'
-alias ansic='for fore in `seq 30 37`; do printf "\e[${fore}m \\\e[${fore}m \e[m\n"; for mode in 1 4 5; do printf "\e[${fore};${mode}m \\\e[${fore};${mode}m \e[m"; for back in `seq 40 47`; do printf "\e[${fore};${back};${mode}m \\\e[${fore};${back};${mode}m \e[m"; done; echo; done; echo; done; printf " \\\e[m\n"'
+alias ansi-rainbow='for fore in `seq 30 37`; do printf "\e[${fore}m \\\e[${fore}m \e[m\n"; \
+  for mode in 1 4 5; do printf "\e[${fore};${mode}m \\\e[${fore};${mode}m \e[m"; \
+  for back in `seq 40 47`; do printf "\e[${fore};${back};${mode}m \\\e[${fore};${back};${mode}m \e[m"; done; \
+  echo; done; echo; done; printf " \\\e[m\n"'
 alias 256c='for code in {000..255}; do print -nP -- "%F{$code}$code %f"; [ $((${code} % 16)) -eq 15 ] && echo; done'
+alias ide3='tmux split-window -v -p 30 && tmux split-window -h'
+alias ide4='tmux split-window -v -p 25 && tmux split-window -h -p 66 && tmux split-window -h -p 50'
 
 if [ $(uname) = "Darwin" ]; then
   alias sed="gsed"
