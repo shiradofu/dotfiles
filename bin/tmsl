@@ -17,17 +17,17 @@ diff_exclude=" \
 diff_head() {
   df=$(git diff --stat HEAD -- ':(top,glob)**/*' "${diff_exclude}" | \
     tail -n 1 | awk '{printf "%s#[fg=colour248] | %s[+]#[fg=colour248] | %s[-]#[fg=colour248]", \
-    ($1==""?"#[fg=colour248] 0":($1>10?"#[fg=colour001] "$1:($1>7?"#[fg=colour011] "$1:"#[fg=colour248] "$1))), \
-    ($4==""?"#[fg=colour248]0":($4>300?"#[fg=colour001]"$4:($4>200?"#[fg=colour011]"$4:"#[fg=colour248]"$4))), \
-    ($6==""?"#[fg=colour248]0":($6>300?"#[fg=colour001]"$6:($6>200?"#[fg=colour011]"$6:"#[fg=colour248]"$6)))  \
+    ($1==""?"#[fg=colour248]≡ 0":($1>8?"#[fg=colour001]≡ "$1:($1>5?"#[fg=colour011]≡ "$1:"#[fg=colour248]≡ "$1))), \
+    ($4==""?"#[fg=colour248]0":($4>200?"#[fg=colour001]"$4:($4>100?"#[fg=colour011]"$4:"#[fg=colour248]"$4))), \
+    ($6==""?"#[fg=colour248]0":($6>200?"#[fg=colour001]"$6:($6>100?"#[fg=colour011]"$6:"#[fg=colour248]"$6)))  \
   }')
-  [ -n "$df" ] && echo "$df" || echo "${basic_colour} 0 | ${basic_colour}0[+] | ${basic_colour}0[-]"
+  [ -n "$df" ] && echo "$df" || echo "${basic_colour}≡ 0 | ${basic_colour}0[+] | ${basic_colour}0[-]"
 }
 
 diff_junction() {
   branch="$(git branch --contains | cut -c 3-)"
   if [ "$branch" = "master" ]; then
-    [ -n "$dj" ] && echo "$dj" || echo "${basic_colour}  "
+    [ -n "$dj" ] && echo "$dj" || echo "${basic_colour}✔  "
   else
     junction=$(git show-branch | grep '*[^[]\+\[' | \
       grep -vF "[$(git rev-parse --abbrev-ref HEAD)" | \
@@ -36,9 +36,9 @@ diff_junction() {
 
     dj=$(git diff --stat "$junction" -- ':(top,glob)**/*' "${diff_exclude}" |
       tail -n 1 | awk '{printf "%s", \
-      ($1==""?"#[fg=colour248] 0":($1>20?"#[fg=colour001] "$1:($1>10?"#[fg=colour011] "$1:"#[fg=colour248] "$1)))
+      ($1==""?"#[fg=colour248]§ 0":($1>15?"#[fg=colour001]§ "$1:($1>10?"#[fg=colour011]§ "$1:"#[fg=colour248]§ "$1)))
     }')
-    [ -n "$dj" ] && echo "$dj" || echo "${basic_colour} 0"
+    [ -n "$dj" ] && echo "$dj" || echo "${basic_colour}§ 0"
   fi
 }
 
@@ -48,53 +48,65 @@ if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
   git_dir=$(basename $(git rev-parse --show-toplevel))
   branch="$(git branch --contains | cut -c 3-)"
   if [ -z "$(git status -s)" ]; then
-    info="${basic_colour} ${git_dir} → ${branch}"
+    info="${basic_colour}${git_dir} → ${branch}"
   else
     if [ "$branch" = "master" ]; then
-      info="#[fg=colour001] ${git_dir} → ${branch}⚹"
+      info="#[fg=colour001]${git_dir} → ${branch}⚹"
     else
-      info="${basic_colour} ${git_dir} → ${branch}⚹"
+      info="${basic_colour}${git_dir} → ${branch}⚹"
     fi
   fi
 else
   info="${basic_colour}--- not in git directory ---"
 fi
+info_nc=$(echo "$info" | sed 's/#\[[^]]*\]//g')
+char_num=$(echo -n "$info_nc" | wc -m)
+space=$(echo "                                                                 \
+                                                                               \
+
+" | cut -c 1-$(expr 100 - $char_num))
+echo "${info}${space}"
 ;;
 
 -r )
 if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
   if [ -n "$(git stash list)" ]; then
-    stash="#[fg=colour011]${basic_colour}   "
+    stash="#[fg=colour011]Π${basic_colour}   "
   else
     stash=""
   fi
 
   GIT_DIR="$(git rev-parse --git-dir 2> /dev/null)"
   if [ -d $GIT_DIR ] && test -r $GIT_DIR/MERGE_HEAD; then
-    merging="#[fg=colour011]${basic_colour}   "
+    merging="#[fg=colour011]Ψ${basic_colour}  "
   else
     merging=""
   fi
 
   num_ahead="$(git log --oneline @{u}.. 2> /dev/null | wc -l | tr -d ' ')"
   if [ "$num_ahead" -gt 0 ]; then
-    ahead="#[fg=colour001] ${num_ahead}${basic_colour}"
+    ahead="#[fg=colour001]↑ ${num_ahead}${basic_colour}"
   else
-    ahead="${basic_colour} ${num_ahead}${basic_colour}"
+    ahead="${basic_colour}↑ ${num_ahead}${basic_colour}"
   fi
 
   num_behind="$(git log --oneline ..@{u} 2> /dev/null | wc -l | tr -d ' ')"
   if [ "$num_behind" -gt 0 ]; then
-    behind="#[fg=colour004] ${num_behind$}${basic_colour}"
+    behind="#[fg=colour004]↓ ${num_behind$}${basic_colour}"
   else
-    behind="${basic_colour} ${num_behind}${basic_colour}"
+    behind="${basic_colour}↓ ${num_behind}${basic_colour}"
   fi
 
   info="${stash}${merging}${ahead} ${behind}  $(diff_head)  $(diff_junction) "
 else
   info=""
 fi
+info_nc=$(echo "$info" | sed 's/#\[[^]]*\]//g')
+char_num=$(echo -n "$info_nc" | wc -m)
+space=$(echo "                                                                 \
+                                                                               \
+
+" | cut -c 1-$(expr 100 - $char_num))
+echo "${space}${info}"
 ;;
 esac
-
-echo "$info"
