@@ -46,7 +46,7 @@ case "$1" in
 -l )
 if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
   git_dir=$(basename $(git rev-parse --show-toplevel))
-  branch="$(git branch --contains | cut -c 3-)"
+  branch="$(git symbolic-ref --short HEAD)"
   if [ -z "$(git status -s)" ]; then
     info="${basic_colour}${git_dir} → ${branch}"
   else
