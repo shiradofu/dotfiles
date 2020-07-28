@@ -66,17 +66,3 @@ autocmd myau BufReadPost ?* call s:loadview()
 " ref: https://hyuki.hatenablog.com/entry/20140122/vim
 autocmd myau BufEnter * setlocal formatoptions-=r
 autocmd myau BufEnter * setlocal formatoptions-=o
-
-" tomlファイル内のvimscriptハイライト
-" ref: https://qiita.com/tmsanrinsha/items/9670628aef3144c7919b
-" 本来はdeinft.tomlに記述したいが、動作しなかったためこちらに記述
-" いずれ別ファイルへ移行するかも
-autocmd myau BufNewFile,BufRead dein*.toml call s:syntax_range_dein()
-function! s:syntax_range_dein() abort
-  let start = '^\s*hook_\%('.
-  \           'add\|source\|post_source\|post_update'.
-  \           '\)\s*=\s*%s'
-  call SyntaxRange#Include(printf(start, "'''"), "'''", 'vim', '')
-  call SyntaxRange#Include(printf(start, '"""'), '"""', 'vim', '')
-endfunction
-

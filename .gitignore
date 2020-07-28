@@ -8,9 +8,9 @@
 !.config/iterm2/com.googlecode.iterm2.plist
 !.config/nvim/userautoload/basic.vim
 !.config/nvim/userautoload/mappings.vim
-!.config/nvim/dein.toml
-!.config/nvim/deinft.toml
-!.config/nvim/deinlazy.toml
+!.config/nvim/dein/general.toml
+!.config/nvim/dein/lazy.toml
+!.config/nvim/dein/filetype.toml
 !.config/nvim/init.vim
 !.config/tmux/tmux.conf
 !.config/zsh/.zalias
