@@ -109,6 +109,9 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'airblade/vim-rooter'
+
+[[plugins]]
 repo = 'rickhowe/diffchar.vim'
 hook_add = '''
   let g:DiffUnit = 'Word1'
