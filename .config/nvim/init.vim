@@ -92,43 +92,49 @@ endif
 
 let g:plug_shallow = 0
 call plug#begin('~/.vim/plugged')
-" 1. 全体外観
+" 0. 全体
 Plug 'itchyny/lightline.vim'
 Plug 'cocopon/iceberg.vim'
 Plug 'joshdick/onedark.vim'
-Plug 'ryanoasis/vim-devicons'
+" Plug 'ryanoasis/vim-devicons'
 Plug 'lambdalisue/nerdfont.vim'
 Plug 'lambdalisue/glyph-palette.vim'
 
-" 2. 移動・全文検索・ファイル操作
+" 1. 移動・全文検索・ファイル操作
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'jesseleite/vim-agriculture'
+Plug 'jesseleite/vim-agriculture', { 'on': 'Rg' }
 Plug 'lambdalisue/fern.vim', { 'on': 'Fern' }
-Plug 'lambdalisue/fern-renderer-nerdfont.vim'
+Plug 'lambdalisue/fern-renderer-nerdfont.vim', { 'on': 'Fern' }
 
-" 3. エディタ設定
-Plug '907th/vim-auto-save'
+" 2. エディタ
+Plug 'kana/vim-submode'
 Plug 'delphinus/vim-auto-cursorline'
+Plug '907th/vim-auto-save'
+
+" 3. 文書編集
+Plug 'tyru/caw.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-Plug 'tyru/caw.vim'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'Yggdroot/indentLine'
+Plug 'sheerun/vim-polyglot'
 "" スニペット
-"" 補完
+"" codi.vim?
+
+" 4. LSP
+"" Completion
 "" Linter
 "" Formatter
 
-" 6. 拡張
+" 6. 外部連携
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'rickhowe/diffchar.vim'
 Plug 'tyru/open-browser.vim'
 "" プログラム実行
 
-Plug 'kana/vim-submode'
 Plug 'airblade/vim-rooter'
 call plug#end()
 

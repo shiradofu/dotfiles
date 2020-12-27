@@ -9,3 +9,4 @@ au myAu ColorScheme *
 \   highlight GitGutterAdd    ctermfg=2  ctermbg=none
 \ |	highlight GitGutterChange ctermfg=12 ctermbg=none
 \ |	highlight GitGutterDelete ctermfg=1  ctermbg=none
+\ |	highlight SignColumn      ctermfg=1  ctermbg=none
