@@ -37,6 +37,29 @@ if IsPlugInstalled('fzf') && IsPlugInstalled('fzf.vim')
   "nnoremap <silent> si :<C-u>gitに含まれないファイルを含めた検索<CR>
 endif
 
+if IsPlugInstalled('vim-submode')
+  call submode#enter_with('bufmove', 'n', '', 's>', '3<C-w>>')
+  call submode#enter_with('bufmove', 'n', '', 's<', '3<C-w><')
+  call submode#enter_with('bufmove', 'n', '', 's+', '3<C-w>+')
+  call submode#enter_with('bufmove', 'n', '', 's-', '3<C-w>-')
+  call submode#map('bufmove', 'n', '', '>', '3<C-w>>')
+  call submode#map('bufmove', 'n', '', '<', '3<C-w><')
+  call submode#map('bufmove', 'n', '', '+', '3<C-w>+')
+  call submode#map('bufmove', 'n', '', '-', '3<C-w>-')
+endif
+
+if IsPlugInstalled('caw.vim')
+  nmap go <Plug>(caw:hatpos:toggle)
+  xmap go <Plug>(caw:hatpos:toggle)
+  nmap gO <Plug>(caw:box:comment)
+  xmap gO <Plug>(caw:box:comment)
+endif
+
+if IsPlugInstalled('open-browser.vim')
+  nmap gx <Plug>(openbrowser-smart-search)
+  vmap gx <Plug>(openbrowser-smart-search)
+endif
+
 function! GoToLeftWindow()
   let l:current = expand("%:p")
   execute "normal \<C-w>h"

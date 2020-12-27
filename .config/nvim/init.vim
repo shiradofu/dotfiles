@@ -13,10 +13,10 @@ let g:loaded_vimball           = 1
 let g:loaded_vimballPlugin     = 1
 let g:loaded_getscript         = 1
 let g:loaded_getscriptPlugin   = 1
-"let g:loaded_netrw             = 1
-"let g:loaded_netrwPlugin       = 1
-"let g:loaded_netrwSettings     = 1
-"let g:loaded_netrwFileHandlers = 1
+let g:loaded_netrw             = 1
+let g:loaded_netrwPlugin       = 1
+let g:loaded_netrwSettings     = 1
+let g:loaded_netrwFileHandlers = 1
 set encoding=utf-8
 set number
 set expandtab
@@ -103,16 +103,18 @@ Plug 'lambdalisue/glyph-palette.vim'
 " 1. 移動・全文検索・ファイル操作
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'jesseleite/vim-agriculture', { 'on': 'Rg' }
+Plug 'jesseleite/vim-agriculture'
 Plug 'lambdalisue/fern.vim', { 'on': 'Fern' }
 Plug 'lambdalisue/fern-renderer-nerdfont.vim', { 'on': 'Fern' }
+Plug 'lambdalisue/fern-hijack.vim'
 
 " 2. エディタ
 Plug 'kana/vim-submode'
 Plug 'delphinus/vim-auto-cursorline'
-Plug '907th/vim-auto-save'
+"" codi.vim?
 
 " 3. 文書編集
+Plug '907th/vim-auto-save'
 Plug 'tyru/caw.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
@@ -121,7 +123,6 @@ Plug 'ntpeters/vim-better-whitespace'
 Plug 'Yggdroot/indentLine'
 Plug 'sheerun/vim-polyglot'
 "" スニペット
-"" codi.vim?
 
 " 4. LSP
 "" Completion
@@ -132,7 +133,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'rickhowe/diffchar.vim'
-Plug 'tyru/open-browser.vim'
+Plug 'tyru/open-browser.vim', { 'on': '<Plug>(openbrowser-smart-search)' }
 "" プログラム実行
 
 Plug 'airblade/vim-rooter'
