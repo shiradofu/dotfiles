@@ -2,10 +2,6 @@ augroup myAu
   autocmd!
 augroup END
 
-if exists('&termguicolors')
-  setglobal termguicolors
-endif
-
 let g:loaded_gzip              = 1
 let g:loaded_tar               = 1
 let g:loaded_tarPlugin         = 1
@@ -51,29 +47,6 @@ set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr
 if $HOME != $USERPROFILE && $GIT_EXEC_PATH != ''
   finish
 end
-
-" 折りたたみを維持
-" ref: https://lambdalisue.hatenablog.com/entry/2015/12/25/000046
-function! s:is_view_available() abort
-  if !&buflisted || &buftype !=# ''
-    return 0
-  elseif !filewritable(expand('%:p'))
-    return 0
-  endif
-  return 1
-endfunction
-function! s:mkview() abort
-  if s:is_view_available()
-    silent! mkview
-  endif
-endfunction
-function! s:loadview() abort
-  if s:is_view_available()
-    silent! loadview
-  endif
-endfunction
-autocmd myAu BufWinLeave ?* call s:mkview()
-autocmd myAu BufReadPost ?* call s:loadview()
 
 " コメント行からの改行時に自動でコメント文字が挿入されるのを抑制
 " ref: https://hyuki.hatenablog.com/entry/20140122/vim
@@ -123,12 +96,16 @@ call plug#begin('~/.vim/plugged')
 Plug 'itchyny/lightline.vim'
 Plug 'cocopon/iceberg.vim'
 Plug 'joshdick/onedark.vim'
+Plug 'ryanoasis/vim-devicons'
+Plug 'lambdalisue/nerdfont.vim'
+Plug 'lambdalisue/glyph-palette.vim'
 
 " 2. 移動・全文検索・ファイル操作
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'jesseleite/vim-agriculture'
 Plug 'lambdalisue/fern.vim', { 'on': 'Fern' }
+Plug 'lambdalisue/fern-renderer-nerdfont.vim'
 
 " 3. エディタ設定
 Plug '907th/vim-auto-save'
@@ -144,14 +121,12 @@ Plug 'Yggdroot/indentLine'
 "" Linter
 "" Formatter
 
-" Git
+" 6. 拡張
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
-" Diff
 Plug 'rickhowe/diffchar.vim'
-" ブラウザ連携
 Plug 'tyru/open-browser.vim'
-" プログラム実行
+"" プログラム実行
 
 Plug 'kana/vim-submode'
 Plug 'airblade/vim-rooter'

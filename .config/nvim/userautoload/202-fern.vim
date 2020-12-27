@@ -1,0 +1,1 @@
+UsePlugin 'fern.vim'

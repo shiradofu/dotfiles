@@ -12,6 +12,7 @@
 !.config/nvim/dein/lazy.toml
 !.config/nvim/dein/filetype.toml
 !.config/nvim/init.vim
+!.config/nvim/userautoload/[0-9]*.vim
 !.config/tmux/tmux.conf
 !.config/zsh/.zalias
 !.config/zsh/.zcli
