@@ -6,13 +6,9 @@
 !.config/git/config
 !.config/git/ignore
 !.config/iterm2/com.googlecode.iterm2.plist
-!.config/nvim/userautoload/basic.vim
-!.config/nvim/userautoload/mappings.vim
-!.config/nvim/dein/general.toml
-!.config/nvim/dein/lazy.toml
-!.config/nvim/dein/filetype.toml
 !.config/nvim/init.vim
 !.config/nvim/userautoload/[0-9]*.vim
+!.config/nvim/snippets/*.json
 !.config/tmux/tmux.conf
 !.config/zsh/.zalias
 !.config/zsh/.zcli

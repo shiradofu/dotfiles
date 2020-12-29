@@ -1,3 +1,8 @@
+function! Reload()
+  w
+  source ~/dotfiles/.config/nvim/init.vim
+endfunction
+
 augroup myAu
   autocmd!
 augroup END
@@ -43,11 +48,6 @@ set clipboard=unnamed
 set diffopt=internal,filler,algorithm:histogram,indent-heuristic
 set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
 
-" git commit 時にはプラグインは読み込まない
-if $HOME != $USERPROFILE && $GIT_EXEC_PATH != ''
-  finish
-end
-
 " コメント行からの改行時に自動でコメント文字が挿入されるのを抑制
 " ref: https://hyuki.hatenablog.com/entry/20140122/vim
 autocmd myAu BufEnter * setlocal formatoptions-=r
@@ -78,10 +78,10 @@ function! CreateCenteredFloatingWindow()
   au BufWipeout <buffer> exe 'bw '.s:buf
 endfunction
 
-augroup MyGroup
-  au!
-  au BufRead,BufNewFile myPat normal! GAmy text
-augroup END
+" git commit 時にはプラグインは読み込まない
+if $HOME != $USERPROFILE && $GIT_EXEC_PATH != ''
+  finish
+end
 
 " Automatically install vim-plug if not installed
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -122,9 +122,14 @@ Plug 'tpope/vim-repeat'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'Yggdroot/indentLine'
 Plug 'sheerun/vim-polyglot'
-"" スニペット
+Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/vim-vsnip-integ'
 
 " 4. LSP
+Plug 'prabirshrestha/vim-lsp'
+Plug 'mattn/vim-lsp-settings'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
 "" Completion
 "" Linter
 "" Formatter
