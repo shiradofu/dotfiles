@@ -85,3 +85,17 @@ tags
 
 # Local History for Visual Studio Code
 .history/
+
+
+##########
+# direnv #
+##########
+
+.envrc
+
+
+########
+# asdf #
+########
+
+.tool-versions

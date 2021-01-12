@@ -41,6 +41,8 @@ printf "\n"
 sleep 5
 
 info_m "🍺  installing formulae with homebrew..."
+
+# gpg -> GnuPG: asdf-nodejs dependency
 while read formula; do
   [ -z "${formula}" ] && continue
   exists "${formula}" && continue
@@ -59,18 +61,16 @@ fzf
 exa
 bat
 tmux
+vim
 nvim
-php
-nodenv
-yarn
-rbenv
-pyenv
-pyenv-virtualenv
 ghq
 hub
 aws
+gpg
+asdf
+yarn
+direnv
 $("${MacOS}" && echo "gnu-sed")
-$("${MacOS}" && echo "deno")
 $("${Linux}" && echo "zsh")
 EOS
 printf "\n"

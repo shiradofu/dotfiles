@@ -98,10 +98,11 @@ zinit ice wait'0' lucid as"completion" for \
 # autoload bashcompinit && bashcompinit
 # TODO: add aws completion after installing
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f /usr/local/opt/asdf/asdf.sh ] && . /usr/local/opt/asdf/asdf.sh
 
 ### STATS
 #if (which zprof > /dev/null) ;then
 #  zprof | less
 #fi
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

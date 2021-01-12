@@ -3,6 +3,10 @@ function! Reload()
   source ~/dotfiles/.config/nvim/init.vim
 endfunction
 
+function! C()
+  :so $VIMRUNTIME/syntax/colortest.vim
+endfunction
+
 augroup myAu
   autocmd!
 augroup END
@@ -36,7 +40,7 @@ set foldlevel=999
 set ttimeoutlen=10
 set updatetime=100
 set hidden
-set inccommand=split
+" set inccommand=split
 set mouse=a
 set showtabline=2
 set laststatus=2
@@ -130,9 +134,6 @@ Plug 'prabirshrestha/vim-lsp'
 Plug 'mattn/vim-lsp-settings'
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
-"" Completion
-"" Linter
-"" Formatter
 
 " 6. 外部連携
 Plug 'tpope/vim-fugitive'
