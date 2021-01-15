@@ -289,7 +289,6 @@ tools:
     hover-stdin: true
 
   eslint-lint: &eslint-lint
-    # lint-command: 'eslint_d -f unix --stdin --stdin-filename ${INPUT}'
     lint-command: 'npx eslint -f unix --stdin --stdin-filename ${INPUT}'
     lint-ignore-exit-code: true
     lint-stdin: true
@@ -307,7 +306,7 @@ tools:
         title: 'prettier fix'
 
   prettier: &prettier
-    format-command: 'prettier'
+    format-command: 'npx prettier'
 
 # languages setting
 languages:
