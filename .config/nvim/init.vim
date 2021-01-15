@@ -134,6 +134,7 @@ Plug 'prabirshrestha/vim-lsp'
 Plug 'mattn/vim-lsp-settings'
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'liuchengxu/vista.vim'
 
 " 6. 外部連携
 Plug 'tpope/vim-fugitive'
