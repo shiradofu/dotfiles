@@ -50,12 +50,12 @@ set shortmess+=W
 set clipboard=unnamed
 set diffopt=internal,filler,algorithm:histogram,indent-heuristic
 set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
-if exists('+termguicolors')
+if has('termguicolors')
   let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
 endif
-if has("nvim")
+if has('nvim')
   set inccommand=nosplit
 endif
 
@@ -135,6 +135,7 @@ Plug 'Yggdroot/indentLine'
 Plug 'sheerun/vim-polyglot'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/vim-vsnip-integ'
+Plug 'machakann/vim-highlightedyank'
 
 " 4. LSP
 Plug 'prabirshrestha/vim-lsp'
@@ -147,6 +148,7 @@ Plug 'liuchengxu/vista.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'rickhowe/diffchar.vim'
+Plug 'ToruIwashita/git-switcher.vim'
 Plug 'tyru/open-browser.vim', { 'on': '<Plug>(openbrowser-smart-search)' }
 "" プログラム実行
 
