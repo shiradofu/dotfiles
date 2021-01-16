@@ -1,5 +1,5 @@
 function! Reload()
-  w
+  m
   source ~/dotfiles/.config/nvim/init.vim
 endfunction
 
@@ -40,7 +40,6 @@ set foldlevel=999
 set ttimeoutlen=10
 set updatetime=100
 set hidden
-" set inccommand=split
 set mouse=a
 set showtabline=2
 set laststatus=2
@@ -51,6 +50,14 @@ set shortmess+=W
 set clipboard=unnamed
 set diffopt=internal,filler,algorithm:histogram,indent-heuristic
 set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
+if exists('+termguicolors')
+  let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
+if has("nvim")
+  set inccommand=nosplit
+endif
 
 " コメント行からの改行時に自動でコメント文字が挿入されるのを抑制
 " ref: https://hyuki.hatenablog.com/entry/20140122/vim

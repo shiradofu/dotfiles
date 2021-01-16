@@ -55,6 +55,8 @@ function! s:lightline_update()
     return
   endif
   try
+    let l:formatted_colors_name =
+    \ substitute(substitute(g:colors_name, '-', '_', 'g'), '256.*', '', '')
     if index([
     \ 'iceberg',
     \ 'wombat',
@@ -65,15 +67,15 @@ function! s:lightline_update()
     \ 'molokai',
     \ 'seoul256',
     \ 'darcula',
-    \ 'selenized-dark',
-    \ 'selenized-black',
-    \ 'selenized-light',
-    \ 'selenized-white',
+    \ 'selenized_dark',
+    \ 'selenized_black',
+    \ 'selenized_light',
+    \ 'selenized_white',
     \ 'Tomorrow',
-    \ 'Tomorrow-Night',
-    \ 'Tomorrow-Night-Blue',
-    \ 'Tomorrow-Night-Bright',
-    \ 'Tomorrow-Night-Eighties',
+    \ 'Tomorrow_Night',
+    \ 'Tomorrow_Night_Blue',
+    \ 'Tomorrow_Night_Bright',
+    \ 'Tomorrow_Night_Eighties',
     \ 'PaperColor',
     \ 'landscape',
     \ 'one',
@@ -83,14 +85,13 @@ function! s:lightline_update()
     \ 'nord',
     \ 'deus',
     \ 'simpleblack',
-    \ 'srcery-drk',
-    \ 'ayu-mirage',
-    \ 'ayu-light',
-    \ 'ayu-dark',
+    \ 'srcery_drk',
+    \ 'ayu_mirage',
+    \ 'ayu_light',
+    \ 'ayu_dark',
     \ '16color'
-  \ ], g:colors_name) != -1
-      let g:lightline.colorscheme =
-        \ substitute(substitute(g:colors_name, '-', '_', 'g'), '256.*', '', '')
+  \ ], l:formatted_colors_name) != -1
+      let g:lightline.colorscheme = l:formatted_colors_name
       call lightline#init()
       call lightline#colorscheme()
       call lightline#update()
