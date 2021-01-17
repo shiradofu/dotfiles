@@ -5,6 +5,17 @@ nnoremap <silent> k gk
 nnoremap <silent> <C-l> :<C-u>nohlsearch<CR>:diffupdate<CR>:syntax sync fromstart<CR><C-l>
 command! -nargs=1 H vertical leftabove help <args>
 
+inoremap <C-b> <left>
+inoremap <C-f> <right>
+
+cnoremap <C-b> <left>
+cnoremap <C-f> <right>
+cnoremap <C-n> <down>
+cnoremap <C-p> <up>
+cnoremap <C-a> <home>
+cnoremap <C-e> <end>
+cnoremap <C-d> <del>
+
 " window commands
 nnoremap s <Nop>
 nnoremap <silent> sj <C-w>j

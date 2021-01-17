@@ -48,6 +48,8 @@ set nocursorbind
 set noscrollbind
 set shortmess+=W
 set clipboard=unnamed
+set wildmenu
+set wildmode=full
 set diffopt=internal,filler,algorithm:histogram,indent-heuristic
 set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
 if has('termguicolors')
@@ -107,13 +109,14 @@ call plug#begin('~/.vim/plugged')
 Plug 'itchyny/lightline.vim'
 Plug 'cocopon/iceberg.vim'
 Plug 'joshdick/onedark.vim'
-" Plug 'ryanoasis/vim-devicons'
 Plug 'lambdalisue/nerdfont.vim'
 Plug 'lambdalisue/glyph-palette.vim'
+Plug 'mhinz/vim-startify'
 
 " 1. 移動・全文検索・ファイル操作
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
+Plug 'pbogut/fzf-mru.vim'
 Plug 'jesseleite/vim-agriculture'
 Plug 'lambdalisue/fern.vim', { 'on': 'Fern' }
 Plug 'lambdalisue/fern-renderer-nerdfont.vim', { 'on': 'Fern' }
@@ -122,7 +125,9 @@ Plug 'lambdalisue/fern-hijack.vim'
 " 2. エディタ
 Plug 'kana/vim-submode'
 Plug 'delphinus/vim-auto-cursorline'
-"" codi.vim?
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+Plug 'lambdalisue/suda.vim'
+Plug 'gcmt/taboo.vim'
 
 " 3. 文書編集
 Plug '907th/vim-auto-save'
