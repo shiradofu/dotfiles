@@ -1,9 +1,8 @@
-nnoremap <silent> s0 :<C-u>call dein#recache_runtimepath()<CR>
+cabbrev h vertical topleft h
 
 nnoremap <silent> j gj
 nnoremap <silent> k gk
 nnoremap <silent> <C-l> :<C-u>nohlsearch<CR>:diffupdate<CR>:syntax sync fromstart<CR><C-l>
-command! -nargs=1 H vertical leftabove help <args>
 
 inoremap <C-b> <left>
 inoremap <C-f> <right>
@@ -35,6 +34,10 @@ nnoremap <silent> s. :<C-u>bn<CR>
 nnoremap <silent> s, :<C-u>bp<CR>
 nnoremap <silent> <BS> :<C-u>q<CR>
 nnoremap <silent> s<BS> :<C-u>tabclose<CR>
+
+if IsPlugInstalled('vim-easymotion')
+  nmap <Space> <Plug>(easymotion-overwin-f)
+endif
 
 if IsPlugInstalled('fzf') && IsPlugInstalled('fzf.vim')
   nnoremap <silent> so :<C-u>Files<CR>
@@ -86,3 +89,16 @@ function! GoToRightWindow()
     execute "normal \<C-w>w"
   endif
 endfunction
+
+function! s:MoveToNewTab()
+    tab split
+    tabprevious
+
+    if winnr('$') > 1
+        close
+    elseif bufnr('$') > 1
+        buffer #
+    endif
+
+    tabnext
+  endfunction

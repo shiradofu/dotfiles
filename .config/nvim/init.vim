@@ -141,6 +141,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/vim-vsnip-integ'
 Plug 'machakann/vim-highlightedyank'
+Plug 'easymotion/vim-easymotion'
 
 " 4. LSP
 Plug 'prabirshrestha/vim-lsp'
@@ -151,6 +152,7 @@ Plug 'liuchengxu/vista.vim'
 
 " 6. 外部連携
 Plug 'tpope/vim-fugitive'
+Plug 'lambdalisue/gina.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'rickhowe/diffchar.vim'
 Plug 'ToruIwashita/git-switcher.vim'
