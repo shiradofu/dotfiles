@@ -26,12 +26,26 @@ let g:lightline = {
   \ 'active': {
   \   'left': [
   \     [ 'mode', 'paste' ],
+  \     [ 'readonly', 'filename', 'modified' ],
   \   ],
   \   'right': [
   \     [ 'lsp_errors', 'lsp_warnings', 'lsp_ok' ],
   \     [ 'percent' ],
   \     [ 'fileformat', 'fileencoding', 'filetype'  ],
   \   ],
+  \ },
+  \ 'tabline': {
+  \   'left': [
+  \     [ 'tabs' ],
+  \   ],
+  \   'right': [
+  \     [],
+  \     [ 'gitbranch' ],
+  \     [],
+  \   ],
+  \ },
+  \ 'component_function': {
+  \   'gitbranch': 'FugitiveHead'
   \ },
   \ 'component_expand': {
   \   'lsp_warnings': 'LightlineLSPWarnings',

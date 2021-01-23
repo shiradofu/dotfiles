@@ -116,18 +116,16 @@ Plug 'mhinz/vim-startify'
 " 1. 移動・全文検索・ファイル操作
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'pbogut/fzf-mru.vim'
 Plug 'jesseleite/vim-agriculture'
 Plug 'lambdalisue/fern.vim', { 'on': 'Fern' }
 Plug 'lambdalisue/fern-renderer-nerdfont.vim', { 'on': 'Fern' }
 Plug 'lambdalisue/fern-hijack.vim'
+Plug 'kana/vim-altr'
 
 " 2. エディタ
 Plug 'kana/vim-submode'
 Plug 'delphinus/vim-auto-cursorline'
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 Plug 'lambdalisue/suda.vim'
-Plug 'gcmt/taboo.vim'
 
 " 3. 文書編集
 Plug '907th/vim-auto-save'
@@ -144,10 +142,11 @@ Plug 'machakann/vim-highlightedyank'
 Plug 'easymotion/vim-easymotion'
 
 " 4. LSP
-Plug 'prabirshrestha/vim-lsp'
-Plug 'mattn/vim-lsp-settings'
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'prabirshrestha/vim-lsp'
+" Plug 'mattn/vim-lsp-settings'
+" Plug 'prabirshrestha/asyncomplete.vim'
+" Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'liuchengxu/vista.vim'
 
 " 6. 外部連携

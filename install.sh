@@ -72,7 +72,6 @@ gpg
 asdf
 yarn
 direnv
-cmigemo
 $("${MacOS}" && echo "gnu-sed")
 $("${Linux}" && echo "zsh")
 EOS
