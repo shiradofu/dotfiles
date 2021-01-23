@@ -41,15 +41,18 @@ printf "\n"
 sleep 5
 
 info_m "🍺  installing formulae with homebrew..."
+
+# gpg -> GnuPG: asdf-nodejs dependency
 while read formula; do
   [ -z "${formula}" ] && continue
   exists "${formula}" && continue
   printf "\n"
   info_m "== brew install ${formula} =============================================================" .80
   case ${formula} in
-    fzf  ) brew install fzf && $(brew --prefix)/opt/fzf/install --no-key-bindings --completion --no-update-rc;;
-    aws  ) brew install awscli;;
-    *    ) brew install ${formula};;
+    fzf     ) brew install fzf && $(brew --prefix)/opt/fzf/install --no-key-bindings --completion --no-update-rc;;
+    aws     ) brew install awscli;;
+    cmigemo ) brew install cmigemo --HEAD;;
+    *       ) brew install ${formula};;
   esac
   ok_m "== ${formula} has been installed. ========================================================" .80
 done <<EOS
@@ -58,19 +61,18 @@ rg
 fzf
 exa
 bat
+fd
 tmux
+vim
 nvim
-php
-nodenv
-yarn
-rbenv
-pyenv
-pyenv-virtualenv
 ghq
 hub
 aws
+gpg
+asdf
+yarn
+direnv
 $("${MacOS}" && echo "gnu-sed")
-$("${MacOS}" && echo "deno")
 $("${Linux}" && echo "zsh")
 EOS
 printf "\n"

@@ -1,65 +1,175 @@
-augroup myau
+function! Reload()
+  m
+  source ~/dotfiles/.config/nvim/init.vim
+endfunction
+
+function! C()
+  :so $VIMRUNTIME/syntax/colortest.vim
+endfunction
+
+augroup myAu
   autocmd!
 augroup END
 
-" for only neovim. in pyenv virtualenv named 'neovim-python3'
-if has('nvim') && isdirectory( $PYENV_ROOT."/versions/neovim-python3" )
-  let g:python3_host_prog = $PYENV_ROOT.'/versions/neovim-python3/bin/python'
+let g:loaded_gzip              = 1
+let g:loaded_tar               = 1
+let g:loaded_tarPlugin         = 1
+let g:loaded_zip               = 1
+let g:loaded_zipPlugin         = 1
+let g:loaded_rrhelper          = 1
+let g:loaded_2html_plugin      = 1
+let g:loaded_vimball           = 1
+let g:loaded_vimballPlugin     = 1
+let g:loaded_getscript         = 1
+let g:loaded_getscriptPlugin   = 1
+let g:loaded_netrw             = 1
+let g:loaded_netrwPlugin       = 1
+let g:loaded_netrwSettings     = 1
+let g:loaded_netrwFileHandlers = 1
+set encoding=utf-8
+set number
+set expandtab
+set tabstop=2
+set shiftwidth=2
+set smartindent
+set shiftround
+set ignorecase
+set smartcase
+set foldmethod=manual
+set foldlevel=999
+set ttimeoutlen=10
+set updatetime=100
+set hidden
+set mouse=a
+set showtabline=2
+set laststatus=2
+set splitright
+set nocursorbind
+set noscrollbind
+set shortmess+=W
+set clipboard=unnamed
+set wildmenu
+set wildmode=full
+set diffopt=internal,filler,algorithm:histogram,indent-heuristic
+set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
+if has('termguicolors')
+  let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
+if has('nvim')
+  set inccommand=nosplit
 endif
 
-" dir for plugin entities
-let s:dein_dir = expand($XDG_CACHE_HOME.'/dein')
-let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
-if &runtimepath !~# '/dein.vim'
-  if !isdirectory(s:dein_repo_dir)
-    execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
-  endif
-  execute 'set runtimepath^=' . fnamemodify(s:dein_repo_dir, ':p')
+" コメント行からの改行時に自動でコメント文字が挿入されるのを抑制
+" ref: https://hyuki.hatenablog.com/entry/20140122/vim
+autocmd myAu BufEnter * setlocal formatoptions-=r
+autocmd myAu BufEnter * setlocal formatoptions-=o
+
+" centered floating window with borders
+" ref: https://github.com/neovim/neovim/issues/9718#issuecomment-559573308
+function! CreateCenteredFloatingWindow()
+  let width = min([&columns - 4, max([80, &columns - 20])])
+  let height = min([&lines - 4, max([20, &lines - 10])])
+  let top = ((&lines - height) / 2) - 1
+  let left = (&columns - width) / 2
+  let opts = {'relative': 'editor', 'row': top, 'col': left, 'width': width, 'height': height, 'style': 'minimal'}
+
+  let top = "╭" . repeat("─", width - 2) . "╮"
+  let mid = "│" . repeat(" ", width - 2) . "│"
+  let bot = "╰" . repeat("─", width - 2) . "╯"
+  let lines = [top] + repeat([mid], height - 2) + [bot]
+  let s:buf = nvim_create_buf(v:false, v:true)
+  call nvim_buf_set_lines(s:buf, 0, -1, v:true, lines)
+  call nvim_open_win(s:buf, v:true, opts)
+  set winhl=Normal:Floating
+  let opts.row += 1
+  let opts.height -= 2
+  let opts.col += 2
+  let opts.width -= 4
+  call nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
+  au BufWipeout <buffer> exe 'bw '.s:buf
+endfunction
+
+" git commit 時にはプラグインは読み込まない
+" if $HOME != $USERPROFILE && $GIT_EXEC_PATH != ''
+"   finish
+" end
+
+" Automatically install vim-plug if not installed
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-let g:config_dir = $XDG_CONFIG_HOME . '/nvim/'
-if dein#load_state(s:dein_dir)
-  let s:dein_toml = g:config_dir . 'dein.toml'
-  let s:deinlazy_toml = g:config_dir . 'deinlazy.toml'
-  let s:deinft_toml = g:config_dir . 'deinft.toml'
-  call dein#begin(s:dein_dir, [expand('<sfile>'), s:dein_toml, s:deinlazy_toml])
-  if !has('nvim')
-    call dein#add('roxma/nvim-yarp')
-    call dein#add('roxma/vim-hug-neovim-rpc')
-  endif
-  call dein#load_toml(s:dein_toml, { 'lazy': 0 })
-  call dein#load_toml(s:deinlazy_toml, { 'lazy': 1 })
-  call dein#load_toml(s:deinft_toml)
-  call dein#end()
-  call dein#save_state()
+let g:plug_shallow = 0
+call plug#begin('~/.vim/plugged')
+" 0. 全体
+Plug 'itchyny/lightline.vim'
+Plug 'cocopon/iceberg.vim'
+Plug 'joshdick/onedark.vim'
+Plug 'lambdalisue/nerdfont.vim'
+Plug 'lambdalisue/glyph-palette.vim'
+Plug 'mhinz/vim-startify'
+
+" 1. 移動・全文検索・ファイル操作
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'jesseleite/vim-agriculture'
+Plug 'lambdalisue/fern.vim', { 'on': 'Fern' }
+Plug 'lambdalisue/fern-renderer-nerdfont.vim', { 'on': 'Fern' }
+Plug 'lambdalisue/fern-hijack.vim'
+Plug 'kana/vim-altr'
+
+" 2. エディタ
+Plug 'kana/vim-submode'
+Plug 'delphinus/vim-auto-cursorline'
+Plug 'lambdalisue/suda.vim'
+
+" 3. 文書編集
+Plug '907th/vim-auto-save'
+Plug 'tyru/caw.vim'
+Plug 'jiangmiao/auto-pairs'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+Plug 'ntpeters/vim-better-whitespace'
+Plug 'Yggdroot/indentLine'
+Plug 'sheerun/vim-polyglot'
+Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/vim-vsnip-integ'
+Plug 'machakann/vim-highlightedyank'
+Plug 'easymotion/vim-easymotion'
+
+" 4. LSP
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'prabirshrestha/vim-lsp'
+" Plug 'mattn/vim-lsp-settings'
+" Plug 'prabirshrestha/asyncomplete.vim'
+" Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'liuchengxu/vista.vim'
+
+" 6. 外部連携
+Plug 'tpope/vim-fugitive'
+Plug 'lambdalisue/gina.vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'rickhowe/diffchar.vim'
+Plug 'ToruIwashita/git-switcher.vim'
+Plug 'tyru/open-browser.vim'
+Plug 'tyru/open-browser-github.vim'
+
+Plug 'airblade/vim-rooter'
+call plug#end()
+
+" check the specified plugin is installed
+let s:plugs = get(s:, 'plugs', get(g:, 'plugs', {}))
+function! IsPlugInstalled(name) abort
+  return has_key(s:plugs, a:name) ? isdirectory(s:plugs[a:name].dir) : 0
+endfunction
+command! -nargs=1 UsePlugin if !IsPlugInstalled(<args>) | finish | endif
+
+if IsPlugInstalled('lightline.vim')
+  let g:lightline = {}
 endif
-if !has('vim_starting') && dein#check_install()
-  call dein#install()
-endif
-filetype plugin indent on
-syntax enable
 
 runtime! userautoload/*.vim
-
-" mtth/scratch.vim
-let g:scratch_no_mappings = 1
-let g:scratch_horizontal = 1
-let g:scratch_height = 999
-let g:scratch_autohide = 0
-let g:scratch_persistence_file = '.scratch-vim'
-nnoremap <silent> gs :<C-u>Scratch<CR>gg
-command! -nargs=0 ScratchClose call ScratchClose()
-function! ScratchClose()
-  if strlen(g:scratch_persistence_file) > 0
-    execute ':w ' . g:scratch_persistence_file
-  endif
-  close
-endfunction
-autocmd myau FileType scratch nnoremap <silent> <buffer> <Esc> :<C-u>ScratchClose<CR>
-
-call plug#begin('~/.local/share/nvim/plugged')
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-  Plug 'junegunn/fzf.vim'
-  Plug 'mtth/scratch.vim'
-call plug#end()
-nnoremap <silent> sf :Files<CR>

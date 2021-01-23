@@ -1,28 +1,24 @@
 *
 !*/
 
-!.gitignore
-!.config/alacritty/alacritty.yml
-!.config/git/config
-!.config/git/ignore
-!.config/iterm2/com.googlecode.iterm2.plist
-!.config/nvim/userautoload/basic.vim
-!.config/nvim/userautoload/mappings.vim
-!.config/nvim/dein.toml
-!.config/nvim/deinft.toml
-!.config/nvim/deinlazy.toml
-!.config/nvim/init.vim
-!.config/tmux/tmux.conf
-!.config/zsh/.zalias
-!.config/zsh/.zcli
-!.config/zsh/.zprompt
-!.config/zsh/.zshrc
-!.zshenv
+!/.gitignore
+!/.config/alacritty/alacritty.yml
+!/.config/efm-langserver/config.yaml
+!/.config/git/config
+!/.config/git/ignore
+!/.config/iterm2/com.googlecode.iterm2.plist
+!/.config/nvim/init.vim
+!/.config/nvim/userautoload/[0-9]*.vim
+!/.config/nvim/snippets/*.json
+!/.config/tmux/tmux.conf
+!/.config/zsh/.zalias
+!/.config/zsh/.zcli
+!/.config/zsh/.zprompt
+!/.config/zsh/.zshrc
+!/.zshenv
 
-!bin/tmsl
+!/install.sh
+!/init.sh
 
-!install.sh
-!init.sh
-
-!README.md
-!Dockerfile
+!/README.md
+!/Dockerfile
