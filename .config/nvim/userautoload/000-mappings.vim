@@ -63,13 +63,18 @@ if IsPlugInstalled('vim-submode')
 endif
 
 if IsPlugInstalled('caw.vim')
-  nmap go <Plug>(caw:hatpos:toggle)
-  xmap go <Plug>(caw:hatpos:toggle)
-  nmap gO <Plug>(caw:box:comment)
-  xmap gO <Plug>(caw:box:comment)
+  nmap g/ <Plug>(caw:hatpos:toggle)
+  xmap g/ <Plug>(caw:hatpos:toggle)
+  " nmap g/ <Plug>(caw:box:comment)
+  " xmap g/ <Plug>(caw:box:comment)
 endif
 
 if IsPlugInstalled('open-browser.vim')
+  nmap gx <Plug>(openbrowser-smart-search)
+  vmap gx <Plug>(openbrowser-smart-search)
+endif
+
+if IsPlugInstalled('open-browser-github.vim')
   nmap gx <Plug>(openbrowser-smart-search)
   vmap gx <Plug>(openbrowser-smart-search)
 endif

@@ -92,9 +92,9 @@ function! CreateCenteredFloatingWindow()
 endfunction
 
 " git commit 時にはプラグインは読み込まない
-if $HOME != $USERPROFILE && $GIT_EXEC_PATH != ''
-  finish
-end
+" if $HOME != $USERPROFILE && $GIT_EXEC_PATH != ''
+"   finish
+" end
 
 " Automatically install vim-plug if not installed
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -156,8 +156,8 @@ Plug 'lambdalisue/gina.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'rickhowe/diffchar.vim'
 Plug 'ToruIwashita/git-switcher.vim'
-Plug 'tyru/open-browser.vim', { 'on': '<Plug>(openbrowser-smart-search)' }
-"" プログラム実行
+Plug 'tyru/open-browser.vim'
+Plug 'tyru/open-browser-github.vim'
 
 Plug 'airblade/vim-rooter'
 call plug#end()
