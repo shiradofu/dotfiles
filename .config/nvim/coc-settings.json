@@ -1,0 +1,36 @@
+{
+  "suggest.autoTrigger": "always",
+  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+  "typescript.suggest.includeCompletionsWithSnippetText": false,
+  "typescript.autoClosingTags": true,
+  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+  "yaml.format.singleQuote": true,
+  "diagnostic-languageserver.mergeConfig": true,
+  "diagnostic-languageserver.filetypes": {
+    "php": ["phpstan", "phpcs"]
+  },
+  "diagnostic-languageserver.formatFiletypes": {
+    "php": ["php-cs-fixer"]
+  },
+  "diagnostic-languageserver.linters": {
+    "phpstan": {
+      "args": [
+        "analyze",
+        "--memory-limit=1G",
+        "--error-format",
+        "raw",
+        "--no-progress",
+        "%file"
+      ]
+    }
+  },
+  "diagnostic-languageserver.formatters": {
+    "php-cs-fixer": {
+      "command": "./vendor/bin/php-cs-fixer",
+      "args": ["fix", "--using-cache=no", "--no-interaction", "%file"],
+      "rootPatterns": ["composer.json", "composer.lock", "vendor", ".git"],
+      "isStdout": false,
+      "doesWriteToFile": true
+    }
+  }
+}

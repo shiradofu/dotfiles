@@ -1,0 +1,5 @@
+[[plugins]]
+repo = 'tyru/open-browser.vim'
+on_cmd = ['OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch']
+on_map = '<Plug>(openbrowser-'
+hook_post_source = 'let g:netrw_nogx = 1' # disable netrw's gx mapping.

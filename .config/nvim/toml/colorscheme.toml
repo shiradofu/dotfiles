@@ -1,0 +1,45 @@
+[[plugins]]
+repo = 'cocopon/iceberg.vim'
+on_if = 'g:colorscheme ==# "iceberg"'
+on_event = ['VimEnter', 'SourcePost']
+
+[[plugins]]
+repo = 'popkirby/lightline-iceberg'
+on_if = 'g:colorscheme ==# "iceberg"'
+on_event = ['VimEnter', 'SourcePost']
+
+[[plugins]] # has lightline theme
+repo = 'arcticicestudio/nord-vim'
+on_if = 'g:colorscheme ==# "nord"'
+hook_add = 'let g:nord_uniform_status_lines = 0'
+on_event = ['VimEnter', 'SourcePost']
+
+[[plugins]] # has lightline theme
+repo = 'yuttie/hydrangea-vim'
+on_if = 'g:colorscheme ==# "hydrangea"'
+on_event = ['VimEnter', 'SourcePost']
+
+[[plugins]]
+repo = 'djjcast/mirodark'
+on_if = 'g:colorscheme ==# "mirodark"'
+on_event = ['VimEnter', 'SourcePost']
+
+[[plugins]] # has lightline theme
+repo = 'whatyouhide/vim-gotham'
+on_if = 'g:colorscheme ==# "gotham"'
+on_event = ['VimEnter', 'SourcePost']
+
+[[plugins]] # has lightline theme
+repo = 'fcpg/vim-farout'
+on_if = 'g:colorscheme ==# "farout"'
+on_event = ['VimEnter', 'SourcePost']
+
+[[plugins]] # has lightline theme
+repo = 'adigitoleo/vim-mellow'
+on_if = 'g:colorscheme ==# "mellow"'
+on_event = ['VimEnter', 'SourcePost']
+
+[[plugins]]
+repo = 'Lokaltog/vim-monotone'
+on_if = 'g:colorscheme ==# "monotone"'
+on_event = ['VimEnter', 'SourcePost']

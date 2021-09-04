@@ -1,0 +1,11 @@
+#!/bin/sh
+
+if [ -z $1 ]; then
+  return 1
+elif [ "$(echo $1 | rev | cut -c 1)" = / ]; then
+  mkdir -p $1
+else
+  dir="$(echo $1 | sed 's@[^/]*$@@')"
+  [ -n "$dir" ] && mkdir -p $dir
+  touch $1
+fi

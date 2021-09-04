@@ -1,0 +1,102 @@
+#!/bin/bash
+
+# chcs - CHange ColorScheme
+
+set -e
+
+__chcs_alacritty() {
+  local dir; dir="$XDG_CONFIG_HOME/alacritty"
+  if
+    ! [ -d "$dir" ] ||
+    ! [ -f "$dir/base.yml" ] ||
+    ! [ -f "$dir/colorschemes/$1.yml" ];
+  then
+    echo An error occurred in chcs alacritty.
+    return 1
+  fi
+  cat "$dir/base.yml" "$dir/colorschemes/$1.yml" >| "$dir/alacritty.yml"
+}
+
+__chcs_tmux() {
+  if ! type tmux > /dev/null 2>&1; then return; fi
+  local dir; dir="$XDG_CONFIG_HOME/tmux"
+  local file; file="$dir/styles/$1.conf"
+  if ! [ -d "$dir" ] || ! [ -f "$file" ]; then
+    echo An error occurred in chcs tmux.
+    return 1
+  fi
+  command cp -f $file $dir/_style.conf
+  if [ -n "$TMUX" ]; then tmux source $dir/tmux.conf; fi
+}
+
+__chcs_bat() {
+  if ! type bat > /dev/null 2>&1; then return; fi
+  if ! [ -d "$(bat --config-dir)" ]; then
+    mkdir -p $(bat --config-dir)
+  fi
+  printf -- "--theme=$1\n" >| "$(bat --config-file)"
+}
+
+__chcs_nvim() {
+  local dir; dir="$XDG_CONFIG_HOME/nvim"
+  if ! [ -d "$dir" ]; then
+    echo An error occurred in chcs nvim.
+    return 1
+  fi
+  echo "let g:colorscheme = '$1'" >| "$dir/_colorscheme.vim"
+}
+
+case $1 in
+  iceberg )
+    __chcs_alacritty iceberg
+    __chcs_tmux iceberg
+    __chcs_bat iceberg
+    __chcs_nvim iceberg
+    ;;
+  nord )
+    __chcs_alacritty nord
+    __chcs_tmux nord
+    __chcs_bat Nord
+    __chcs_nvim nord
+    ;;
+  hydrangea )
+    __chcs_alacritty nord
+    __chcs_tmux hydrangea
+    __chcs_bat mirodark
+    __chcs_nvim hydrangea
+    ;;
+  mirodark )
+    __chcs_alacritty nord
+    __chcs_tmux hydrangea
+    __chcs_bat mirodark
+    __chcs_nvim mirodark
+    ;;
+  gotham )
+    __chcs_alacritty gotham
+    __chcs_tmux gotham
+    __chcs_bat gotham
+    __chcs_nvim gotham
+    ;;
+  farout )
+    __chcs_alacritty mellow
+    __chcs_tmux mellow
+    __chcs_bat zenburn
+    __chcs_nvim farout
+    ;;
+  mellow )
+    __chcs_alacritty mellow
+    __chcs_tmux mellow
+    __chcs_bat zenburn
+    __chcs_nvim mellow
+    ;;
+  monotone )
+    __chcs_alacritty monotone
+    __chcs_tmux monotone
+    __chcs_bat monotone
+    __chcs_nvim monotone
+    ;;
+  * )
+    echo colorscheme not found.
+    exit 1
+    ;;
+esac

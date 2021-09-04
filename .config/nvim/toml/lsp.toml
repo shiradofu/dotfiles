@@ -1,0 +1,12 @@
+[[plugins]]
+repo = 'neoclide/coc.nvim'
+rev = 'release'
+hook_add = 'call plug#coc#hook_add()'
+
+[[plugins]]
+repo = 'antoinemadec/coc-fzf'
+depends = 'coc.nvim'
+
+[[plugins]]
+repo = 'liuchengxu/vista.vim'
+hook_add = 'call plug#vista#hook_add()'

@@ -1,0 +1,16 @@
+#compdef chcs
+
+_chcs() {
+  _values \
+    'name' \
+    'iceberg' \
+    'nord' \
+    'hydrangea' \
+    'mirodark' \
+    'gotham' \
+    'farout' \
+    'mellow' \
+    'monotone'
+}
+
+_chcs "$@"

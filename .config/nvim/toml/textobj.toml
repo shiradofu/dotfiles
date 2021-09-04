@@ -1,0 +1,75 @@
+[[plugins]]
+repo = 'kana/vim-textobj-user'
+on_event = 'VimEnter'
+hook_post_source = '''
+call textobj#user#plugin('underscore', {
+\   'a': {
+\     'select': 'a_',
+\     '*pattern*': '_[^_]*_'
+\   },
+\   'i': {
+\     'select': 'i_',
+\     '*pattern*': '_\zs[^_]\+\ze_'
+\   },
+\ })
+call textobj#user#plugin('space', {
+\   'a': {
+\     'pattern': '[[:blank:]　]\+',
+\     'select': ['a<Space>'],
+\   },
+\   'i': {
+\     'pattern': ' \+',
+\     'select': ['i<Space>'],
+\   },
+\ })
+'''
+
+[[plugins]]
+repo = 'kana/vim-textobj-entire'
+on_event = 'VimEnter'
+
+[[plugins]]
+repo = 'kana/vim-textobj-indent'
+on_event = 'VimEnter'
+
+[[plugins]]
+repo = 'kana/vim-textobj-line'
+on_event = 'VimEnter'
+
+[[plugins]]
+repo = 'sgur/vim-textobj-parameter'
+depends = 'vim-textobj-user'
+on_event = 'VimEnter'
+
+[[plugins]]
+repo = 'glts/vim-textobj-comment'
+on_event = 'VimEnter'
+
+[[plugins]]
+repo = 'tpope/vim-commentary'
+on_map = '<Plug>Commentary'
+on_func = 'CommentaryTextobj'
+hook_add = '''
+MyAutocmd FileType toml setlocal commentstring=\#\ %s
+xmap s <Plug>Commentary
+nmap s <Plug>Commentary
+nmap S <Plug>Commentary<Plug>Commentary
+omap aC <Plug>Commentary
+xmap <silent> aC :<C-u>call CommentaryTextobj()<CR>
+'''
+hook_post_source = 'call user#sid#globalize_commentary_textobj()'
+
+[[plugins]]
+repo = 'kana/vim-operator-user'
+on_event = 'VimEnter'
+
+[[plugins]]
+repo = 'kana/vim-operator-replace'
+depends = 'vim-operator-user'
+on_event = 'VimEnter'
+
+[[plugins]]
+repo = 'machakann/vim-sandwich'
+on_event = 'VimEnter'
+hook_add = 'call plug#sandwich#hook_add()'
+hook_post_source = 'call plug#sandwich#hook_post_source()'

@@ -1,0 +1,45 @@
+#compdef git-wt
+
+_list_branches() {
+  git branch -a |
+      grep -v HEAD |
+      awk '{sub(/^[*+]? */, "");sub(/^ *remotes\/[^\/]+\//, "");print}' |
+      sort -r |
+      uniq
+}
+
+__git_branches() {
+  local -a _c
+  _c=("${(@f)$(_list_branches)}")
+  _describe -t commands git_branches _c
+}
+
+_list_worktrees() {
+  local root pj wts
+  root=$(git rev-parse --show-toplevel | sed -e 's@/\.wt-.*@@')
+  pj=$(basename $root)
+  wts=$(cd $root && ls -a | grep .wt-)
+  _list_branches | while read b; do
+    if echo $wts | grep -x -q $(echo ".wt-$pj-$b" | sed -e 's@/@-@g'); then
+      echo $b
+    fi
+  done
+}
+__git_worktrees() {
+  local -a _c b
+  _c=("${(@f)$(_list_worktrees)}")
+  _describe -t commands git_worktrees _c
+}
+
+_git-wt() {
+  local context curcontext=$curcontext state line
+  typeset -A opt_args
+  local ret=1
+
+  _arguments \
+    '(- *)'{-d,--delete}'[Delete worktree]: :__git_worktrees' \
+    '(- *): :__git_branches' \
+    && ret=0
+}
+
+_git-wt "$@"

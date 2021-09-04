@@ -1,0 +1,3 @@
+[[plugins]]
+repo = 'itchyny/lightline.vim'
+hook_add = 'call plug#lightline#hook_add()'

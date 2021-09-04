@@ -1,0 +1,12 @@
+[[plugins]]
+repo = 'lambdalisue/fern.vim'
+on_event = ['VimEnter', 'SourcePost']
+hook_source ='call plug#fern#hook_source()'
+
+[[plugins]]
+repo = 'lambdalisue/fern-hijack.vim'
+on_event = ['VimEnter', 'SourcePost']
+
+[[plugins]]
+repo = 'antoinemadec/FixCursorHold.nvim'
+on_event = ['VimEnter', 'SourcePost']

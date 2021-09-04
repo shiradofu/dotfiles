@@ -1,0 +1,7 @@
+[[plugins]]
+repo = 'editorconfig/editorconfig-vim'
+on_event = 'BufEnter'
+hook_source = '''
+let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+MyAutocmd FileType gitcommit let b:EditorConfig_disable = 1
+'''

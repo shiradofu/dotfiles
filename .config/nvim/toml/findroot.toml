@@ -1,0 +1,6 @@
+[[plugins]]
+repo = 'mattn/vim-findroot'
+hook_add = '''
+let g:findroot_patterns = ['.git/']
+let g:findroot_not_for_subdir = 0
+'''
