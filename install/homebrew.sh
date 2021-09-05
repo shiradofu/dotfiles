@@ -13,8 +13,8 @@ if ! exists "brew"; then
     spawn bash _homebrew.sh
     for { set i 0 } { \$i <= 1 } { incr i } {
       expect {
-        \"password\" { send -- \"$1\r\" }
-        \"Password\" { send -- \"$1\r\" }
+        \" password for\" { send -- \"$1\r\" }
+        \"Password:\" { send -- \"$1\r\" }
         \"Press RETURN\" { send \"\r\" }
       }
     }
