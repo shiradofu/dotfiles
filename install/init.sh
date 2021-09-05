@@ -46,7 +46,7 @@ case "${DIST}" in
     echo "${password}" | sudo -S apt -y update
 
     # for homebrew
-    echo "${password}" | sudo -S apt -y install build-essential procps curl file git bash
+    echo "${password}" | sudo -S apt -y install build-essential procps curl file git bash expect
 
     # for asdf python
     echo "${password}" | sudo -S apt -y install make build-essential libssl-dev zlib1g-dev \
@@ -59,7 +59,7 @@ case "${DIST}" in
 
     # for homebrew
     echo "${password}" | sudo -S yum -y groupinstall 'Development Tools'
-    echo "${password}" | sudo -S yum -y install procps-ng curl file git bash
+    echo "${password}" | sudo -S yum -y install procps-ng curl file git bash expect
 
     # for asdf python
     echo "${password}" | sudo -S yum -y install gcc zlib-devel bzip2 bzip2-devel readline-devel \

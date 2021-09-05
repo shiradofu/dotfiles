@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -eu
-
 msg() { printf "\033[1;34m$1\033[0m\n"; }
 is_mac() { uname | grep Darwin -q; }
 exists() { type $1 > /dev/null 2>&1; }

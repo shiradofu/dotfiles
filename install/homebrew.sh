@@ -5,9 +5,23 @@ if ! exists "brew"; then
       msg "installing xcode-select..."
       xcode-select --install
   fi
+  url='https://raw.githubusercontent.com/Homebrew/install/master/install.sh'
+  curl -fsSL $url > _homebrew.sh
   msg "installing homebrew..."
-  echo "$1" | sudo -S bash -c \
-    "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
+  expect -c "
+    spawn bash _homebrew.sh
+    for { set i 0 } { \$i <= 1 } { incr i } {
+      expect {
+        \"password\" { send -- \"$1\r\" }
+        \"Password\" { send -- \"$1\r\" }
+        \"Press RETURN\" { send \"\r\" }
+      }
+    }
+    interact
+  "
+
+  rm _homebrew.sh
 
   test -f /usr/local/bin/brew && eval $(/usr/local/bin/brew shellenv)
   test -d /opt/homebrew && eval $(/opt/homebrew/bin/brew shellenv)

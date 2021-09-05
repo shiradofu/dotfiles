@@ -48,6 +48,7 @@ nnoremap ¥ 2<C-w>>
 nnoremap g. <C-w>_<C-w>\|
 nnoremap g/ <C-w>=
 
+nnoremap <silent> gb :<C-u>edit #<CR>
 nnoremap <silent> gy :<C-u>let @+=expand('%')<CR>
 nnoremap <silent> gY :<C-u>let @+=expand('%:p')<CR>
 nnoremap <silent> gz :<C-u>Goyo 100<CR>
