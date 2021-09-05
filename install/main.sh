@@ -12,9 +12,9 @@ source ${SCRIPT_DIR}/languages.sh
 
 set -e
 
-ghq_shiradofu=$(ghq root)/github.com/shiradofu/
+ghq_shiradofu=$(ghq root)/github.com/shiradofu
 mkdir -p $ghq_shiradofu
-rsync -av ./dotfiles $ghq_shiradofu
+rsync -av ./dotfiles $ghq_shiradofu/
 ghq_dotfiles=$ghq_shiradofu/dotfiles
 
 [ -f ".zshenv" ] && mv .zshenv .zshenv.$RANDOM.bak
@@ -22,7 +22,7 @@ ln -s $ghq_dotfiles/.config/zsh/.zshenv
 [ -d ".config" ] && mv .config .config.$RANDOM.bak
 ln -s $ghq_dotfiles/.config
 [ -d "bin" ] && mv bin bin.$RANDOM.bak
-ln -s $ghq_dotfiles/bin
+ln -s $ghq_dotfiles/bin && hash -r
 [ -f ".gitconfig" ] && mv .gitconfig .gitconfig.$RANDOM.bak
 cp $ghq_dotfiles/.config/git/config.tpl $ghq_dotfiles/.config/git/config
 
