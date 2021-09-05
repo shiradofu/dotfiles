@@ -14,7 +14,7 @@ set -e
 
 ghq_shiradofu=$(ghq root)/github.com/shiradofu/
 mkdir -p $ghq_shiradofu
-cp -r dotfiles $ghq_shiradofu
+rsync -av ./dotfiles $ghq_shiradofu
 ghq_dotfiles=$ghq_shiradofu/dotfiles
 
 [ -f ".zshenv" ] && mv .zshenv .zshenv.$RANDOM.bak

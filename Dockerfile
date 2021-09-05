@@ -17,7 +17,7 @@ CMD /bin/sh
 
 FROM ubuntu-fresh AS ubuntu-initialized
 USER root
-RUN apt-get -y install build-essential procps curl file git expect && \
+RUN apt-get -y install build-essential procps curl file git expect rsync && \
   apt-get -y install bash libffi-dev locales && \
   apt-get -y install build-essential libssl-dev zlib1g-dev \
     libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
@@ -42,7 +42,7 @@ CMD /bin/sh
 FROM centos-fresh AS centos-initialized
 USER root
 RUN yum -y groupinstall 'Development Tools' && \
-  yum -y install procps-ng curl file git bash expect && \
+  yum -y install procps-ng curl file git bash expect rsync && \
   yum -y install gcc zlib-devel bzip2 bzip2-devel readline-devel \
     sqlite sqlite-devel openssl-devel tk-devel libffi-devel xz-devel
 COPY ./test ./dotfiles

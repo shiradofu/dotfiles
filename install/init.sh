@@ -44,6 +44,7 @@ case "${DIST}" in
     msg "installing basic packages..."
     export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true
     echo "${password}" | sudo -S apt -y update
+    echo "${password}" | sudo -S apt -y install rsync
 
     # for homebrew
     echo "${password}" | sudo -S apt -y install build-essential procps curl file git bash expect
@@ -56,6 +57,7 @@ case "${DIST}" in
   redhat | fedora )
     msg "installing basic packages..."
     echo "${password}" | sudo -S yum -y update
+    echo "${password}" | sudo -S yum -y install rsync
 
     # for homebrew
     echo "${password}" | sudo -S yum -y groupinstall 'Development Tools'
