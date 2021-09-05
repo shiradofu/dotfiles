@@ -1,5 +1,7 @@
 #!/bin/bash
 
+if ! exists asdf; then return; fi
+
 msg "\ninstall languages...\n"
 
 msg "\nnodejs:\n"

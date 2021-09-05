@@ -1,5 +1,10 @@
 #!/bin/bash
 
+brew-install() {
+  msg "\n🍺  installing $1...\n"
+  brew install $1
+}
+
 if ! exists "brew"; then
   if is_mac && ! exists "xcode-select"; then
       msg "installing xcode-select..."
@@ -33,44 +38,44 @@ echo "$1" | sudo -S chown -R $(whoami) $(brew --prefix)
 
 msg "🍺  installing formulae with homebrew..."
 
-brew install zsh
-brew install fzf
-brew install rg
-brew install fd
-brew install jq
-brew install bat
-brew install git-delta
-brew install tmux
-brew install nvim
-brew install starship
-brew install asdf
-brew install php
-brew install composer
-brew install yarn
-brew install awscli
-brew install git
-brew install gh
-brew install ghq
-brew install gitui
-brew install tokei
-brew install act
-brew install bitwarden-cli
-brew install watchman # for coc-tsserver
+brew-install zsh
+brew-install fzf
+brew-install rg
+brew-install fd
+brew-install jq
+brew-install bat
+brew-install git-delta
+brew-install tmux
+brew-install nvim
+brew-install starship
+brew-install asdf
+brew-install php
+brew-install composer
+brew-install yarn
+brew-install awscli
+brew-install git
+brew-install gh
+brew-install ghq
+brew-install gitui
+brew-install tokei
+brew-install act
+brew-install bitwarden-cli
+brew-install watchman # for coc-tsserver
 
 if is_mac; then
-  brew install binutils
-  brew install coreutils
-  brew install findutils
-  brew install grep
-  brew install gawk
-  brew install gnu-sed
-  brew install gnu-tar
-  brew install gzip
-  brew install wget
-  brew install gpg
+  brew-install binutils
+  brew-install coreutils
+  brew-install findutils
+  brew-install grep
+  brew-install gawk
+  brew-install gnu-sed
+  brew-install gnu-tar
+  brew-install gzip
+  brew-install wget
+  brew-install gpg
 
   # for asdf python
-  brew install openssl readline sqlite3 xz zlib
+  brew-install openssl readline sqlite3 xz zlib
 fi
 
 [ ! -d "$ZDOTDIR/completions" ] && mkdir -p $ZDOTDIR/completions
@@ -79,5 +84,7 @@ gh completion -s zsh > $ZDOTDIR/completions/_gh
 $(brew --prefix)/opt/fzf/install --completion --no-key-bindings --no-update-rc --xdg
 
 echo "$1" | sudo -S sh -c "printf '${HOMEBREW_PREFIX}/bin/zsh\n' >> /etc/shells"
+
+source ${HOMEBREW_PREFIX}/opt/asdf/asdf.sh
 
 msg "\n🍺  brew install completed!"

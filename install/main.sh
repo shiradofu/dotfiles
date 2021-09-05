@@ -8,8 +8,9 @@ SCRIPT_DIR=$(cd $(dirname $0) && pwd)
 
 source ${SCRIPT_DIR}/../.config/zsh/.zshenv
 source ${SCRIPT_DIR}/homebrew.sh $1
-source ${HOMEBREW_PREFIX}/opt/asdf/asdf.sh
 source ${SCRIPT_DIR}/languages.sh
+
+set -e
 
 ghq_shiradofu=$(ghq root)/github.com/shiradofu/
 mkdir -p $ghq_shiradofu
