@@ -12,6 +12,7 @@ MyAutocmd ColorScheme *
 \ | highlight GitGutterChange ctermbg=none guibg=none
 \ | highlight GitGutterDelete ctermbg=none guibg=none
 \ | highlight VertSplit       ctermfg=none guifg=none
+\ | highlight CursorLine      ctermbg=none guibg=none gui=underline
 \ | highlight clear DiffAdd
 \ | highlight clear DiffDelete
 \ | highlight clear DiffChange

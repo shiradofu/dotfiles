@@ -22,6 +22,7 @@ function plug#fern#hook_source() abort
 
   function! InitFern() abort
     setlocal signcolumn=number
+    setlocal conceallevel=2
     nnoremap <silent> <BS> :<C-u>q<CR>
     nmap <buffer> <C-c> <Plug>(fern-action-cancel)
     nmap <buffer> yy    <Plug>(fern-action-clipboard-copy)

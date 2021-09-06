@@ -9,9 +9,8 @@ set splitbelow
 set splitright
 set number
 set signcolumn=number
-set colorcolumn=80,100
+" set colorcolumn=80,100
 set cursorline
-set conceallevel=0
 set ignorecase
 set smartcase
 set inccommand=nosplit
@@ -34,7 +33,7 @@ set viminfo-='100
 
 MyAutocmd BufEnter * setlocal formatoptions-=r
 MyAutocmd BufEnter * setlocal formatoptions-=o
-MyAutocmd BufEnter * setlocal conceallevel=0
+MyAutocmd FileType markdown setlocal conceallevel=0
 
 let s:asdf_dir = $HOME . '/.asdf/installs'
 let g:python_host_prog = s:asdf_dir . '/python/2.7.18/bin/python'

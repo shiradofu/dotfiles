@@ -14,7 +14,7 @@ __echo_if_should() {
   exit
 }
 
-git ls-files --others --exclude-standard | xargs git add -N
+git ls-files --others --exclude-standard | xargs git add -N >/dev/null 2>&1
 
 if [ "$type" = 'allfiles' ]; then
   standard_branch=''
@@ -46,17 +46,14 @@ fi
 
 
 if [ "$type" = 'files' ] || [ "$type" = 'ins' ] || [ "$type" = 'del' ]; then
-  # うまく動いていない
-  diff_exclude=" \
-  ':(exclude,glob)**/composer.lock' \
-  ':(exclude,glob)**/package-lock.json' \
-  ':(exclude,glob)**/yarn.lock' \
-  ':(exclude,glob)**/.png' \
-  ':(exclude,glob)**/.jpg' \
-  ':(exclude,glob)**/.jpeg' \
-  "
-
-  diff_stat=$(git diff --shortstat HEAD -- ':(top,glob)**/*' "${diff_exclude}")
+  diff_stat=$(git diff --shortstat HEAD -- ':(top,glob)**/*' \
+    ':(exclude,glob)**/composer.lock' \
+    ':(exclude,glob)**/package-lock.json' \
+    ':(exclude,glob)**/yarn.lock' \
+    ':(exclude,glob)**/.png' \
+    ':(exclude,glob)**/.jpg' \
+    ':(exclude,glob)**/.jpeg' \
+  )
 fi
 
 if [ "$type" = 'files' ]; then
@@ -67,12 +64,12 @@ fi
 
 if [ "$type" = 'ins' ]; then
   if [ -z "$diff_stat" ] && [ "$level" = 'n' ]; then printf "[+]0"; exit; fi
-  ins=$((echo $diff_stat | grep -o '\d\+ i' || echo '0 i') | cut -d ' ' -f 1)
+  ins=$((echo $diff_stat | grep -o '[0-9]\+ i' || echo '0 i') | cut -d ' ' -f 1)
   __echo_if_should $ins 100 200 '[+]'
 fi
 
 if [ "$type" = 'del' ]; then
   if [ -z "$diff_stat" ] && [ "$level" = 'n' ]; then printf "[-]0"; exit; fi
-  del=$((echo $diff_stat | grep -o '\d\+ d' || echo '0 d') | cut -d ' ' -f 1)
+  del=$((echo $diff_stat | grep -o '[0-9]\+ d' || echo '0 d') | cut -d ' ' -f 1)
   __echo_if_should $del 100 200 '[-]'
 fi

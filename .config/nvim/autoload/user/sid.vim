@@ -38,7 +38,7 @@ function! user#sid#globalize_fugitive_functions() abort
     let s:fugitive_id = user#sid#get_script_id('autoload\/fugitive\.vim')
     call execute([
       \ 'function! FugitiveStageDiff() abort',
-      \   'exe <SNR>' . s:fugitive_id . '_StageDiff("Gdiffsplit")',
+      \   'exe <SNR>' . s:fugitive_id . '_StageDiff("Gvdiffsplit")',
       \ 'endfunction',
       \ 'function! FugitiveNextItem() abort',
       \   'call <SNR>' . s:fugitive_id . '_NextItem(v:count1)',
