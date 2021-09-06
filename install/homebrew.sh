@@ -81,7 +81,7 @@ fi
 [ ! -d "$ZDOTDIR/completions" ] && mkdir -p $ZDOTDIR/completions
 gh completion -s zsh > $ZDOTDIR/completions/_gh
 
-$(brew --prefix)/opt/fzf/install --completion --no-key-bindings --no-update-rc --xdg
+$(brew --prefix)/opt/fzf/install --completion --no-update-rc --xdg
 
 echo "$1" | sudo -S sh -c "printf '${HOMEBREW_PREFIX}/bin/zsh\n' >> /etc/shells"
 
