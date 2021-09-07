@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# generate windows terminal's settings.json from settings.tpl.json
+
+winterm_dir=$XDG_CONFIG_HOME/winterm
+
+for arg; do
+  case $arg in
+    --colorscheme )
+      shift
+      colorscheme=$1
+      ;;
+    * ) ;;
+  esac
+  shift
+done
+
+sed \
+  -e s/{{whoami}}/$(whoami)/ \
+  -e s/{{colorscheme}}/${colorScheme:-Iceberg}/   \
+  $winterm_dir/settings.tpl.json > $winterm_dir/settings.json
+

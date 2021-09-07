@@ -44,6 +44,7 @@
 
 !/bin/chcs
 !/bin/mk
+!/bin/winterm-gen
 !/bin/wslsync
 !/bin/vim-tabline-git-diff
 

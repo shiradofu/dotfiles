@@ -2,12 +2,14 @@
 
 msg() { printf "\033[1;34m$1\033[0m\n"; }
 is_mac() { uname | grep Darwin -q; }
+is_wsl() { uname -r | grep microsoft -q; }
 exists() { type $1 > /dev/null 2>&1; }
 
 SCRIPT_DIR=$(cd $(dirname $0) && pwd)
+password=$1
 
 source ${SCRIPT_DIR}/../.config/zsh/.zshenv
-source ${SCRIPT_DIR}/homebrew.sh $1
+source ${SCRIPT_DIR}/homebrew.sh $password
 source ${SCRIPT_DIR}/languages.sh
 
 set -e
@@ -29,3 +31,21 @@ cp $ghq_dotfiles/.config/git/config.tpl $ghq_dotfiles/.config/git/config
 if ! [ -f ".bashrc" ] || ! cat .bashrc | grep -xq 'source ~/.zshenv'; then
   echo 'source ~/.zshenv' >> .bashrc
 fi
+
+chcs iceberg
+
+if is_wsl && exists wslvar; then
+  curl -sLo /tmp/win32yank.zip \
+    https://github.com/equalsraf/win32yank/releases/download/v0.0.4/win32yank-x64.zip
+  unzip -p /tmp/win32yank.zip win32yank.exe > /tmp/win32yank.exe
+  chmod +x /tmp/win32yank.exe
+  mv /tmp/win32yank.exe ./bin
+
+  userprofile=$(wslpath $(wslvar USERPROFILE))
+  wslsync .wslconfig --backup
+  wslsync wls.conf --backup
+  winterm-gen --colorscheme Iceberg
+  wslsync winterm --backup
+fi
+
+unset $password
