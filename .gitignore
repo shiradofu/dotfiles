@@ -25,6 +25,9 @@
 !/.config/tmux/mac.copy.conf
 !/.config/tmux/wsl.copy.conf
 !/.config/tmux/styles/*.conf
+!/.config/winterm/settings.tpl.json
+!/.config/wsl/.wslconfig
+!/.config/wsl/wsl.conf
 /.config/zsh/*
 !/.config/zsh/.zshrc
 !/.config/zsh/aliases.zsh
@@ -39,10 +42,14 @@
 !/.config/zsh/completions
 !/.config/zsh/completions/_*
 
+!/bin/chcs
+!/bin/mk
+!/bin/wslsync
+!/bin/vim-tabline-git-diff
+
 !/.gitignore
 !/.editorconfig
 !/install/*
-!/bin/*
 !/Dockerfile
 !/Makefile
 !/README.md
