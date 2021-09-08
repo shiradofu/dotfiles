@@ -4,18 +4,9 @@
 
 winterm_dir=$XDG_CONFIG_HOME/winterm
 
-for arg; do
-  case $arg in
-    --colorscheme )
-      shift
-      colorscheme=$1
-      ;;
-    * ) ;;
-  esac
-  shift
-done
+colorscheme=$1
 
 sed \
-  -e s/{{whoami}}/$(whoami)/ \
-  -e s/{{colorscheme}}/${colorscheme:-Iceberg}/   \
+  -e s/{{wsl-home}}/$(wslpath -w $HOME | sed 's/\\/\\\\\\\\/g')/ \
+  -e s/{{colorscheme}}/${colorscheme:-iceberg}/   \
   $winterm_dir/settings.tpl.json > $winterm_dir/settings.json

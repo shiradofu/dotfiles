@@ -43,7 +43,7 @@
                 "hidden": false,
                 "icon": null,
                 "source": "Windows.Terminal.Wsl",
-                "startingDirectory": "\\\\wsl$\\Ubuntu\\home\\{{whoami}}"
+                "startingDirectory": "{{wsl-home}}"
             },
             {
                 "name": "Windows PowerShell",
@@ -73,7 +73,7 @@
     },
     "schemes": [
         {
-            "name": "Iceberg",
+            "name": "iceberg",
             "background": "#161821",
             "black": "#161821",
             "blue": "#84A0C6",
@@ -96,6 +96,29 @@
             "yellow": "#E2A478"
         },
         {
+            "name": "nord",
+            "background": "#14151B",
+            "foreground": "#D8DEE9",
+            "cursorColor": "#D8DEE9",
+            "black": "#3B4252",
+            "red": "#BF616A",
+            "green": "#A3BE8C",
+            "yellow": "#EBCB8B",
+            "blue": "#81A1C1",
+            "purple": "#B48EAD",
+            "cyan": "#88C0D0",
+            "white": "#E5E9F0",
+            "brightBlack": "#4C566A",
+            "brightRed": "#BF616A",
+            "brightGreen": "#A3BE8C",
+            "brightYellow": "#EBCB8B",
+            "brightBlue": "#81A1C1",
+            "brightPurple": "#B48EAD",
+            "brightCyan": "#8FBCBB",
+            "brightWhite": "#ECEFF4",
+            "selectionBackground": "#FFFFFF"
+        },
+        {
             "name": "mellow",
             "background": "#0F0908",
             "foreground": "#ECCD9D",
@@ -116,6 +139,44 @@
             "brightPurple": "#8A4B53",
             "brightCyan": "#D47D49",
             "brightWhite": "#ECCD9D",
+            "selectionBackground": "#FFFFFF"
+        },
+        {
+            "name": "gotham",
+            "background": "#0a0f14",
+            "foreground": "#98d1ce",
+            "cursorColor": "#98d1ce",
+            "black": "#0a0f14",
+            "red": "#c33027",
+            "green": "#26a98b",
+            "yellow": "#edb54b",
+            "blue": "#195465",
+            "purple": "#4e5165",
+            "cyan": "#33859d",
+            "white": "#98d1ce",
+            "brightBlack": "#10151b",
+            "brightRed": "#d26939",
+            "brightGreen": "#081f2d",
+            "brightYellow": "#245361",
+            "brightBlue": "#093748",
+            "brightPurple": "#888ba5",
+            "brightCyan": "#599caa",
+            "brightWhite": "#d3ebe9",
+            "selectionBackground": "#FFFFFF"
+        },
+        {
+            "name": "monotone",
+            "background": "#181818",
+            "foreground": "#D8DEE9",
+            "cursorColor": "#D8DEE9",
+            "black": "#D8DEE9",
+            "red": "#D8DEE9",
+            "green": "#D8DEE9",
+            "yellow": "#D8DEE9",
+            "blue": "#D8DEE9",
+            "purple": "#D8DEE9",
+            "cyan": "#D8DEE9",
+            "white": "#D8DEE9",
             "selectionBackground": "#FFFFFF"
         },
         {
