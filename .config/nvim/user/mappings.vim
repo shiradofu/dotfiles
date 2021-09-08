@@ -65,8 +65,9 @@ nnoremap <silent> gT :<C-u>call CocAction('jumpTypeDefinition', 'vsplit')<CR>
 nnoremap <silent> gr :<C-u>call CocActionAsync('rename')<CR>
 nnoremap <silent> ga :<C-u>CocAction<CR>
 
-nnoremap <silent> <Leader>t :<C-u>vs<CR>:<C-u>Fern . -reveal=%<CR>
-nnoremap <silent> <Leader>T :<C-u>vs<CR>:<C-u>Fern .<CR>
+nnoremap <silent> <Leader>r :<C-u>:<C-u>Fern . -reveal=%<CR>
+nnoremap <silent> <Leader><C-r> :<C-u>vs<CR>:<C-u>Fern . -reveal=%<CR>
+nnoremap <silent> <Leader>R :<C-u>vs<CR>:<C-u>Fern .<CR>
 nnoremap <silent> <Leader>o :ProjectMru<CR>
 nnoremap <silent> <Leader>i :Files<CR>
 nnoremap <silent> <Leader>u :GFiles?<CR>
@@ -86,7 +87,6 @@ nnoremap <silent> <Leader>s
 nnoremap <silent> <Leader>b :<C-u>Git blame<CR>
 nnoremap <silent> <Leader>B :<C-u>GBrowse<CR>
 vnoremap <silent> <Leader>B :GBrowse<CR>
-nnoremap <silent> <Leader>r :<C-u>Qfreplace topleft split<CR>
 nnoremap <silent> <Leader>, :<C-u>Git commit \| startinsert<CR>
 nnoremap <silent> <Leader>. :<C-u>Dispatch! git push<CR>
 nmap     <silent> <Leader>n <Plug>(coc-references)
@@ -128,3 +128,4 @@ MyAutocmd FileType qf
 \   nnoremap <buffer> p <CR>zi<C-w>p
 \ | nnoremap <silent> <buffer> dd :<C-u>call user#quickfix#del()<CR>
 \ | nnoremap <silent> <buffer> u  :<C-u>call user#quickfix#undo_del()<CR>
+\ | nnoremap <silent> <buffer> R  :<C-u>Qfreplace topleft split<CR>
