@@ -1,5 +1,15 @@
 alias tmux='tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf'
 
+ctrl_u() {
+  if [ -z "$TMUX" ]; then
+    zle kill-whole-line
+  else
+    tmux copy-mode
+  fi
+}
+zle -N ctrl_u
+bindkey "^u" ctrl_u
+
 tmux_safe_session_name() {
   echo $1 | sed 's/[.:]/_/g'
 }
