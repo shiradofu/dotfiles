@@ -45,4 +45,3 @@ let g:Hexokinase_ftOptInPatterns = {
       \}
 '''
 hook_post_source = 'HexokinaseTurnOn'
-

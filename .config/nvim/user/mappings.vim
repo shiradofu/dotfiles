@@ -39,7 +39,6 @@ nnoremap <C-l> <C-w>l
 nnoremap <C-h> <C-w>h
 nnoremap <C-n> gt
 nnoremap <C-p> gT
-nnoremap go <C-w>T
 nnoremap Z <C-w>+
 nnoremap Q <C-w>-
 nnoremap \| 2<C-w><
@@ -47,6 +46,9 @@ nnoremap \ 2<C-w>>
 nnoremap ¥ 2<C-w>>
 nnoremap g. <C-w>_<C-w>\|
 nnoremap g/ <C-w>=
+nnoremap <silent> go :<C-u>call user#util#winmove(v:count)<CR>
+nnoremap <silent> g[ :<C-u>-tabm<CR>
+nnoremap <silent> g] :<C-u>+tabm<CR>
 
 nnoremap <silent> gb :<C-u>edit #<CR>
 nnoremap <silent> gy :<C-u>let @+=expand('%')<CR>

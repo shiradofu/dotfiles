@@ -46,6 +46,20 @@ function! user#util#tabclose() abort
   exe tabpagenr('$') == 1 ? "qall" : "tabclose"
 endfunction
 
+function user#util#winmove(count)
+  if a:count ==# 0
+    wincmd T
+  else
+    call s:move_buf_to_tabpage(a:count)
+  endif
+endfunction
+
+function! s:move_buf_to_tabpage(tabpagenr)
+  let bufnr = bufnr() | close
+  call win_gotoid(win_getid(tabpagewinnr(a:tabpagenr, '$'), a:tabpagenr))
+  exe 'vert sbuffer ' . bufnr
+endfunction
+
 " windowを閉じたらwinnrを基準に1つ前のwindowに移動する
 function! user#util#quit()
   if range(1, tabpagewinnr(tabpagenr(), '$')) ==# [1]
@@ -75,4 +89,3 @@ function! s:set_should_zi()
   " if abs(s:lnum - lnum) ># (winheight(winnr()) / 3) | return | endif
   let g:no_zi = 1
 endfunction
-
