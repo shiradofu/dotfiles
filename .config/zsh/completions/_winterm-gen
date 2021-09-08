@@ -1,0 +1,13 @@
+#compdef winterm-gen
+
+_winterm-gen() {
+  _values \
+    'name' \
+    'iceberg' \
+    'nord' \
+    'gotham' \
+    'mellow' \
+    'monotone'
+}
+
+_winterm-gen "$@"
