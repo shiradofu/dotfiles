@@ -1,42 +1,57 @@
 #!/bin/bash
 
-set -eu
-
 userprofile=$(wslpath $(wslvar USERPROFILE))
+backup=true
+files=""
+password=''
 
-backup=false
 for arg; do
-  case $arg in
-    --backup ) backup=true ;;
-    * ) ;;
+  case $1 in
+    --no-backup ) backup=false ;;
+    --password  ) shift; password=$1 ;; # use only when non-interactive
+    '' ) ;;
+    * ) files+="$1 " ;;
   esac
+  shift
 done
 
-case $1 in
-  .wslconfig )
-    if [ "$backup" = true ] && [ -f "$userprofile/.wslconfig" ]; then
-      mv $userprofile/.wslconfig $userprofile/.wslconfig.$RANDOM.bak
-    fi
-    cp -f ${XDG_CONFIG_HOME:-~/.config}/wsl/.wslconfig $userprofile/
-    ;;
-  wsl.conf )
-    if [ "$backup" = true ] && [ -f "/etc/wsl.conf" ]; then
-      echo $password | sudo -S mv /etc/wsl.conf /etc/wsl.conf.$RANDOM.bak
-    fi
-    echo $password | sudo -S cp -f ${XDG_CONFIG_HOME:-~/.config}/wsl/wsl.conf /etc/
-    ;;
-  winterm )
-    packages_dir=$userprofile/AppData/Local/Packages
-    winterm_dir=$packages_dir/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState
-    ! [ -d "$winterm_dir" ] && exit
-    if [ "$backup" = true ] && [ -f "$winterm_dir/settings.json" ]; then
-      mv $winterm_dir/settings.json $winterm_dir/settings.json.bak
-    fi
-    cp -f ${XDG_CONFIG_HOME:-~/.config}/winterm/settings.json $winterm_dir/
-    ;;
-  --bakcup ) ;;
-  * )
-    echo invalid argument.
-    exit 1
-    ;;
-esac
+set -u
+
+for file in $(echo $files | tr ' ', '\n'); do
+  case $file in
+    .wslconfig )
+      if [ "$backup" = true ] && [ -f "$userprofile/.wslconfig" ]; then
+        mv $userprofile/.wslconfig $userprofile/.wslconfig.$RANDOM.bak
+      fi
+      cp -f ${XDG_CONFIG_HOME:-~/.config}/wsl/.wslconfig $userprofile/
+      ;;
+    wsl.conf )
+      if [ -n "$password" ] && ! echo $password | sudo -lS >/dev/null 2>&1; then
+        echo password is incorrect.
+        exit 1
+      fi
+      if [ "$backup" = true ] && [ -f "/etc/wsl.conf" ]; then
+        [ -n "$password" ] \
+          && echo $password | sudo -S mv /etc/wsl.conf /etc/wsl.conf.$RANDOM.bak \
+          || sudo mv /etc/wsl.conf /etc/wsl.conf.$RANDOM.bak
+      fi
+      [ -n "$password" ] \
+        && echo $password | sudo -S cp -f ${XDG_CONFIG_HOME:-~/.config}/wsl/wsl.conf /etc/ \
+        || sudo cp -f ${XDG_CONFIG_HOME:-~/.config}/wsl/wsl.conf /etc/
+      ;;
+    winterm )
+      packages_dir=$userprofile/AppData/Local/Packages
+      winterm_dir=$packages_dir/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState
+      ! [ -d "$winterm_dir" ] && exit
+      if [ "$backup" = true ] && [ -f "$winterm_dir/settings.json" ]; then
+        mv $winterm_dir/settings.json $winterm_dir/settings.json.bak
+      fi
+      cp -f ${XDG_CONFIG_HOME:-~/.config}/winterm/settings.json $winterm_dir/
+      ;;
+    --bakcup ) ;;
+    * )
+      echo invalid argument.
+      exit 1
+      ;;
+  esac
+done
