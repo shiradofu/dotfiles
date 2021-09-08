@@ -73,6 +73,7 @@
     },
     "schemes": [
         {
+            "name": "Iceberg",
             "background": "#161821",
             "black": "#161821",
             "blue": "#84A0C6",
@@ -88,12 +89,34 @@
             "cyan": "#89B8C2",
             "foreground": "#C6C8D1",
             "green": "#B4BE82",
-            "name": "Iceberg",
             "purple": "#A093C7",
             "red": "#E27878",
             "selectionBackground": "#FFFFFF",
             "white": "#C6C8D1",
             "yellow": "#E2A478"
+        },
+        {
+            "name": "mellow",
+            "background": "#0F0908",
+            "foreground": "#ECCD9D",
+            "cursorColor": "#ECCD9D",
+            "black": "#0F0908",
+            "red": "#AF0032",
+            "green": "#577E2A",
+            "yellow": "#BF9169",
+            "blue": "#896186",
+            "purple": "#66292F",
+            "cyan": "#BF472C",
+            "white": "#D3C1A6",
+            "brightBlack": "#3D241F",
+            "brightRed": "#FF7477",
+            "brightGreen": "#84BF40",
+            "brightYellow": "#F5BB89",
+            "brightBlue": "#9F939B",
+            "brightPurple": "#8A4B53",
+            "brightCyan": "#D47D49",
+            "brightWhite": "#ECCD9D",
+            "selectionBackground": "#FFFFFF"
         },
         {
             "background": "#0C0C0C",

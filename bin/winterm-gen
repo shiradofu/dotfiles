@@ -17,6 +17,5 @@ done
 
 sed \
   -e s/{{whoami}}/$(whoami)/ \
-  -e s/{{colorscheme}}/${colorScheme:-Iceberg}/   \
+  -e s/{{colorscheme}}/${colorscheme:-Iceberg}/   \
   $winterm_dir/settings.tpl.json > $winterm_dir/settings.json
-

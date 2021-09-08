@@ -5,7 +5,7 @@ set -eu
 userprofile=$(wslpath $(wslvar USERPROFILE))
 
 backup=false
-for arg do;
+for arg; do
   case $arg in
     --backup ) backup=true ;;
     * ) ;;
@@ -26,10 +26,10 @@ case $1 in
     echo $password | sudo -S cp -f ${XDG_CONFIG_HOME:-~/.config}/wsl/wsl.conf /etc/
     ;;
   winterm )
-    $packages_dir=$userprofile/AppData/Local/Packages
-    $winterm_dir=$packages_dir/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState
-    if ! [ -d "$winterm_dir" ]; exit; fi
-    if [ "$backup" = true ] && [ -f "$winterm_dir/settings.json" ];
+    packages_dir=$userprofile/AppData/Local/Packages
+    winterm_dir=$packages_dir/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState
+    ! [ -d "$winterm_dir" ] && exit
+    if [ "$backup" = true ] && [ -f "$winterm_dir/settings.json" ]; then
       mv $winterm_dir/settings.json $winterm_dir/settings.json.bak
     fi
     cp -f ${XDG_CONFIG_HOME:-~/.config}/winterm/settings.json $winterm_dir/
