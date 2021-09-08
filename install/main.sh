@@ -42,10 +42,10 @@ if is_wsl && exists wslvar; then
   mv /tmp/win32yank.exe ./bin
 
   userprofile=$(wslpath $(wslvar USERPROFILE))
-  wslsync .wslconfig --backup
-  wslsync wls.conf --backup
+  wslsync .wslconfig
+  wslsync wls.conf --password $password
   winterm-gen --colorscheme Iceberg
-  wslsync winterm --backup
+  wslsync winterm
 fi
 
 unset $password
