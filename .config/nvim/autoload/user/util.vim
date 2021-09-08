@@ -54,6 +54,7 @@ function user#util#winmove(count)
   endif
 endfunction
 
+" windowを指定したタブに移動する
 function! s:move_buf_to_tabpage(tabpagenr)
   let bufnr = bufnr() | close
   call win_gotoid(win_getid(tabpagewinnr(a:tabpagenr, '$'), a:tabpagenr))
@@ -68,7 +69,12 @@ function! user#util#quit()
   let close_winnr = winnr()
   let dest_winnr = close_winnr ==# 1 ? 2 : (close_winnr - 1)
   exe dest_winnr . 'wincmd w'
-  exe close_winnr . 'wincmd q'
+  try
+    exe close_winnr . 'wincmd q'
+  catch /^Vim\%((\a\+)\)\=:E5601/
+    " タブ内にwindow1つ+floating windowが表示されているとき
+    call user#util#tabclose()
+  endtry
 endfunction
 
 function! s:save_pos()
