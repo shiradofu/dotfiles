@@ -35,6 +35,8 @@ fi
 chcs iceberg
 
 if is_mac; then
+  # brew install もこっちに持ってくる
+  git config --global credential.helper osxkeychain
   defaults write com.apple.Dock autohide-delay -float 3600; killall Dock
 fi
 
@@ -50,6 +52,9 @@ if is_wsl && exists wslvar; then
   wslsync wls.conf --password $password
   winterm-gen --colorscheme Iceberg
   wslsync winterm
+
+  git config --global credential.helper \
+    "/mnt/c/Program\ Files/Git/mingw64/libexec/git-core/git-credential-manager.exe"
 fi
 
 unset $password
