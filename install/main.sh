@@ -34,6 +34,10 @@ fi
 
 chcs iceberg
 
+if is_mac; then
+  defaults write com.apple.Dock autohide-delay -float 3600; killall Dock
+fi
+
 if is_wsl && exists wslvar; then
   curl -sLo /tmp/win32yank.zip \
     https://github.com/equalsraf/win32yank/releases/download/v0.0.4/win32yank-x64.zip
