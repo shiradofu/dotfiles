@@ -17,3 +17,7 @@ MANPATH="/usr/local/opt/gnu-sed/libexec/gnuman:$MANPATH"
 
 PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
 MANPATH="/usr/local/opt/gnu-tar/libexec/gnuman:$MANPATH"
+
+export PATH="/usr/local/opt/llvm/bin:$PATH"
+export LDFLAGS="-L/usr/local/opt/llvm/lib"
+export CPPFLAGS="-I/usr/local/opt/llvm/include"
