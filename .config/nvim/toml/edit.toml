@@ -46,3 +46,22 @@ let g:Hexokinase_ftOptInPatterns = {
       \}
 '''
 hook_post_source = 'HexokinaseTurnOn'
+
+[[plugins]]
+repo = 'plasticboy/vim-markdown'
+on_ft = ['markdown']
+hook_source = '''
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_conceal_code_blocks = 1
+let g:vim_markdown_new_list_item_indent = 0
+let g:vim_markdown_auto_insert_bullets = 0
+
+let g:vim_markdown_fenced_languages = [
+\ 'c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini',
+\ 'html=html',
+\ 'css=css',
+\ 'js=javascriptreact',
+\ 'ts=typescriptreact',
+\ 'php=php',
+\ ]
+'''
