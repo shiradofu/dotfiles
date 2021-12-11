@@ -6,5 +6,6 @@ function plug#autopairs#hook_post_source() abort
   let g:AutoPairsQuotes = ["'", '"', '`']
   let g:AutoPairsMoveCharacter = ''
   let g:AutoPairsShortcutToggleMultilineClose = ''
+  let g:AutoPairsShortcutIgnore = ''
   inoremap <silent> <C-h> <C-r>=autopairs#AutoPairsDelete()<CR>
 endfunction
