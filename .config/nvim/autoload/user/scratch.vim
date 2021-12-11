@@ -48,6 +48,7 @@ function! user#scratch#open() abort
     call nvim_win_set_buf(win_getid(winnr()), scr_bufnr)
   endif
   call user#scratch#mapping()
+  setlocal conceallevel=0
 endfunction
 
 function! user#scratch#close() abort
@@ -68,7 +69,6 @@ endfunction
 
 function! user#scratch#mapping() abort
   nnoremap <silent> <buffer> <BS>  :<C-u>call user#scratch#leave()<CR>
-  nnoremap <silent> <buffer> <Esc> :<C-u>call user#scratch#leave()<CR>
   nnoremap <silent> <buffer> <C-h> :<C-u>call user#scratch#leave()<CR>
   nnoremap <silent> <buffer> <C-j> :<C-u>call user#scratch#leave()<CR>
   nnoremap <silent> <buffer> <C-k> :<C-u>call user#scratch#leave()<CR>
