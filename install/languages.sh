@@ -32,3 +32,5 @@ msg "\ngolang:\n"
 asdf plugin add golang     &&
 asdf install golang latest &&
 asdf global golang latest
+export GOPATH="$XDG_CACHE_HOME/go"
+go install golang.org/x/tools/cmd/goimports@latest
