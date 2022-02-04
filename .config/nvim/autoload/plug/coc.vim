@@ -62,6 +62,8 @@ function! plug#coc#hook_add() abort
   \ 'coc-styled-components',
   \ 'coc-html',
   \ 'coc-css',
+  \ 'coc-restclient',
+  \ 'coc-go',
   \ 'coc-phpls',
   \ 'coc-json',
   \ 'coc-yaml',
