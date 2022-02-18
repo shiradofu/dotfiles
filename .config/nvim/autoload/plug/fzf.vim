@@ -16,7 +16,7 @@ function! plug#fzf#hook_add() abort
   function! s:project_mru_files() abort
     let old=map(
     \ filter(extend([expand('%:p'), expand('#:p')], copy(v:oldfiles)),
-    \   'v:val =~ getcwd()'
+    \   'v:val =~ getcwd() . "/"'
     \  . ' && filereadable(v:val)'
     \  . ' && v:val !~# ".*/\.scratch-vim.md$"'
     \  . ' && v:val !~# ".*/\.git/index$"'
