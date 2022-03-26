@@ -62,6 +62,7 @@ brew-install act
 brew-install bitwarden-cli
 brew-install watchman # for coc-tsserver
 brew-install llvm
+brew-install ccls
 
 if is_mac; then
   brew-install binutils
