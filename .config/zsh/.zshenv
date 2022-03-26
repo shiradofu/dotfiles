@@ -7,6 +7,7 @@ export LESS="-g -i -M -R -S -W"
 export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 export PATH="$PATH:$HOME/bin"
 
+export ASDF_DIR="${HOMEBREW_PREFIX}/opt/asdf/libexec"
 export GOPATH="$XDG_CACHE_HOME/go"
 export PATH="$PATH:$GOPATH/bin"
 

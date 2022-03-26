@@ -61,12 +61,12 @@ source $ZDOTDIR/tmux.zsh
 source $ZDOTDIR/wsl.zsh
 source $ZDOTDIR/mac.zsh
 
-[ -f "${HOMEBREW_PREFIX}/opt/asdf/asdf.sh" ] && . ${HOMEBREW_PREFIX}/opt/asdf/asdf.sh
+[ -f "${HOMEBREW_PREFIX}/opt/asdf/libexec/asdf.sh" ] && . ${HOMEBREW_PREFIX}/opt/asdf/libexec/asdf.sh
 [ -z "${TMUX}" ] \
   && export STARSHIP_CONFIG="${XDG_CONFIG_HOME}/starship/starship.toml" \
   || export STARSHIP_CONFIG="${XDG_CONFIG_HOME}/starship/starship-tmux.toml"
 eval "$(starship init zsh)"
 
 if (which zprof > /dev/null 2>&1) then
-  zprof
+  zprof | less
 fi
