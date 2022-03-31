@@ -9,7 +9,8 @@ window:
     x: 0
     y: 0
   dynamic_padding: false
-  decorations: none
+  decorations: full
+  opacity: 0.85
   startup_mode: Maximized
   history: 10000
   multiplier: 2 # default: 3
@@ -36,7 +37,6 @@ font:
     y: 0
   use_thin_strokes: true
 draw_bold_text_with_bright_colors: false
-background_opacity: 0.85
 bell:
   animation: EaseOutExpo
   duration: 0
