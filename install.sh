@@ -4,52 +4,81 @@ msg() { printf "\033[1;34m$1\033[0m\n"; }
 is_mac() { uname | grep Darwin -q; }
 is_wsl() { uname -r | grep microsoft -q; }
 exists() { type $1 > /dev/null 2>&1; }
-brew-install() { msg "\n🍺  installing $1...\n";brew install $1 }
+brew-install() { msg "\n🍺  installing $1...\n"; brew install $1; }
 source ${SCRIPT_DIR}/../.config/zsh/.zshenv
 SCRIPT_DIR=$(cd $(dirname $0) && pwd)
 password=$1
 
 msg "🍺  installing formulae with homebrew..."
 
-echo HOMEBREW_PREFIX
-echo $HOMEBREW_PREFIX
-echo HOMEBREW_PREFIX
-
 brew-install zsh
 brew-install fzf
 brew-install rg
 brew-install fd
-# brew-install jq
-# brew-install bat
-# brew-install git-delta
-# brew-install tmux
-# brew-install nvim
-# brew-install starship
-# brew-install asdf
-# brew-install php
-# brew-install composer
-# brew-install yarn
-# brew-install awscli
-# brew-install git
-# brew-install gh
-# brew-install ghq
-# brew-install gitui
-# brew-install tokei
-# brew-install act
-# brew-install bitwarden-cli
-# brew-install watchman # for coc-tsserver
-# brew-install llvm
-# brew-install ccls
-
-$(brew --prefix)/opt/fzf/install --completion --no-update-rc --xdg
+brew-install jq
+brew-install bat
+brew-install tmux
+brew-install starship
+brew-install nvim
+brew-install git
+brew-install git-delta
+brew-install gh
+brew-install ghq
+brew-install gitui
+brew-install tokei
+brew-install act
+brew-install awscli
+brew-install bitwarden-cli
+brew-install asdf
+brew-install watchman # for coc-tsserver
 
 echo "$1" | sudo -S sh -c "printf '${HOMEBREW_PREFIX}/bin/zsh\n' >> /etc/shells"
+$(brew --prefix)/opt/fzf/install --completion --no-update-rc --xdg
+
+
+# msg "\n🍺  brew install completed!"
+
+msg "\ninstall languages...\n"
 
 source ${HOMEBREW_PREFIX}/opt/asdf/asdf.sh
 
-msg "\n🍺  brew install completed!"
+brew-install llvm
+brew-install ccls
 
-# source ${SCRIPT_DIR}/languages.sh
+msg "\nnodejs:\n"
+asdf plugin add nodejs  &&
+asdf install nodejs lts &&
+asdf global nodejs lts  &&
+npm install --global neovim
+brew-install yarn
+
+asdf plugin add yarn     &&
+asdf install yarn latest &&
+asdf global yarn latest
+
+msg "\npython:\n"
+asdf plugin add python     &&
+asdf install python 2.7.18 &&
+asdf shell python 2.7.18   &&
+pip install pynvim
+
+asdf install python 3.9.6  &&
+asdf shell python 3.9.6    &&
+pip install pynvim         &&
+asdf global python 3.9.6
+
+pip3 install neovim-remote &&
+asdf reshim python
+
+msg "\ngolang:\n"
+asdf plugin add golang     &&
+asdf install golang latest &&
+asdf global golang latest
+export GOPATH="$XDG_CACHE_HOME/go"
+go install golang.org/x/tools/cmd/goimports@latest
+
+brew-install php
+brew-install composer
 
 # set -e
 

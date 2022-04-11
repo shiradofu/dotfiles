@@ -47,7 +47,7 @@ case "${DIST}" in
     echo "${password}" | sudo -S apt -y install rsync
 
     # required by homebrew
-    echo "${password}" | sudo -S apt -y install build-essential procps curl file git bash expect
+    echo "${password}" | sudo -S apt -y install build-essential procps curl file git bash
 
     # required by asdf python
     echo "${password}" | sudo -S apt -y install make build-essential libssl-dev zlib1g-dev \
@@ -61,19 +61,21 @@ case "${DIST}" in
 
     # required by homebrew
     echo "${password}" | sudo -S yum -y groupinstall 'Development Tools'
-    echo "${password}" | sudo -S yum -y install procps-ng curl file git bash expect
+    echo "${password}" | sudo -S yum -y install procps-ng curl file git bash
 
     # required by asdf python
     echo "${password}" | sudo -S yum -y install gcc zlib-devel bzip2 bzip2-devel readline-devel \
       sqlite sqlite-devel openssl-devel tk-devel libffi-devel xz-devel
     ;;
+  darwin )
+    if ! exists "xcode-select"; then
+        msg "installing xcode-select..."
+        xcode-select --install
+    fi
+    ;;
 esac
 
 if ! exists "brew"; then
-  if [ "${DIST}" = "Darwin" ] && ! exists "xcode-select"; then
-      msg "installing xcode-select..."
-      xcode-select --install
-  fi
   url='https://raw.githubusercontent.com/Homebrew/install/master/install.sh'
   curl -fsSL $url > _homebrew.sh
   msg "installing homebrew..."
@@ -86,7 +88,7 @@ if ! exists "brew"; then
   test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
   test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
-  echo "$1" | sudo -S chown -R $(whoami) $(brew --prefix)
+  echo "$password" | sudo -S chown -R $(whoami) $(brew --prefix)
 fi
 
 if [ "${DIST}" = "Darwin" ]; then
