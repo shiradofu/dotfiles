@@ -14,8 +14,10 @@ nnoremap <silent> ]q :<C-u>call user#util#zi_after('cnext')<CR>
 nnoremap <silent> [q :<C-u>call user#util#zi_after('cprev')<CR>
 nnoremap <silent> ]c :<C-u>call user#util#zi_after('call feedkeys("\<Plug>(GitGutterNextHunk)", "m")')<CR>
 nnoremap <silent> [c :<C-u>call user#util#zi_after('call feedkeys("\<Plug>(GitGutterPrevHunk)", "m")')<CR>
-nnoremap <silent> ]e :<C-u>call user#util#zi_after("call CocAction('diagnosticNext')")<CR>
-nnoremap <silent> [e :<C-u>call user#util#zi_after("call CocAction('diagnosticPrevious')")<CR>
+nnoremap <silent> ]w :<C-u>call user#util#zi_after("call CocAction('diagnosticNext')")<CR>
+nnoremap <silent> [w :<C-u>call user#util#zi_after("call CocAction('diagnosticPrevious')")<CR>
+nnoremap <silent> ]e :<C-u>call user#util#zi_after("call CocAction('diagnosticNext')")<CR>e
+nnoremap <silent> [e :<C-u>call user#util#zi_after("call CocAction('diagnosticPrevious')")<CR>e
 nmap     <silent> g; :<C-u>call user#util#zi_after('normal! g;')<CR>
 nmap     <silent> g, :<C-u>call user#util#zi_after('normal! g,')<CR>
 nmap     <silent> <C-o> :<C-u>call user#util#zi_after('call feedkeys("\<C-o>", "n")')<CR>
