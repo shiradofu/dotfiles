@@ -51,6 +51,8 @@
 !/.gitignore
 !/.editorconfig
 !/install/*
+!/init.sh
+!/install.sh
 !/Dockerfile
 !/Makefile
 !/README.md

@@ -10,7 +10,7 @@ RUN apt-get -y update && apt-get -y install sudo locales curl && \
   echo "Set disable_coredump false" >> /etc/sudo.conf && \
   localedef -f UTF-8 -i en_US en_US.UTF-8
 WORKDIR /home/user
-COPY ./install/init.sh .
+COPY init.sh .
 RUN chown user:user ./init.sh
 USER user
 CMD /bin/sh
@@ -34,7 +34,7 @@ RUN yum -y update && yum -y install sudo curl && \
   echo "user:user" | chpasswd && \
   usermod -aG wheel user
 WORKDIR /home/user
-COPY ./install/init.sh .
+COPY init.sh .
 RUN chown user:user ./init.sh
 USER user
 CMD /bin/sh
