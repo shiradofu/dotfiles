@@ -11,6 +11,10 @@ password=$1
 
 msg "🍺  installing formulae with homebrew..."
 
+echo HOMEBREW_PREFIX
+echo $HOMEBREW_PREFIX
+echo HOMEBREW_PREFIX
+
 brew-install zsh
 brew-install fzf
 brew-install rg
