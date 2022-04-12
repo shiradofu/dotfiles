@@ -108,8 +108,8 @@ if [ "${DIST}" = "Darwin" ]; then
     brew install openssl readline sqlite3 xz zlib
 fi
 
-cd && git clone https://github.com/shiradofu/dotfiles.test.git
-bash ./dotfiles.test/install.sh $password
+cd && git clone https://github.com/shiradofu/dotfiles.git
+bash ./dotfiles/install.sh $password
 unset password
 
 # if [ -f "$0" ]; then rm "$0"; fi

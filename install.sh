@@ -59,9 +59,8 @@ brew_i yarn
 msg "\npython:\n"
 asdf plugin add python     &&
 asdf install python 2.7.18 &&
-
-asdf install python 3.9.6  &&
-asdf global python 3.9.6
+asdf install python 3.10.4  &&
+asdf global python 3.10.4
 
 msg "\nphp:\n"
 brew_i php
@@ -72,8 +71,8 @@ brew_i composer
 #
 brew_i nvim
 npm install --global neovim
-asdf shell python 2.7.18 && pip install pynvim
-asdf shell python 3.9.6  && pip install pynvim
+# asdf shell python 2.7.18 && pip install pynvim
+# asdf shell python 3.10.4 && pip install pynvim
 brew_i watchman # coc-tsserver
 
 #
