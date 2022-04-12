@@ -6,43 +6,43 @@ msg() { printf "\033[1;34m$1\033[0m\n"; }
 exists() { type $1 > /dev/null 2>&1; }
 is_mac() { uname | grep Darwin -q; }
 is_wsl() { uname -r | grep microsoft -q; }
-brew-i() { msg "\n🍺  installing $1:\n"; brew install $1; }
+brew_i() { msg "\n🍺  installing $1:\n"; brew install $1; }
 
 source ${SCRIPT_DIR}/../.config/zsh/.zshenv
 SCRIPT_DIR=$(cd $(dirname $0) && pwd)
 
-brew-i zsh
+brew_i zsh
 echo "$password" | sudo -S sh -c "printf '${HOMEBREW_PREFIX}/bin/zsh\n' >> /etc/shells"
 
-brew-i fzf
-${HOMEBREW_PREFIX}/opt/fzf/install --completion --no-update-rc --xdg
+brew_i fzf
+${HOMEBREW_PREFIX}/opt/fzf/install --completion --no-update-rc --no-key-bindings --xdg
 
-brew-i rg
-brew-i fd
-brew-i jq
-brew-i bat
-brew-i tmux
-brew-i starship
-brew-i git
-brew-i git-delta
-brew-i gh
-brew-i ghq
-brew-i gitui
-brew-i tokei
-brew-i act
-brew-i awscli
-brew-i bitwarden-cli
+brew_i rg
+brew_i fd
+brew_i jq
+brew_i bat
+brew_i tmux
+brew_i starship
+brew_i git
+brew_i git-delta
+brew_i gh
+brew_i ghq
+brew_i gitui
+brew_i tokei
+brew_i act
+brew_i awscli
+brew_i bitwarden-cli
 
 #
 # Languages and Package Managers
 #
-brew-i asdf
+brew_i asdf
 source ${HOMEBREW_PREFIX}/opt/asdf/asdf.sh
 
 msg "\nc/c++:\n"
-brew-i gcc
-brew-i llvm
-brew-i ccls
+brew_i gcc
+brew_i llvm
+brew_i ccls
 
 msg "\ngolang:\n"
 asdf plugin add golang     &&
@@ -54,7 +54,7 @@ msg "\nnodejs:\n"
 asdf plugin add nodejs  &&
 asdf install nodejs lts &&
 asdf global nodejs lts  &&
-brew-i yarn
+brew_i yarn
 
 msg "\npython:\n"
 asdf plugin add python     &&
@@ -64,17 +64,17 @@ asdf install python 3.9.6  &&
 asdf global python 3.9.6
 
 msg "\nphp:\n"
-brew-i php
-brew-i composer
+brew_i php
+brew_i composer
 
 #
 # Vim
 #
-brew-i nvim
+brew_i nvim
 npm install --global neovim
 asdf shell python 2.7.18 && pip install pynvim
 asdf shell python 3.9.6  && pip install pynvim
-brew-i watchman # coc-tsserver
+brew_i watchman # coc-tsserver
 
 #
 # Deploy files
