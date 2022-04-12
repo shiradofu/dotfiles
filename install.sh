@@ -31,7 +31,6 @@ brew_i gitui
 brew_i tokei
 brew_i act
 brew_i awscli
-brew_i bitwarden-cli
 
 #
 # Languages and Package Managers
@@ -71,8 +70,6 @@ brew_i composer
 #
 brew_i nvim
 npm install --global neovim
-# asdf shell python 2.7.18 && pip install pynvim
-# asdf shell python 3.10.4 && pip install pynvim
 brew_i watchman # coc-tsserver
 
 #
