@@ -44,14 +44,12 @@ case "${DIST}" in
     export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true
     echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections
     echo "${password}" | sudo -S apt -y update
-    echo "${password}" | sudo -S apt -y install rsync
     # required by homebrew
     echo "${password}" | sudo -S apt -y install build-essential procps curl file git bash
     ;;
   redhat | fedora )
     msg "installing basic packages..."
     echo "${password}" | sudo -S yum -y update
-    echo "${password}" | sudo -S yum -y install rsync
     # required by homebrew
     echo "${password}" | sudo -S yum -y groupinstall 'Development Tools'
     echo "${password}" | sudo -S yum -y install procps-ng curl file git bash
@@ -69,7 +67,6 @@ if ! exists "brew"; then
   curl -fsSL $url > _homebrew.sh
   msg "installing homebrew..."
   NONINTERACTIVE=1 bash _homebrew.sh
-
   rm _homebrew.sh
 
   test -f /usr/local/bin/brew && eval $(/usr/local/bin/brew shellenv)
@@ -83,8 +80,11 @@ fi
 msg "\n🍺  installing ghq:\n"
 brew install ghq
 
+msg "\n✨  Cloning dotfiles repository...\n"
 repo=github.com/shiradofu/dotfiles
 ghq get --shallow --update https://${repo}
+
+msg "\n🚀  Start installing!\n"
 bash $(ghq root)/${repo}/install.sh $password
 
 unset password

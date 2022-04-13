@@ -7,6 +7,7 @@ build.%:
 build.i:
 	@{ git ls-files | sed 's@^@+ /@' ; printf '+ */\n- *\n'; } | \
 		rsync -aR --prune-empty-dirs --filter='. -' . ./test/
+	@rsync -a ./.git ./test/
 	@docker build --target i -t $(BASE)-i .
 	@test -d ./test && rm -rf test/
 

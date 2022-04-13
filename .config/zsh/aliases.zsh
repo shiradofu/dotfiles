@@ -3,17 +3,15 @@ alias ll='ls -lahF'
 
 typeset -A r_aliases
 r_aliases=(
-  "v"     "nvim"
-  "art"   "php artisan"
-  "artt"  "php artisan tinker"
-  "tmkt"  "tmux kill-session -t"
-  "dc"    "docker-compose"
-  "dce"   "docker-compose exec"
+  "v"    "nvim"
+  "gg"   "ghq get --shallow --update "
+  "tmkt" "tmux kill-session -t"
 )
 
 typeset -A g_aliases
 g_aliases=(
   # directory
+  "./..."    "./..."
   "..."      "../.."
   "...."     "../../.."
   "....."    "../../../.."
@@ -39,6 +37,8 @@ abbrev-expand() {
   if "${first}" && [ -n "${r_aliases[$abbr]}" ]; then
     zle backward-kill-word
     LBUFFER+=${r_aliases[$abbr]}
+  elif [[ $LBUFFER =~ " *go +[a-z]+ +\./\.\.\." ]]; then
+    # do nothing
   elif [ -n "${g_aliases[$abbr]}" ]; then
     zle backward-kill-word
     LBUFFER+=${g_aliases[$abbr]}
