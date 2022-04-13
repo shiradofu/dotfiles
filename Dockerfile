@@ -27,7 +27,6 @@ RUN chown user:user ./init.sh
 USER user
 CMD /bin/sh
 
-# TODO: ghq
 FROM linuxbrew/linuxbrew AS i
 USER root
 ENV LANG="en_US.UTF-8" \

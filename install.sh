@@ -12,7 +12,10 @@ DOTFILES_ROOT=$(cd $(dirname $0) && pwd)
 source ${DOTFILES_ROOT}/.config/zsh/.zshenv
 
 brew_i zsh
-echo "$password" | sudo -S sh -c "printf '${HOMEBREW_PREFIX}/bin/zsh\n' >> /etc/shells"
+if ! cat /etc/shells | grep -xq ${HOMEBREW_PREFIX}/bin/zsh; then
+  echo "$password" | sudo -S sh -c "printf '${HOMEBREW_PREFIX}/bin/zsh\n' >> /etc/shells"
+fi
+git clone --depth 1 https://github.com/zdharma-continuum/zinit "${XDG_DATA_HOME}/zinit/zinit.git"
 
 brew_i fzf
 ${HOMEBREW_PREFIX}/opt/fzf/install --completion --no-update-rc --no-key-bindings --xdg
@@ -77,13 +80,14 @@ brew_i watchman # coc-tsserver
 #
 cd
 set -e
-[ -f ".zshenv" ] && mv .zshenv .zshenv.$RANDOM.bak
+RAND=$RANDOM
+[ -f ".zshenv" ] && mv .zshenv .zshenv.${RAND}.bak
 ln -s ${DOTFILES_ROOT}/.config/zsh/.zshenv
-[ -d ".config" ] && mv .config .config.$RANDOM.bak
+[ -d ".config" ] && mv .config .config.${RAND}.bak
 ln -s ${DOTFILES_ROOT}/.config
-[ -d "bin" ] && mv bin bin.$RANDOM.bak
+[ -d "bin" ] && mv bin bin.${RAND}.bak
 ln -s ${DOTFILES_ROOT}/bin && hash -r
-[ -f ".gitconfig" ] && mv .gitconfig .gitconfig.$RANDOM.bak
+[ -f ".gitconfig" ] && mv .gitconfig .gitconfig.${RAND}.bak
 cp ${DOTFILES_ROOT}/.config/git/config.tpl ${DOTFILES_ROOT}/.config/git/config
 
 if ! [ -f ".bashrc" ] || ! cat .bashrc | grep -xq 'source ~/.zshenv'; then

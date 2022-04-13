@@ -84,7 +84,7 @@ msg "\n🍺  installing ghq:\n"
 brew install ghq
 
 repo=github.com/shiradofu/dotfiles
-ghq get --shallow https://${repo}
+ghq get --shallow --update https://${repo}
 bash $(ghq root)/${repo}/install.sh $password
 
 unset password

@@ -48,11 +48,10 @@
 !/bin/wslsync
 !/bin/vim-tabline-git-diff
 
-!/.gitignore
 !/.editorconfig
-!/install/*
+!/.gitignore
+!/Dockerfile
 !/init.sh
 !/install.sh
-!/Dockerfile
 !/Makefile
 !/README.md

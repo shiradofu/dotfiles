@@ -13,9 +13,13 @@ build.i:
 new.%: del.%
 	@docker run -it --name $(NAME) $(NAME)
 
-in.%:
+sh.%:
 	@docker start $(NAME)
 	@docker exec -it $(NAME) /bin/sh
+
+zsh.%:
+	@docker start $(NAME)
+	@docker exec -it $(NAME) /home/linuxbrew/.linuxbrew/bin/zsh
 
 del.%:
 	@CONTAINER_ID=$(shell docker ps -a -f name=$(NAME) -q); \
