@@ -8,8 +8,8 @@ is_mac() { uname | grep Darwin -q; }
 is_wsl() { uname -r | grep microsoft -q; }
 brew_i() { msg "\n🍺  installing $1:\n"; brew install $1; }
 
-source ${SCRIPT_DIR}/../.config/zsh/.zshenv
-SCRIPT_DIR=$(cd $(dirname $0) && pwd)
+DOTFILES_ROOT=$(cd $(dirname $0) && pwd)
+source ${DOTFILES_ROOT}/.config/zsh/.zshenv
 
 brew_i zsh
 echo "$password" | sudo -S sh -c "printf '${HOMEBREW_PREFIX}/bin/zsh\n' >> /etc/shells"
@@ -26,7 +26,6 @@ brew_i starship
 brew_i git
 brew_i git-delta
 brew_i gh
-brew_i ghq
 brew_i gitui
 brew_i tokei
 brew_i act
@@ -56,9 +55,10 @@ asdf global nodejs lts  &&
 brew_i yarn
 
 msg "\npython:\n"
+brew install openssl readline sqlite3 xz zlib &&
 asdf plugin add python     &&
 asdf install python 2.7.18 &&
-asdf install python 3.10.4  &&
+asdf install python 3.10.4 &&
 asdf global python 3.10.4
 
 msg "\nphp:\n"
@@ -75,21 +75,16 @@ brew_i watchman # coc-tsserver
 #
 # Deploy files
 #
+cd
 set -e
-
-ghq_shiradofu=$(ghq root)/github.com/shiradofu
-mkdir -p $ghq_shiradofu
-rsync -av ./dotfiles $ghq_shiradofu/
-ghq_dotfiles=$ghq_shiradofu/dotfiles
-
 [ -f ".zshenv" ] && mv .zshenv .zshenv.$RANDOM.bak
-ln -s $ghq_dotfiles/.config/zsh/.zshenv
+ln -s ${DOTFILES_ROOT}/.config/zsh/.zshenv
 [ -d ".config" ] && mv .config .config.$RANDOM.bak
-ln -s $ghq_dotfiles/.config
+ln -s ${DOTFILES_ROOT}/.config
 [ -d "bin" ] && mv bin bin.$RANDOM.bak
-ln -s $ghq_dotfiles/bin && hash -r
+ln -s ${DOTFILES_ROOT}/bin && hash -r
 [ -f ".gitconfig" ] && mv .gitconfig .gitconfig.$RANDOM.bak
-cp $ghq_dotfiles/.config/git/config.tpl $ghq_dotfiles/.config/git/config
+cp ${DOTFILES_ROOT}/.config/git/config.tpl ${DOTFILES_ROOT}/.config/git/config
 
 if ! [ -f ".bashrc" ] || ! cat .bashrc | grep -xq 'source ~/.zshenv'; then
   echo 'source ~/.zshenv' >> .bashrc

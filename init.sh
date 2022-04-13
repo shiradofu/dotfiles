@@ -50,9 +50,9 @@ case "${DIST}" in
     echo "${password}" | sudo -S apt -y install build-essential procps curl file git bash
 
     # required by asdf python
-    echo "${password}" | sudo -S apt -y install make build-essential libssl-dev zlib1g-dev \
-      libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
-      libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+    # echo "${password}" | sudo -S apt -y install make build-essential libssl-dev zlib1g-dev \
+    #   libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
+    #   libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
     ;;
   redhat | fedora )
     msg "installing basic packages..."
@@ -64,9 +64,9 @@ case "${DIST}" in
     echo "${password}" | sudo -S yum -y install procps-ng curl file git bash
 
     # required by asdf python
-    echo "${password}" | sudo -S yum -y install gcc zlib-devel bzip2 bzip2-devel readline-devel \
-      sqlite sqlite-devel openssl-devel tk-devel libffi-devel xz-devel
-    ;;
+    # echo "${password}" | sudo -S yum -y install gcc zlib-devel bzip2 bzip2-devel readline-devel \
+    #   sqlite sqlite-devel openssl-devel tk-devel libffi-devel xz-devel
+    # ;;
   darwin )
     if ! exists "xcode-select"; then
         msg "installing xcode-select..."
@@ -108,8 +108,13 @@ if [ "${DIST}" = "Darwin" ]; then
     brew install openssl readline sqlite3 xz zlib
 fi
 
-cd && git clone https://github.com/shiradofu/dotfiles.git
-bash ./dotfiles/install.sh $password
+msg "\n🍺  installing ghq:\n"
+brew install ghq
+
+dotfiles=github.com/shiradofu/dotfiles
+ghq get --shallow https://${dotfiles}
+bash $(ghq root)/${dotfiles}/install.sh $password
+
 unset password
 
 # if [ -f "$0" ]; then rm "$0"; fi
