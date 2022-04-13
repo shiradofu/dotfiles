@@ -45,27 +45,16 @@ case "${DIST}" in
     echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections
     echo "${password}" | sudo -S apt -y update
     echo "${password}" | sudo -S apt -y install rsync
-
     # required by homebrew
     echo "${password}" | sudo -S apt -y install build-essential procps curl file git bash
-
-    # required by asdf python
-    # echo "${password}" | sudo -S apt -y install make build-essential libssl-dev zlib1g-dev \
-    #   libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
-    #   libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
     ;;
   redhat | fedora )
     msg "installing basic packages..."
     echo "${password}" | sudo -S yum -y update
     echo "${password}" | sudo -S yum -y install rsync
-
     # required by homebrew
     echo "${password}" | sudo -S yum -y groupinstall 'Development Tools'
     echo "${password}" | sudo -S yum -y install procps-ng curl file git bash
-
-    # required by asdf python
-    # echo "${password}" | sudo -S yum -y install gcc zlib-devel bzip2 bzip2-devel readline-devel \
-    #   sqlite sqlite-devel openssl-devel tk-devel libffi-devel xz-devel
     ;;
   darwin )
     if ! exists "xcode-select"; then
@@ -91,29 +80,12 @@ if ! exists "brew"; then
   echo "$password" | sudo -S chown -R $(whoami) $(brew --prefix)
 fi
 
-if [ "${DIST}" = "Darwin" ]; then
-    msg "installing basic packages..."
-    brew install binutils
-    brew install coreutils
-    brew install findutils
-    brew install grep
-    brew install gawk
-    brew install gnu-sed
-    brew install gnu-tar
-    brew install gzip
-    brew install wget
-    brew install gpg
-
-    # for asdf python
-    brew install openssl readline sqlite3 xz zlib
-fi
-
 msg "\n🍺  installing ghq:\n"
 brew install ghq
 
-dotfiles=github.com/shiradofu/dotfiles
-ghq get --shallow https://${dotfiles}
-bash $(ghq root)/${dotfiles}/install.sh $password
+repo=github.com/shiradofu/dotfiles
+ghq get --shallow https://${repo}
+bash $(ghq root)/${repo}/install.sh $password
 
 unset password
 

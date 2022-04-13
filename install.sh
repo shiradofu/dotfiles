@@ -94,6 +94,17 @@ fi
 # OS-spesific settings
 #
 if is_mac; then
+  brew_i binutils
+  brew_i coreutils
+  brew_i findutils
+  brew_i grep
+  brew_i gawk
+  brew_i gnu-sed
+  brew_i gnu-tar
+  brew_i gzip
+  brew_i wget
+  brew_i gpg
+
   git config --global credential.helper osxkeychain
   defaults write com.apple.Dock autohide-delay -float 3600; killall Dock
 fi
