@@ -110,6 +110,7 @@ if is_mac; then
   brew_i gpg
 
   git config --global credential.helper osxkeychain
+  defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
   defaults write com.apple.Dock autohide-delay -float 3600; killall Dock
 fi
 

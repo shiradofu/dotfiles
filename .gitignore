@@ -41,8 +41,10 @@
 !/.config/zsh/.zshenv
 !/.config/zsh/completions
 !/.config/zsh/completions/_*
+!/.config/zsh/completions/git-completion.bash
 
 !/bin/chcs
+!/bin/git-wt
 !/bin/mk
 !/bin/winterm-gen
 !/bin/wslsync

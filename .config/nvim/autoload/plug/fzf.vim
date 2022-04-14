@@ -24,7 +24,7 @@ function! plug#fzf#hook_add() abort
     \ ),
     \ 'fnamemodify(v:val, ":.")'
     \ )
-    let fd = split(system('fd --type f --hidden -E ".git" -E ".wt-*"'))
+    let fd = split(system('fd --type f --hidden -E ".git"'))
     return fzf#vim#_uniq(old + fd)
   endfunction
 

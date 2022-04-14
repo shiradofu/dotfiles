@@ -61,7 +61,7 @@ bindkey "^x^m" accept-line
 
 ### suffix alias
 # ref: https://itchyny.hatenablog.com/entry/20130227/1361933011
-function extract() {
+function kaito() {
   case $1 in
     *.tar.gz|*.tgz) tar xzvf $1;;
     *.tar.xz) tar Jxvf $1;;
@@ -76,4 +76,4 @@ function extract() {
     # *.arj) unarj $1;;
   esac
 }
-alias -s {gz,tgz,zip,bz2,tbz,Z,tar,xz}=extract
+alias -s {gz,tgz,zip,bz2,tbz,Z,tar,xz}=kaito

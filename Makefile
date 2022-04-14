@@ -5,6 +5,7 @@ build.%:
 	@docker build --target $* -t $(NAME) .
 
 build.i:
+	# https://www.robario.com/2017/02/22
 	@{ git ls-files | sed 's@^@+ /@' ; printf '+ */\n- *\n'; } | \
 		rsync -aR --prune-empty-dirs --filter='. -' . ./test/
 	@rsync -a ./.git ./test/

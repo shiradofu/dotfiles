@@ -11,8 +11,7 @@ export FZF_TMUX=1
 export FZF_TMUX_OPTS='-p50%,70%'
 export FZF_COMPLETION_TRIGGER=';'
 export FZF_COMPLETION_OPTS="$FZF_DEFAULT_OPTS --info=inline"
-FD_NO_IGNORE="--no-ignore --exclude='.wt-*'"
-export FZF_DEFAULT_COMMAND="fd --type f --hidden ${FD_NO_IGNORE}"
+export FZF_DEFAULT_COMMAND="fd --type f --hidden --no-ignore-vcs"
 
 __fzfcmd() {
   [ -n "$TMUX_PANE" ] && { [ "${FZF_TMUX:-0}" != 0 ] || [ -n "$FZF_TMUX_OPTS" ]; } &&
@@ -56,11 +55,11 @@ __fzf_extract_command() {
 }
 
 _fzf_compgen_path() {
-  fd --hidden --follow "${=FD_NO_IGNORE}" . "$1"
+  fd --hidden --follow . "$1"
 }
 
 _fzf_compgen_dir() {
-  fd --type d --hidden --follow "${=FD_NO_IGNORE}" . "$1"
+  fd --type d --hidden --follow . "$1"
 }
 
 _fzf_comprun() {
@@ -73,24 +72,6 @@ _fzf_comprun() {
     ssh)          fzf "$@" --preview 'dig {}' ;;
     *)            fzf "$@" ;;
   esac
-}
-
-_fzf_complete_php() {
-  zle backward-delete-char
-  if [[ $LBUFFER =~ "php +artisan +test +" ]]; then
-    _fzf_complete -- "$@" < <( fd '.*Test\.php' .); return
-  else
-    _fzf_complete -- "$@" < <( fd '.*\.php' .); return
-  fi
-}
-
-_fzf_complete_git() {
-  zle backward-delete-char
-  if [[ $LBUFFER =~ "git +co +" ]]; then
-    _fzf_complete -- "$@" < <( git branch -a | sed 's/^[*+]*\s*\(remotes\/\)*//' | cut -d ' ' -f1 ); return
-  else
-    _fzf_complete -- "$@" < <({ git ls-files; git ls-files --others --exclude-standard }); return
-  fi
 }
 
 _fzf_complete_mk() {

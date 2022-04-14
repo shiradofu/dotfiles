@@ -13,7 +13,7 @@ function! user#rg#raw(command_suffix, no_ignore, bang) abort
   call user#sid#override_fzf_fill_quickfix()
   let command = 'rg --column --line-number --no-heading --color=always '
     \ . '--smart-case --sort path '
-    \ . (a:no_ignore ? "-uu -g '!.wt-*' " : '')
+    \ . (a:no_ignore ? "-uu " : '')
     \ . trim(a:command_suffix)
   return fzf#vim#grep(command, 1, fzf#vim#with_preview(), a:bang)
 endfunction

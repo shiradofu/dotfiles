@@ -1,0 +1,69 @@
+#!/bin/sh
+
+# git >= 2.5 required
+
+delete=false
+
+for ARG; do
+  case $ARG in
+    -d | --delete ) delete=true;;
+    *             ) branch=$ARG;;
+  esac
+done
+
+if [ -z "${branch}" ]; then
+  git worktree list
+  exit $?
+fi
+
+root=$(git rev-parse --show-toplevel)
+! [ -d "${root}" ] && exit 1
+wtdir="${root}-$(echo $branch | sed -e 's@/@-@g')/"
+
+cd ${root}
+
+if [ "${delete}" = "false" ]; then
+  __git-wt-add
+else
+  __git-wt-del
+fi
+
+__git-wt_add() {
+  if [ -d "${wtdir}" ]; then
+     echo "worktree for '${branch}' already exists."
+     exit 1
+  fi
+
+  # ブランチ存在確認
+  git fetch --all > /dev/null
+  if ! git show-ref --quiet $branch; then
+     echo "branch '${branch}' does not exist."
+  fi
+
+  printf "create worktree for '${branch}'? (y to continue): "
+  read create_yn
+  [ "${create_yn}" != 'y' ] && { echo canceled.; exit 1 }
+
+  git worktree add ${wtdir} ${branch}
+  {
+    find . -type f | cut -d/ -f2- | \
+    grep -v "^.git/" | \
+    git check-ignore --stdin | \
+    sed 's@^@+ /@' ; printf '+ */\n- *\n';
+  } | \time rsync -aR --prune-empty-dirs --filter='. -' . ${wtdir}/
+
+  echo "\ncompleted."
+}
+
+__git-wt_del() {
+  if ! [ -d "${wtdir}" ]; then
+     echo "worktree for '${branch}' does not exist."
+     exit 1
+  fi
+
+  printf "delete worktree for '${branch}'? (y to continue): "
+  read del_yn
+  [ "${del_yn}" != 'y' ] && { echo canceled.; exit 1 }
+
+  git worktree remove ${wtdir}
+}
