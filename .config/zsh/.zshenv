@@ -11,11 +11,13 @@ export PATH="$PATH:$HOME/bin"
 
 export GOPATH="$XDG_DATA_HOME/go"
 export PATH="$PATH:$GOPATH/bin"
-export WATCHMAN_CONFIG_FILE="${XDG_CONFIG_HOME}/watchman/config.json"
 
 test -f /usr/local/bin/brew && eval $(/usr/local/bin/brew shellenv)
 test -d /opt/homebrew && eval $(/opt/homebrew/bin/brew shellenv)
 test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
 test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+
+source ${HOMEBREW_PREFIX}/opt/asdf/libexec/asdf.sh 2>/dev/null
+export WATCHMAN_CONFIG_FILE="${XDG_CONFIG_HOME}/watchman/config.json"
 
 skip_global_compinit=1

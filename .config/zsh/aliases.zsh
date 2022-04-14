@@ -1,5 +1,6 @@
 alias ls='ls --color'
 alias ll='ls -lahF'
+alias tmux='tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf'
 
 typeset -A r_aliases
 r_aliases=(
@@ -11,7 +12,6 @@ r_aliases=(
 typeset -A g_aliases
 g_aliases=(
   # directory
-  "./..."    "./..."
   "..."      "../.."
   "...."     "../../.."
   "....."    "../../../.."

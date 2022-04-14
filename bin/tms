@@ -1,0 +1,41 @@
+#!/bin/sh
+
+for cmd in tmux fzf; do
+  if ! type "${cmd}" >/dev/null 2>&1; then
+    echo "${cmd} required."
+    exit 1
+  fi
+done
+
+[ -n "$TMUX" ] \
+  && prompt="current: $(tmux display-message -p '#{session_name}') > " \
+  || prompt="> "
+
+list="$(tmux ls -F '#{session_name}' -f '#{?session_attached,0,1}')
+[new]"
+
+if [ -z "$1" ]; then
+  selected=$(echo "${list}" | fzf --prompt="${prompt}")
+else
+  selected=$(echo "${list}" | fzf --border=none --margin=0,1 --prompt="${prompt}")
+fi
+
+case "${selected}" in
+  '' ) exit ;;
+  '[new]' )
+    while [ -z "${name}" ] || tmux ls 2>/dev/null | grep -q "${name}"; do
+      # zle -I
+      printf 'new session name: '
+      read name < /dev/tty
+      [ -z "${name}" ] && printf "name required.\n\n" && continue
+      name=$(echo "${name}" | sed 's/[.:]/_/g') # session_name で使えない文字を変換
+      tmux ls 2>/dev/null | grep -q "${name}" && printf "${name} already exists.\n\n"
+    done
+    tmux new -d -s "${name}"
+    selected=${name}
+    ;;
+esac
+
+[ -n "$TMUX" ] \
+  && tmux switch-client -t "${selected}" \
+  || tmux attach-session -t "${selected}"

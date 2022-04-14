@@ -55,14 +55,11 @@ setopt hist_reduce_blanks   # 余分なスペースを削除してヒストリ�
 source $ZDOTDIR/utils.zsh
 source $ZDOTDIR/zinit.zsh
 source $ZDOTDIR/aliases.zsh
-source $ZDOTDIR/fzf-fd.zsh
-source $ZDOTDIR/git.zsh
-source $ZDOTDIR/tmux.zsh
+source $ZDOTDIR/fzf.zsh
 source $ZDOTDIR/wsl.zsh
 source $ZDOTDIR/mac.zsh
 
-[ -f "${HOMEBREW_PREFIX}/opt/asdf/libexec/asdf.sh" ] && . ${HOMEBREW_PREFIX}/opt/asdf/libexec/asdf.sh
-[ -z "${TMUX}" ] \
+[ -z "$TMUX" ] \
   && export STARSHIP_CONFIG="${XDG_CONFIG_HOME}/starship/starship.toml" \
   || export STARSHIP_CONFIG="${XDG_CONFIG_HOME}/starship/starship-tmux.toml"
 eval "$(starship init zsh)"
