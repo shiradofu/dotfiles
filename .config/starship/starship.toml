@@ -14,3 +14,6 @@ $character
 [directory]
 style = "bold"
 truncation_length = 1000
+
+[git_status]
+deleted = "✗"

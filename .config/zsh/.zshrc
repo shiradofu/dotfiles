@@ -59,9 +59,9 @@ source $ZDOTDIR/fzf.zsh
 source $ZDOTDIR/wsl.zsh
 source $ZDOTDIR/mac.zsh
 
-[ -z "$TMUX" ] \
-  && export STARSHIP_CONFIG="${XDG_CONFIG_HOME}/starship/starship.toml" \
-  || export STARSHIP_CONFIG="${XDG_CONFIG_HOME}/starship/starship-tmux.toml"
+unset ASDF_DIR # https://github.com/ohmyzsh/ohmyzsh/issues/10484
+source $HOMEBREW_PREFIX/opt/asdf/libexec/asdf.sh
+
 eval "$(starship init zsh)"
 
 if (which zprof > /dev/null 2>&1) then

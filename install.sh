@@ -15,6 +15,7 @@ brew_i zsh
 if ! cat /etc/shells | grep -xq ${HOMEBREW_PREFIX}/bin/zsh; then
   echo "$password" | sudo -S sh -c "printf '${HOMEBREW_PREFIX}/bin/zsh\n' >> /etc/shells"
 fi
+mkdir -p "$XDG_DATA_HOME/zsh" && touch "$XDG_DATA_HOME/zsh/history"
 git clone --depth 1 https://github.com/zdharma-continuum/zinit "${XDG_DATA_HOME}/zinit/zinit.git"
 
 brew_i fzf
@@ -38,7 +39,7 @@ brew_i awscli
 # Languages and Package Managers
 #
 brew_i asdf
-source ${HOMEBREW_PREFIX}/opt/asdf/asdf.sh
+source $HOMEBREW_PREFIX/opt/asdf/libexec/asdf.sh
 
 msg "\nc/c++:\n"
 brew_i gcc
@@ -54,7 +55,7 @@ go install golang.org/x/tools/cmd/goimports@latest
 msg "\nnodejs:\n"
 asdf plugin add nodejs  &&
 asdf install nodejs lts &&
-asdf global nodejs lts  &&
+asdf global nodejs lts
 brew_i yarn
 
 msg "\npython:\n"
@@ -71,6 +72,7 @@ brew_i composer
 #
 # Vim
 #
+brew_i vim
 brew_i nvim
 npm install --global neovim
 brew_i watchman # coc-tsserver
