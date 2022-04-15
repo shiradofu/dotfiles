@@ -15,9 +15,9 @@ list="$(tmux ls -F '#{session_name}' -f '#{?session_attached,0,1}')
 [new]"
 
 if [ -z "$1" ]; then
-  selected=$(echo "${list}" | fzf --prompt="${prompt}")
+  selected=$(echo "${list}" | grep -v '^$' | fzf --prompt="${prompt}")
 else
-  selected=$(echo "${list}" | fzf --border=none --margin=0,1 --prompt="${prompt}")
+  selected=$(echo "${list}" | grep -v '^$' | fzf --border=none --margin=1 --prompt="${prompt}")
 fi
 
 case "${selected}" in

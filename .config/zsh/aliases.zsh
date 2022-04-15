@@ -1,6 +1,8 @@
 alias ls='ls --color'
 alias ll='ls -lahF'
 alias tmux='tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf'
+# https://superuser.com/questions/231002/how-can-i-search-within-the-output-buffer-of-a-tmux-shell
+alias clear="clear && printf '\e[3J'"
 
 typeset -A r_aliases
 r_aliases=(
