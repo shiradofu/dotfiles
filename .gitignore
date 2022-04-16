@@ -19,7 +19,6 @@
 !/.config/nvim/dein.vim
 !/.config/nvim/init.vim
 !/.config/nvim/coc-settings.json
-!/.config/starship/starship-tmux.toml
 !/.config/starship/starship.toml
 !/.config/tmux/tmux.conf
 !/.config/tmux/styles/*.conf

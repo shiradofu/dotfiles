@@ -2,6 +2,20 @@
 
 # git >= 2.5 required
 
+# git worktree のラッパー
+#
+# git-wt
+#   現在の worktree の一覧を表示
+#
+# git-wt BRANCH_NAME
+#   オリジナルのディレクトリが属するディレクトリに worktree を作成
+#   新ディレクトリ名はオリジナルにブランチ名を足したもの
+#   (ブランチ名の "/" は "-" に変換される)
+#
+# git-wt --delete BRANCH_NAME
+#   git-wt BRANCH_NAME で作成された worktree を削除
+#   フラグは -d も可
+
 delete=false
 
 for ARG; do
