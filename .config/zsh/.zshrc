@@ -43,7 +43,7 @@ bindkey -M menuselect '^o' accept-and-infer-next-history # 次の補完メニュ
 bindkey -M menuselect '^r' history-incremental-search-forward # 補完候補内インクリメンタルサーチ
 
 # 履歴
-HISTFILE="$XDG_DATA_HOME/zsh/history"
+HISTFILE="$XDG_STATE_HOME/zsh/history"
 HISTSIZE=1000000
 SAVEHIST=1000000
 setopt share_history

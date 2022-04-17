@@ -14,9 +14,9 @@ test -d /opt/homebrew && eval $(/opt/homebrew/bin/brew shellenv)
 test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
 test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
-export GOPATH="$XDG_DATA_HOME/go"
+export GOPATH="$XDG_STATE_HOME/go"
 export PATH="$PATH:$GOPATH/bin"
-export ASDF_DATA_DIR="$XDG_DATA_HOME/asdf"
+export ASDF_DATA_DIR="$XDG_STATE_HOME/asdf"
 export STARSHIP_CONFIG="${XDG_CONFIG_HOME}/starship/starship.toml"
 export WATCHMAN_CONFIG_FILE="$XDG_CONFIG_HOME/watchman/config.json"
 

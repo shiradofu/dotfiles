@@ -1,4 +1,4 @@
-let s:plugin_dir = $XDG_CACHE_HOME . '/dein'
+let s:plugin_dir = $XDG_STATE_HOME . '/dein'
 let s:dein_dir = s:plugin_dir . '/repos/github.com/Shougo/dein.vim'
 
 if &runtimepath !~# '/dein.vim'

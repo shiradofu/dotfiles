@@ -15,8 +15,8 @@ brew_i zsh
 if ! cat /etc/shells | grep -xq ${HOMEBREW_PREFIX}/bin/zsh; then
   echo "$password" | sudo -S sh -c "printf '${HOMEBREW_PREFIX}/bin/zsh\n' >> /etc/shells"
 fi
-mkdir -p "$XDG_DATA_HOME/zsh" && touch "$XDG_DATA_HOME/zsh/history"
-git clone --depth 1 https://github.com/zdharma-continuum/zinit "${XDG_DATA_HOME}/zinit/zinit.git"
+mkdir -p "$XDG_STATE_HOME/zsh" && touch "$XDG_STATE_HOME/zsh/history"
+git clone --depth 1 https://github.com/zdharma-continuum/zinit "${XDG_STATE_HOME}/zinit/zinit.git"
 
 brew_i fzf
 ${HOMEBREW_PREFIX}/opt/fzf/install --completion --no-update-rc --no-key-bindings --xdg
@@ -52,10 +52,16 @@ asdf install golang latest &&
 asdf global golang latest
 go install golang.org/x/tools/cmd/goimports@latest
 
+msg "\ndeno:\n"
+asdf plugin add deno     &&
+asdf install deno latest &&
+asdf global deno latest
+
 msg "\nnodejs:\n"
 asdf plugin add nodejs  &&
 asdf install nodejs lts &&
-asdf global nodejs lts
+asdf global nodejs lts  &&
+npm install --global npm
 brew_i yarn
 
 msg "\npython:\n"

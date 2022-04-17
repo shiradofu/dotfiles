@@ -11,7 +11,7 @@ done
   && prompt="current: $(tmux display-message -p '#{session_name}') > " \
   || prompt="> "
 
-list="$(tmux ls -F '#{session_name}' -f '#{?session_attached,0,1}')
+list="$(tmux ls -F '#{session_name}' -f '#{?session_attached,0,1}' 2>/dev/null)
 [new]"
 
 if [ -z "$1" ]; then
