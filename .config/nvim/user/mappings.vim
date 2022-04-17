@@ -3,6 +3,7 @@ let mapleader = "\<Space>"
 nnoremap <silent> <Leader>; :<C-u>execute 'source ' . g:init_vim_path<CR>
 \ :<C-u>call dein#recache_runtimepath()<CR>:<C-u>echo "loaded"<CR>
 
+inoremap <silent> jj <Esc>
 nnoremap <silent> <BS>  :<C-u>call user#util#quit()<CR>
 nnoremap <silent> g<BS> :<C-u>call user#util#tabclose()<CR>
 nmap     <silent> zi    :<C-u>call user#util#zi()<CR>

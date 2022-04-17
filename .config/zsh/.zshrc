@@ -52,10 +52,9 @@ setopt hist_ignore_all_dups # ZSH_AUTOSUGGEST_STRATEGY=match_prev_cmdを使用�
 setopt hist_ignore_space    # spaceで始まる場合、コマンド履歴に追加しない
 setopt hist_reduce_blanks   # 余分なスペースを削除してヒストリに記録する
 
-source $ZDOTDIR/utils.zsh
 source $ZDOTDIR/zinit.zsh
 source $ZDOTDIR/aliases.zsh
-source $ZDOTDIR/fzf.zsh
+source $ZDOTDIR/utils.zsh
 source $ZDOTDIR/wsl.zsh
 source $ZDOTDIR/mac.zsh
 

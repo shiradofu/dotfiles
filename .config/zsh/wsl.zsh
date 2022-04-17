@@ -1,4 +1,4 @@
-! $IS_WSL && return
+[ -f /proc/sys/fs/binfmt_misc/WSLInterop ] || return
 
 alias open=wslview
 

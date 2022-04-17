@@ -1,4 +1,4 @@
-! $IS_MAC && return
+[[ "$OSTYPE" == "darwin"* ]] || return
 
 PATH="$HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin:$PATH"
 MANPATH="$HOMEBREW_PREFIX/opt/coreutils/libexec/gnuman:$MANPATH"

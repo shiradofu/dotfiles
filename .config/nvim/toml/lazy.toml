@@ -1,0 +1,294 @@
+#
+# fern
+#
+[[plugins]]
+repo = 'lambdalisue/fern.vim'
+on_cmd = 'fern'
+on_event = ['VimEnter', 'SourcePost']
+hook_source ='call plug#fern#hook_source()'
+
+[[plugins]]
+repo = 'lambdalisue/fern-hijack.vim'
+on_event = ['VimEnter', 'SourcePost']
+
+[[plugins]]
+repo = 'antoinemadec/FixCursorHold.nvim'
+on_event = ['VimEnter', 'SourcePost']
+
+#
+# fzf
+#
+[[plugins]]
+repo = 'junegunn/fzf'
+build = './install --no-key-bindings --no-update-rc'
+merged = 0
+
+[[plugins]]
+repo = 'junegunn/fzf.vim'
+depends = 'fzf'
+hook_add = 'call plug#fzf#hook_add()'
+
+#
+# git
+#
+[[plugins]]
+repo = 'airblade/vim-gitgutter'
+on_event = 'VimEnter'
+hook_add = 'call plug#gitgutter#hook_add()'
+
+[[plugins]]
+repo = 'tpope/vim-fugitive'
+depends = 'vim-rhubarb'
+on_cmd = ['Git', 'Gdiffsplit', 'GBrowse']
+hook_add = 'call plug#fugitive#hook_add()'
+hook_post_source = 'call plug#fugitive#hook_post_source()'
+
+[[plugins]]
+repo = 'tpope/vim-rhubarb'
+on_cmd = 'GBrowse'
+
+[[plugins]]
+repo = 'tpope/vim-dispatch'
+on_cmd = 'Dispatch'
+
+#
+# search and replace
+#
+[[plugins]]
+repo = 'jesseleite/vim-agriculture'
+on_cmd = ['RgIgnore', 'RgNoIgnore']
+on_func = ['RgVisual', 'RgCword']
+
+[[plugins]]
+repo = 'thinca/vim-qfreplace'
+on_cmd = 'Qfreplace'
+
+#
+# textobj
+#
+[[plugins]]
+repo = 'kana/vim-textobj-user'
+on_event = 'VimEnter'
+hook_post_source = '''
+call textobj#user#plugin('underscore', {
+\   'a': {
+\     'select': 'a_',
+\     '*pattern*': '_[^_]*_'
+\   },
+\   'i': {
+\     'select': 'i_',
+\     '*pattern*': '_\zs[^_]\+\ze_'
+\   },
+\ })
+call textobj#user#plugin('space', {
+\   'a': {
+\     'pattern': '[[:blank:]　]\+',
+\     'select': ['a<Space>'],
+\   },
+\   'i': {
+\     'pattern': ' \+',
+\     'select': ['i<Space>'],
+\   },
+\ })
+'''
+
+[[plugins]]
+repo = 'kana/vim-textobj-entire'
+on_event = 'VimEnter'
+
+[[plugins]]
+repo = 'kana/vim-textobj-indent'
+on_event = 'VimEnter'
+
+[[plugins]]
+repo = 'kana/vim-textobj-line'
+on_event = 'VimEnter'
+
+[[plugins]]
+repo = 'sgur/vim-textobj-parameter'
+depends = 'vim-textobj-user'
+on_event = 'VimEnter'
+
+[[plugins]]
+repo = 'glts/vim-textobj-comment'
+on_event = 'VimEnter'
+
+[[plugins]]
+repo = 'tpope/vim-commentary'
+on_map = '<Plug>Commentary'
+on_func = 'CommentaryTextobj'
+hook_add = '''
+MyAutocmd FileType toml setlocal commentstring=\#\ %s
+xmap s <Plug>Commentary
+nmap s <Plug>Commentary
+nmap S <Plug>Commentary<Plug>Commentary
+omap aC <Plug>Commentary
+xmap <silent> aC :<C-u>call CommentaryTextobj()<CR>
+'''
+hook_post_source = 'call user#sid#globalize_commentary_textobj()'
+
+[[plugins]]
+repo = 'kana/vim-operator-user'
+on_event = 'VimEnter'
+
+[[plugins]]
+repo = 'kana/vim-operator-replace'
+depends = 'vim-operator-user'
+on_event = 'VimEnter'
+
+[[plugins]]
+repo = 'machakann/vim-sandwich'
+on_event = 'VimEnter'
+hook_add = 'call plug#sandwich#hook_add()'
+hook_post_source = 'call plug#sandwich#hook_post_source()'
+
+
+
+
+
+[[plugins]]
+repo = 'haya14busa/is.vim'
+on_event = 'VimEnter'
+
+[[plugins]]
+repo = 'haya14busa/vim-asterisk'
+depends = ['is.vim']
+on_map = ['<Plug>(asterisk-']
+hook_post_source  = 'let g:asterisk#keeppos = 1'
+
+[[plugins]]
+repo = 'editorconfig/editorconfig-vim'
+on_event = 'BufEnter'
+hook_source = '''
+let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+MyAutocmd FileType gitcommit let b:EditorConfig_disable = 1
+'''
+
+[[plugins]]
+repo = '907th/vim-auto-save'
+on_event = 'VimEnter'
+hook_add = 'call plug#auto_save#hook_add()'
+
+[[plugins]]
+repo = 'tpope/vim-repeat'
+on_func = 'repeat#set'
+hook_post_source = 'call plug#repeat#hook_post_source()'
+
+[[plugins]]
+repo = 'nicwest/vim-camelsnek'
+on_cmd = ['CamelB', 'Camel', 'Snek', 'Kebab']
+
+[[plugins]]
+repo = 'Yggdroot/indentLine'
+on_event = 'BufEnter'
+hook_source = '''
+let g:indentLine_char = '│'
+let g:indentLine_fileTypeExclude = ['help', 'vista', 'fern']
+'''
+
+[[plugins]]
+repo = 'LunarWatcher/auto-pairs'
+on_event = 'VimEnter'
+hook_post_source = 'call plug#autopairs#hook_post_source()'
+
+[[plugins]]
+repo ='junegunn/goyo.vim'
+on_cmd = 'Goyo'
+
+[[plugins]]
+repo = 'iamcco/markdown-preview.nvim'
+build = 'sh -c "cd app && yarn install"'
+on_map = '<Plug>MarkdownPreviewToggle'
+
+[[plugins]]
+repo = 'RRethy/vim-hexokinase'
+build = 'make hexokinase' # golang required
+on_event = 'VimEnter'
+hook_source = '''
+let g:Hexokinase_ftOptInPatterns = {
+      \ 'vim': 'full_hex',
+      \ 'yaml': 'full_hex',
+      \ 'json': 'full_hex',
+      \}
+'''
+hook_post_source = 'HexokinaseTurnOn'
+
+[[plugins]]
+repo = 'plasticboy/vim-markdown'
+on_ft = ['markdown']
+hook_source = '''
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_conceal_code_blocks = 1
+let g:vim_markdown_new_list_item_indent = 0
+let g:vim_markdown_auto_insert_bullets = 0
+
+let g:vim_markdown_fenced_languages = [
+\ 'c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini',
+\ 'html=html',
+\ 'css=css',
+\ 'js=javascriptreact',
+\ 'ts=typescriptreact',
+\ 'php=php',
+\ 'go=go',
+\ ]
+'''
+
+[[plugins]]
+repo = 'tyru/open-browser.vim'
+on_cmd = ['OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch']
+on_map = '<Plug>(openbrowser-'
+# disable netrw's gx mapping
+hook_post_source = 'let g:netrw_nogx = 1'
+
+# [[plugins]]
+# repo = 'vim-jp/vimdoc-ja'
+# on_cmd = 'help'
+
+#
+# colorscheme
+#
+[[plugins]]
+repo = 'cocopon/iceberg.vim'
+on_if = 'g:colorscheme ==# "iceberg"'
+on_event = ['VimEnter', 'SourcePost']
+
+[[plugins]]
+repo = 'popkirby/lightline-iceberg'
+on_if = 'g:colorscheme ==# "iceberg"'
+on_event = ['VimEnter', 'SourcePost']
+
+[[plugins]] # has lightline theme
+repo = 'arcticicestudio/nord-vim'
+on_if = 'g:colorscheme ==# "nord"'
+hook_add = 'let g:nord_uniform_status_lines = 0'
+on_event = ['VimEnter', 'SourcePost']
+
+[[plugins]] # has lightline theme
+repo = 'yuttie/hydrangea-vim'
+on_if = 'g:colorscheme ==# "hydrangea"'
+on_event = ['VimEnter', 'SourcePost']
+
+[[plugins]]
+repo = 'djjcast/mirodark'
+on_if = 'g:colorscheme ==# "mirodark"'
+on_event = ['VimEnter', 'SourcePost']
+
+[[plugins]] # has lightline theme
+repo = 'whatyouhide/vim-gotham'
+on_if = 'g:colorscheme ==# "gotham"'
+on_event = ['VimEnter', 'SourcePost']
+
+[[plugins]] # has lightline theme
+repo = 'fcpg/vim-farout'
+on_if = 'g:colorscheme ==# "farout"'
+on_event = ['VimEnter', 'SourcePost']
+
+[[plugins]] # has lightline theme
+repo = 'adigitoleo/vim-mellow'
+on_if = 'g:colorscheme ==# "mellow"'
+on_event = ['VimEnter', 'SourcePost']
+
+[[plugins]]
+repo = 'Lokaltog/vim-monotone'
+on_if = 'g:colorscheme ==# "monotone"'
+on_event = ['VimEnter', 'SourcePost']

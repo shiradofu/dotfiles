@@ -83,6 +83,11 @@ brew_i nvim
 npm install --global neovim
 brew_i watchman # coc-tsserver
 
+curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > dein.sh
+vim_plugin_dir=$XDG_STATE_HOME/nvim/dein
+mkdir -p "${vim_plugin_dir}"
+sh ./dein.sh "${vim_plugin_dir}"
+
 #
 # Deploy files
 #

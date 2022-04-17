@@ -1,9 +1,0 @@
-[[plugins]]
-repo = 'junegunn/fzf'
-build = './install --no-key-bindings --no-update-rc'
-merged = 0
-
-[[plugins]]
-repo = 'junegunn/fzf.vim'
-depends = 'fzf'
-hook_add = 'call plug#fzf#hook_add()'
