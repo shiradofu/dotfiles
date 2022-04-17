@@ -2,10 +2,8 @@
 
 # chcs - CHange ColorScheme
 
-set -e
-
 __chcs_winterm() {
-  [ -f /proc/sys/fs/binfmt_misc/WSLInterop ] || return # if not wsl, do nothing
+  [ -f /proc/sys/fs/binfmt_misc/WSLInterop ] || return # if not in wsl, do nothing
   local dir; dir="$XDG_CONFIG_HOME/winterm"
   if ! [ -f "$dir/settings.tpl.json" ]; then return; fi
   winterm-gen $1

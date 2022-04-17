@@ -7,7 +7,7 @@ alias clear="clear && printf '\e[3J'"
 typeset -A r_aliases
 r_aliases=(
   "v"    "nvim"
-  "gg"   "ghq get --shallow --update "
+  "gg"   "ghq get --shallow --update"
   "tmkt" "tmux kill-session -t"
 )
 
