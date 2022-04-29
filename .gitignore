@@ -12,10 +12,9 @@
 !/.config/gitui/theme.ron
 /.config/iterm2/*
 !/.config/iterm2/com.googlecode.iterm2.plist
-!/.config/nvim/toml/*.toml
-!/.config/nvim/user/*.vim
 !/.config/nvim/autoload/user/*.vim
 !/.config/nvim/autoload/plug/*.vim
+!/.config/nvim/templates/**/*
 !/.config/nvim/dein.vim
 !/.config/nvim/init.vim
 !/.config/nvim/coc-settings.json

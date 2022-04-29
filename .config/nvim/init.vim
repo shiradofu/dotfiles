@@ -61,9 +61,9 @@ let g:loaded_python3_provider  = 0
 let g:vim_json_conceal         = 0
 let g:vim_markdown_conceal     = 0
 
-let s:config_dir = $XDG_CONFIG_HOME . '/nvim'
+let g:config_dir = $XDG_CONFIG_HOME . '/nvim'
 let s:cache_dir = $XDG_CACHE_HOME . '/nvim'
-let g:init_vim_path = s:config_dir . '/init.vim'
+let g:init_vim_path = g:config_dir . '/init.vim'
 let s:asdf_dir = $ASDF_DATA_DIR . '/installs'
 let g:node_host_prog = s:asdf_dir . '/nodejs/lts/.npm/lib/node_modules/neovim/bin/cli.js'
 
@@ -91,8 +91,8 @@ MyAutocmd VimEnter * call dein#autoload#_on_default_event('VimEnter')
 if dein#load_state(s:plugin_dir)
   call dein#begin(s:plugin_dir)
   call dein#add(s:dein_dir)
-  call dein#load_toml(s:config_dir . '/dein.toml')
-  call dein#load_toml(s:config_dir . '/dein_lazy.toml', { 'lazy': 1 })
+  call dein#load_toml(g:config_dir . '/dein.toml')
+  call dein#load_toml(g:config_dir . '/dein_lazy.toml', { 'lazy': 1 })
   call dein#add('sheerun/vim-polyglot')
   call dein#end()
   call dein#save_state()
@@ -183,7 +183,8 @@ nnoremap <silent> gb :<C-u>edit #<CR>
 nnoremap <silent> gy :<C-u>let @+=expand('%')<CR>
 nnoremap <silent> gY :<C-u>let @+=expand('%:p')<CR>
 nnoremap <silent> gz :<C-u>Goyo 100<CR>
-nnoremap <silent> gs :<C-u>call user#scratch#open()<CR>
+nmap     <silent> gs :<C-u>Scratch<CR>
+vmap     <silent> gs <plug>(scratch-selection-reuse)
 nmap     <silent> gx <Plug>(openbrowser-smart-search)
 vmap     <silent> gx <Plug>(openbrowser-smart-search)
 nmap     <silent> gh <Plug>(coc-float-jump)
@@ -194,12 +195,14 @@ nnoremap <silent> gT :<C-u>call CocAction('jumpTypeDefinition', 'vsplit')<CR>
 nnoremap <silent> gr :<C-u>call CocActionAsync('rename')<CR>
 nnoremap <silent> ga :<C-u>CocAction<CR>
 
-nnoremap <silent> <Leader>r :<C-u>:<C-u>Fern . -reveal=%<CR>
+nnoremap <silent> <Leader>r :<C-u>Fern . -reveal=%<CR>
+nnoremap <silent> <Leader>t :<C-u>call fzf#sonictemplate#run()<CR>
 nnoremap <silent> <Leader><C-r> :<C-u>vs<CR>:<C-u>Fern . -reveal=%<CR>
 nnoremap <silent> <Leader>R :<C-u>vs<CR>:<C-u>Fern .<CR>
 nnoremap <silent> <Leader>o :ProjectMru<CR>
 nnoremap <silent> <Leader>i :Files<CR>
 nnoremap <silent> <Leader>u :GFiles?<CR>
+nnoremap <silent> <Leader>p :<C-u>call ProjectDirs()<CR>
 nnoremap <Leader>f :<C-u>RgIgnore<Space>
 nnoremap <Leader>F :<C-u>RgNoIgnore<Space>
 vnoremap <Leader>f :<C-u>call user#rg#visual('RgIgnore')<CR>

@@ -35,5 +35,15 @@ function! plug#fzf#hook_add() abort
       \ })))
   endfunction
 
+  function! g:ProjectDirs() abort
+    call fzf#run(fzf#wrap({
+      \ 'source': 'fd . -t d',
+      \ 'options': [
+        \ '--prompt', 'Dirs> ',
+        \ '--preview', 'tree -C {} | head -200 '
+      \ ]
+      \ }))
+  endfunction
+
   command! -nargs=0 ProjectMru call ProjectMru()
 endfunction

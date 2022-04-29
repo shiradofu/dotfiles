@@ -40,7 +40,7 @@ function plug#fern#hook_source() abort
     nmap <buffer> l     <Plug>(fern-action-open-or-expand)
     nmap <buffer> <C-r> <Plug>(fern-action-reload)
     nmap <buffer> dd    <Plug>(fern-action-remove)
-    nmap <buffer> R     <Plug>(fern-action-rename)
+    nmap <buffer> r     <Plug>(fern-action-rename)
     call FernLcd()
   endfunction
   MyAutocmd FileType fern call InitFern()
