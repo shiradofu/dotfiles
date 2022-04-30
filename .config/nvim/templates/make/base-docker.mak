@@ -2,7 +2,7 @@
 .PHONY: $(shell egrep -o ^[a-zA-Z_-]+: $(MAKEFILE_LIST) | sed 's/://')
 
 # ターゲットを指定しなかったときに実行するものを指定する
-.DEFAULT_GOAL := up
+.DEFAULT_GOAL := daemon
 
 # .envの環境変数を読み込む
 include .env
@@ -17,7 +17,7 @@ up:
 down:
 	@docker-compose down
 
-restart: down up
+re: down up
 
 app:
 	@docker-compose exec app bash

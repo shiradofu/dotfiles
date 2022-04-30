@@ -1,0 +1,15 @@
+includes:
+  - ./vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+  level: 5
+  paths:
+    - app
+  excludePaths:
+    - tests
+  checkModelProperties: true
+  # API Resource には @mixin タグを記述する
+  # https://github.com/nunomaduro/larastan/blob/master/tests/Application/app/UserResource.php#L7
+  ignoreErrors:
+    # https://github.com/nunomaduro/larastan/issues/402
+    - '#Function cache invoked with \d parameters?, 0 required\.#'

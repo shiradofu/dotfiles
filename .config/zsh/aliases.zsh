@@ -1,12 +1,14 @@
 alias ls='ls --color'
 alias ll='ls -lahF'
 alias tmux='tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf'
-# https://superuser.com/questions/231002/how-can-i-search-within-the-output-buffer-of-a-tmux-shell
+# https://apple.stackexchange.com/questions/31872/how-do-i-reset-the-scrollback-in-the-terminal-via-a-shell-command
 alias clear="clear && printf '\e[3J'"
+alias bios="sudo systemctl reboot --firmware-setup"
 
 typeset -A r_aliases
 r_aliases=(
   "v"    "nvim"
+  "t"    "tms"
   "gg"   "ghq get --shallow --update"
   "tmkt" "tmux kill-session -t"
 )

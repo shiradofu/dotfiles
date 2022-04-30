@@ -24,7 +24,6 @@ case "${selected}" in
   '' ) exit ;;
   '[new]' )
     while [ -z "${name}" ] || tmux ls 2>/dev/null | grep -q "${name}"; do
-      # zle -I
       printf 'new session name: '
       read name < /dev/tty
       [ -z "${name}" ] && printf "name required.\n\n" && continue

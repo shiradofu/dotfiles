@@ -121,3 +121,7 @@ if exists ghq; then
   zle -N ghq_fzf
   bindkey -e '^g' ghq_fzf
 fi
+
+if exists tms; then
+  bindkey -s '^[a' '^Qtms^M'
+fi
