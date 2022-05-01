@@ -1,0 +1,52 @@
+[[plugins]]
+repo = 'sheerun/vim-polyglot'
+
+[[plugins]]
+repo = 'mattn/vim-findroot'
+hook_add = '''
+let g:findroot_patterns = ['.git/']
+let g:findroot_not_for_subdir = 0
+'''
+
+[[plugins]]
+repo = 'itchyny/lightline.vim'
+hook_add = 'call plug#lightline#hook_add()'
+
+[[plugins]]
+repo = 'neoclide/coc.nvim'
+rev = 'release'
+hook_add = 'call plug#coc#hook_add()'
+
+[[plugins]]
+repo = 'antoinemadec/coc-fzf'
+depends = 'coc.nvim'
+
+[[plugins]]
+repo = 'liuchengxu/vista.vim'
+hook_add = 'call plug#vista#hook_add()'
+
+#
+# fern
+#
+[[plugins]]
+repo = 'lambdalisue/fern.vim'
+hook_add ='call plug#fern#hook_source()'
+
+[[plugins]]
+repo = 'lambdalisue/fern-hijack.vim'
+
+[[plugins]]
+repo = 'antoinemadec/FixCursorHold.nvim'
+
+#
+# fzf
+#
+[[plugins]]
+repo = 'junegunn/fzf'
+build = './install --no-key-bindings --no-update-rc'
+merged = 0
+
+[[plugins]]
+repo = 'junegunn/fzf.vim'
+depends = 'fzf'
+hook_add = 'call plug#fzf#hook_add()'

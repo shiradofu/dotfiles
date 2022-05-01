@@ -1,4 +1,5 @@
 " s:scripts is array of ['sid', 'scrip path']
+
 function! s:get_scriptnames() abort
   let scripts = split(execute('scriptnames'), "\n")
   let s:scripts = map(copy(scripts), 'split(v:val, "\\v:=\\s+")')
@@ -20,17 +21,6 @@ function! user#sid#get_script_id(name, ...) abort
     endif
   endif
   return matches[0][0]
-endfunction
-
-function! user#sid#globalize_commentary_textobj() abort
-  if !exists('s:commentary_id')
-    let s:commentary_id = user#sid#get_script_id('\/commentary\.vim')
-    call execute([
-      \ 'function! CommentaryTextobj() abort',
-      \   'call <SNR>' . s:commentary_id . "_textobject(get(v:, 'operator', '') ==# 'c')",
-      \ 'endfunction',
-      \ ])
-  endif
 endfunction
 
 function! user#sid#globalize_fugitive_functions() abort

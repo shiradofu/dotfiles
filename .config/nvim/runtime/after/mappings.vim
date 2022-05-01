@@ -4,36 +4,25 @@ command! -bang -nargs=+ -complete=dir RgIgnore
 command! -bang -nargs=+ -complete=dir RgNoIgnore
   \ call user#rg#raw(user#rg#smart_quote_input(<q-args>), 1, <bang>0)
 
-nnoremap <silent> <Plug>(user-util-set_should_zi)
-  \ :<C-u>call user#util#set_should_zi()<CR>
-
 let mapleader = "\<Space>"
 nnoremap <silent> <Leader>; :<C-u>execute 'source ' . g:init_vim_path<CR>
 \ :<C-u>call dein#recache_runtimepath()<CR>:<C-u>echo "loaded"<CR>
 
-inoremap <silent> jj <Esc>
 nnoremap <silent> <BS>  :<C-u>call user#util#quit()<CR>
 nnoremap <silent> g<BS> :<C-u>call user#util#tabclose()<CR>
-nnoremap <silent> zz    :<C-u>call user#util#zi(1)<CR>
-nmap     <silent> zi    :<C-u>call user#util#zi(0)<CR>
-nnoremap <silent> <expr> <C-g> (float2nr(winheight(win_getid()) * 0.25) - 1) . 'j'
-nnoremap <silent> <expr> <C-t> (float2nr(winheight(win_getid()) * 0.25) - 1) . 'k'
-vnoremap <silent> <expr> <C-g> (float2nr(winheight(win_getid()) * 0.25) - 1) . 'j'
-vnoremap <silent> <expr> <C-t> (float2nr(winheight(win_getid()) * 0.25) - 1) . 'k'
-nnoremap <silent> ]q :<C-u>call user#util#zi_after('cnext')<CR>
-nnoremap <silent> [q :<C-u>call user#util#zi_after('cprev')<CR>
-nnoremap <silent> ]c :<C-u>call user#util#zi_after('call feedkeys("\<Plug>(GitGutterNextHunk)", "m")')<CR>
-nnoremap <silent> [c :<C-u>call user#util#zi_after('call feedkeys("\<Plug>(GitGutterPrevHunk)", "m")')<CR>
-nnoremap <silent> ]w :<C-u>call user#util#zi_after("call CocAction('diagnosticNext')")<CR>
-nnoremap <silent> [w :<C-u>call user#util#zi_after("call CocAction('diagnosticPrevious')")<CR>
-nnoremap <silent> ]e :<C-u>call user#util#zi_after("call CocAction('diagnosticNext')")<CR>e
-nnoremap <silent> [e :<C-u>call user#util#zi_after("call CocAction('diagnosticPrevious')")<CR>e
-nmap     <silent> g; :<C-u>call user#util#zi_after('normal! g;')<CR>
-nmap     <silent> g, :<C-u>call user#util#zi_after('normal! g,')<CR>
-nmap     <silent> <C-o> :<C-u>call user#util#zi_after('call feedkeys("\<C-o>", "n")')<CR>
-nmap     <silent> <C-i> :<C-u>call user#util#zi_after('call feedkeys("\<C-i>", "n")')<CR>
-nmap     <silent> n :<C-u>call user#util#zi_after('call feedkeys("\<Plug>(is-n)", "m")')<CR>
-nmap     <silent> N :<C-u>call user#util#zi_after('call feedkeys("\<Plug>(is-N)", "m")')<CR>
+nmap     <silent> zz :<C-u>call user#zz#do(1)<CR>
+nnoremap <silent> ]q :<C-u>call user#zz#after('cmd', 'cnext')<CR>
+nnoremap <silent> [q :<C-u>call user#zz#after('cmd', 'cprev')<CR>
+nnoremap <silent> ]c :<C-u>call user#zz#after('map', "\<Plug>(GitGutterNextHunk)")<CR>
+nnoremap <silent> [c :<C-u>call user#zz#after('map', "\<Plug>(GitGutterPrevHunk)")<CR>
+nnoremap <silent> ]e :<C-u>call user#zz#after('fn', "CocAction('diagnosticNext')")<CR>
+nnoremap <silent> [e :<C-u>call user#zz#after('fn', "CocAction('diagnosticPrevious')")<CR>
+nmap     <silent> g; :<C-u>call user#zz#after('cmd', 'normal! g;')<CR>
+nmap     <silent> g, :<C-u>call user#zz#after('cmd', 'normal! g,')<CR>
+nmap     <silent> n  :<C-u>call user#zz#after('map', "\<Plug>(is-n)")<CR>
+nmap     <silent> N  :<C-u>call user#zz#after('map', "\<Plug>(is-N)")<CR>
+nmap     <silent> <C-o> :<C-u>call user#zz#after('fn', 'feedkeys("\<C-o>", "n")')<CR>
+nmap     <silent> <C-i> :<C-u>call user#zz#after('fn', 'feedkeys("\<C-i>", "n")')<CR>
 map      *  <Plug>(asterisk-z*)<Plug>(is-nohl-1)
 map      g* <Plug>(asterisk-gz*)<Plug>(is-nohl-1)
 map      #  <Plug>(asterisk-z#)<Plug>(is-nohl-1)
@@ -140,7 +129,7 @@ cnoremap <C-k> <C-\>e(strpart(getcmdline(), 0, getcmdpos() - 1))<CR>
 cnoremap <C-x> <C-r>=expand('%:p')<CR>
 
 MyAutocmd FileType qf
-\   nnoremap <buffer> p <CR>zi<C-w>p
+\   nnoremap <buffer> ; <CR>zz<C-w>p
 \ | nnoremap <silent> <buffer> dd :<C-u>call user#quickfix#del()<CR>
 \ | nnoremap <silent> <buffer> u  :<C-u>call user#quickfix#undo_del()<CR>
 \ | nnoremap <silent> <buffer> R  :<C-u>Qfreplace topleft split<CR>
