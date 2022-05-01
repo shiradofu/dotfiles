@@ -54,7 +54,7 @@ setopt hist_reduce_blanks   # 余分なスペースを削除してヒストリ�
 
 source $ZDOTDIR/zinit.zsh
 source $ZDOTDIR/aliases.zsh
-source $ZDOTDIR/utils.zsh
+source $ZDOTDIR/commands.zsh
 source $ZDOTDIR/wsl.zsh
 source $ZDOTDIR/mac.zsh
 

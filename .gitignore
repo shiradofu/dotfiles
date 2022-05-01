@@ -14,6 +14,9 @@
 !/.config/iterm2/com.googlecode.iterm2.plist
 !/.config/nvim/autoload/user/*.vim
 !/.config/nvim/autoload/plug/*.vim
+!/.config/nvim/runtime/dein.vim
+!/.config/nvim/runtime/*.toml
+!/.config/nvim/runtime/after/*.vim
 !/.config/nvim/templates/**/*
 !/.config/nvim/dein.vim
 !/.config/nvim/init.vim

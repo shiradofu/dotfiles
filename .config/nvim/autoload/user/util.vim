@@ -1,13 +1,13 @@
 nnoremap <silent> <Plug>(user-set-should-zi) :<C-u>call <SID>set_should_zi()<CR>
 
-function! user#util#zi() abort
+function! user#util#zi(always_upper) abort
   if get(g:, 'no_zi', 0)
     let g:no_zi = 0 | return
   endif
   let win_height = winheight(win_getid())
   let wintop_offset = getpos('.')[1] - getpos('w0')[1] + 1
   let lastline_offset = getpos('$')[1] - getpos('.')[1]  + 1
-  let ideal_offset = lastline_offset ># win_height * 0.5
+  let ideal_offset = lastline_offset ># win_height * 0.5 || a:always_upper
   \ ? float2nr(win_height * 0.25) - 1
   \ : win_height - float2nr(win_height * 0.25) - lastline_offset
   if wintop_offset ==# ideal_offset | return | endif

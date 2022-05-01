@@ -49,7 +49,7 @@ __chcs_nvim() {
     echo An error occurred in chcs nvim.
     return 1
   fi
-  echo "let g:colorscheme = '$1'" >| "$dir/_colorscheme.vim"
+  echo "let g:colorscheme = '$1'" >| "$dir/runtime/current_colorscheme"
 }
 
 case $1 in

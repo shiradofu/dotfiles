@@ -1,7 +1,5 @@
 " https://github.com/jesseleite/vim-agriculture
 
-call fzf#vim#_uniq([]) " autoloadを確実に読み込む(overrideするため)
-
 function! user#rg#smart_quote_input(input)
   let hasQuotes = match(a:input, '"') > -1 || match(a:input, "'") > -1
   let hasOptions = match(' ' . a:input, '\s-[-a-zA-Z]') > -1
@@ -18,7 +16,7 @@ function! user#rg#raw(command_suffix, no_ignore, bang) abort
   return fzf#vim#grep(command, 1, fzf#vim#with_preview(), a:bang)
 endfunction
 
-" substituteについて
+" cword または visual から検索する際に検索文字列をエスケープする
 " # は常にエスケープする
 " " か ' のどちらかが含まれていない場合、含まれていない方で囲う
 " " と ' が両方含まれている場合、" をエスケープして " で囲う
@@ -46,7 +44,7 @@ endfunction
 function! user#rg#cword()  abort
   let query = expand('<cword>')
   let query = s:escape(query)
-  return  query
+  return query
 endfunction
 
 function! user#rg#visual(command) abort
