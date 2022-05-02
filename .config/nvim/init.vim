@@ -30,8 +30,6 @@ set fillchars=vert:\ ,eob:\ , " ステータスライン・バッファの終わ
 set shada+='10000             " 以前に編集したファイルを最大で1000件記憶
 set shada-='100               " 以前に編集したファイルの最大記憶数のデフォルト(100件)を除去
 
-MyAutocmd BufEnter * setlocal formatoptions-=r " インサートモードで改行時にコメント文字を自動で追加しない
-MyAutocmd BufEnter * setlocal formatoptions-=o " ノーマルモードでo/O使用時にコメント文字を自動で追加しない
 MyAutocmd FileType markdown setlocal conceallevel=0 " markdownのconcealを無効化
 
 " 不要な機能の無効化
@@ -63,10 +61,10 @@ let g:asdf_dir = $ASDF_DATA_DIR . '/installs'
 let g:node_host_prog = g:asdf_dir . '/nodejs/lts/.npm/lib/node_modules/neovim/bin/cli.js'
 
 " デバッグ用ログ関数/コマンド
-" function! Log(var) abort
-"   exe 'redir >> ' g:cache_dir . '/log' | silent echo a:var | redir END
-" endfunction
-" command! -nargs=1 Log call Log(<args>)
+function! Log(var) abort
+  exe 'redir >> ' g:cache_dir . '/log' | silent echo a:var | redir END
+endfunction
+command! -nargs=1 Log call Log(<args>)
 
 " カラースキームの変更をgit管理しないように切り出している
 runtime! runtime/current_colorscheme.vim
