@@ -33,8 +33,8 @@ xmap     if <Plug>(coc-funcobj-i)
 omap     if <Plug>(coc-funcobj-i)
 xmap     af <Plug>(coc-funcobj-a)
 omap     af <Plug>(coc-funcobj-a)
-nnoremap <silent> o  user#newline#o()
-nnoremap <silent> O  user#newline#O()
+nnoremap <silent> o  :<C-u>call user#newline#o()<CR>
+nnoremap <silent> O  :<C-u>call user#newline#O()<CR>
 inoremap <expr> <CR> user#newline#cr()
 
 nnoremap <C-j> <C-w>j
