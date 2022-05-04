@@ -188,6 +188,17 @@ on_map = '<Plug>(openbrowser-'
 # disable netrw's gx mapping
 hook_post_source = 'let g:netrw_nogx = 1'
 
+[[plugins]]
+repo = 'diepm/vim-rest-console'
+on_event = 'VimEnter'
+hook_add = '''
+" -i, --include     responseヘッダを表示
+" -s, --silent      進捗を表示しない
+" -S, --show-error  -sフラグ付与時にエラーは表示
+" -L, --location    リダイレクトを追う
+let g:vrc_curl_opts = { '-isSL': '' }
+'''
+
 # [[plugins]]
 # repo = 'vim-jp/vimdoc-ja'
 # on_cmd = 'help'
