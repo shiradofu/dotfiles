@@ -18,7 +18,7 @@ function! plug#fzf#hook_add() abort
     \ filter(extend([expand('%:p'), expand('#:p')], copy(v:oldfiles)),
     \   'v:val =~ getcwd() . "/"'
     \  . ' && filereadable(v:val)'
-    \  . ' && v:val !~# ".*/\.scratch-vim.md$"'
+    \  . ' && v:val !~# ".*/\.scratch.md$"'
     \  . ' && v:val !~# ".*/\.git/index$"'
     \  . ' && v:val !~# ".*/\.git/COMMIT_EDITMSG$"'
     \ ),

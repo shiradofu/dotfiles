@@ -1,10 +1,7 @@
-#
-# git
-#
 [[plugins]]
 repo = 'airblade/vim-gitgutter'
-on_event = 'VimEnter'
 hook_add = 'call plug#gitgutter#hook_add()'
+on_event = 'SourcePre'
 
 [[plugins]]
 repo = 'tpope/vim-fugitive'
@@ -17,13 +14,10 @@ hook_post_source = 'call plug#fugitive#hook_post_source()'
 repo = 'tpope/vim-rhubarb'
 on_cmd = 'GBrowse'
 
-[[plugins]]
+[[plugins]] # for git push
 repo = 'tpope/vim-dispatch'
 on_cmd = 'Dispatch'
 
-#
-# search and replace
-#
 [[plugins]]
 repo = 'jesseleite/vim-agriculture'
 on_cmd = ['RgIgnore', 'RgNoIgnore']
@@ -33,9 +27,6 @@ on_func = ['RgVisual', 'RgCword']
 repo = 'thinca/vim-qfreplace'
 on_cmd = 'Qfreplace'
 
-#
-# textobj
-#
 [[plugins]]
 repo = 'kana/vim-textobj-user'
 on_event = 'VimEnter'
@@ -103,22 +94,11 @@ on_event = 'VimEnter'
 hook_add = 'call plug#sandwich#hook_add()'
 hook_post_source = 'call plug#sandwich#hook_post_source()'
 
-#
-# others
-#
 [[plugins]]
 repo = 'mtth/scratch.vim'
 on_cmd = ['Scratch']
 on_map = '<plug>(scratch-'
-hook_add = '''
-let g:scratch_autohide = 0
-let g:scratch_height = 0.3
-let g:scratch_top = 1
-let g:scratch_horizontal = 1
-let g:scratch_filetype = 'markdown'
-let g:scratch_persistence_file = '.scratch.md'
-let g:scratch_no_mappings = 1
-'''
+hook_add = 'call plug#scratch#hook_add()'
 
 [[plugins]]
 repo = 'mattn/vim-sonictemplate'
@@ -199,22 +179,7 @@ hook_post_source = 'HexokinaseTurnOn'
 [[plugins]]
 repo = 'plasticboy/vim-markdown'
 on_ft = ['markdown']
-hook_source = '''
-let g:vim_markdown_folding_disabled = 1
-let g:vim_markdown_conceal_code_blocks = 1
-let g:vim_markdown_new_list_item_indent = 0
-let g:vim_markdown_auto_insert_bullets = 0
-
-let g:vim_markdown_fenced_languages = [
-\ 'c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini',
-\ 'html=html',
-\ 'css=css',
-\ 'js=javascriptreact',
-\ 'ts=typescriptreact',
-\ 'php=php',
-\ 'go=go',
-\ ]
-'''
+hook_source = 'call plug#markdown#hook_source()'
 
 [[plugins]]
 repo = 'tyru/open-browser.vim'
@@ -233,45 +198,54 @@ hook_post_source = 'let g:netrw_nogx = 1'
 [[plugins]]
 repo = 'cocopon/iceberg.vim'
 on_if = 'g:colorscheme ==# "iceberg"'
-on_event = ['VimEnter', 'SourcePost']
+on_event = 'SourcePre'
+depends = ['vim-gitgutter']
 
 [[plugins]]
 repo = 'popkirby/lightline-iceberg'
 on_if = 'g:colorscheme ==# "iceberg"'
-on_event = ['VimEnter', 'SourcePost']
+on_event = 'SourcePre'
+depends = ['vim-gitgutter']
 
 [[plugins]] # has lightline theme
 repo = 'arcticicestudio/nord-vim'
 on_if = 'g:colorscheme ==# "nord"'
+on_event = 'SourcePre'
+depends = ['vim-gitgutter']
 hook_add = 'let g:nord_uniform_status_lines = 0'
-on_event = ['VimEnter', 'SourcePost']
 
 [[plugins]] # has lightline theme
 repo = 'yuttie/hydrangea-vim'
 on_if = 'g:colorscheme ==# "hydrangea"'
-on_event = ['VimEnter', 'SourcePost']
+on_event = 'SourcePre'
+depends = ['vim-gitgutter']
 
 [[plugins]]
 repo = 'djjcast/mirodark'
 on_if = 'g:colorscheme ==# "mirodark"'
-on_event = ['VimEnter', 'SourcePost']
+on_event = 'SourcePre'
+depends = ['vim-gitgutter']
 
 [[plugins]] # has lightline theme
 repo = 'whatyouhide/vim-gotham'
 on_if = 'g:colorscheme ==# "gotham"'
-on_event = ['VimEnter', 'SourcePost']
+on_event = 'SourcePre'
+depends = ['vim-gitgutter']
 
 [[plugins]] # has lightline theme
 repo = 'fcpg/vim-farout'
 on_if = 'g:colorscheme ==# "farout"'
-on_event = ['VimEnter', 'SourcePost']
+on_event = 'SourcePre'
+depends = ['vim-gitgutter']
 
 [[plugins]] # has lightline theme
 repo = 'adigitoleo/vim-mellow'
 on_if = 'g:colorscheme ==# "mellow"'
-on_event = ['VimEnter', 'SourcePost']
+on_event = 'SourcePre'
+depends = ['vim-gitgutter']
 
 [[plugins]]
 repo = 'Lokaltog/vim-monotone'
 on_if = 'g:colorscheme ==# "monotone"'
-on_event = ['VimEnter', 'SourcePost']
+on_event = 'SourcePre'
+depends = ['vim-gitgutter']

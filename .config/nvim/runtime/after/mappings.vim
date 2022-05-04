@@ -4,9 +4,12 @@ command! -bang -nargs=+ -complete=dir RgIgnore
 command! -bang -nargs=+ -complete=dir RgNoIgnore
   \ call user#rg#raw(user#rg#smart_quote_input(<q-args>), 1, <bang>0)
 
+command! R
+  \ execute 'source ' . g:init_vim_path |
+  \ call dein#recache_runtimepath() |
+  \ echo "loaded"
+
 let mapleader = "\<Space>"
-nnoremap <silent> <Leader>; :<C-u>execute 'source ' . g:init_vim_path<CR>
-\ :<C-u>call dein#recache_runtimepath()<CR>:<C-u>echo "loaded"<CR>
 
 nnoremap <silent> <BS>  :<C-u>call user#util#quit()<CR>
 nnoremap <silent> g<BS> :<C-u>call user#util#tabclose()<CR>
@@ -48,8 +51,8 @@ nnoremap Q <C-w>-
 nnoremap \| 2<C-w><
 nnoremap \ 2<C-w>>
 nnoremap ¥ 2<C-w>>
-nnoremap g. <C-w>_<C-w>\|
-nnoremap g/ <C-w>=
+nnoremap <C-g> <C-w>_<C-w>\|
+nnoremap <C-t> <C-w>=
 nnoremap <silent> go :<C-u>call user#util#winmove(v:count)<CR>
 nnoremap <silent> g[ :<C-u>-tabm<CR>
 nnoremap <silent> g] :<C-u>+tabm<CR>
@@ -136,3 +139,7 @@ MyAutocmd FileType qf
 \ | nnoremap <silent> <buffer> dd :<C-u>call user#quickfix#del()<CR>
 \ | nnoremap <silent> <buffer> u  :<C-u>call user#quickfix#undo_del()<CR>
 \ | nnoremap <silent> <buffer> R  :<C-u>Qfreplace topleft split<CR>
+
+" bulletの行でTabを押すとインデントを追加
+MyAutocmd FileType markdown
+\   inoremap <expr><buffer> <Tab> getline('.') =~ '^\s*- .*' ? "\<C-t>" : "\<Tab>"

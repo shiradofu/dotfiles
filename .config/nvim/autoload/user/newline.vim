@@ -60,9 +60,22 @@ endfunction
 " 行の空白文字以外の最初の文字のシンタックスハイライト詳細名を確認
 " 最初の文字が HogeDocComment、または行が /** のみであればドキュメンテーションと判定する
 function! s:is_doc_comment(lnum)
+  let line = getline(a:lnum)
   " 行の空白文字以外の最初の文字位置
-  let first_char =  match(getline(a:lnum),'\S') + 1
+  let first_char =  match(line,'\S') + 1
   " 最初の文字のシンタックスハイライトの詳細名
   let syn = synIDattr(synID(a:lnum, first_char, 1), 'name')
-  return syn =~ '.*DocComment' || getline(a:lnum) =~ '^\s*/\*\*\s*'
+  if syn =~ '.*DocComment' | return 1 | endif
+
+  " filetypeによるドキュメンテーションコメントのチェック
+  let ft = &ft
+  if ft ==# 'php'
+  \ || ft ==# 'javascript'
+  \ || ft ==# 'typescript'
+  \ || ft ==# 'javascriptreact'
+  \ || ft ==# 'typescriptreact'
+  \ || ft ==# 'java'
+    return s:is_line_comment(a:lnum) &&
+    \ line =~ '^\s*/\*\*\?\s*' || line =~ '^\s*\*\s*'
+  endif
 endfunction
