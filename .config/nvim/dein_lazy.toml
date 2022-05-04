@@ -197,6 +197,7 @@ hook_add = '''
 " -S, --show-error  -sフラグ付与時にエラーは表示
 " -L, --location    リダイレクトを追う
 let g:vrc_curl_opts = { '-isSL': '' }
+let g:vrc_trigger = '<Leader><CR>'
 '''
 
 # [[plugins]]

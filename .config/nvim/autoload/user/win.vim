@@ -1,5 +1,5 @@
 " https://koturn.hatenablog.com/entry/2018/02/12/140000
-function! user#util#gotowin_or(bufname, cmd_if_not) abort
+function! user#win#goto_or(bufname, cmd_if_not) abort
   let bnr = bufnr(a:bufname)
   if bnr == -1
     exe a:cmd_if_not
@@ -14,11 +14,7 @@ function! user#util#gotowin_or(bufname, cmd_if_not) abort
   endif
 endfunction
 
-function! user#util#tabclose() abort
-  exe tabpagenr('$') == 1 ? "qall" : "tabclose"
-endfunction
-
-function user#util#winmove(count)
+function user#win#move(count)
   if a:count ==# 0
     wincmd T
   else
@@ -34,7 +30,7 @@ function! s:move_buf_to_tabpage(tabpagenr)
 endfunction
 
 " windowを閉じたらwinnrを基準に1つ前のwindowに移動する
-function! user#util#quit()
+function! user#win#quit()
   if range(1, tabpagewinnr(tabpagenr(), '$')) ==# [1]
     quit | return
   endif
@@ -45,6 +41,10 @@ function! user#util#quit()
     exe close_winnr . 'wincmd q'
   catch /^Vim\%((\a\+)\)\=:E5601/
     " タブ内にwindow1つ+floating windowが表示されているとき
-    call user#util#tabclose()
+    call user#win#tabclose()
   endtry
+endfunction
+
+function! user#win#tabclose() abort
+  exe tabpagenr('$') == 1 ? "qall" : "tabclose"
 endfunction

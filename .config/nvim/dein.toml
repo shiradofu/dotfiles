@@ -60,3 +60,22 @@ merged = 0
 repo = 'junegunn/fzf.vim'
 depends = 'fzf'
 hook_add = 'call plug#fzf#hook_add()'
+
+# [[plugins]]
+# repo = 'vim-denops/denops.vim'
+# hook_add = 'call plug#ddu#hook()'
+
+# [[plugins]]
+# repo = 'Shougo/ddu.vim'
+
+# [[plugins]]
+# repo = 'Shougo/ddu-ui-ff'
+
+# [[plugins]]
+# repo = 'Shougo/ddu-source-file_rec'
+
+# [[plugins]]
+# repo = 'yuki-yano/ddu-filter-fzf'
+
+# [[plugins]]
+# repo = 'Shougo/ddu-kind-file'

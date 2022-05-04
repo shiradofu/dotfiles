@@ -1,4 +1,5 @@
 function plug#fern#hook_source() abort
+  augroup FernHookSource | autocmd! | augroup END
   let g:fern#disable_default_mappings  = 1
   let g:fern#default_hidden = 1
   let s:fern_starship_like_path = ''
@@ -43,5 +44,5 @@ function plug#fern#hook_source() abort
     nmap <buffer> r     <Plug>(fern-action-rename)
     call FernLcd()
   endfunction
-  MyAutocmd FileType fern call InitFern()
+  autocmd FernHookSource FileType fern call InitFern()
 endfunction

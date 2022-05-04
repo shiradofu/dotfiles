@@ -4,15 +4,15 @@ command! -bang -nargs=+ -complete=dir RgIgnore
 command! -bang -nargs=+ -complete=dir RgNoIgnore
   \ call user#rg#raw(user#rg#smart_quote_input(<q-args>), 1, <bang>0)
 
-command! R
+command! RE
   \ execute 'source ' . g:init_vim_path |
   \ call dein#recache_runtimepath() |
   \ echo "loaded"
 
 let mapleader = "\<Space>"
 
-nnoremap <silent> <BS>  :<C-u>call user#util#quit()<CR>
-nnoremap <silent> g<BS> :<C-u>call user#util#tabclose()<CR>
+nnoremap <silent> <BS>  :<C-u>call user#win#quit()<CR>
+nnoremap <silent> g<BS> :<C-u>call user#win#tabclose()<CR>
 nmap     <silent> zz :<C-u>call user#zz#do(1)<CR>
 nnoremap <silent> ]q :<C-u>call user#zz#after('cmd', 'cnext')<CR>
 nnoremap <silent> [q :<C-u>call user#zz#after('cmd', 'cprev')<CR>
@@ -53,7 +53,7 @@ nnoremap \ 2<C-w>>
 nnoremap ¥ 2<C-w>>
 nnoremap <C-g> <C-w>_<C-w>\|
 nnoremap <C-t> <C-w>=
-nnoremap <silent> go :<C-u>call user#util#winmove(v:count)<CR>
+nnoremap <silent> go :<C-u>call user#win#move(v:count)<CR>
 nnoremap <silent> g[ :<C-u>-tabm<CR>
 nnoremap <silent> g] :<C-u>+tabm<CR>
 
@@ -93,7 +93,7 @@ nnoremap <silent> <Leader>: :<C-u>History:<CR>
 nnoremap <silent> <Leader>q :<C-u>botright copen<CR>
 nnoremap <silent> <Leader>d :<C-u>tabnew<CR><C-o>:<C-u>Gdiffsplit<CR>
 nnoremap <silent> <Leader>s
-\ :<C-u>call user#util#gotowin_or('.git/index', 'tabnew \| Git! \| wincmd K')<CR>
+\ :<C-u>call user#win#goto_or('.git/index', 'tabnew \| Git! \| wincmd K')<CR>
 nnoremap <silent> <Leader>b :<C-u>Git blame<CR>
 nnoremap <silent> <Leader>B :<C-u>GBrowse<CR>
 vnoremap <silent> <Leader>B :GBrowse<CR>
@@ -115,7 +115,6 @@ xnoremap <silent> gcC :Camel<CR>:call repeat#set("gcC")<CR>
 xnoremap <silent> gcs :Snek<CR>:call repeat#set("gcs")<CR>
 xnoremap <silent> gck :Kebab<CR>:call repeat#set("gck")<CR>
 
-nmap md <C-p> <Plug>MarkdownPreviewToggle
 nnoremap mv :<C-u>CocCommand workspace.renameCurrentFile<CR>
 nnoremap <silent> K :call CocShowDocumentation()<CR>
 inoremap <silent><expr> <Tab> pumvisible() ? coc#_select_confirm() : "\<Tab>"
@@ -143,3 +142,4 @@ MyAutocmd FileType qf
 " bulletの行でTabを押すとインデントを追加
 MyAutocmd FileType markdown
 \   inoremap <expr><buffer> <Tab> getline('.') =~ '^\s*- .*' ? "\<C-t>" : "\<Tab>"
+\ | nmap <Leader><CR> <Plug>MarkdownPreviewToggle

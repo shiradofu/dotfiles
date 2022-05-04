@@ -1,4 +1,5 @@
 function! plug#lightline#hook_add() abort
+  augroup CocHookAdd | autocmd! | augroup END
   set noshowmode
   let g:lightline = {}
   function! LightlineCocDiagnoticsWarnings() abort
@@ -158,5 +159,5 @@ function! plug#lightline#hook_add() abort
   \ }
 
   call s:generate_lightline_git_diff()
-  MyAutocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
+  autocmd CocHookAdd User CocStatusChange,CocDiagnosticChange call lightline#update()
 endfunction

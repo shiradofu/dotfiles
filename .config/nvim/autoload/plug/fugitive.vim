@@ -4,6 +4,7 @@ function! plug#fugitive#hook_add() abort
 endfunction
 
 function! plug#fugitive#hook_post_source() abort
+  augroup FugitiveHookPostSource | autocmd! | augroup END
   function! FugitiveStageDiffPreview(files, t)
     if getline(line('.')) !~# '^[MRDA?] .\+[^/]$' | return | endif
     let b:fugitive_files = a:files
@@ -50,5 +51,5 @@ function! plug#fugitive#hook_post_source() abort
     vnoremap <silent> <buffer> s :<C-u>call FugitiveStatusOperation('vToggle')<CR>
     nnoremap <buffer> <C-j> <C-w>W
   endfunction
-  MyAutocmd FileType fugitive call InitFugitiveGitStatus()
+  autocmd FugitiveHookPostSource FileType fugitive call InitFugitiveGitStatus()
 endfunction
