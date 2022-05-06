@@ -29,6 +29,7 @@ set termguicolors             " TUIで24bitカラーを有効にする
 set fillchars=vert:\ ,eob:\ , " ステータスライン・バッファの終わりを埋める文字を空白化
 set shada+='10000             " 以前に編集したファイルを最大で1000件記憶
 set shada-='100               " 以前に編集したファイルの最大記憶数のデフォルト(100件)を除去
+set formatoptions+=ro         " 行コメント改行時にコメント文字を自動挿入
 
 MyAutocmd FileType markdown setlocal conceallevel=0 " markdownのconcealを無効化
 

@@ -27,6 +27,7 @@ brew_i jq
 brew_i bat
 brew_i tmux
 brew_i starship
+brew_i hexyl
 brew_i git
 brew_i git-delta
 brew_i gh
