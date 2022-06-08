@@ -64,7 +64,7 @@ function! plug#coc#hook_add() abort
   \ 'coc-css',
   \ 'coc-restclient',
   \ 'coc-go',
-  \ '@yaegassy/coc-intelephense',
+  \ 'coc-phpls',
   \ 'coc-json',
   \ 'coc-yaml',
   \ 'coc-sh',

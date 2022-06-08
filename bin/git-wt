@@ -11,6 +11,7 @@
 #   オリジナルのディレクトリが属するディレクトリに worktree を作成
 #   新ディレクトリ名はオリジナルにブランチ名を足したもの
 #   (ブランチ名の "/" は "-" に変換される)
+#   git 管理下にないファイルも worktree 内に rsync でコピーされる
 #
 # git-wt --delete BRANCH_NAME
 #   git-wt BRANCH_NAME で作成された worktree を削除
@@ -59,6 +60,8 @@ __git-wt_add() {
   [ "${create_yn}" != 'y' ] && { echo canceled.; exit 1 }
 
   git worktree add ${wtdir} ${branch}
+
+  # git 管理下にないファイルをコピー
   {
     find . -type f | cut -d/ -f2- | \
     grep -v "^.git/" | \

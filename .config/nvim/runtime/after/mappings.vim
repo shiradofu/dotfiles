@@ -24,8 +24,6 @@ nmap     <silent> g; :<C-u>call user#zz#after('cmd', 'normal! g;')<CR>
 nmap     <silent> g, :<C-u>call user#zz#after('cmd', 'normal! g,')<CR>
 nmap     <silent> n  :<C-u>call user#zz#after('map', "\<Plug>(is-n)")<CR>
 nmap     <silent> N  :<C-u>call user#zz#after('map', "\<Plug>(is-N)")<CR>
-nmap     <silent> <C-o> :<C-u>call user#zz#after('fn', 'feedkeys("\<C-o>", "n")')<CR>
-nmap     <silent> <C-i> :<C-u>call user#zz#after('fn', 'feedkeys("\<C-i>", "n")')<CR>
 map      *  <Plug>(asterisk-z*)<Plug>(is-nohl-1)
 map      g* <Plug>(asterisk-gz*)<Plug>(is-nohl-1)
 map      #  <Plug>(asterisk-z#)<Plug>(is-nohl-1)
@@ -40,10 +38,6 @@ nnoremap <silent> o  :<C-u>call user#newline#o()<CR>
 nnoremap <silent> O  :<C-u>call user#newline#O()<CR>
 inoremap <expr> <CR> user#newline#cr()
 
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
-nnoremap <C-h> <C-w>h
 nnoremap <C-n> gt
 nnoremap <C-p> gT
 nnoremap Z <C-w>+
