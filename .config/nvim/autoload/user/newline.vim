@@ -1,16 +1,18 @@
 " newline.vim
 " 行コメントの改行時に自動でコメント文字が挿入される挙動を調整
 
+let s:exclude_ft = ['gitignore']
+
 " インサートモードでの<CR>の挙動を調整
 " 現在行がDocCommentのとき、または現在行と次行が行コメントのときは
 " 新しい行の頭にコメント文字を挿入
 " inoremap <expr> <CR> user#newline#cr()
 function! user#newline#cr() abort
-  if !s:is_line_comment(line('.'))
+  if index(s:exclude_ft, &ft) == 0
     return "\<CR>"
-  elseif s:is_doc_comment(line('.'))
+  elseif !s:is_line_comment(line('.')) || s:is_comment_closed(line('.'))
     return "\<CR>"
-  elseif s:is_line_comment(line('.') + 1)
+  elseif s:is_doc_comment(line('.')) || s:is_line_comment(line('.') + 1)
     return "\<CR>"
   else
     return "\<CR>\<C-u>"
@@ -21,11 +23,13 @@ endfunction
 " 現在行がDocCommentのとき、または現在行と次行が行コメントのときは
 " 新しい行の頭にコメント文字を挿入
 function! user#newline#o() abort
-  if !s:is_line_comment(line('.'))
+  if index(s:exclude_ft, &ft) == 0
     call feedkeys("o", 'n')
-  elseif s:is_doc_comment(line('.'))
+  elseif !s:is_line_comment(line('.')) || s:is_comment_closed(line('.'))
+    echo 'is not line comment or is comment closed'
     call feedkeys("o", 'n')
-  elseif s:is_line_comment(line('.') + 1)
+  elseif s:is_doc_comment(line('.')) || s:is_line_comment(line('.') + 1)
+    echo 'is doc comment or next line is line comment'
     call feedkeys("o", 'n')
   else
     call feedkeys("o\<C-u>", 'n')
@@ -36,11 +40,11 @@ endfunction
 " 現在行がDocCommentのとき、または現在行と前行が行コメントのときは
 " 新しい行の頭にコメント文字を挿入
 function! user#newline#O() abort
-  if !s:is_line_comment(line('.'))
+  if index(s:exclude_ft, &ft) == 0
     call feedkeys("O", 'n')
-  elseif s:is_doc_comment(line('.'))
+  elseif !s:is_line_comment(line('.')) || s:is_comment_closed(line('.'))
     call feedkeys("O", 'n')
-  elseif s:is_line_comment(line('.') - 1)
+  elseif s:is_doc_comment(line('.')) || s:is_line_comment(line('.') - 1)
     call feedkeys("O", 'n')
   else
     call feedkeys("O\<C-u>", 'n')
@@ -77,5 +81,23 @@ function! s:is_doc_comment(lnum)
   \ || ft ==# 'java'
     return s:is_line_comment(a:lnum) &&
     \ line =~ '^\s*/\*\*\?\s*' || line =~ '^\s*\*\s*'
+  endif
+endfunction
+
+" 複数行記入可能なスタイルのコメントが1行で終わっているときを識別
+" この場合はコメント行からの改行であるにも関わらず vim によりコメント
+" 文字列が挿入されないので <C-u> を発動しないようにする
+function! s:is_comment_closed(lnum)
+  let ft = &ft
+  if ft ==# 'c'
+  \ || ft ==# 'cpp'
+  \ || ft ==# 'php'
+  \ || ft ==# 'javascript'
+  \ || ft ==# 'typescript'
+  \ || ft ==# 'javascriptreact'
+  \ || ft ==# 'typescriptreact'
+  \ || ft ==# 'java'
+    let line = getline(a:lnum)
+    return s:is_line_comment(a:lnum) && line =~ '\*/'
   endif
 endfunction

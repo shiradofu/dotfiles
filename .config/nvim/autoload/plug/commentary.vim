@@ -6,4 +6,5 @@ function! plug#commentary#hook_add() abort
   nmap S <Plug>Commentary<Plug>Commentary
   autocmd CommentaryHookAdd FileType toml setlocal commentstring=#\ %s
   autocmd CommentaryHookAdd FileType php  setlocal commentstring=//\ %s
+  autocmd CommentaryHookAdd FileType cpp  setlocal commentstring=//\ %s
 endfunction

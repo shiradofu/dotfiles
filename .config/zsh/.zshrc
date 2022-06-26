@@ -52,16 +52,163 @@ setopt hist_ignore_all_dups # ZSH_AUTOSUGGEST_STRATEGY=match_prev_cmdを使用�
 setopt hist_ignore_space    # spaceで始まる場合、コマンド履歴に追加しない
 setopt hist_reduce_blanks   # 余分なスペースを削除してヒストリに記録する
 
-source $ZDOTDIR/zinit.zsh
-source $ZDOTDIR/aliases.zsh
-source $ZDOTDIR/commands.zsh
-source $ZDOTDIR/wsl.zsh
-source $ZDOTDIR/mac.zsh
+alias ls='ls --color'
+alias ll='ls -lahF'
+alias tmux='direnv exec / tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf'
+# https://apple.stackexchange.com/questions/31872/how-do-i-reset-the-scrollback-in-the-terminal-via-a-shell-command
+alias clear="clear && printf '\e[3J'"
+alias bios="sudo systemctl reboot --firmware-setup"
 
-unset ASDF_DIR # https://github.com/ohmyzsh/ohmyzsh/issues/10484
-source $HOMEBREW_PREFIX/opt/asdf/libexec/asdf.sh
+# https://mollifier.hatenablog.com/entry/20090728/p1
+zshaddhistory() {
+  local line="${1%%$'\n'}"
+  [[ ${#line} -ge 5 ]] &&
+    [[ ! "$line" =~ "^(cd|ls|ll|rm|mkdir|tms|mk)( |$)" ]]
+}
+
+typeset -A r_aliases
+r_aliases=(
+  "v"    "nvim"
+  "gg"   "ghq get --shallow --update"
+  "tmkt" "tmux kill-session -t"
+)
+
+typeset -A g_aliases
+g_aliases=(
+  # directory
+  "..."      "../.."
+  "...."     "../../.."
+  "....."    "../../../.."
+  "......"   "../../../../.."
+  # pipe
+  "G"        "| grep"
+  "R"        "| rg"
+  "X"        "| xargs"
+  "L"        "| less"
+  "A"        "| awk"
+  "S"        "| sed"
+  "E"        "2>&1 > /dev/null"
+  "N"        "> /dev/null"
+)
+
+for abbr in ${(k)r_aliases}; do alias $abbr="${r_aliases[$abbr]}"; done
+for abbr in ${(k)g_aliases}; do alias -g $abbr="${g_aliases[$abbr]}"; done
+
+abbrev-expand() {
+  local abbr
+  [[ $LBUFFER =~ "[^ ]  *[^ ]" ]] && first=false || first=true
+  abbr=$(echo ${LBUFFER} | grep -o '[-_a-zA-Z0-9\.]*$')
+  if "${first}" && [ -n "${r_aliases[$abbr]}" ]; then
+    zle backward-kill-word
+    LBUFFER+=${r_aliases[$abbr]}
+  elif [[ $LBUFFER =~ " *go +[a-z]+ +\./\.\.\." ]]; then
+    # do nothing
+  elif [ -n "${g_aliases[$abbr]}" ]; then
+    zle backward-kill-word
+    LBUFFER+=${g_aliases[$abbr]}
+  fi
+}
+
+spacekey() { abbrev-expand; zle self-insert; }
+zle -N spacekey
+bindkey " " spacekey
+
+enterkey() { abbrev-expand; zle accept-line; }
+zle -N enterkey
+bindkey "^m" enterkey
+
+no-expand-space() { LBUFFER+=' '; }
+zle -N no-expand-space
+bindkey "^x " no-expand-space
+bindkey "^x^m" accept-line
+
+
+### suffix alias
+# ref: https://itchyny.hatenablog.com/entry/20130227/1361933011
+function kaito() {
+  case $1 in
+    *.tar.gz|*.tgz) tar xzvf $1;;
+    *.tar.xz) tar Jxvf $1;;
+    *.zip) unzip $1;;
+    # *.lzh) lha e $1;;
+    *.tar.bz2|*.tbz) tar xjvf $1;;
+    *.tar.Z) tar zxvf $1;;
+    *.gz) gzip -d $1;;
+    *.bz2) bzip2 -dc $1;;
+    *.Z) uncompress $1;;
+    *.tar) tar xvf $1;;
+    # *.arj) unarj $1;;
+  esac
+}
+alias -s {gz,tgz,zip,bz2,tbz,Z,tar,xz}=kaito
+
+typeset -agU precmd_functions;
+typeset -agU chpwd_functions;
+
+# direnv hook zsh の出力を改変したもの
+_direnv_hook() {
+  (( $+commands[direnv] )) || return
+  trap -- '' SIGINT;eval "$(direnv export zsh)";trap - SIGINT;
+}
+precmd_functions=( _direnv_hook ${precmd_functions[@]} )
+chpwd_functions=( _direnv_hook ${chpwd_functions[@]} )
+
+required() {
+  for arg; do
+    if ! (( $+commands[$arg] )); then
+      >&2 printf "${arg} required.\n"
+      return 127
+    fi
+  done
+}
+
+__ghq_fzf() {
+  local preview_cmd
+  (( $+commands[bat] )) \
+    && preview_cmd="bat -n --color=always --line-range :80 $(ghq root)/{}/README.*" \
+    || preview_cmd="cat $(ghq root)/{}/README .* | head -n 80"
+  ghq list | fzf-tmux -p90%,70% --preview "${preview_cmd}"
+}
+
+ghq_fzf() {
+  required ghq fzf || return 127
+  local repo=$(__ghq_fzf)
+  if [ -n "${repo}" ]; then
+    BUFFER="cd $(ghq root | sed -e "s@${HOME}@~@")/${repo}"
+    zle accept-line
+  fi
+  zle reset-prompt
+}
+zle -N ghq_fzf
+bindkey -e '^g' ghq_fzf
+bindkey -s '^[a' '^Qtms^M'
+
+# fzf のキーバインドは CTRL-R のみほしいので取り出して使用している
+# CTRL-R - Paste the selected command from history into the command line
+fzf-history-widget() {
+  local selected num
+  setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
+  selected=( $(fc -rl 1 | perl -ne 'print if !$seen{(/^\s*[0-9]+\s+(.*)/, $1)}++' |
+    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(__fzfcmd)) )
+  local ret=$?
+  if [ -n "$selected" ]; then
+    num=$selected[1]
+    if [ -n "$num" ]; then
+      zle vi-fetch-history -n $num
+    fi
+  fi
+  zle reset-prompt
+  return $ret
+}
+zle -N fzf-history-widget
+bindkey -e '^R' fzf-history-widget
 
 eval "$(starship init zsh)"
+
+source "$ZINIT_HOME/zinit.zsh"
+zinit wait lucid light-mode as'null' nocd \
+    atinit'source "$ZDOTDIR/lazy.zsh"' \
+    for 'zdharma-continuum/null'
 
 if (which zprof > /dev/null 2>&1) then
   zprof | less

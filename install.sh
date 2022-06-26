@@ -26,7 +26,6 @@ brew_i fd
 brew_i jq
 brew_i bat
 brew_i tmux
-brew_i starship
 brew_i hexyl
 brew_i git
 brew_i git-delta
@@ -35,17 +34,21 @@ brew_i gitui
 brew_i tokei
 brew_i act
 brew_i awscli
+brew_i cmake
+
+msg "\n🚀 installing starship:\n"
+curl -sS https://starship.rs/install.sh | sh -s -- --yes
 
 #
 # Languages and Package Managers
 #
-brew_i asdf
-source $HOMEBREW_PREFIX/opt/asdf/libexec/asdf.sh
-
 msg "\nc/c++:\n"
 brew_i gcc
 brew_i llvm
-brew_i ccls
+
+git clone https://github.com/asdf-vm/asdf.git "$ASDF_DIR"
+git -C "$ASDF_DIR" checkout -q "$(git -C $ASDF_DIR describe --abbrev=0 --tags)"
+source "$ASDF_DIR/asdf.sh"
 
 msg "\ngolang:\n"
 asdf plugin add golang     &&
@@ -76,6 +79,11 @@ msg "\nphp:\n"
 brew_i php
 brew_i composer
 
+msg "\ndirenv:\n"
+asdf plugin add direnv     &&
+asdf install direnv latest &&
+asdf global direnv latest
+
 #
 # Vim
 #
@@ -84,10 +92,18 @@ brew_i nvim
 npm install --global neovim
 brew_i watchman # coc-tsserver
 
-curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > dein.sh
-vim_plugin_dir=$XDG_STATE_HOME/nvim/dein
-mkdir -p "${vim_plugin_dir}"
-sh ./dein.sh "${vim_plugin_dir}"
+# curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > dein.sh
+# vim_plugin_dir=$XDG_STATE_HOME/nvim/dein
+# mkdir -p "${vim_plugin_dir}"
+# sh ./dein.sh "${vim_plugin_dir}"
+
+
+git clone --depth 1 \
+  https://github.com/wbthomason/packer.nvim \
+  $XDG_DATA_HOME/nvim/site/pack/packer/opt/packer.nvim
+nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+
+
 
 #
 # Deploy files

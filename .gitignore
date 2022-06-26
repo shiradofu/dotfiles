@@ -5,6 +5,7 @@
 !/.config/alacritty/base.yml
 !/.config/alacritty/colorschemes/*.yml
 !/.config/bat/themes/*.tmTheme
+!/.config/direnv/direnvrc
 !/.config/gh/config.yml
 !/.config/git/config.tpl
 !/.config/git/ignore
@@ -12,10 +13,11 @@
 !/.config/gitui/theme.ron
 /.config/iterm2/*
 !/.config/iterm2/com.googlecode.iterm2.plist
+!/.config/nvim/autoload/*.vim
 !/.config/nvim/autoload/user/*.vim
 !/.config/nvim/autoload/plug/*.vim
-!/.config/nvim/runtime/dein.vim
-!/.config/nvim/runtime/after/*.vim
+!/.config/nvim/lua/*.lua
+!/.config/nvim/lua/plug/*.lua
 !/.config/nvim/templates/**/*
 !/.config/nvim/init.vim
 !/.config/nvim/*.toml
@@ -29,12 +31,7 @@
 /.config/zsh/*
 !/.config/zsh/.zshrc
 !/.config/zsh/.zshenv
-!/.config/zsh/aliases.zsh
-!/.config/zsh/fzf.zsh
-!/.config/zsh/utils.zsh
-!/.config/zsh/mac.zsh
-!/.config/zsh/wsl.zsh
-!/.config/zsh/zinit.zsh
+!/.config/zsh/lazy.zsh
 !/.config/zsh/completions
 !/.config/zsh/completions/_*
 !/.config/zsh/completions/git-completion.bash
