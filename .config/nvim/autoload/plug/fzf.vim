@@ -1,4 +1,4 @@
-function! plug#fzf#hook_add() abort
+function! plug#fzf#setup() abort
   let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8, 'border': 'sharp' } }
   let g:fzf_preview_window = ['right:50%:sharp', 'ctrl-l']
 

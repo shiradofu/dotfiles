@@ -1,6 +1,10 @@
 augroup MyGroup | autocmd! | augroup END
 command! -nargs=* MyAutocmd autocmd MyGroup <args>
 
+" ターミナルでのヤンク時文字化け回避
+" https://github.com/neovim/neovim/issues/5683#issuecomment-420833679
+lang en_US.UTF-8
+
 set encoding=utf-8            " エンコーディングをUTF-8に設定
 set mouse=a                   " マウスを有効化
 set showtabline=2             " タブを常に表示
@@ -30,6 +34,7 @@ set fillchars=vert:\ ,eob:\ , " ステータスライン・バッファの終わ
 set shada+='10000             " 以前に編集したファイルを最大で1000件記憶
 set shada-='100               " 以前に編集したファイルの最大記憶数のデフォルト(100件)を除去
 set formatoptions+=ro         " 行コメント改行時にコメント文字を自動挿入
+set noswapfile                " スワップファイルを無効化
 
 MyAutocmd FileType markdown setlocal conceallevel=0 " markdownのconcealを無効化
 
@@ -99,10 +104,6 @@ map      #  <Plug>(asterisk-z#)<Plug>(is-nohl-1)
 map      g# <Plug>(asterisk-gz#)<Plug>(is-nohl-1)
 nmap     t <Plug>(operator-replace)
 map      Y y$
-" xmap     if <Plug>(coc-funcobj-i)
-" omap     if <Plug>(coc-funcobj-i)
-" xmap     af <Plug>(coc-funcobj-a)
-" omap     af <Plug>(coc-funcobj-a)
 nnoremap <silent> o  :<C-u>call user#newline#o()<CR>
 nnoremap <silent> O  :<C-u>call user#newline#O()<CR>
 inoremap <expr> <CR> user#newline#cr()
@@ -140,11 +141,12 @@ vmap     <silent> gx <Plug>(openbrowser-smart-search)
 " nnoremap <silent> gr :<C-u>call CocActionAsync('rename')<CR>
 " nnoremap <silent> ga :<C-u>CocAction<CR>
 
+nnoremap <silent> <Leader>w :<C-u>w<CR>
 nnoremap <silent> <Leader>r :<C-u>Fern . -reveal=%<CR>
 nnoremap <silent> <Leader><C-r> :<C-u>vs<CR>:<C-u>Fern . -reveal=%<CR>
 nnoremap <silent> <Leader>t :<C-u>call fzf#sonictemplate#run()<CR>
-nnoremap <silent> <Leader>R :<C-u>vs<CR>:<C-u>Fern .<CR>
-nnoremap <silent> <Leader>o :<C-u>GFiles<CR>
+" nnoremap <silent> <Leader>R :<C-u>vs<CR>:<C-u>Fern .<CR>
+nnoremap <silent> <Leader>o :<C-u>ProjectMru<CR>
 nnoremap <silent> <Leader>i :<C-u>Files<CR>
 nnoremap <silent> <Leader>u :<C-u>GFiles?<CR>
 nnoremap <Leader>f :<C-u>RgIgnore<Space>

@@ -1,24 +1,31 @@
-local function ts_disable(_, bufnr)
-	return vim.api.nvim_buf_line_count(bufnr) > 5000
-end
-
 require'nvim-treesitter.configs'.setup {
 	ensure_installed = 'all',
   highlight = {
-    enable = true,
-    additional_vim_regex_highlighting = {
-      'vim',
-      'markdown',
+    disable = { 'markdown' },
+    additional_vim_regex_highlighting = { 'vim' },
+  },
+  yati = { enable = true },
+  textobjects = {
+    select = {
+      enable = true,
+      -- Automatically jump forward to textobj, similar to targets.vim
+      lookahead = true,
+      keymaps = {
+        ['af'] = '@function.outer',
+        ['if'] = '@function.inner',
+      },
+    },
+    move = {
+      enable = true,
+      set_jumps = true, -- whether to set jumps in the jumplist
+      goto_next_start = {
+        [']f'] = '@function.outer',
+        [']]'] = '@class.outer',
+      },
+      goto_previous_start = {
+        ['[f'] = '@function.outer',
+        ['[['] = '@class.outer',
+      },
     },
   },
 }
-
-local augroup = vim.api.nvim_create_augroup('MyTreesitter', {})
-vim.api.nvim_create_autocmd('Syntax', {
-	pattern = 'markdown',
-  callback = function()
-    vim.cmd[[syntax on]]
-    vim.cmd[[syntax match checkedItem containedin=ALL "\v\s*(-\s+)?\[x\]\s+.*"]]
-  end,
-	group = augroup,
-})

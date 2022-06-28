@@ -1,7 +1,7 @@
 " newline.vim
 " 行コメントの改行時に自動でコメント文字が挿入される挙動を調整
 
-let s:exclude_ft = ['gitignore']
+let s:exclude_ft = ['markdown', 'gitignore']
 
 " インサートモードでの<CR>の挙動を調整
 " 現在行がDocCommentのとき、または現在行と次行が行コメントのときは

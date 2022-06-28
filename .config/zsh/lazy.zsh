@@ -1,10 +1,19 @@
-
-. "${ASDF_DIR}/lib/asdf.sh"
-
 { test -f /usr/local/bin/brew && eval $(/usr/local/bin/brew shellenv) } \
 || { test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv) }   \
 || { test -d /opt/homebrew && eval $(/opt/homebrew/bin/brew shellenv) } \
 || { test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv) }
+
+typeset -gaU path
+path=(
+  "$HOME/bin"(N-/)
+  "$GOPATH/bin"(N-/)
+  "$ASDF_DIR/bin"(N-/)
+  "$ASDF_DATA_DIR/shims"(N-/)
+  "$path[@]"
+)
+
+. "${ASDF_DIR}/lib/asdf.sh"
+fpath=(${ASDF_DIR}/completions $fpath)
 
 zinit wait lucid nocd for \
     zdharma-continuum/fast-syntax-highlighting \

@@ -14,13 +14,4 @@ export ASDF_DIR="$XDG_STATE_HOME/asdf/repo"
 export ASDF_DATA_DIR="$XDG_STATE_HOME/asdf/data"
 export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
 
-typeset -gaU path
-path=(
-  "$HOME/bin"(N-/)
-  "$GOPATH/bin"(N-/)
-  "$ASDF_DIR/bin"(N-/)
-  "$ASDF_DATA_DIR/shims"(N-/)
-  "$path[@]"
-)
-
 skip_global_compinit=1

@@ -14,4 +14,11 @@ function! plug#markdown#hook_source() abort
   \ 'php=php',
   \ 'go=go',
   \ ]
+
+  augroup MyMarkdown
+    autocmd!
+    autocmd Syntax markdown syntax on |
+      \ syntax match checkedItem containedin=ALL
+      \ '\v\s*(-\s+)?\[x\]\s+.*'
+  augroup END
 endfunction

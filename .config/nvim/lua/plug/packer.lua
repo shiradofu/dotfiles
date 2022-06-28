@@ -16,8 +16,8 @@ local config_dir = vim.fn.stdpath('config')..'/nvim'
 -- 	return _G.packer_plugins[name] ~= nil
 -- end
 
-require("packer").init({
-	compile_path = vim.fn.stdpath("data") .. "/site/pack/loader/start/my-packer/plugin/packer.lua",
+require('packer').init({
+	compile_path = vim.fn.stdpath('data') .. '/site/pack/loader/start/my-packer/plugin/packer.lua',
 	display = {
 		open_fn = require('packer.util').float,
 	}

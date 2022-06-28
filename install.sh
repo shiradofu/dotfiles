@@ -7,6 +7,8 @@ exists() { type $1 > /dev/null 2>&1; }
 is_mac() { uname | grep Darwin -q; }
 is_wsl() { uname -r | grep microsoft -q; }
 brew_i() { msg "\n🍺  installing $1:\n"; brew install $1; }
+npm_i()  { msg "\n🍔  installing $1:\n"; npm install -g $1; }
+go_i()   { msg "]n🍙  installing $1:\n"; go install $1 }
 
 DOTFILES_ROOT=$(cd $(dirname $0) && pwd)
 source ${DOTFILES_ROOT}/.config/zsh/.zshenv
@@ -54,7 +56,7 @@ msg "\ngolang:\n"
 asdf plugin add golang     &&
 asdf install golang latest &&
 asdf global golang latest
-go install golang.org/x/tools/cmd/goimports@latest
+go_i golang.org/x/tools/cmd/goimports@latest
 
 msg "\ndeno:\n"
 asdf plugin add deno     &&
@@ -84,6 +86,16 @@ asdf plugin add direnv     &&
 asdf install direnv latest &&
 asdf global direnv latest
 
+mgs "\nlinters/formatters:\n"
+brew_i stylua
+brew_i shellcheck
+brew_i cfn-lint
+brew_i actionlint
+npm_i eslint_d
+npm_i @fsouza/prettierd
+npm_i stylelint
+go_i github.com/editorconfig-checker/editorconfig-checker/cmd/editorconfig-checker@latest
+
 #
 # Vim
 #
@@ -97,12 +109,10 @@ brew_i watchman # coc-tsserver
 # mkdir -p "${vim_plugin_dir}"
 # sh ./dein.sh "${vim_plugin_dir}"
 
-
 git clone --depth 1 \
   https://github.com/wbthomason/packer.nvim \
   $XDG_DATA_HOME/nvim/site/pack/packer/opt/packer.nvim
 nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
-
 
 
 #
