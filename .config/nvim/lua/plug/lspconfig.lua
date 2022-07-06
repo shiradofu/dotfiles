@@ -1,13 +1,12 @@
 local M = {}
 local k = vim.keymap.set
-local root_pattern = require'lspconfig'.util.root_pattern
-local create_on_attach = require'user/lsp-attach'
+local root_pattern = require("lspconfig").util.root_pattern
+local create_on_attach = require "plug/lsp-attach"
 local WAIT_MS = 1000
 
 local o = { noremap = true, silent = true }
-k('n', '[e', vim.diagnostic.goto_prev, o)
-k('n', ']e', vim.diagnostic.goto_next, o)
-
+k("n", "[e", vim.diagnostic.goto_prev, o)
+k("n", "]e", vim.diagnostic.goto_next, o)
 
 local basic_on_attach = create_on_attach()
 
@@ -17,21 +16,21 @@ local lsp_flags = {
 }
 
 M.sumneko_lua = {
-  on_attach = create_on_attach({
+  on_attach = create_on_attach {
     -- use stylua
     fmt_off = true,
     fmt_fn = function(opt)
       vim.lsp.buf.formatting_sync(opt, WAIT_MS)
     end,
-  }),
+  },
   lsp_flags = lsp_flags,
   settings = {
     Lua = {
-      runtime = 'LuaJIT',
+      runtime = "LuaJIT",
       diagnostics = {
-        globals = { 'vim' }
+        globals = { "vim" },
       },
-      library = vim.api.nvim_get_runtime_file('', true),
+      library = vim.api.nvim_get_runtime_file("", true),
       telemetry = {
         enable = false,
       },
@@ -45,14 +44,19 @@ M.ccls = {
 }
 
 M.gopls = {
-  on_attach = create_on_attach({
+  on_attach = create_on_attach {
     fmt_fn = function(opt)
       vim.lsp.buf.formatting_sync(opt)
       -- goimports on save
       -- https://github.com/golang/tools/blob/master/gopls/doc/vim.md#neovim-imports
       local params = vim.lsp.util.make_range_params()
-      params.context = {only = {"source.organizeImports"}}
-      local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, WAIT_MS)
+      params.context = { only = { "source.organizeImports" } }
+      local result = vim.lsp.buf_request_sync(
+        0,
+        "textDocument/codeAction",
+        params,
+        WAIT_MS
+      )
       for _, res in pairs(result or {}) do
         for _, r in pairs(res.result or {}) do
           if r.edit then
@@ -62,8 +66,8 @@ M.gopls = {
           end
         end
       end
-    end
-  }),
+    end,
+  },
   lsp_flags = lsp_flags,
 }
 
@@ -74,13 +78,13 @@ M.golangci_lint_ls = {
 
 M.tsserver = {
   root_pattern("package.json", "tsconfig.json", "jsconfig.json"),
-  on_attach = create_on_attach({
+  on_attach = create_on_attach {
     -- use prettier
     fmt_off = true,
     fmt_fn = function(opt)
       vim.lsp.buf.formatting_sync(opt, WAIT_MS)
     end,
-  }),
+  },
   lsp_flags = lsp_flags,
 }
 
@@ -113,22 +117,26 @@ M.cssmodules_ls = {
 }
 
 M.html = {
-  on_attach = create_on_attach({
+  on_attach = create_on_attach {
     -- use prettier
     fmt_off = true,
     fmt_fn = function(opt)
       vim.lsp.buf.formatting_sync(opt, WAIT_MS)
     end,
-  }),
+  },
   lsp_flags = lsp_flags,
 }
 
 M.intelephense = {
-  on_attach = create_on_attach({
+  on_attach = create_on_attach {
     fmt_fn = function(opt)
-      vim.lsp.buf.formatting_seq_sync(opt, WAIT_MS, { 'intelephense', 'null-ls' })
+      vim.lsp.buf.formatting_seq_sync(
+        opt,
+        WAIT_MS,
+        { "intelephense", "null-ls" }
+      )
     end,
-  }),
+  },
   lsp_flags = lsp_flags,
 }
 
@@ -155,6 +163,12 @@ M.yamlls = {
 M.jsonls = {
   on_attach = basic_on_attach,
   lsp_flags = lsp_flags,
+  settings = {
+    json = {
+      schemas = require("schemastore").json.schemas(),
+      validate = { enable = true },
+    },
+  },
 }
 
 M.vimls = {

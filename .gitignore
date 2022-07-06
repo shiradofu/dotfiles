@@ -48,6 +48,7 @@
 
 !/.editorconfig
 !/.gitignore
+!/.stylua.toml
 !/Dockerfile
 !/init.sh
 !/install.sh

@@ -92,8 +92,6 @@ nnoremap <silent> ]q :<C-u>call user#zz#after('cmd', 'cnext')<CR>
 nnoremap <silent> [q :<C-u>call user#zz#after('cmd', 'cprev')<CR>
 nnoremap <silent> ]c :<C-u>call user#zz#after('map', "\<Plug>(GitGutterNextHunk)")<CR>
 nnoremap <silent> [c :<C-u>call user#zz#after('map', "\<Plug>(GitGutterPrevHunk)")<CR>
-" nnoremap <silent> ]e :<C-u>call user#zz#after('fn', "CocAction('diagnosticNext')")<CR>
-" nnoremap <silent> [e :<C-u>call user#zz#after('fn', "CocAction('diagnosticPrevious')")<CR>
 nmap     <silent> g; :<C-u>call user#zz#after('cmd', 'normal! g;')<CR>
 nmap     <silent> g, :<C-u>call user#zz#after('cmd', 'normal! g,')<CR>
 nmap     <silent> n  :<C-u>call user#zz#after('map', "\<Plug>(is-n)")<CR>
@@ -124,6 +122,7 @@ nnoremap <C-t> <C-w>=
 nnoremap <silent> go :<C-u>call user#win#move(v:count)<CR>
 nnoremap <silent> g[ :<C-u>-tabm<CR>
 nnoremap <silent> g] :<C-u>+tabm<CR>
+nnoremap  gh :<C-u>call user#win#focus_float()<CR>
 
 nnoremap <silent> gb :<C-u>edit #<CR>
 nnoremap <silent> gy :<C-u>let @+=expand('%')<CR>
@@ -133,19 +132,11 @@ nmap     <silent> gs :<C-u>Scratch<CR>
 vmap     <silent> gs <plug>(scratch-selection-reuse)
 nmap     <silent> gx <Plug>(openbrowser-smart-search)
 vmap     <silent> gx <Plug>(openbrowser-smart-search)
-" nmap     <silent> gh <Plug>(coc-float-jump)
-" nnoremap <silent> gd :<C-u>call CocAction('jumpDefinition')<CR>
-" nnoremap <silent> gD :<C-u>call CocAction('jumpDefinition', 'vsplit')<CR>
-" nnoremap <silent> gt :<C-u>call CocAction('jumpTypeDefinition')<CR>
-" nnoremap <silent> gT :<C-u>call CocAction('jumpTypeDefinition', 'vsplit')<CR>
-" nnoremap <silent> gr :<C-u>call CocActionAsync('rename')<CR>
-" nnoremap <silent> ga :<C-u>CocAction<CR>
 
 nnoremap <silent> <Leader>w :<C-u>w<CR>
 nnoremap <silent> <Leader>r :<C-u>Fern . -reveal=%<CR>
 nnoremap <silent> <Leader><C-r> :<C-u>vs<CR>:<C-u>Fern . -reveal=%<CR>
 nnoremap <silent> <Leader>t :<C-u>call fzf#sonictemplate#run()<CR>
-" nnoremap <silent> <Leader>R :<C-u>vs<CR>:<C-u>Fern .<CR>
 nnoremap <silent> <Leader>o :<C-u>ProjectMru<CR>
 nnoremap <silent> <Leader>i :<C-u>Files<CR>
 nnoremap <silent> <Leader>u :<C-u>GFiles?<CR>
@@ -161,17 +152,15 @@ nnoremap <silent> <Leader>: :<C-u>History:<CR>
 nnoremap <silent> <Leader>q :<C-u>botright copen<CR>
 nnoremap <silent> <Leader>d :<C-u>tabnew<CR><C-o>:<C-u>Gdiffsplit<CR>
 nnoremap <silent> <Leader>s
-\ :<C-u>call user#win#goto_or('.git/index', 'tabnew \| Git! \| wincmd K')<CR>
+\ :<C-u>call user#win#goto_or('DiffviewFilePanel', 'DiffviewOpen')<CR>
+nnoremap <silent> <Leader>y :<C-u>DiffviewFileHistory %<CR>
+nnoremap <silent> <Leader><C-y> :<C-u>DiffviewFileHistory<CR>
 nnoremap <silent> <Leader>b :<C-u>Git blame<CR>
 nnoremap <silent> <Leader>B :<C-u>GBrowse<CR>
 vnoremap <silent> <Leader>B :<C-u>GBrowse<CR>
 nnoremap <silent> <Leader>, :<C-u>Git commit \| startinsert<CR>
 nnoremap <silent> <Leader>. :<C-u>Dispatch! git push<CR>
-" nmap     <silent> <Leader>n <Plug>(coc-references)
-" nmap     <silent> <Leader>m <Plug>(coc-implementation)
-" nnoremap <silent> <Leader>e :<C-u>CocFzfList diagnostics<CR>
-" nnoremap <silent> <Leader>y :<C-u>CocFzfList symbols<CR>
-nnoremap <silent> <Leader>l :<C-u>Vista!!<CR>
+nnoremap <silent> <Leader>l :<C-u>SymbolsOutline<CR>
 
 nmap gc <nop>
 nnoremap <silent> gcc :<C-u>CamelB<CR>:call repeat#set("gcc")<CR>
@@ -184,7 +173,6 @@ xnoremap <silent> gcs :Snek<CR>:call repeat#set("gcs")<CR>
 xnoremap <silent> gck :Kebab<CR>:call repeat#set("gck")<CR>
 
 nnoremap mv :<C-u>CocCommand workspace.renameCurrentFile<CR>
-" nnoremap <silent> K :call CocShowDocumentation()<CR>
 inoremap <silent><expr> <Tab> pumvisible() ? coc#_select_confirm() : "\<Tab>"
 
 noremap! <C-b> <Left>
@@ -215,8 +203,6 @@ MyAutocmd FileType markdown
 call colorscheme#get()
 call plugins#load()
 call colorscheme#set()
-
-let g:nightfox_debug = 1
 
 lua require'plugins'
 
