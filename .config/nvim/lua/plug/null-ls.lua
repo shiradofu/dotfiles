@@ -2,8 +2,17 @@ local n = require "null-ls"
 local a = n.builtins.code_actions
 local f = n.builtins.formatting
 local d = n.builtins.diagnostics
+local fmt = require "plug/lsp-format"
+local map = require "user/lsp-keymap"
 
-local create_on_attach = require "plug/lsp-attach"
+map.diagnostic()
+
+local function on_attach(client, bufnr)
+  map.hover()
+  map.action()
+  local ft = vim.api.nvim_buf_get_option(bufnr, "filetype")
+  fmt[fmt[ft] and ft or "_"](client, bufnr)
+end
 
 n.setup {
   sources = {
@@ -33,5 +42,5 @@ n.setup {
       command = "editorconfig-checker",
     },
   },
-  on_attach = create_on_attach(),
+  on_attach = on_attach,
 }

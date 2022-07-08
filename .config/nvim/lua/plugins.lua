@@ -23,13 +23,10 @@ return require("packer").startup(function(use)
   use "nvim-lua/plenary.nvim" -- do not lazy load
   use "antoinemadec/FixCursorHold.nvim"
   use "kyazdani42/nvim-web-devicons"
-  -- use{ 'nvim-lua/popup.nvim', module = 'popup' }
-  -- use{ 'tami5/sqlite.lua', module = 'sqlite' }
-  -- use{ 'MunifTanjim/nui.nvim', module = 'nui' }
 
   --------------------------------
   -- Denops Library
-  -- use {'vim-denops/denops.vim'}
+  use "vim-denops/denops.vim"
 
   -- ------------------------------------------------------------
   -- Fundamental
@@ -77,46 +74,54 @@ return require("packer").startup(function(use)
   }
 
   --------------------------------
-  -- Text Objects
+  -- Text Objects and Operators
   use {
     "kana/vim-textobj-user",
-    event = "VimEnter",
     config = "vim.cmd[[call plug#textobj#setup()]]",
   }
   use {
-    -- TODO: not working
     "sgur/vim-textobj-parameter",
     event = "VimEnter",
-    after = { "vim-textobj-user" },
-    requires = { "vim-textobj-user" },
   }
   use {
     "kana/vim-textobj-entire",
     event = "VimEnter",
-    after = { "vim-textobj-user" },
   }
   use {
     "kana/vim-textobj-indent",
     event = "VimEnter",
-    after = { "vim-textobj-user" },
   }
   use {
     "kana/vim-textobj-line",
     event = "VimEnter",
-    after = { "vim-textobj-user" },
   }
   use {
     "glts/vim-textobj-comment",
     event = "VimEnter",
-    after = { "vim-textobj-user" },
   }
-
+  use {
+    "tpope/vim-commentary",
+    config = function()
+      vim.fn["plug#commentary#setup"]()
+    end,
+  }
+  use {
+    "machakann/vim-sandwich",
+    setup = function()
+      vim.fn["plug#sandwich#setup"]()
+    end,
+  }
+  use {
+    "gbprod/substitute.nvim",
+    config = function()
+      require("substitute").setup {}
+    end,
+  }
   --------------------------------------------------------------
-  -- LSP & Completion
+  -- Language & Completion
 
   --------------------------------
   -- Language Server Protocol(LSP)
-
   use {
     "neovim/nvim-lspconfig",
     config = function()
@@ -149,8 +154,10 @@ return require("packer").startup(function(use)
   }
 
   --------------------------------
-  -- Completion
+  -- Filetype
 
+  --------------------------------
+  -- Completion
   use {
     "hrsh7th/nvim-cmp",
     config = function()
@@ -171,7 +178,6 @@ return require("packer").startup(function(use)
 
   --------------------------------
   -- Snippet
-
   use {
     "L3MON4D3/LuaSnip",
     config = function()
@@ -190,7 +196,9 @@ return require("packer").startup(function(use)
   }
   use {
     "weilbith/nvim-code-action-menu",
-    cmd = "CodeActionMenu",
+    config = function()
+      require "plug/code-action-menu"
+    end,
   }
   use "simrat39/symbols-outline.nvim"
 
@@ -207,9 +215,9 @@ return require("packer").startup(function(use)
     requires = { "fzf" },
   }
 
-  -- use{
-  -- 	'nvim-telescope/telescope.nvim',
-  -- 	config = function()require'plug/telescope'end,
+  -- use {
+  --   "nvim-telescope/telescope.nvim",
+  --   requires = { "nvim-lua/plenary.nvim" },
   -- }
   -- use{
   -- 'nvim-telescope/telescope-fzf-native.nvim',
@@ -225,13 +233,6 @@ return require("packer").startup(function(use)
   --------------------------------------------------------------
   -- Git
 
-  -- use {
-  --   "TimUntersberger/neogit",
-  --   requires = "nvim-lua/plenary.nvim",
-  --   config = function()
-  --     require "plug/neogit"
-  --   end,
-  -- }
   use {
     "sindrets/diffview.nvim",
     requires = "nvim-lua/plenary.nvim",
@@ -246,6 +247,45 @@ return require("packer").startup(function(use)
       require "plug/gitsigns"
     end,
   }
+  use {
+    "lambdalisue/gin.vim",
+    requires = "vim-denops/denops.vim",
+  }
+  use {
+    "akinsho/git-conflict.nvim",
+    config = function()
+      require("git-conflict").setup()
+    end,
+  }
+  use {
+    "tyru/open-browser-github.vim",
+    requires = "open-browser.vim",
+    cmd = "OpenGithubFile",
+  }
+
+  --------------------------------------------------------------
+  -- Editing
+
+  --------------------------------
+  -- Local
+  use {
+    "numToStr/Comment.nvim",
+    config = function()
+      require("Comment").setup()
+    end,
+  }
+
+  --------------------------------
+  -- Workspace
+  use {
+    "thinca/vim-qfreplace",
+    cmd = "Qfreplace",
+  }
+
+  --------------------------------------------------------------
+  -- Others
+
+  use "tyru/open-browser.vim"
 
   --------------------------------------------------------------
   -- Colorschemes

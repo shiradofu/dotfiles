@@ -6,6 +6,13 @@ require("nvim-treesitter.configs").setup {
   },
   indent = { enable = false },
   -- yati = { enable = true },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      node_incremental = "v",
+      node_decremental = "V",
+    },
+  },
   textobjects = {
     select = {
       enable = true,

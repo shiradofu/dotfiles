@@ -24,23 +24,16 @@
   autocrlf = false
   ignorecase = false
   quotepath = false
-  pager = less -R -F -X
-[pager]
-  diff = delta
-  log = delta
-  reflog = delta
-  show = delta
-[interactive]
-  diffFilter = delta --color-only --features=interactive
+  pager = delta
+  # pager = less -R -F -X
 [delta]
-  features = decorations
-[delta "interactive"]
-  keep-plus-minus-markers = false
-[delta "decorations"]
-  commit-decoration-style = blue ol
-  commit-style = raw
-  file-style = omit
-  hunk-header-decoration-style = blue box
-  hunk-header-file-style = red
-  hunk-header-line-number-style = "#067a00"
-  hunk-header-style = file line-number syntax
+  navigate = true # use n and N to move between diff sections
+  light = false   # set to true if you're in a terminal w/ a light background color
+[interactive]
+  diffFilter = delta --color-only
+[add.interactive]
+  useBuiltin = false # required for git 2.37.0
+[merge]
+  conflictstyle = diff3
+[diff]
+  colorMoved = default

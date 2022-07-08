@@ -1,16 +1,21 @@
 #!/bin/bash
 
+# https://stackoverflow.com/questions/6245570/how-to-get-the-current-branch-name-in-git
+# https://stackoverflow.com/questions/3801321/git-list-only-untracked-files-also-custom-commands
+# https://stackoverflow.com/questions/3137094/how-to-count-lines-in-a-document
+# https://stackoverflow.com/questions/13727917/use-wc-on-all-subdirectories-to-count-the-sum-of-lines
+
 type=$1  # files, ins, del, allfiles
 level=$2 # n(ormal), w(arning), e(rror)
 
 __echo_if_should() {
   # 1: val, 2: warning threshold, 3: error threshold, 4: symbol
   local msg; msg=''
-  if ([ "$level" = 'n' ] && [ $1 -le $2 ]) ||
-    ([ "$level" = 'w' ] && [ $1 -gt $2 ] && [ $1 -le $3 ]) ||
-    ([ "$level" = 'e' ] && [ $1 -gt $3 ])
+  if { [ "$level" = 'n' ] && [ "$1" -le "$2" ]; } ||
+    { [ "$level" = 'w' ] && [ "$1" -gt "$2" ] && [ "$1" -le "$3" ]; } ||
+    { [ "$level" = 'e' ] && [ "$1" -gt "$3" ]; }
   then msg="$4$1"; fi
-  echo $msg
+  echo "$msg"
   exit
 }
 
@@ -19,11 +24,11 @@ git ls-files --others --exclude-standard | xargs git add -N >/dev/null 2>&1
 if [ "$type" = 'allfiles' ]; then
   standard_branch=''
   branches=$(git branch)
-  if echo $branches | grep -q ' develop'; then
+  if echo "$branches" | grep -q ' develop'; then
     standard_branch='develop'
-  elif echo $branches | grep -q ' main'; then
+  elif echo "$branches" | grep -q ' main'; then
     standard_branch='main'
-  elif echo $branches | grep -q ' master'; then
+  elif echo "$branches" | grep -q ' master'; then
     standard_branch='master'
   fi
 
@@ -32,16 +37,16 @@ if [ "$type" = 'allfiles' ]; then
       grep "[ (]${standard_branch}[,)]" | cut -c 1-7
   )
 
-  if [ -z "standard_branch" ] || [ -z "$default_branch_head_hash" ]; then
+  if [ -z "$standard_branch" ] || [ -z "$default_branch_head_hash" ]; then
     [ "$level" = 'normal' ] && echo '≡ ??'
     exit 0
   fi
 
   num_of_changed_files=$(
-    echo $(git diff $default_branch_head_hash --name-only | wc -l)
+    git diff "$default_branch_head_hash" --name-only | wc -l
   )
 
-  __echo_if_should $num_of_changed_files 10 20 '≡ '
+  __echo_if_should "$num_of_changed_files" 10 20 '≡ '
 fi
 
 
@@ -58,18 +63,18 @@ fi
 
 if [ "$type" = 'files' ]; then
   if [ -z "$diff_stat" ] && [ "$level" = 'n' ]; then printf "[=]0"; exit; fi
-  files=$(echo $diff_stat | cut -d ' ' -f 1)
-  __echo_if_should $files 5 10 '[=]'
+  files=$(echo "$diff_stat" | cut -d ' ' -f 1)
+  __echo_if_should "$files" 5 10 '[=]'
 fi
 
 if [ "$type" = 'ins' ]; then
   if [ -z "$diff_stat" ] && [ "$level" = 'n' ]; then printf "[+]0"; exit; fi
-  ins=$((echo $diff_stat | grep -o '[0-9]\+ i' || echo '0 i') | cut -d ' ' -f 1)
-  __echo_if_should $ins 100 200 '[+]'
+  ins=$({ echo "$diff_stat" | grep -o '[0-9]\+ i' || echo '0 i'; } | cut -d ' ' -f 1)
+  __echo_if_should "$ins" 100 200 '[+]'
 fi
 
 if [ "$type" = 'del' ]; then
   if [ -z "$diff_stat" ] && [ "$level" = 'n' ]; then printf "[-]0"; exit; fi
-  del=$((echo $diff_stat | grep -o '[0-9]\+ d' || echo '0 d') | cut -d ' ' -f 1)
-  __echo_if_should $del 100 200 '[-]'
+  del=$({ echo "$diff_stat" | grep -o '[0-9]\+ d' || echo '0 d'; } | cut -d ' ' -f 1)
+  __echo_if_should "$del" 100 200 '[-]'
 fi

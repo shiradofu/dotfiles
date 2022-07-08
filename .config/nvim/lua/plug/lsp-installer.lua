@@ -1,7 +1,7 @@
 local installer = require "nvim-lsp-installer"
 local lspconfig = require "lspconfig"
 local config = require "plug/lspconfig"
-local cap = require "plug/cmp-lsp"
+local cmp = require "plug/cmp-lsp"
 local t = require("user/utils").table
 
 installer.setup {
@@ -17,9 +17,9 @@ installer.setup {
 }
 
 for _, server in ipairs(installer.get_installed_servers()) do
-  config[server.name].capabilities = cap
+  config[server.name].capabilities = cmp
   if server.name == "tsserver" then
-    require("typescript").setup { server = config[server.name], debug = true }
+    require("typescript").setup { server = config[server.name] }
   else
     lspconfig[server.name].setup(config[server.name])
   end

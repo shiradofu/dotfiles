@@ -110,19 +110,19 @@ nnoremap <silent> <C-h> <C-w>h
 nnoremap <silent> <C-j> <C-w>j
 nnoremap <silent> <C-k> <C-w>k
 nnoremap <silent> <C-l> <C-w>l
-nnoremap <C-n> gt
-nnoremap <C-p> gT
-nnoremap Z <C-w>+
-nnoremap Q <C-w>-
-nnoremap \| 2<C-w><
-nnoremap \ 2<C-w>>
-nnoremap ¥ 2<C-w>>
-nnoremap <C-g> <C-w>_<C-w>\|
-nnoremap <C-t> <C-w>=
+nnoremap <silent> <C-n> gt
+nnoremap <silent> <C-p> gT
+nnoremap <silent> Z <C-w>+
+nnoremap <silent> Q <C-w>-
+nnoremap <silent> \| 2<C-w><
+nnoremap <silent> \ 2<C-w>>
+nnoremap <silent> ¥ 2<C-w>>
+nnoremap <silent> <C-g> <C-w>_<C-w>\|
+nnoremap <silent> <C-t> <C-w>=
 nnoremap <silent> go :<C-u>call user#win#move(v:count)<CR>
 nnoremap <silent> g[ :<C-u>-tabm<CR>
 nnoremap <silent> g] :<C-u>+tabm<CR>
-nnoremap  gh :<C-u>call user#win#focus_float()<CR>
+nnoremap <silent> gh :<C-u>call user#win#focus_float()<CR>
 
 nnoremap <silent> gb :<C-u>edit #<CR>
 nnoremap <silent> gy :<C-u>let @+=expand('%')<CR>
@@ -150,30 +150,43 @@ vnoremap <Leader>g :<C-u>call user#rg#visual('RgIgnore')<CR><CR>
 vnoremap <Leader>G :<C-u>call user#rg#visual('RgNoIgnore')<CR><CR>
 nnoremap <silent> <Leader>: :<C-u>History:<CR>
 nnoremap <silent> <Leader>q :<C-u>botright copen<CR>
-nnoremap <silent> <Leader>d :<C-u>tabnew<CR><C-o>:<C-u>Gdiffsplit<CR>
+nnoremap <silent> <Leader>d :<C-u>DiffviewOpen -- %<CR>
 nnoremap <silent> <Leader>s
-\ :<C-u>call user#win#goto_or('DiffviewFilePanel', 'DiffviewOpen')<CR>
+\ :<C-u>call user#win#goto_or('Git status', 'DiffviewOpen')<CR>
 nnoremap <silent> <Leader>y :<C-u>DiffviewFileHistory %<CR>
 nnoremap <silent> <Leader><C-y> :<C-u>DiffviewFileHistory<CR>
 nnoremap <silent> <Leader>b :<C-u>Git blame<CR>
-nnoremap <silent> <Leader>B :<C-u>GBrowse<CR>
-vnoremap <silent> <Leader>B :<C-u>GBrowse<CR>
-nnoremap <silent> <Leader>, :<C-u>Git commit \| startinsert<CR>
-nnoremap <silent> <Leader>. :<C-u>Dispatch! git push<CR>
+nnoremap <silent> <Leader>B :<C-u>OpenGithubFile<CR>
+vnoremap <silent> <Leader>B :OpenGithubFile<CR>
+nnoremap <silent> <Leader>, :<C-u>Gin commit<CR>
+nnoremap <silent> <Leader>. :<C-u>Gin push<CR>
 nnoremap <silent> <Leader>l :<C-u>SymbolsOutline<CR>
 
-nmap gc <nop>
-nnoremap <silent> gcc :<C-u>CamelB<CR>:call repeat#set("gcc")<CR>
-nnoremap <silent> gcC :<C-u>Camel<CR>:call repeat#set("gcC")<CR>
-nnoremap <silent> gcs :<C-u>Snek<CR>:call repeat#set("gcs")<CR>
-nnoremap <silent> gck :<C-u>Kebab<CR>:call repeat#set("gck")<CR>
-xnoremap <silent> gcc :CamelB<CR>:call repeat#set("gcc")<CR>
-xnoremap <silent> gcC :Camel<CR>:call repeat#set("gcC")<CR>
-xnoremap <silent> gcs :Snek<CR>:call repeat#set("gcs")<CR>
-xnoremap <silent> gck :Kebab<CR>:call repeat#set("gck")<CR>
+xmap s <Plug>Commentary
+nmap s <Plug>Commentary
+omap s <Plug>Commentary
+nmap S <Plug>Commentary<Plug>Commentary
+
+nmap gs <Plug>(sandwich-add)
+xmap gs <Plug>(sandwich-add)
+omap gs <Plug>(sandwich-add)
+nmap ds <Plug>(sandwich-delete)
+nmap dss <Plug>(sandwich-delete-auto)
+nmap cs <Plug>(sandwich-replace)
+nmap css <Plug>(sandwich-replace-auto)
+
+" nmap gc <nop>
+" nnoremap <silent> gcc :<C-u>CamelB<CR>:call repeat#set("gcc")<CR>
+" nnoremap <silent> gcC :<C-u>Camel<CR>:call repeat#set("gcC")<CR>
+" nnoremap <silent> gcs :<C-u>Snek<CR>:call repeat#set("gcs")<CR>
+" nnoremap <silent> gck :<C-u>Kebab<CR>:call repeat#set("gck")<CR>
+" xnoremap <silent> gcc :CamelB<CR>:call repeat#set("gcc")<CR>
+" xnoremap <silent> gcC :Camel<CR>:call repeat#set("gcC")<CR>
+" xnoremap <silent> gcs :Snek<CR>:call repeat#set("gcs")<CR>
+" xnoremap <silent> gck :Kebab<CR>:call repeat#set("gck")<CR>
 
 nnoremap mv :<C-u>CocCommand workspace.renameCurrentFile<CR>
-inoremap <silent><expr> <Tab> pumvisible() ? coc#_select_confirm() : "\<Tab>"
+" inoremap <silent><expr> <Tab> pumvisible() ? coc#_select_confirm() : "\<Tab>"
 
 noremap! <C-b> <Left>
 noremap! <C-f> <Right>
@@ -207,3 +220,32 @@ call colorscheme#set()
 lua require'plugins'
 
 hi link checkedItem Comment
+
+augroup MyGitCommit
+  autocmd!
+  " au BufFilePost .git/COMMIT_EDITMSG startinsert
+  " au BufNew .git/COMMIT_EDITMSG startinsert
+  " au BufNewFile .git/COMMIT_EDITMSG startinsert
+  " au BufReadCmd .git/COMMIT_EDITMSG startinsert
+  au BufWinEnter .git/COMMIT_EDITMSG startinsert
+augroup END
+
+" lua << EOF
+" local k = vim.keymap.set
+" local fn = vim.fn
+" local opt = { noremap = true, silent = true }
+" local function test_cr()
+"   -- vim.api.nvim_input([[<CR>]])
+"   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<CR>", true, false, true), 'n', true)
+"
+"   -- vim.cmd[[execute "normal! i\<CR>"]]
+"   local lnum = fn.line('.')
+"   local line = fn.getline(lnum)
+"   -- fn.setpos('.', {0, lnum, #fn.getline(lnum) + 1})
+"   -- vim.cmd[[execute "normal! i\<Space>"]]
+"   -- fn.setpos('.', {0, lnum, #fn.getline(lnum) + 1})
+"   print(vim.inspect({lnum, line, #line}))
+" end
+" k("i", "<CR>", test_cr, opt)
+" EOF
+

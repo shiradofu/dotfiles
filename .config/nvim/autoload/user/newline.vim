@@ -26,10 +26,8 @@ function! user#newline#o() abort
   if index(s:exclude_ft, &ft) == 0
     call feedkeys("o", 'n')
   elseif !s:is_line_comment(line('.')) || s:is_comment_closed(line('.'))
-    echo 'is not line comment or is comment closed'
     call feedkeys("o", 'n')
   elseif s:is_doc_comment(line('.')) || s:is_line_comment(line('.') + 1)
-    echo 'is doc comment or next line is line comment'
     call feedkeys("o", 'n')
   else
     call feedkeys("o\<C-u>", 'n')

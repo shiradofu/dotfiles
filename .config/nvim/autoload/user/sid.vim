@@ -23,35 +23,6 @@ function! user#sid#get_script_id(name, ...) abort
   return matches[0][0]
 endfunction
 
-function! user#sid#globalize_fugitive_functions() abort
-  if !exists('s:fugitive_id')
-    let s:fugitive_id = user#sid#get_script_id('autoload\/fugitive\.vim')
-    call execute([
-      \ 'function! FugitiveStageDiff() abort',
-      \   'exe <SNR>' . s:fugitive_id . '_StageDiff("Gvdiffsplit")',
-      \ 'endfunction',
-      \ 'function! FugitiveNextItem() abort',
-      \   'call <SNR>' . s:fugitive_id . '_NextItem(v:count1)',
-      \ 'endfunction',
-      \ 'function! FugitivePreviousItem() abort',
-      \   'call <SNR>' . s:fugitive_id . '_PreviousItem(v:count1)',
-      \ 'endfunction',
-      \ 'function! FugitiveNextSection() abort',
-      \   'exe <SNR>' . s:fugitive_id . '_NextSection(v:count1)',
-      \ 'endfunction',
-      \ 'function! FugitivePreviousSection() abort',
-      \   'exe <SNR>' . s:fugitive_id . '_PreviousSection(v:count1)',
-      \ 'endfunction',
-      \ 'function! FugitiveToggleStagedNormal() abort',
-      \   'exe <SNR>' . s:fugitive_id . '_Do("Toggle",0)',
-      \ 'endfunction',
-      \ 'function! FugitiveToggleStagedVisual() abort',
-      \   'exe <SNR>' . s:fugitive_id . '_Do("Toggle",1)',
-      \ 'endfunction',
-      \ ])
-  endif
-endfunction
-
 function! user#sid#override_fzf_fill_quickfix() abort
   if !exists('s:fzf_vim_id')
     let s:fzf_vim_id = user#sid#get_script_id('fzf\/vim\.vim')

@@ -3,29 +3,27 @@
 # hook_add = 'call plug#gitgutter#hook_add()'
 # on_event = 'SourcePre'
 
-[[plugins]]
-repo = 'tpope/vim-fugitive'
-depends = 'vim-rhubarb'
-on_cmd = ['Git', 'Gdiffsplit', 'GBrowse']
-hook_add = 'call plug#fugitive#hook_add()'
-hook_post_source = 'call plug#fugitive#hook_post_source()'
+# [[plugins]]
+# repo = 'tpope/vim-fugitive'
+# depends = 'vim-rhubarb'
+# on_cmd = ['Gdiffsplit', 'GBrowse']
 
-[[plugins]]
-repo = 'tpope/vim-rhubarb'
-on_cmd = 'GBrowse'
+# [[plugins]]
+# repo = 'tpope/vim-rhubarb'
+# on_cmd = 'GBrowse'
 
-[[plugins]] # for git push
-repo = 'tpope/vim-dispatch'
-on_cmd = 'Dispatch'
+# [[plugins]] # for git push
+# repo = 'tpope/vim-dispatch'
+# on_cmd = 'Dispatch'
 
 # [[plugins]]
 # repo = 'jesseleite/vim-agriculture'
 # on_cmd = ['RgIgnore', 'RgNoIgnore']
 # on_func = ['RgVisual', 'RgCword']
 
-[[plugins]]
-repo = 'thinca/vim-qfreplace'
-on_cmd = 'Qfreplace'
+# [[plugins]]
+# repo = 'thinca/vim-qfreplace'
+# on_cmd = 'Qfreplace'
 
 # [[plugins]]
 # repo = 'kana/vim-textobj-user'
@@ -74,10 +72,10 @@ on_cmd = 'Qfreplace'
 # repo = 'glts/vim-textobj-comment'
 # on_event = 'VimEnter'
 
-[[plugins]]
-repo = 'tpope/vim-commentary'
-on_map = '<Plug>Commentary'
-hook_add = 'call plug#commentary#hook_add()'
+# [[plugins]]
+# repo = 'tpope/vim-commentary'
+# on_map = '<Plug>Commentary'
+# hook_add = 'call plug#commentary#hook_add()'
 
 # [[plugins]]
 # repo = 'kana/vim-operator-user'
@@ -88,11 +86,11 @@ hook_add = 'call plug#commentary#hook_add()'
 # depends = 'vim-operator-user'
 # on_event = 'VimEnter'
 
-[[plugins]]
-repo = 'machakann/vim-sandwich'
-on_event = 'VimEnter'
-hook_add = 'call plug#sandwich#hook_add()'
-hook_post_source = 'call plug#sandwich#hook_post_source()'
+# [[plugins]]
+# repo = 'machakann/vim-sandwich'
+# on_event = 'VimEnter'
+# hook_add = 'call plug#sandwich#hook_add()'
+# hook_post_source = 'call plug#sandwich#hook_post_source()'
 
 [[plugins]]
 repo = 'mtth/scratch.vim'
@@ -127,15 +125,15 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 MyAutocmd FileType gitcommit let b:EditorConfig_disable = 1
 '''
 
-[[plugins]]
-repo = '907th/vim-auto-save'
-on_event = 'VimEnter'
-hook_add = 'call plug#auto_save#hook_add()'
+# [[plugins]]
+# repo = '907th/vim-auto-save'
+# on_event = 'VimEnter'
+# hook_add = 'call plug#auto_save#hook_add()'
 
-[[plugins]]
-repo = 'tpope/vim-repeat'
-on_func = 'repeat#set'
-hook_post_source = 'call plug#repeat#hook_post_source()'
+# [[plugins]]
+# repo = 'tpope/vim-repeat'
+# on_func = 'repeat#set'
+# hook_post_source = 'call plug#repeat#hook_post_source()'
 
 [[plugins]]
 repo = 'nicwest/vim-camelsnek'
@@ -183,12 +181,12 @@ repo = 'plasticboy/vim-markdown'
 on_ft = ['markdown']
 hook_source = 'call plug#markdown#hook_source()'
 
-[[plugins]]
-repo = 'tyru/open-browser.vim'
-on_cmd = ['OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch']
-on_map = '<Plug>(openbrowser-'
-# disable netrw's gx mapping
-hook_post_source = 'let g:netrw_nogx = 1'
+# [[plugins]]
+# repo = 'tyru/open-browser.vim'
+# on_cmd = ['OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch']
+# on_map = '<Plug>(openbrowser-'
+# # disable netrw's gx mapping
+# hook_post_source = 'let g:netrw_nogx = 1'
 
 [[plugins]]
 repo = 'diepm/vim-rest-console'
@@ -213,59 +211,49 @@ let g:vrc_trigger = '<Leader><CR>'
 repo = 'cocopon/iceberg.vim'
 on_if = 'g:colorscheme ==# "iceberg"'
 on_event = 'SourcePre'
-# depends = ['vim-gitgutter']
 
 [[plugins]]
 repo = 'popkirby/lightline-iceberg'
 on_if = 'g:colorscheme ==# "iceberg"'
 on_event = 'SourcePre'
-# depends = ['vim-gitgutter']
 
 [[plugins]] # has lightline theme
 repo = 'arcticicestudio/nord-vim'
 on_if = 'g:colorscheme ==# "nord"'
 on_event = 'SourcePre'
-# depends = ['vim-gitgutter']
 hook_add = 'let g:nord_uniform_status_lines = 0'
 
 [[plugins]] # has lightline theme
 repo = 'yuttie/hydrangea-vim'
 on_if = 'g:colorscheme ==# "hydrangea"'
 on_event = 'SourcePre'
-# depends = ['vim-gitgutter']
 
 [[plugins]]
 repo = 'djjcast/mirodark'
 on_if = 'g:colorscheme ==# "mirodark"'
 on_event = 'SourcePre'
-# depends = ['vim-gitgutter']
 
 [[plugins]] # has lightline theme
 repo = 'whatyouhide/vim-gotham'
 on_if = 'g:colorscheme ==# "gotham"'
 on_event = 'SourcePre'
-# depends = ['vim-gitgutter']
 
 [[plugins]] # has lightline theme
 repo = 'fcpg/vim-farout'
 on_if = 'g:colorscheme ==# "farout"'
 on_event = 'SourcePre'
-# depends = ['vim-gitgutter']
 
 [[plugins]] # has lightline theme
 repo = 'adigitoleo/vim-mellow'
 on_if = 'g:colorscheme ==# "mellow"'
 on_event = 'SourcePre'
-# depends = ['vim-gitgutter']
 
 [[plugins]]
 repo = 'Lokaltog/vim-monotone'
 on_if = 'g:colorscheme ==# "monotone"'
 on_event = 'SourcePre'
-# depends = ['vim-gitgutter']
 
 [[plugins]]
 repo = 'EdenEast/nightfox.nvim'
 on_if = 'g:colorscheme ==# "nightfox"'
 on_event = 'SourcePre'
-# depends = ['vim-gitgutter']
