@@ -2,7 +2,7 @@ local n = require "null-ls"
 local a = n.builtins.code_actions
 local f = n.builtins.formatting
 local d = n.builtins.diagnostics
-local fmt = require "plug/lsp-format"
+local fmt = require "plug.lsp-format"
 local map = require "user/lsp-keymap"
 
 map.diagnostic()
@@ -21,6 +21,22 @@ n.setup {
     a.eslint_d,
     d.eslint_d,
     f.prettierd.with {
+      filetypes = {
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact",
+        "vue",
+        "css",
+        "scss",
+        "less",
+        "html",
+        "json",
+        "jsonc",
+        "yaml",
+        "graphql",
+        "handlebars",
+      },
       condition = function(utils)
         return not utils.has_file { "deno.json", "deno.jsonc" }
       end,
@@ -33,8 +49,6 @@ n.setup {
     f.phpcsfixer.with {
       only_local = "vendor/bin",
     },
-    a.shellcheck,
-    d.shellcheck,
     d.zsh,
     d.cfn_lint,
     d.actionlint,

@@ -89,4 +89,5 @@ bash $(ghq root)/${repo}/install.sh $password
 
 unset password
 
+# delete this script
 # if [ -f "$0" ]; then rm "$0"; fi

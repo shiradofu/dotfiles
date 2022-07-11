@@ -2,26 +2,26 @@
 
 password=$1
 
-msg() { printf "\033[1;34m$1\033[0m\n"; }
-exists() { type $1 > /dev/null 2>&1; }
+msg() { printf "\033[1;34m%s\033[0m\n" "$1"; }
+exists() { type "$1" > /dev/null 2>&1; }
 is_mac() { uname | grep Darwin -q; }
 is_wsl() { uname -r | grep microsoft -q; }
-brew_i() { msg "\n🍺  installing $1:\n"; brew install $1; }
-npm_i()  { msg "\n🍔  installing $1:\n"; npm install -g $1; }
-go_i()   { msg "]n🍙  installing $1:\n"; go install $1 }
+brew_i() { msg "\n🍺  installing $1:\n"; brew install "$1"; }
+npm_i()  { msg "\n🍔  installing $1:\n"; npm install -g "$1"; }
+go_i()   { msg "]n🍙  installing $1:\n"; go install "$1"; }
 
-DOTFILES_ROOT=$(cd $(dirname $0) && pwd)
-source ${DOTFILES_ROOT}/.config/zsh/.zshenv
+DOTFILES_ROOT=$(cd "$(dirname "$0")" && pwd)
+source "${DOTFILES_ROOT}/.config/zsh/.zshenv"
 
 brew_i zsh
-if ! cat /etc/shells | grep -xq ${HOMEBREW_PREFIX}/bin/zsh; then
+if ! cat /etc/shells | grep -xq "${HOMEBREW_PREFIX}/bin/zsh"; then
   echo "$password" | sudo -S sh -c "printf '${HOMEBREW_PREFIX}/bin/zsh\n' >> /etc/shells"
 fi
 mkdir -p "$XDG_STATE_HOME/zsh" && touch "$XDG_STATE_HOME/zsh/history"
 git clone --depth 1 https://github.com/zdharma-continuum/zinit "${XDG_STATE_HOME}/zinit/zinit.git"
 
 brew_i fzf
-${HOMEBREW_PREFIX}/opt/fzf/install --completion --no-update-rc --no-key-bindings --xdg
+"${HOMEBREW_PREFIX}/opt/fzf/install" --completion --no-update-rc --no-key-bindings --xdg
 
 brew_i rg
 brew_i fd
@@ -29,6 +29,7 @@ brew_i jq
 brew_i bat
 brew_i tmux
 brew_i hexyl
+brew_i glow
 brew_i git
 brew_i git-delta
 brew_i gh
@@ -49,7 +50,7 @@ brew_i gcc
 brew_i llvm
 
 git clone https://github.com/asdf-vm/asdf.git "$ASDF_DIR"
-git -C "$ASDF_DIR" checkout -q "$(git -C $ASDF_DIR describe --abbrev=0 --tags)"
+git -C "$ASDF_DIR" checkout -q "$(git -C "$ASDF_DIR" describe --abbrev=0 --tags)"
 source "$ASDF_DIR/asdf.sh"
 
 msg "\ngolang:\n"
@@ -110,7 +111,7 @@ npm install --global neovim
 
 git clone --depth 1 \
   https://github.com/wbthomason/packer.nvim \
-  $XDG_DATA_HOME/nvim/site/pack/packer/opt/packer.nvim
+  "$XDG_DATA_HOME/nvim/site/pack/packer/opt/packer.nvim"
 nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
 
 
@@ -127,7 +128,7 @@ ln -s ${DOTFILES_ROOT}/.config
 [ -d "bin" ] && mv bin bin.${RAND}.bak
 ln -s ${DOTFILES_ROOT}/bin && hash -r
 [ -f ".gitconfig" ] && mv .gitconfig .gitconfig.${RAND}.bak
-cp ${DOTFILES_ROOT}/.config/git/config.tpl ${DOTFILES_ROOT}/.config/git/config
+cp "${DOTFILES_ROOT}/.config/git/config.tpl" "${DOTFILES_ROOT}/.config/git/config"
 
 if ! [ -f ".bashrc" ] || ! cat .bashrc | grep -xq 'source ~/.zshenv'; then
   echo 'source ~/.zshenv' >> .bashrc
@@ -160,9 +161,9 @@ if is_wsl && exists wslvar; then
   chmod +x /tmp/win32yank.exe
   mv /tmp/win32yank.exe ./bin
 
-  userprofile=$(wslpath $(wslvar USERPROFILE))
+  userprofile=$(wslpath "$(wslvar USERPROFILE)")
   wslsync .wslconfig
-  wslsync wls.conf --password $password
+  wslsync wls.conf --password "$password"
   winterm-gen --colorscheme Iceberg
   wslsync winterm
 
@@ -170,4 +171,4 @@ if is_wsl && exists wslvar; then
     "/mnt/c/Program\ Files/Git/mingw64/libexec/git-core/git-credential-manager.exe"
 fi
 
-unset $password
+unset "$password"

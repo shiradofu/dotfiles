@@ -1,7 +1,7 @@
 local installer = require "nvim-lsp-installer"
 local lspconfig = require "lspconfig"
-local config = require "plug/lspconfig"
-local cmp = require "plug/cmp-lsp"
+local config = require "plug.lspconfig"
+local cmp = require "plug.cmp-lsp"
 local t = require("user/utils").table
 
 installer.setup {

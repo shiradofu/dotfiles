@@ -49,27 +49,29 @@ augroup MyColorScheme
   \ highlight DiffText   guibg=#362d02 gui=bold
 augroup END
 
-function! colorscheme#get() abort
-  " カラースキームの変更をgit管理しないように切り出している
-  exe 'source ' . g:config_dir . '/_color.vim'
-  let g:colorscheme = get(g:, 'colorscheme', 'default')
-endfunction
+" function! colorscheme#get() abort
+"   " カラースキームの変更をgit管理しないように切り出している
+"   exe 'source ' . g:config_dir . '/_color.vim'
+"   let g:colorscheme = get(g:, 'colorscheme', 'default')
+" endfunction
 
 function! colorscheme#set() abort
-  " g:colorscheme が有効なカラースキーム名かどうか検証
-  if index(getcompletion('', 'color'), g:colorscheme) == -1
-    exe 'echoerr "invalid colorscheme name: ' . g:colorscheme . '"'
-    return v:false
+  let name = !empty($COLORSCHEME) ? $COLORSCHEME : 'default'
+
+  " l:name が有効なカラースキーム名かどうか検証
+  if index(getcompletion('', 'color'), l:name) == -1
+    exe 'echoerr "invalid colorscheme name: ' . l:name . '"'
+    l:name = 'default'
   endif
 
-  exe 'colorscheme ' . g:colorscheme
+  exe 'colorscheme ' . l:name
 
-  if g:colorscheme ==# 'nightfox'
+  if l:name ==# 'nightfox'
     let g:lightline.colorscheme = 'apprentice'
-  elseif g:colorscheme ==# 'mirodark'
+  elseif l:name ==# 'mirodark'
     let g:lightline.colorscheme = 'apprentice'
   else
-    let g:lightline.colorscheme = g:colorscheme
+    let g:lightline.colorscheme = l:name
   endif
 
   call lightline#init()

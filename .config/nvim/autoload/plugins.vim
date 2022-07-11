@@ -14,7 +14,6 @@ if s:manager_installed()
   execute 'set runtimepath^=' . s:dein_dir
 endif
 
-let s:sync = g:config_dir . '/sync.toml'
 let s:_old = g:config_dir . '/_old.toml'
 
 function! plugins#load() abort
@@ -22,7 +21,6 @@ function! plugins#load() abort
   " if dein#load_state(s:plugin_dir)
     call dein#begin(s:plugin_dir)
     call dein#add(s:dein_dir)
-    call dein#load_toml(g:config_dir . '/sync.toml')
     call dein#load_toml(g:config_dir . '/_old.toml', { 'lazy': 1 })
     call dein#end()
     " call dein#save_state()

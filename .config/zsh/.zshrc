@@ -164,10 +164,14 @@ required() {
 
 __ghq_fzf() {
   local preview_cmd
-  (( $+commands[bat] )) \
-    && preview_cmd="bat -n --color=always --line-range :80 $(ghq root)/{}/README.*" \
-    || preview_cmd="cat $(ghq root)/{}/README .* | head -n 80"
-  ghq list | fzf-tmux -p90%,70% --preview "${preview_cmd}"
+  if (( $+commands[glow] )); then
+    preview_cmd="glow --style=dark $(ghq root)/{}/README.*"
+  elif (( $+commands[bat] )); then
+    preview_cmd="bat -n --color=always --line-range :80 $(ghq root)/{}/README.*"
+  else
+    preview_cmd="cat $(ghq root)/{}/README .* | head -n 80"
+  fi
+  ghq list | fzf-tmux -p90%,70% --preview "${preview_cmd}" --no-multi
 }
 
 ghq_fzf() {
@@ -183,7 +187,7 @@ zle -N ghq_fzf
 bindkey -e '^g' ghq_fzf
 bindkey -s '^[a' '^Qtms^M'
 
-# fzf のキーバインドは CTRL-R のみほしいので取り出して使用している
+# fzf のキーバインドは CTRL-R のみ取り出して使用
 # CTRL-R - Paste the selected command from history into the command line
 fzf-history-widget() {
   local selected num

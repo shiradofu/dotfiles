@@ -1,3 +1,4 @@
+" nnoremap <silent> GG :echom screencol()<CR>
 augroup MyGroup | autocmd! | augroup END
 command! -nargs=* MyAutocmd autocmd MyGroup <args>
 
@@ -8,6 +9,8 @@ lang en_US.UTF-8
 set encoding=utf-8            " エンコーディングをUTF-8に設定
 set mouse=a                   " マウスを有効化
 set showtabline=2             " タブを常に表示
+" set laststatus=3              " window をまたいで statusline を表示
+set laststatus=0              " statusline を非表示
 set hidden                    " 保存せずにバッファを切り替え可能にする
 set splitbelow                " :splitで画面を下に開く
 set splitright                " :vsplitで画面を右に開く
@@ -36,8 +39,6 @@ set shada-='100               " 以前に編集したファイルの最大記憶
 set formatoptions+=ro         " 行コメント改行時にコメント文字を自動挿入
 set noswapfile                " スワップファイルを無効化
 
-MyAutocmd FileType markdown setlocal conceallevel=0 " markdownのconcealを無効化
-
 " 不要な機能の無効化
 " https://lambdalisue.hatenablog.com/entry/2015/12/25/000046
 let g:loaded_gzip              = 1
@@ -64,7 +65,7 @@ let g:config_dir = $XDG_CONFIG_HOME . '/nvim'
 let s:asdf_dir = $ASDF_DATA_DIR . '/installs'
 let g:node_host_prog = s:asdf_dir . '/nodejs/lts/.npm/lib/node_modules/neovim/bin/cli.js'
 
-" デバッグ用ログ関数/コマンド
+" Log function/command for debugging
 function! Log(var) abort
   exe 'redir >> ' g:config_dir . '/log' | silent echo a:var | redir END
 endfunction
@@ -81,55 +82,63 @@ command! RE
   \ call dein#recache_runtimepath() |
   \ echo "loaded"
 
+" run `ulimit -S -n 200048` if fails
+" https://github.com/wbthomason/packer.nvim/issues/202#issuecomment-796619161
 command! PS PackerSync
+command! PC PackerCompile
 
 let mapleader = "\<Space>"
 
-nnoremap <silent> <BS>  :<C-u>call user#win#quit()<CR>
-nnoremap <silent> g<BS> :<C-u>call user#win#tabclose()<CR>
-nmap     <silent> zz :<C-u>call user#zz#do(1)<CR>
+nnoremap <BS>  <Cmd>call user#win#quit()<CR>
+nnoremap <Del> <Cmd>bp<bar>sp<bar>bn<bar>bd<CR>
+nnoremap g<BS> <Cmd>call user#win#tabclose()<CR>
+
+" nmap     <silent> zz :<C-u>call user#zz#do(1)<CR>
 nnoremap <silent> ]q :<C-u>call user#zz#after('cmd', 'cnext')<CR>
 nnoremap <silent> [q :<C-u>call user#zz#after('cmd', 'cprev')<CR>
 nnoremap <silent> ]c :<C-u>call user#zz#after('map', "\<Plug>(GitGutterNextHunk)")<CR>
 nnoremap <silent> [c :<C-u>call user#zz#after('map', "\<Plug>(GitGutterPrevHunk)")<CR>
 nmap     <silent> g; :<C-u>call user#zz#after('cmd', 'normal! g;')<CR>
 nmap     <silent> g, :<C-u>call user#zz#after('cmd', 'normal! g,')<CR>
-nmap     <silent> n  :<C-u>call user#zz#after('map', "\<Plug>(is-n)")<CR>
-nmap     <silent> N  :<C-u>call user#zz#after('map', "\<Plug>(is-N)")<CR>
-map      *  <Plug>(asterisk-z*)<Plug>(is-nohl-1)
-map      g* <Plug>(asterisk-gz*)<Plug>(is-nohl-1)
-map      #  <Plug>(asterisk-z#)<Plug>(is-nohl-1)
-map      g# <Plug>(asterisk-gz#)<Plug>(is-nohl-1)
-nmap     t <Plug>(operator-replace)
-map      Y y$
-nnoremap <silent> o  :<C-u>call user#newline#o()<CR>
-nnoremap <silent> O  :<C-u>call user#newline#O()<CR>
-inoremap <expr> <CR> user#newline#cr()
 
-nnoremap <silent> <C-h> <C-w>h
-nnoremap <silent> <C-j> <C-w>j
-nnoremap <silent> <C-k> <C-w>k
-nnoremap <silent> <C-l> <C-w>l
-nnoremap <silent> <C-n> gt
-nnoremap <silent> <C-p> gT
-nnoremap <silent> Z <C-w>+
-nnoremap <silent> Q <C-w>-
-nnoremap <silent> \| 2<C-w><
-nnoremap <silent> \ 2<C-w>>
-nnoremap <silent> ¥ 2<C-w>>
-nnoremap <silent> <C-g> <C-w>_<C-w>\|
-nnoremap <silent> <C-t> <C-w>=
+nmap f <Plug>(shot-f-f)
+xmap f <Plug>(shot-f-f)
+omap f <Plug>(shot-f-f)
+nmap F <Plug>(shot-f-F)
+xmap F <Plug>(shot-f-F)
+omap F <Plug>(shot-f-F)
+" nmap n  <Cmd>call user#zz#after('mapn', "n")<CR><Cmd>lua require('hlslens').start()<CR>
+" nmap N  <Cmd>call user#zz#after('mapn', "n")<CR><Cmd>lua require('hlslens').start()<CR>
+nmap n  <Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>
+nmap N  <Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>
+
+nmap  *  <Plug>(asterisk-z*)<Cmd>lua require('hlslens').start()<CR>
+nmap  g* <Plug>(asterisk-gz*)<Cmd>lua require('hlslens').start()<CR>
+nmap  #  <Plug>(asterisk-z#)<Cmd>lua require('hlslens').start()<CR>
+nmap  g# <Plug>(asterisk-gz#)<Cmd>lua require('hlslens').start()<CR>
+xmap  *  <Plug>(asterisk-z*)<Cmd>lua require('hlslens').start()<CR>
+xmap  g* <Plug>(asterisk-gz*)<Cmd>lua require('hlslens').start()<CR>
+xmap  #  <Plug>(asterisk-z#)<Cmd>lua require('hlslens').start()<CR>
+xmap  g# <Plug>(asterisk-gz#)<Cmd>lua require('hlslens').start()<CR>
+
+nnoremap ( ^
+nnoremap ) $
+nmap     t  <Plug>(operator-replace)
+map      Y y$
+nnoremap o    o<Cmd>call user#newline#n()<CR>
+nnoremap O    O<Cmd>call user#newline#p()<CR>
+inoremap <CR> <CR><Cmd>call user#newline#n()<CR>
+
+
+nnoremap <C-g> <Cmd>TZAtaraxis<CR>
+
 nnoremap <silent> go :<C-u>call user#win#move(v:count)<CR>
-nnoremap <silent> g[ :<C-u>-tabm<CR>
-nnoremap <silent> g] :<C-u>+tabm<CR>
 nnoremap <silent> gh :<C-u>call user#win#focus_float()<CR>
 
 nnoremap <silent> gb :<C-u>edit #<CR>
 nnoremap <silent> gy :<C-u>let @+=expand('%')<CR>
 nnoremap <silent> gY :<C-u>let @+=expand('%:p')<CR>
 nnoremap <silent> gz :<C-u>Goyo 100<CR>
-nmap     <silent> gs :<C-u>Scratch<CR>
-vmap     <silent> gs <plug>(scratch-selection-reuse)
 nmap     <silent> gx <Plug>(openbrowser-smart-search)
 vmap     <silent> gx <Plug>(openbrowser-smart-search)
 
@@ -151,21 +160,28 @@ vnoremap <Leader>G :<C-u>call user#rg#visual('RgNoIgnore')<CR><CR>
 nnoremap <silent> <Leader>: :<C-u>History:<CR>
 nnoremap <silent> <Leader>q :<C-u>botright copen<CR>
 nnoremap <silent> <Leader>d :<C-u>DiffviewOpen -- %<CR>
-nnoremap <silent> <Leader>s
-\ :<C-u>call user#win#goto_or('Git status', 'DiffviewOpen')<CR>
+nnoremap <silent> <Leader>s :<C-u>call user#win#goto_or('Git status', 'DiffviewOpen')<CR>
+nnoremap <silent> <Leader>S :<C-u>DiffviewOpen main<CR>
 nnoremap <silent> <Leader>y :<C-u>DiffviewFileHistory %<CR>
-nnoremap <silent> <Leader><C-y> :<C-u>DiffviewFileHistory<CR>
+nnoremap <silent> <Leader>Y :<C-u>DiffviewFileHistory<CR>
 nnoremap <silent> <Leader>b :<C-u>Git blame<CR>
 nnoremap <silent> <Leader>B :<C-u>OpenGithubFile<CR>
 vnoremap <silent> <Leader>B :OpenGithubFile<CR>
 nnoremap <silent> <Leader>, :<C-u>Gin commit<CR>
 nnoremap <silent> <Leader>. :<C-u>Gin push<CR>
 nnoremap <silent> <Leader>l :<C-u>SymbolsOutline<CR>
+nnoremap <Leader>p <Cmd>call print_debug#print_debug()<CR>
+nnoremap <Leader>e <Cmd>Trouble<CR>
+
+nnoremap cl "_cl
+nnoremap ch "_ch
 
 xmap s <Plug>Commentary
 nmap s <Plug>Commentary
 omap s <Plug>Commentary
 nmap S <Plug>Commentary<Plug>Commentary
+" invert
+xnoremap S <Cmd>let b:S = @/<CR>:g/./Commentary<CR><Cmd>nohl<CR><Cmd>let @/ = b:S<CR>
 
 nmap gs <Plug>(sandwich-add)
 xmap gs <Plug>(sandwich-add)
@@ -175,18 +191,20 @@ nmap dss <Plug>(sandwich-delete-auto)
 nmap cs <Plug>(sandwich-replace)
 nmap css <Plug>(sandwich-replace-auto)
 
-" nmap gc <nop>
-" nnoremap <silent> gcc :<C-u>CamelB<CR>:call repeat#set("gcc")<CR>
-" nnoremap <silent> gcC :<C-u>Camel<CR>:call repeat#set("gcC")<CR>
-" nnoremap <silent> gcs :<C-u>Snek<CR>:call repeat#set("gcs")<CR>
-" nnoremap <silent> gck :<C-u>Kebab<CR>:call repeat#set("gck")<CR>
-" xnoremap <silent> gcc :CamelB<CR>:call repeat#set("gcc")<CR>
-" xnoremap <silent> gcC :Camel<CR>:call repeat#set("gcC")<CR>
-" xnoremap <silent> gcs :Snek<CR>:call repeat#set("gcs")<CR>
-" xnoremap <silent> gck :Kebab<CR>:call repeat#set("gck")<CR>
+nnoremap t  <Cmd>lua require('substitute').operator()<CR>
+nnoremap T  <Cmd>lua require('substitute').eol()<CR>
+xnoremap P  <Cmd>lua require('substitute').visual()<CR>
+nnoremap X  <Cmd>lua require('substitute.exchange').operator()<CR>
+xnoremap X  <Cmd>lua require('substitute.exchange').visual()<CR>
+nnoremap Xx <Cmd>lua require('substitute.exchange').cancel()<CR>
+
+nmap gl     <Plug>(quickhl-manual-this)
+xmap gl     <Plug>(quickhl-manual-this)
+nmap gL     <Plug>(quickhl-manual-reset)
+xmap gL     <Plug>(quickhl-manual-reset)
+nmap g<C-l> <Plug>(quickhl-cword-toggle)
 
 nnoremap mv :<C-u>CocCommand workspace.renameCurrentFile<CR>
-" inoremap <silent><expr> <Tab> pumvisible() ? coc#_select_confirm() : "\<Tab>"
 
 noremap! <C-b> <Left>
 noremap! <C-f> <Right>
@@ -197,8 +215,8 @@ noremap! <C-y> <C-r>+
 inoremap <C-p> <Up>
 inoremap <C-n> <Down>
 inoremap <C-k> <C-o>D
-cnoremap <expr> <C-p> pumvisible() ? "\<Left>" : "\<Up>"
-cnoremap <expr> <C-n> pumvisible() ? "\<Right>" : "\<Down>"
+cnoremap <C-p> <Up>
+cnoremap <C-n> <Down>
 cnoremap <C-k> <C-\>e(strpart(getcmdline(), 0, getcmdpos() - 1))<CR>
 cnoremap <C-x> <C-r>=expand('%:p')<CR>
 
@@ -208,18 +226,32 @@ MyAutocmd FileType qf
 \ | nnoremap <silent> <buffer> u  :<C-u>call user#quickfix#undo_del()<CR>
 \ | nnoremap <silent> <buffer> R  :<C-u>Qfreplace topleft split<CR>
 
-" bulletの行でTabを押すとインデントを追加
-MyAutocmd FileType markdown
-\   inoremap <expr><buffer> <Tab> getline('.') =~ '^\s*- .*' ? "\<C-t>" : "\<Tab>"
-\ | nmap <Leader><CR> <Plug>MarkdownPreviewToggle
+augroup MyMarkdown
+  autocmd!
+  " inoremap: bulletの行でTabを押すとインデントを追加
+  autocmd FileType markdown
+  \ setlocal conceallevel=0
+  \ | inoremap <expr><buffer> <Tab> getline('.') =~ '^\s*- .*' ? "\<C-t>" : "\<Tab>"
+  \ | nmap <Leader><CR> <Plug>MarkdownPreviewToggle
+  \ | nnoremap g<CR> <Cmd>call plug#checkbox#toggle()<CR>
+  \ | nnoremap <C-g><CR> <Cmd>call plug#checkbox#toggle()<CR>
+  \ | inoremap <C-g><CR> <Cmd>call plug#checkbox#toggle()<CR>
+  " autocmd Syntax markdown syntax on
+  autocmd Syntax markdown syntax match checkedItem containedin=ALL '\v\s*(-\s+)?\[x\]\s+.*'
+  autocmd Syntax markdown hi link checkedItem Comment
+augroup END
 
-call colorscheme#get()
+augroup MyRest
+  autocmd FileType http nmap <buffer> <CR> <Plug>RestNvim
+augroup END
+
+nnoremap <Leader>k <Cmd>lua require("duck").hatch()<CR>
+nnoremap <Leader>K <Cmd>lua require("duck").cook()<CR>
+
 call plugins#load()
-call colorscheme#set()
 
+lua require'user.mappings'
 lua require'plugins'
-
-hi link checkedItem Comment
 
 augroup MyGitCommit
   autocmd!
@@ -230,22 +262,6 @@ augroup MyGitCommit
   au BufWinEnter .git/COMMIT_EDITMSG startinsert
 augroup END
 
-" lua << EOF
-" local k = vim.keymap.set
-" local fn = vim.fn
-" local opt = { noremap = true, silent = true }
-" local function test_cr()
-"   -- vim.api.nvim_input([[<CR>]])
-"   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<CR>", true, false, true), 'n', true)
-"
-"   -- vim.cmd[[execute "normal! i\<CR>"]]
-"   local lnum = fn.line('.')
-"   local line = fn.getline(lnum)
-"   -- fn.setpos('.', {0, lnum, #fn.getline(lnum) + 1})
-"   -- vim.cmd[[execute "normal! i\<Space>"]]
-"   -- fn.setpos('.', {0, lnum, #fn.getline(lnum) + 1})
-"   print(vim.inspect({lnum, line, #line}))
-" end
-" k("i", "<CR>", test_cr, opt)
-" EOF
-
+" TODO: default に戻す
+let s:colorscheme = !empty($COLORSCHEME) ? $COLORSCHEME : 'nord'
+exe 'colorscheme ' . s:colorscheme

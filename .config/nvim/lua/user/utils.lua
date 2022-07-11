@@ -1,9 +1,10 @@
 local M = {
   table = {},
+  fn = {},
 }
 
---- Get table keys.
---@param t table
+---Get table keys.
+---@param t table
 M.table.getkeys = function(t)
   local r = {}
   for key, _ in pairs(t) do
@@ -35,4 +36,10 @@ M.table.copy = function(orig)
   return copy
 end
 
+function M.fn.f(modname, fn, ...)
+  local va = { ... }
+  return function()
+    require(modname)[fn](unpack(va))
+  end
+end
 return M

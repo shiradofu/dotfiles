@@ -1,4 +1,7 @@
 function! plug#textobj#setup() abort
+endfunction
+
+function! plug#textobj#config() abort
   call textobj#user#plugin('underscore', {
   \   'a': {
   \     'select': 'a_',

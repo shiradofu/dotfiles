@@ -11,7 +11,8 @@ require("diffview").setup {
           a.focus_files()
         end
       end
-      if #view.panel.path_args == 0 then
+      local p = view.panel
+      if not p.rev_pretty_name and #p.path_args == 0 then
         vim.cmd [[set filetype=gitstatus]]
         vim.cmd [[file Git status]]
       end
@@ -35,7 +36,6 @@ require("diffview").setup {
     view = {
       ["<tab>"] = a.select_next_entry,
       ["<S-tab>"] = a.select_prev_entry,
-      ["go"] = a.goto_file_tab,
       ["<C-g>"] = a.toggle_files,
       ["<C-t>"] = a.goto_file_tab,
       ["<C-o>"] = a.focus_files,
@@ -59,7 +59,6 @@ require("diffview").setup {
           vim.cmd [[wincmd p]]
         end
       end,
-      ["go"] = a.goto_file_tab,
       ["<C-t>"] = a.goto_file_tab,
       ["<C-g>"] = a.toggle_files,
       ["<BS>"] = fn["user#win#tabclose"],

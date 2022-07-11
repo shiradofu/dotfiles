@@ -1,4 +1,4 @@
-function! plug#commentary#setup() abort
+function! plug#commentary#config() abort
   augroup MyCommentary
     autocmd!
     autocmd FileType toml setlocal commentstring=#\ %s

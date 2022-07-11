@@ -4,14 +4,16 @@ require("nvim-treesitter.configs").setup {
     disable = { "markdown" },
     additional_vim_regex_highlighting = { "vim" },
   },
-  indent = { enable = false },
+  -- incremental_selection = {
+  --   enable = true,
+  --   keymaps = {
+  --     node_incremental = "v",
+  --     node_decremental = "V",
+  --   },
+  -- },
   -- yati = { enable = true },
-  incremental_selection = {
+  indent = {
     enable = true,
-    keymaps = {
-      node_incremental = "v",
-      node_decremental = "V",
-    },
   },
   textobjects = {
     select = {
@@ -35,5 +37,8 @@ require("nvim-treesitter.configs").setup {
         ["[["] = "@class.outer",
       },
     },
+  },
+  endwise = {
+    enable = true,
   },
 }

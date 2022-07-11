@@ -30,8 +30,10 @@ function! user#zz#after(type, payload) abort
   elseif a:type ==# 'cmd'
     exe a:payload
   elseif a:type ==# 'map'
-  echo a:type . ' ' . a:payload
+    " echo a:type . ' ' . a:payload
     call feedkeys(a:payload, 'm')
+  elseif a:type ==# 'mapn'
+    call feedkeys(a:payload, 'n')
   endif
   call feedkeys("\<Plug>(zz-should)", 'm')
   call feedkeys("\<Plug>(zz-do)", 'm')

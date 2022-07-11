@@ -48,7 +48,8 @@ end
 M._ = basic
 
 M.lua = null_only
-
+M.c = basic
+M.cpp = basic
 M.go = function(_, bufnr)
   local function fn()
     -- goimports on save

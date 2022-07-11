@@ -6,7 +6,7 @@ __chcs_winterm() {
   [ -f /proc/sys/fs/binfmt_misc/WSLInterop ] || return # if not in wsl, do nothing
   local dir; dir="$XDG_CONFIG_HOME/winterm"
   if ! [ -f "$dir/settings.tpl.json" ]; then return; fi
-  winterm-gen $1
+  winterm-gen "$1"
   wslsync winterm --no-backup
 }
 
@@ -31,16 +31,16 @@ __chcs_tmux() {
     echo An error occurred in chcs tmux.
     return 1
   fi
-  command cp -f $file $dir/_style.conf
-  if [ -n "$TMUX" ]; then tmux source $dir/tmux.conf; fi
+  command cp -f "$file" "$dir/_style.conf"
+  if [ -n "$TMUX" ]; then tmux source "$dir/tmux.conf"; fi
 }
 
 __chcs_bat() {
   if ! type bat > /dev/null 2>&1; then return; fi
   if ! [ -d "$(bat --config-dir)" ]; then
-    mkdir -p $(bat --config-dir)
+    mkdir -p "$(bat --config-dir)"
   fi
-  printf -- "--theme=$1\n" >| "$(bat --config-file)"
+  printf -- "--theme=%s\n" "$1" >| "$(bat --config-file)"
 }
 
 __chcs_nvim() {

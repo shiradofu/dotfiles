@@ -3,49 +3,29 @@
 
 let s:exclude_ft = ['markdown', 'gitignore']
 
-" インサートモードでの<CR>の挙動を調整
-" 現在行がDocCommentのとき、または現在行と次行が行コメントのときは
-" 新しい行の頭にコメント文字を挿入
-" inoremap <expr> <CR> user#newline#cr()
-function! user#newline#cr() abort
-  if index(s:exclude_ft, &ft) == 0
-    return "\<CR>"
-  elseif !s:is_line_comment(line('.')) || s:is_comment_closed(line('.'))
-    return "\<CR>"
-  elseif s:is_doc_comment(line('.')) || s:is_line_comment(line('.') + 1)
-    return "\<CR>"
-  else
-    return "\<CR>\<C-u>"
+" o または <CR> での改行後に実行
+" 前行がDocCommentのとき、または次行も行コメントのとき以外は
+" 改行後に挿入されるコメント文字を削除
+function! user#newline#n() abort
+  if getline(line('.')) =~# '^\s*$' | return | endif
+  if index(s:exclude_ft, &ft) == -1
+    \ && s:is_line_comment(line('.'))
+    \ && !s:is_line_comment(line('.') + 1)
+    \ && !s:is_doc_comment(line('.') - 1)
+    call feedkeys("\<C-u>", 'in')
   endif
 endfunction
 
-" ノーマルモードでのoの挙動を調整
-" 現在行がDocCommentのとき、または現在行と次行が行コメントのときは
-" 新しい行の頭にコメント文字を挿入
-function! user#newline#o() abort
-  if index(s:exclude_ft, &ft) == 0
-    call feedkeys("o", 'n')
-  elseif !s:is_line_comment(line('.')) || s:is_comment_closed(line('.'))
-    call feedkeys("o", 'n')
-  elseif s:is_doc_comment(line('.')) || s:is_line_comment(line('.') + 1)
-    call feedkeys("o", 'n')
-  else
-    call feedkeys("o\<C-u>", 'n')
-  endif
-endfunction
-
-" ノーマルモードでのOの挙動を調整
-" 現在行がDocCommentのとき、または現在行と前行が行コメントのときは
-" 新しい行の頭にコメント文字を挿入
-function! user#newline#O() abort
-  if index(s:exclude_ft, &ft) == 0
-    call feedkeys("O", 'n')
-  elseif !s:is_line_comment(line('.')) || s:is_comment_closed(line('.'))
-    call feedkeys("O", 'n')
-  elseif s:is_doc_comment(line('.')) || s:is_line_comment(line('.') - 1)
-    call feedkeys("O", 'n')
-  else
-    call feedkeys("O\<C-u>", 'n')
+" O での改行後に実行
+" 次行がDocCommentのとき、または前行も行コメントのとき以外は
+" 改行後に挿入されるコメント文字を削除
+function! user#newline#p() abort
+  if getline(line('.')) =~# '^\s*$' | return | endif
+  if index(s:exclude_ft, &ft) == -1
+    \ && s:is_line_comment(line('.'))
+    \ && !s:is_line_comment(line('.') - 1)
+    \ && !s:is_doc_comment(line('.') + 1)
+    call feedkeys("\<C-u>", 'in')
   endif
 endfunction
 
@@ -79,23 +59,5 @@ function! s:is_doc_comment(lnum)
   \ || ft ==# 'java'
     return s:is_line_comment(a:lnum) &&
     \ line =~ '^\s*/\*\*\?\s*' || line =~ '^\s*\*\s*'
-  endif
-endfunction
-
-" 複数行記入可能なスタイルのコメントが1行で終わっているときを識別
-" この場合はコメント行からの改行であるにも関わらず vim によりコメント
-" 文字列が挿入されないので <C-u> を発動しないようにする
-function! s:is_comment_closed(lnum)
-  let ft = &ft
-  if ft ==# 'c'
-  \ || ft ==# 'cpp'
-  \ || ft ==# 'php'
-  \ || ft ==# 'javascript'
-  \ || ft ==# 'typescript'
-  \ || ft ==# 'javascriptreact'
-  \ || ft ==# 'typescriptreact'
-  \ || ft ==# 'java'
-    let line = getline(a:lnum)
-    return s:is_line_comment(a:lnum) && line =~ '\*/'
   endif
 endfunction

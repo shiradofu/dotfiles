@@ -1,4 +1,4 @@
-function! plug#markdown#hook_source() abort
+function! plug#markdown#setup() abort
   let g:vim_markdown_folding_disabled = 1
   let g:vim_markdown_conceal_code_blocks = 1
   let g:vim_markdown_new_list_item_indent = 0
@@ -14,11 +14,4 @@ function! plug#markdown#hook_source() abort
   \ 'php=php',
   \ 'go=go',
   \ ]
-
-  augroup MyMarkdown
-    autocmd!
-    autocmd Syntax markdown syntax on |
-      \ syntax match checkedItem containedin=ALL
-      \ '\v\s*(-\s+)?\[x\]\s+.*'
-  augroup END
 endfunction
