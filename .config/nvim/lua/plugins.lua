@@ -1,3 +1,13 @@
+function Log(x)
+  print(vim.inspect(x))
+end
+local function r(modname, fn)
+  return 'require("' .. modname .. '")' .. (fn and '.' .. fn .. '()' or '')
+end
+local function v(fn)
+  return 'vim.fn["' .. fn .. '"]()'
+end
+
 local install_path = vim.fn.stdpath 'data'
   .. '/site/pack/packer/opt/packer.nvim'
 if vim.fn.empty(vim.fn.glob(install_path)) == 1 then
@@ -55,9 +65,7 @@ return require('packer').startup(function(use)
   use {
     'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate',
-    config = function()
-      require 'plug.treesitter'
-    end,
+    config = r 'plug.treesitter',
   }
   use {
     'yioneko/nvim-yati', -- improve indentation
@@ -79,9 +87,7 @@ return require('packer').startup(function(use)
   -- Text Objects and Operators
   use {
     'kana/vim-textobj-user',
-    config = function()
-      -- vim.fn["plug#textobj#config"]()
-    end,
+    config = v 'plug#textobj#config',
   }
   use {
     'sgur/vim-textobj-parameter',
@@ -105,9 +111,6 @@ return require('packer').startup(function(use)
   }
   use {
     'tpope/vim-commentary',
-    config = function()
-      vim.fn['plug#commentary#config']()
-    end,
     keys = '<Plug>Commentary',
   }
   use {
@@ -119,11 +122,10 @@ return require('packer').startup(function(use)
   }
   use {
     'gbprod/substitute.nvim',
-    config = function()
-      require('substitute').setup {}
-    end,
+    config = r('substitute', 'setup'),
     module = 'substitute',
   }
+
   --------------------------------------------------------------
   -- Language & Completion
 
@@ -133,12 +135,6 @@ return require('packer').startup(function(use)
     'neovim/nvim-lspconfig',
     config = function()
       require 'plug.lspconfig'
-    end,
-  }
-  use {
-    'ray-x/lsp_signature.nvim',
-    config = function()
-      require 'plug.lsp-signature'
     end,
   }
   use {
@@ -159,6 +155,12 @@ return require('packer').startup(function(use)
       require 'plug.lsp-installer'
     end,
   }
+  -- use {
+  --   'ray-x/lsp_signature.nvim',
+  --   config = function()
+  --     require 'plug.lsp-signature'
+  --   end,
+  -- }
 
   --------------------------------
   -- Filetype
@@ -225,6 +227,7 @@ return require('packer').startup(function(use)
   use 'hrsh7th/cmp-buffer'
   use 'hrsh7th/cmp-path'
   use 'hrsh7th/cmp-cmdline'
+  use 'hrsh7th/cmp-nvim-lsp-signature-help'
   use 'saadparwaiz1/cmp_luasnip'
 
   --------------------------------
@@ -256,6 +259,7 @@ return require('packer').startup(function(use)
     'simrat39/symbols-outline.nvim',
     cmd = 'SymbolsOutline',
   }
+  use 'gpanders/editorconfig.nvim'
 
   --------------------------------------------------------------
   -- Fuzzy Finder
@@ -265,6 +269,11 @@ return require('packer').startup(function(use)
     run = function()
       vim.fn['fzf#install']()
     end,
+  }
+  use {
+    'ibhagwan/fzf-lua',
+    requires = { 'kyazdani42/nvim-web-devicons' },
+    config = r 'plug.fzf',
   }
   use {
     'junegunn/fzf.vim',
@@ -349,15 +358,31 @@ return require('packer').startup(function(use)
     end,
   }
   -- TODO: 必要性検証
+  -- use {
+  --   'deris/vim-shot-f',
+  --   setup = function()
+  --     vim.g.shot_f_no_default_key_mappings = true
+  --   end,
+  --   keys = { '<Plug>(shot-f-' },
+  -- }
+  -- TODO: 必要性検証
   use {
-    'deris/vim-shot-f',
-    setup = function()
-      vim.g.shot_f_no_default_key_mappings = true
-    end,
-    keys = { '<Plug>(shot-f-' },
+    'rhysd/clever-f.vim',
+    setup = v 'plug#clever_f#setup',
+    keys = { '<Plug>(clever-f-' },
   }
   -- TODO: 必要性検証
-  use 'yuki-yano/fuzzy-motion.vim'
+  use {
+    'yuki-yano/fuzzy-motion.vim',
+    config = function()
+      -- stylua: ignore
+      vim.g.fuzzy_motion_labels = {
+        'I', 'H', 'J', 'K', 'L', 'U', 'O', 'N', 'M',
+        'P', 'Y', 'F', 'G', 'E', 'A', 'V', 'C', 'B',
+        'W', 'D', 'R', 'S', 'Z', 'X', 'T', 'Q',
+      }
+    end,
+  }
   use {
     'norcalli/nvim-colorizer.lua',
     config = function()

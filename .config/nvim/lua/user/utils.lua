@@ -36,10 +36,10 @@ M.table.copy = function(orig)
   return copy
 end
 
-function M.fn.f(modname, fn, ...)
+function M.fn.req(modname, fn, ...)
   local va = { ... }
   return function()
-    require(modname)[fn](unpack(va))
+    return require(modname)[fn](unpack(va))
   end
 end
 return M

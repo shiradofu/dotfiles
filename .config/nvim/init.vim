@@ -1,4 +1,3 @@
-" nnoremap <silent> GG :echom screencol()<CR>
 augroup MyGroup | autocmd! | augroup END
 command! -nargs=* MyAutocmd autocmd MyGroup <args>
 
@@ -9,22 +8,18 @@ lang en_US.UTF-8
 set encoding=utf-8            " エンコーディングをUTF-8に設定
 set mouse=a                   " マウスを有効化
 set showtabline=2             " タブを常に表示
-" set laststatus=3              " window をまたいで statusline を表示
 set laststatus=0              " statusline を非表示
 set hidden                    " 保存せずにバッファを切り替え可能にする
 set splitbelow                " :splitで画面を下に開く
 set splitright                " :vsplitで画面を右に開く
 set number                    " 左端に行数を表示
 set signcolumn=number         " Gitの変更やLSPの警告を行数を上書きして表示
-" set colorcolumn=80,100      " 80列・100列をハイライト
 set cursorline                " カーソル行をハイライト
 set ignorecase                " 検索時に大文字小文字の差を無視
 set smartcase                 " 検索時に大文字が含まれていれば大文字小文字を区別
 set inccommand=nosplit        " インクリメンタルサーチの結果をバッファ内でハイライト
 set clipboard+=unnamedplus    " システムのクリップボードを使用
-set expandtab                 " タブをスペースに展開
 set tabstop=2                 " タブをスペース2つ相当として扱う
-set shiftwidth=2              " デフォルトのインデントをスペース2つに設定
 set smartindent               " C言語風のプログラミング言語向けの自動インデント
 set shiftround                " インデントをshiftwidthの整数倍に揃える
 set ttimeoutlen=5             " キーの確定待ちまでの時間
@@ -100,26 +95,30 @@ nnoremap <silent> ]c :<C-u>call user#zz#after('map', "\<Plug>(GitGutterNextHunk)
 nnoremap <silent> [c :<C-u>call user#zz#after('map', "\<Plug>(GitGutterPrevHunk)")<CR>
 nmap     <silent> g; :<C-u>call user#zz#after('cmd', 'normal! g;')<CR>
 nmap     <silent> g, :<C-u>call user#zz#after('cmd', 'normal! g,')<CR>
-
-nmap f <Plug>(shot-f-f)
-xmap f <Plug>(shot-f-f)
-omap f <Plug>(shot-f-f)
-nmap F <Plug>(shot-f-F)
-xmap F <Plug>(shot-f-F)
-omap F <Plug>(shot-f-F)
+nmap f <Plug>(clever-f-f)
+xmap f <Plug>(clever-f-f)
+omap f <Plug>(clever-f-f)
+nmap F <Plug>(clever-f-F)
+xmap F <Plug>(clever-f-F)
+omap F <Plug>(clever-f-F)
+xmap t <Plug>(clever-f-t)
+omap t <Plug>(clever-f-t)
+xmap T <Plug>(clever-f-T)
+omap T <Plug>(clever-f-T)
+nnoremap ; <Cmd>FuzzyMotion<CR>
 " nmap n  <Cmd>call user#zz#after('mapn', "n")<CR><Cmd>lua require('hlslens').start()<CR>
 " nmap N  <Cmd>call user#zz#after('mapn', "n")<CR><Cmd>lua require('hlslens').start()<CR>
 nmap n  <Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>
 nmap N  <Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>
 
-nmap  *  <Plug>(asterisk-z*)<Cmd>lua require('hlslens').start()<CR>
-nmap  g* <Plug>(asterisk-gz*)<Cmd>lua require('hlslens').start()<CR>
-nmap  #  <Plug>(asterisk-z#)<Cmd>lua require('hlslens').start()<CR>
-nmap  g# <Plug>(asterisk-gz#)<Cmd>lua require('hlslens').start()<CR>
-xmap  *  <Plug>(asterisk-z*)<Cmd>lua require('hlslens').start()<CR>
-xmap  g* <Plug>(asterisk-gz*)<Cmd>lua require('hlslens').start()<CR>
-xmap  #  <Plug>(asterisk-z#)<Cmd>lua require('hlslens').start()<CR>
-xmap  g# <Plug>(asterisk-gz#)<Cmd>lua require('hlslens').start()<CR>
+nmap <silent> *  <Plug>(asterisk-z*):<C-u>lua require('hlslens').start()<CR>
+nmap <silent> g* <Plug>(asterisk-gz*):<C-u>lua require('hlslens').start()<CR>
+nmap <silent> #  <Plug>(asterisk-z#):<C-u>lua require('hlslens').start()<CR>
+nmap <silent> g# <Plug>(asterisk-gz#):<C-u>lua require('hlslens').start()<CR>
+xmap <silent> *  <Plug>(asterisk-z*):<C-u>lua require('hlslens').start()<CR>
+xmap <silent> g* <Plug>(asterisk-gz*):<C-u>lua require('hlslens').start()<CR>
+xmap <silent> #  <Plug>(asterisk-z#):<C-u>lua require('hlslens').start()<CR>
+xmap <silent> g# <Plug>(asterisk-gz#):<C-u>lua require('hlslens').start()<CR>
 
 nnoremap ( ^
 nnoremap ) $
@@ -129,6 +128,8 @@ nnoremap o    o<Cmd>call user#newline#n()<CR>
 nnoremap O    O<Cmd>call user#newline#p()<CR>
 inoremap <CR> <CR><Cmd>call user#newline#n()<CR>
 
+inoremap , <Cmd>call plug#autopairs#comma()<CR>
+inoremap ; <Cmd>call plug#autopairs#semi()<CR>
 
 nnoremap <C-g> <Cmd>TZAtaraxis<CR>
 
@@ -149,13 +150,17 @@ nnoremap <silent> <Leader>t :<C-u>call fzf#sonictemplate#run()<CR>
 nnoremap <silent> <Leader>o :<C-u>ProjectMru<CR>
 nnoremap <silent> <Leader>i :<C-u>Files<CR>
 nnoremap <silent> <Leader>u :<C-u>GFiles?<CR>
-nnoremap <Leader>f :<C-u>RgIgnore<Space>
+" nnoremap <Leader>f :<C-u>RgIgnore<Space>
+" vnoremap <Leader>f :<C-u>call user#rg#visual('RgIgnore')<CR>
+" nnoremap <expr> <Leader>g ':<C-u>RgIgnore ' . user#rg#cword() . '<CR>'
+" vnoremap <Leader>g :<C-u>call user#rg#visual('RgIgnore')<CR><CR>
+nnoremap <Leader>f :<C-u>FzfLua live_grep_glob<CR>
 nnoremap <Leader>F :<C-u>RgNoIgnore<Space>
-vnoremap <Leader>f :<C-u>call user#rg#visual('RgIgnore')<CR>
+vnoremap <Leader>f <Cmd>FzfLua grep_visual<CR>
 vnoremap <Leader>F :<C-u>call user#rg#visual('RgNoIgnore')<CR>
-nnoremap <expr> <Leader>g ':<C-u>RgIgnore ' . user#rg#cword() . '<CR>'
+nnoremap <Leader>g <Cmd>FzfLua grep_cword<CR>
 nnoremap <expr> <Leader>G ':<C-u>RgNoIgnore ' . user#rg#cword() . '<CR>'
-vnoremap <Leader>g :<C-u>call user#rg#visual('RgIgnore')<CR><CR>
+vnoremap <Leader>g <Cmd>FzfLua grep_visual<CR>
 vnoremap <Leader>G :<C-u>call user#rg#visual('RgNoIgnore')<CR><CR>
 nnoremap <silent> <Leader>: :<C-u>History:<CR>
 nnoremap <silent> <Leader>q :<C-u>botright copen<CR>
@@ -215,10 +220,13 @@ noremap! <C-y> <C-r>+
 inoremap <C-p> <Up>
 inoremap <C-n> <Down>
 inoremap <C-k> <C-o>D
-cnoremap <C-p> <Up>
-cnoremap <C-n> <Down>
+cnoremap <C-o> <Up>
+cnoremap <C-i> <Down>
+cnoremap <Tab> <Down>
 cnoremap <C-k> <C-\>e(strpart(getcmdline(), 0, getcmdpos() - 1))<CR>
 cnoremap <C-x> <C-r>=expand('%:p')<CR>
+snoremap <BS> <BS>i
+snoremap <C-h> <C-h>i
 
 MyAutocmd FileType qf
 \   nnoremap <buffer> ; <CR>zz<C-w>p
@@ -233,9 +241,8 @@ augroup MyMarkdown
   \ setlocal conceallevel=0
   \ | inoremap <expr><buffer> <Tab> getline('.') =~ '^\s*- .*' ? "\<C-t>" : "\<Tab>"
   \ | nmap <Leader><CR> <Plug>MarkdownPreviewToggle
-  \ | nnoremap g<CR> <Cmd>call plug#checkbox#toggle()<CR>
-  \ | nnoremap <C-g><CR> <Cmd>call plug#checkbox#toggle()<CR>
-  \ | inoremap <C-g><CR> <Cmd>call plug#checkbox#toggle()<CR>
+  \ | nnoremap <C-x> <Cmd>call plug#checkbox#toggle()<CR>
+  \ | inoremap <C-x> <Cmd>call plug#checkbox#toggle()<CR>
   " autocmd Syntax markdown syntax on
   autocmd Syntax markdown syntax match checkedItem containedin=ALL '\v\s*(-\s+)?\[x\]\s+.*'
   autocmd Syntax markdown hi link checkedItem Comment
@@ -245,7 +252,7 @@ augroup MyRest
   autocmd FileType http nmap <buffer> <CR> <Plug>RestNvim
 augroup END
 
-nnoremap <Leader>k <Cmd>lua require("duck").hatch()<CR>
+nnoremap <Leader>k <Cmd>lua require("duck").hatch('🫀')<CR>
 nnoremap <Leader>K <Cmd>lua require("duck").cook()<CR>
 
 call plugins#load()
@@ -255,13 +262,17 @@ lua require'plugins'
 
 augroup MyGitCommit
   autocmd!
-  " au BufFilePost .git/COMMIT_EDITMSG startinsert
-  " au BufNew .git/COMMIT_EDITMSG startinsert
-  " au BufNewFile .git/COMMIT_EDITMSG startinsert
-  " au BufReadCmd .git/COMMIT_EDITMSG startinsert
   au BufWinEnter .git/COMMIT_EDITMSG startinsert
 augroup END
 
+augroup MyCommentString
+  autocmd!
+  autocmd FileType toml setlocal commentstring=#\ %s
+  autocmd FileType php  setlocal commentstring=//\ %s
+  autocmd FileType cpp  setlocal commentstring=//\ %s
+augroup END
+
 " TODO: default に戻す
+se bg=dark
 let s:colorscheme = !empty($COLORSCHEME) ? $COLORSCHEME : 'nord'
 exe 'colorscheme ' . s:colorscheme

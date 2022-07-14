@@ -1,47 +1,81 @@
-local cmp = require "cmp"
+local cmp = require 'cmp'
+local luasnip = require 'luasnip'
+local maps = require('user.mappings').cmp_selection(cmp)
+
+local view = {
+  entries = {
+    name = 'custom',
+    selection_order = 'near_cursor',
+  },
+}
 
 cmp.setup {
   snippet = {
     -- REQUIRED - you must specify a snippet engine
     expand = function(args)
-      require("luasnip").lsp_expand(args.body)
+      luasnip.lsp_expand(args.body)
     end,
   },
   window = {
-    completion = cmp.config.window.bordered(),
-    documentation = cmp.config.window.bordered(),
+    completion = cmp.config.window.bordered { border = 'single' },
+    documentation = cmp.config.window.bordered { border = 'single' },
   },
-  mapping = cmp.mapping.preset.insert {
-    ["<C-j>"] = cmp.mapping.scroll_docs(-4),
-    ["<C-k>"] = cmp.mapping.scroll_docs(4),
-    ["<C-Space>"] = cmp.mapping.complete(),
-    ["<C-c>"] = cmp.mapping.abort(),
-    -- Accept currently selected item. Set `select` to `false`
-    -- to only confirm explicitly selected items.
-    ["<Tab>"] = cmp.mapping.confirm { select = true },
-    ["<CR>"] = cmp.mapping.confirm { select = false },
+  mapping = {
+    ['<Tab>'] = { i = maps['<Tab>'] },
+    ['<C-n>'] = { i = maps['<C-n>'] },
+    ['<C-p>'] = { i = maps['<C-p>'] },
+    ['<C-l>'] = { i = maps['<C-l>'] },
   },
-  -- nvim_lsp と luasnip の候補があるうちは buffer の候補は表示しない
-  sources = cmp.config.sources({
-    { name = "nvim_lsp" },
-    { name = "luasnip" },
-    { name = "path" },
-  }, {
-    { name = "buffer" },
-  }),
+  view = view,
+  sources = cmp.config.sources {
+    { name = 'luasnip' },
+    { name = 'nvim_lsp' },
+    { name = 'nvim_lsp_signature_help' },
+    { name = 'path' },
+    {
+      name = 'buffer',
+      option = {
+        -- https://github.com/hrsh7th/cmp-buffer#performance-on-large-text-files
+        get_bufnrs = function()
+          local bufs = {}
+          local all = vim.api.nvim_list_bufs()
+          for _, buf in ipairs(all) do
+            local byte_size = vim.api.nvim_buf_get_offset(
+              buf,
+              vim.api.nvim_buf_line_count(buf)
+            )
+            if byte_size <= 1024 * 1024 then -- 1 Megabyte max
+              bufs[#bufs + 1] = buf
+            end
+          end
+          return bufs
+        end,
+      },
+    },
+  },
 }
 
-cmp.setup.cmdline("/", {
-  mapping = cmp.mapping.preset.cmdline(),
-  sources = {
-    { name = "buffer" },
+cmp.setup.cmdline('/', {
+  mapping = {
+    ['<Tab>'] = { c = maps['<Tab>'] },
+    ['<C-n>'] = { c = maps['<C-n>'] },
+    ['<C-p>'] = { c = maps['<C-p>'] },
+    ['<C-l>'] = { c = maps['<C-l>'] },
+  },
+  sources = cmp.config.sources {
+    { name = 'buffer' },
   },
 })
 
-cmp.setup.cmdline(":", {
-  mapping = cmp.mapping.preset.cmdline(),
+cmp.setup.cmdline(':', {
+  mapping = {
+    ['<Tab>'] = { c = maps['<Tab>'] },
+    ['<C-n>'] = { c = maps['<C-n>'] },
+    ['<C-p>'] = { c = maps['<C-p>'] },
+    ['<C-l>'] = { c = maps['<C-l>'] },
+  },
   sources = cmp.config.sources {
-    { name = "cmdline" },
-    { name = "path" },
+    { name = 'cmdline' },
+    { name = 'path' },
   },
 })

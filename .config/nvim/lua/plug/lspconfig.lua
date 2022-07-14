@@ -81,7 +81,11 @@ M.denols = t.merge(base_config, {
 M.html = t.copy(base_config)
 M.cssls = t.copy(base_config)
 M.cssmodules_ls = t.copy(base_config)
-M.intelephense = t.copy(base_config)
+M.intelephense = t.merge(base_config, {
+  handlers = {
+    ['textDocument/publishDiagnostics'] = function(...) end,
+  },
+})
 M.bashls = t.copy(base_config)
 M.sqls = t.copy(base_config)
 M.dockerls = t.copy(base_config)

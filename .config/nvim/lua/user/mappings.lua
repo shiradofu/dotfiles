@@ -1,10 +1,11 @@
-local f = require('user.utils').fn.f
+local req = require('user.utils').fn.req
 local function k(mode, lhs, rhs, opts)
   opts = vim.tbl_extend('force', { silent = true }, opts or {})
   vim.keymap.set(mode, lhs, rhs, opts)
 end
 local r = { remap = true }
 local b = { buffer = true }
+local e = { expr = true }
 
 local M = {}
 
@@ -57,18 +58,53 @@ function M.lsp_format(fn)
   k('n', '=', fn, b)
 end
 
+function M.luasnip()
+  local mod = 'luasnip'
+  k({ 'i', 's' }, '<C-j>', req(mod, 'jump', 1))
+  k({ 'i', 's' }, '<C-k>', req(mod, 'jump', -1))
+end
+
+function M.cmp_selection(cmp)
+  return {
+    ['<Tab>'] = cmp.mapping.confirm { select = true },
+    ['<C-n>'] = function(fallback)
+      if cmp.visible() then
+        if cmp.core.view.custom_entries_view:is_direction_top_down() then
+          cmp.select_next_item()
+        else
+          cmp.select_prev_item()
+        end
+      else
+        fallback()
+      end
+    end,
+    ['<C-p>'] = function(fallback)
+      if cmp.visible() then
+        if cmp.core.view.custom_entries_view:is_direction_top_down() then
+          cmp.select_prev_item()
+        else
+          cmp.select_next_item()
+        end
+      else
+        fallback()
+      end
+    end,
+    ['<C-l>'] = cmp.mapping.abort(),
+  }
+end
+
 function M.textcase()
-  local m = 'textcase'
+  local mod = 'textcase'
   k('n', 'gc', '<Nop>')
   for mode, fn in pairs { n = 'operator', x = 'visual' } do
-    k(mode, 'gcu', f(m, fn, 'to_upper_case'))
-    k(mode, 'gcl', f(m, fn, 'to_lower_case'))
-    k(mode, 'gcc', f(m, fn, 'to_camel_case'))
-    k(mode, 'gcs', f(m, fn, 'to_snake_case'))
-    k(mode, 'gck', f(m, fn, 'to_dash_case'))
-    k(mode, 'gcn', f(m, fn, 'to_constant_case'))
-    k(mode, 'gcd', f(m, fn, 'to_dot_case'))
-    k(mode, 'gcp', f(m, fn, 'to_pascal_case'))
+    k(mode, 'gcu', req(mod, fn, 'to_upper_case'))
+    k(mode, 'gcl', req(mod, fn, 'to_lower_case'))
+    k(mode, 'gcc', req(mod, fn, 'to_camel_case'))
+    k(mode, 'gcs', req(mod, fn, 'to_snake_case'))
+    k(mode, 'gck', req(mod, fn, 'to_dash_case'))
+    k(mode, 'gcn', req(mod, fn, 'to_constant_case'))
+    k(mode, 'gcd', req(mod, fn, 'to_dot_case'))
+    k(mode, 'gcp', req(mod, fn, 'to_pascal_case'))
   end
 end
 M.textcase()

@@ -1,34 +1,34 @@
-require("gitsigns").setup {
+require('gitsigns').setup {
   signs = {
     add = {
-      hl = "GitSignsAdd",
-      text = "‖",
-      numhl = "GitSignsAddNr",
-      linehl = "GitSignsAddLn",
+      hl = 'GitSignsAdd',
+      text = '‖',
+      numhl = 'GitSignsAddNr',
+      linehl = 'GitSignsAddLn',
     },
     change = {
-      hl = "GitSignsChange",
-      text = "‖",
-      numhl = "GitSignsChangeNr",
-      linehl = "GitSignsChangeLn",
+      hl = 'GitSignsChange',
+      text = '‖',
+      numhl = 'GitSignsChangeNr',
+      linehl = 'GitSignsChangeLn',
     },
     delete = {
-      hl = "GitSignsDelete",
-      text = "‖",
-      numhl = "GitSignsDeleteNr",
-      linehl = "GitSignsDeleteLn",
+      hl = 'GitSignsDelete',
+      text = '‖',
+      numhl = 'GitSignsDeleteNr',
+      linehl = 'GitSignsDeleteLn',
     },
     topdelete = {
-      hl = "GitSignsDelete",
-      text = "‾",
-      numhl = "GitSignsDeleteNr",
-      linehl = "GitSignsDeleteLn",
+      hl = 'GitSignsDelete',
+      text = '‾',
+      numhl = 'GitSignsDeleteNr',
+      linehl = 'GitSignsDeleteLn',
     },
     changedelete = {
-      hl = "GitSignsChange",
-      text = "‖",
-      numhl = "GitSignsChangeNr",
-      linehl = "GitSignsChangeLn",
+      hl = 'GitSignsChange',
+      text = '‖',
+      numhl = 'GitSignsChangeNr',
+      linehl = 'GitSignsChangeLn',
     },
   },
   on_attach = function(bufnr)
@@ -41,28 +41,28 @@ require("gitsigns").setup {
     end
 
     -- Navigation
-    map("n", "]c", function()
+    map('n', ']g', function()
       if vim.wo.diff then
-        return "]c"
+        return ']g'
       end
       vim.schedule(function()
         gs.next_hunk()
       end)
-      return "<Ignore>"
+      return '<Ignore>'
     end, { expr = true })
 
-    map("n", "[c", function()
+    map('n', '[g', function()
       if vim.wo.diff then
-        return "[c"
+        return '[g'
       end
       vim.schedule(function()
         gs.prev_hunk()
       end)
-      return "<Ignore>"
+      return '<Ignore>'
     end, { expr = true })
 
     -- Actions
-    map({ "o", "x" }, "ih", ":<C-u>Gitsigns select_hunk<CR>")
-    map({ "o", "x" }, "ah", ":<C-u>Gitsigns select_hunk<CR>")
+    map({ 'o', 'x' }, 'ig', ':<C-u>Gitsigns select_hunk<CR>')
+    map({ 'o', 'x' }, 'ag', ':<C-u>Gitsigns select_hunk<CR>')
   end,
 }

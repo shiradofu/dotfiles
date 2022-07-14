@@ -7,11 +7,12 @@ function! plug#whitespace#setup() abort
 
   augroup MyBetterWhitespace
     autocmd!
-    autocmd ColorScheme * call plug#whitespace#hl()
+    autocmd BufEnter * call plug#whitespace#hl()
   augroup END
   call plug#whitespace#hl()
 endfunction
 
 function plug#whitespace#hl() abort
-  highlight link ExtraWhitespace Search
+  let hl = synIDattr(hlID('Error'),'fg')
+  exe 'hi ExtraWhitespace guibg='.hl.' guifg='.hl
 endfunction
