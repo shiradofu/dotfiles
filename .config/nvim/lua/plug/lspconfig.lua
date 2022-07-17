@@ -2,6 +2,7 @@ local M = {}
 local root_pattern = require('lspconfig').util.root_pattern
 local map = require 'user/lsp-keymap'
 local fmt = require 'plug.lsp-format'
+local diagnostics = require 'plug.lsp-diagnostics'
 local t = require('user/utils').table
 
 local border = {
@@ -30,6 +31,7 @@ local function on_attach(client, bufnr)
   map.action()
   local ft = vim.api.nvim_buf_get_option(bufnr, 'filetype')
   fmt[fmt[ft] and ft or '_'](client, bufnr)
+  diagnostics[diagnostics[ft] and ft or '_'](client, bufnr)
 end
 
 local base_config = {
@@ -60,11 +62,12 @@ M.gopls = t.copy(base_config)
 M.golangci_lint_ls = t.copy(base_config)
 
 M.tsserver = t.merge(base_config, {
-  root_pattern('package.json', 'tsconfig.json', 'jsconfig.json'),
+  root_dir = root_pattern('package.json', 'tsconfig.json', 'jsconfig.json'),
 })
 
 M.denols = t.merge(base_config, {
   root_dir = root_pattern('deno.json', 'deno.jsonc'),
+  single_file_support = false,
   init_options = {
     lint = true,
     unstable = false,

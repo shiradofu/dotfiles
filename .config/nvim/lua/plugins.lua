@@ -51,6 +51,7 @@ return require('packer').startup(function(use)
   }
   use {
     'lambdalisue/fern.vim',
+    requires = 'antoinemadec/FixCursorHold.nvim',
     setup = function()
       vim.fn['plug#fern#setup']()
     end,
@@ -262,6 +263,26 @@ return require('packer').startup(function(use)
   use 'gpanders/editorconfig.nvim'
 
   --------------------------------------------------------------
+  -- Testing and Debugging
+
+  use {
+    'nvim-neotest/neotest',
+    requires = {
+      'nvim-lua/plenary.nvim',
+      'nvim-treesitter/nvim-treesitter',
+      'antoinemadec/FixCursorHold.nvim',
+      'haydenmeade/neotest-jest',
+      'shiradofu/neotest-vitest',
+      'olimorris/neotest-phpunit',
+    },
+    config = r 'plug.neotest',
+  }
+  use {
+    'shiradofu/neotest-vitest',
+    branch = 'follow-neotest-jest-12138a1',
+  }
+
+  --------------------------------------------------------------
   -- Fuzzy Finder
 
   use {
@@ -321,9 +342,15 @@ return require('packer').startup(function(use)
   use {
     'akinsho/git-conflict.nvim',
     config = function()
-      -- require("git-conflict").setup()
+      require('git-conflict').setup()
     end,
-    opt = true,
+  }
+  use {
+    'samoshkin/vim-mergetool',
+    setup = function()
+      vim.g.mergetool_layout = 'LmR'
+      vim.g.mergetool_prefer_revision = 'base'
+    end,
   }
   use {
     'tyru/open-browser-github.vim',
@@ -450,12 +477,18 @@ return require('packer').startup(function(use)
   --------------------------------------------------------------
   -- Appearance
 
+  -- use {
+  --   'Pocco81/TrueZen.nvim',
+  --   config = function()
+  --     require 'plug.truezen'
+  --   end,
+  --   cmd = { 'TZAtaraxis', 'TZMinimalist', 'TZFocus' },
+  -- }
   use {
-    'Pocco81/TrueZen.nvim',
+    'folke/zen-mode.nvim',
     config = function()
-      require 'plug.truezen'
+      require('zen-mode').setup {}
     end,
-    cmd = { 'TZAtaraxis', 'TZMinimalist', 'TZFocus' },
   }
   use {
     'kwkarlwang/bufresize.nvim',

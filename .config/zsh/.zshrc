@@ -55,6 +55,7 @@ setopt hist_reduce_blanks   # 余分なスペースを削除してヒストリ�
 alias ls='ls --color'
 alias ll='ls -lahF'
 alias tmux='direnv exec / tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf'
+alias d='direnv edit .'
 # https://apple.stackexchange.com/questions/31872/how-do-i-reset-the-scrollback-in-the-terminal-via-a-shell-command
 alias clear="clear && printf '\e[3J'"
 alias bios="sudo systemctl reboot --firmware-setup"

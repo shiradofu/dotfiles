@@ -19,7 +19,6 @@ set ignorecase                " 検索時に大文字小文字の差を無視
 set smartcase                 " 検索時に大文字が含まれていれば大文字小文字を区別
 set inccommand=nosplit        " インクリメンタルサーチの結果をバッファ内でハイライト
 set clipboard+=unnamedplus    " システムのクリップボードを使用
-set tabstop=2                 " タブをスペース2つ相当として扱う
 set smartindent               " C言語風のプログラミング言語向けの自動インデント
 set shiftround                " インデントをshiftwidthの整数倍に揃える
 set ttimeoutlen=5             " キーの確定待ちまでの時間
@@ -131,7 +130,7 @@ inoremap <CR> <CR><Cmd>call user#newline#n()<CR>
 inoremap , <Cmd>call plug#autopairs#comma()<CR>
 inoremap ; <Cmd>call plug#autopairs#semi()<CR>
 
-nnoremap <C-g> <Cmd>TZAtaraxis<CR>
+nnoremap <C-g> <Cmd>ZenMode<CR>
 
 nnoremap <silent> go :<C-u>call user#win#move(v:count)<CR>
 nnoremap <silent> gh :<C-u>call user#win#focus_float()<CR>
@@ -258,6 +257,7 @@ nnoremap <Leader>K <Cmd>lua require("duck").cook()<CR>
 call plugins#load()
 
 lua require'user.mappings'
+lua require'user.options'
 lua require'plugins'
 
 augroup MyGitCommit
@@ -270,6 +270,11 @@ augroup MyCommentString
   autocmd FileType toml setlocal commentstring=#\ %s
   autocmd FileType php  setlocal commentstring=//\ %s
   autocmd FileType cpp  setlocal commentstring=//\ %s
+augroup END
+
+augroup MyDotenv
+  autocmd!
+  autocmd BufEnter .env.* setlocal ft=sh
 augroup END
 
 " TODO: default に戻す

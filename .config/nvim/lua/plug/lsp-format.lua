@@ -3,6 +3,11 @@ local map = require('user/lsp-keymap').format
 local t = require('user/utils').table
 local WAIT_MS = 1000
 
+vim.g.enable_auto_format = true
+vim.api.nvim_create_user_command('AutoFormatToggle', function()
+  vim.g.enable_auto_format = not vim.g.enable_auto_format
+end, { nargs = 0 })
+
 local fmt_group = vim.api.nvim_create_augroup('LspFormatting', {})
 
 local function create_fn(bufnr, servers)
@@ -23,7 +28,9 @@ local function create_au(bufnr, fn, config)
       group = fmt_group,
       buffer = bufnr,
       callback = function()
-        fn { bufnr = bufnr }
+        if vim.g.enable_auto_format then
+          fn { bufnr = bufnr }
+        end
       end,
     }, config)
   )

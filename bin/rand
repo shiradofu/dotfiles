@@ -1,0 +1,36 @@
+#!/bin/bash
+
+copy=""
+if type "pbcopy" > /dev/null 2>&1; then
+  copy="pbcopy"
+elif type "clip.exe" > /dev/null 2>&1; then
+  copy="clip.exe"
+elif type "xsel" > /dev/null 2>&1; then
+  copy="xsel -ib"
+fi
+
+function __rand() {
+  case $1 in
+    port )
+      echo "$(( ((RANDOM<<15)|RANDOM) % 49152 + 10000 ))"
+      ;;
+    sha1 )
+      date "+%s" | sha1sum | awk '{print $1}'
+      ;;
+    sha256 )
+      date "+%s" | sha256sum | awk '{print $1}'
+      ;;
+    sha512 )
+      date "+%s" | sha512sum | awk '{print $1}'
+      ;;
+    * )
+      printf "invalid arg: %s\n" "$1"
+      ;;
+  esac
+}
+
+n=$(__rand "$1")
+if [ -n "$copy" ]; then
+  echo -n "$n" | $copy
+fi
+echo "$n"

@@ -87,6 +87,11 @@ asdf plugin add direnv     &&
 asdf install direnv latest &&
 asdf global direnv latest
 
+msg "\nmysql:\n"
+asdf plugin-add mysql     &&
+asdf install mysql 5.7.38 &&
+asdf global mysql
+
 mgs "\nlinters/formatters:\n"
 brew_i stylua
 brew_i shellcheck

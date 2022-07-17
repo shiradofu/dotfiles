@@ -7,12 +7,13 @@
 !/.config/bat/themes/*.tmTheme
 !/.config/direnv/direnvrc
 !/.config/gh/config.yml
-!/.config/git/config.tpl
+!/.config/git/template
 !/.config/git/ignore
 !/.config/gitui/key_config.ron
 !/.config/gitui/theme.ron
 /.config/iterm2/*
 !/.config/iterm2/com.googlecode.iterm2.plist
+!/.config/karabiner/karabiner.json
 !/.config/nvim/autoload/*.vim
 !/.config/nvim/autoload/plug/*.vim
 !/.config/nvim/autoload/user/*.vim
@@ -21,8 +22,6 @@
 !/.config/nvim/lua/user/*.lua
 !/.config/nvim/templates/**/*
 !/.config/nvim/init.vim
-!/.config/nvim/*.toml
-!/.config/nvim/coc-settings.json
 !/.config/starship/starship.toml
 !/.config/stylua/stylua.toml
 !/.config/tmux/tmux.conf
@@ -31,8 +30,8 @@
 !/.config/wsl/.wslconfig
 !/.config/wsl/wsl.conf
 /.config/zsh/*
-!/.config/zsh/.zshrc
 !/.config/zsh/.zshenv
+!/.config/zsh/.zshrc
 !/.config/zsh/lazy.zsh
 !/.config/zsh/completions
 !/.config/zsh/completions/_*
@@ -41,16 +40,16 @@
 !/bin/chcs
 !/bin/git-wt
 !/bin/mk
+!/bin/rand
 !/bin/tms
-!/bin/vim-tabline-git-diff
 !/bin/winterm-gen
 !/bin/wslsync
 
 !/.editorconfig
 !/.gitignore
-!/.stylua.toml
 !/Dockerfile
 !/init.sh
 !/install.sh
 !/Makefile
 !/README.md
+!/stylua.toml

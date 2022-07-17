@@ -1,0 +1,11 @@
+#compdef chcs
+
+_chcs() {
+  _values \
+    'port' \
+    'sha1' \
+    'sha256' \
+    'sha512'
+}
+
+_chcs "$@"
