@@ -19,7 +19,19 @@ n.setup {
     a.gitsigns,
     f.stylua,
     a.eslint_d,
-    d.eslint_d,
+    d.eslint_d.with {
+      filter = function(diagnostic)
+        if
+          vim.startswith(
+            diagnostic.message,
+            'Error: No ESLint configuration found in '
+          )
+        then
+          return false
+        end
+        return true
+      end,
+    },
     f.prettierd.with {
       filetypes = {
         'javascript',

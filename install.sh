@@ -153,6 +153,7 @@ if is_mac; then
   brew_i gzip
   brew_i wget
   brew_i gpg
+  brew_i koekeishiya/formulae/skhd
 
   git config --global credential.helper osxkeychain
   defaults write NSGlobalDomain AppleKeyboardUIMode -int 3

@@ -4,3 +4,5 @@ require('luasnip').config.setup {
 }
 
 require('user.mappings').luasnip()
+
+require 'plug.luasnip.json'

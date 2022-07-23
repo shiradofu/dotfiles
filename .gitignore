@@ -18,9 +18,7 @@
 !/.config/nvim/autoload/plug/*.vim
 !/.config/nvim/autoload/user/*.vim
 !/.config/nvim/lua/*.lua
-!/.config/nvim/lua/plug/*.lua
-!/.config/nvim/lua/user/*.lua
-!/.config/nvim/templates/**/*
+!/.config/nvim/lua/**/*.lua
 !/.config/nvim/init.vim
 !/.config/starship/starship.toml
 !/.config/stylua/stylua.toml
@@ -36,6 +34,7 @@
 !/.config/zsh/completions
 !/.config/zsh/completions/_*
 !/.config/zsh/completions/git-completion.bash
+!/data/templates/**/*
 
 !/bin/chcs
 !/bin/git-wt

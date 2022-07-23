@@ -9,6 +9,20 @@ local e = { expr = true }
 
 local M = {}
 
+function M.neotest()
+  local mod = 'neotest'
+  k('n', '<Leader>j', function()
+    require(mod).run.run()
+  end)
+  k('n', '<Leader>J', function()
+    require(mod).run.run(vim.fn.expand '%')
+  end)
+  k('n', '<Leader><C-j>', function()
+    require(mod).summary.toggle()
+  end)
+end
+M.neotest()
+
 function M.tab_move()
   k('n', '<C-n>', 'gt')
   k('n', '<C-p>', 'gT')
@@ -42,7 +56,7 @@ function M.lsp_diagnostic()
 end
 function M.lsp_jump()
   k('n', 'gd', vim.lsp.buf.definition, b)
-  k('n', 'gD', '<cmd>vs|lua vim.lsp.buf.definition()<CR>', b)
+  k('n', 'gD', '<Cmd>vs|lua vim.lsp.buf.definition()<CR>', b)
   k('n', '<leader>n', vim.lsp.buf.references, b)
 end
 function M.lsp_hover()
@@ -108,5 +122,15 @@ function M.textcase()
   end
 end
 M.textcase()
+
+function M.newline()
+  k('n', 'o', "o<Cmd>lua require('user.newline').next()<CR>")
+  k('n', 'O', "O<Cmd>lua require('user.newline').prev()<CR>")
+  k('i', '<CR>', function()
+    local p = require('nvim-autopairs').autopairs_cr()
+    return p .. "<Cmd>lua require('user.newline').next()<CR>"
+  end, e)
+end
+M.newline()
 
 return M

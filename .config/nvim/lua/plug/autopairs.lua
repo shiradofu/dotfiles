@@ -2,6 +2,7 @@ local npairs = require 'nvim-autopairs'
 local Rule = require 'nvim-autopairs.rule'
 
 npairs.setup {
+  map_cr = false,
   map_c_h = true,
   map_c_w = true,
   enable_bracket_in_quote = false,

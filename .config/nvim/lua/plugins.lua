@@ -18,7 +18,7 @@ end
 vim.cmd [[packadd packer.nvim]]
 require 'plug.packer'
 
--- -@diagnostic disable-next-line: different-requires
+---@diagnostic disable-next-line: different-requires
 return require('packer').startup(function(use)
   use { 'wbthomason/packer.nvim', opt = true }
 
@@ -52,6 +52,7 @@ return require('packer').startup(function(use)
   use {
     'lambdalisue/fern.vim',
     requires = 'antoinemadec/FixCursorHold.nvim',
+    branch = 'main',
     setup = function()
       vim.fn['plug#fern#setup']()
     end,
@@ -81,7 +82,11 @@ return require('packer').startup(function(use)
   use {
     'nvim-treesitter/playground',
     requires = 'nvim-treesitter/nvim-treesitter',
-    cmd = 'TSPlaygroundToggle',
+    cmd = {
+      'TSPlaygroundToggle',
+      'TSHighlightCapturesUnderCursor',
+    },
+    module = 'user.newline',
   }
 
   --------------------------------
@@ -518,9 +523,4 @@ return require('packer').startup(function(use)
   use 'sainnhe/everforest'
   use 'yuttie/hydrangea-vim'
   use 'xiyaowong/nvim-transparent'
-
-  use {
-    'tamton-aquib/duck.nvim',
-    module = 'duck',
-  }
 end)

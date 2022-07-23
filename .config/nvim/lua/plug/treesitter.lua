@@ -1,18 +1,15 @@
 require('nvim-treesitter.configs').setup {
   ensure_installed = 'all',
   highlight = {
+    enable = true,
     disable = { 'markdown' },
-    additional_vim_regex_highlighting = { 'vim' },
+    additional_vim_regex_highlighting = false,
   },
-  -- incremental_selection = {
-  --   enable = true,
-  --   keymaps = {
-  --     node_incremental = "v",
-  --     node_decremental = "V",
-  --   },
-  -- },
   indent = { enable = false },
-  yati = { enable = true, disable = { 'markdown', 'php' } },
+  yati = {
+    enable = false,
+    -- disable = { 'markdown', 'php' },
+  },
   textobjects = {
     select = {
       enable = true,
@@ -36,6 +33,13 @@ require('nvim-treesitter.configs').setup {
       },
     },
   },
+  -- incremental_selection = {
+  --   enable = true,
+  --   keymaps = {
+  --     node_incremental = "v",
+  --     node_decremental = "V",
+  --   },
+  -- },
   endwise = {
     enable = true,
   },

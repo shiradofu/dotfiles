@@ -17,3 +17,7 @@ truncation_length = 1000
 
 [git_status]
 deleted = "✗"
+
+[character]
+success_symbol = "[>>](bold green)"
+error_symbol = "[>>](bold red)"

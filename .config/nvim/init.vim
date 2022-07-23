@@ -7,7 +7,7 @@ lang en_US.UTF-8
 
 set encoding=utf-8            " エンコーディングをUTF-8に設定
 set mouse=a                   " マウスを有効化
-set showtabline=2             " タブを常に表示
+set showtabline=1             " タブを常に表示
 set laststatus=0              " statusline を非表示
 set hidden                    " 保存せずにバッファを切り替え可能にする
 set splitbelow                " :splitで画面を下に開く
@@ -73,7 +73,6 @@ command! -bang -nargs=+ -complete=dir RgNoIgnore
 
 command! RE
   \ execute 'source ' . $MYVIMRC |
-  \ call dein#recache_runtimepath() |
   \ echo "loaded"
 
 " run `ulimit -S -n 200048` if fails
@@ -123,9 +122,6 @@ nnoremap ( ^
 nnoremap ) $
 nmap     t  <Plug>(operator-replace)
 map      Y y$
-nnoremap o    o<Cmd>call user#newline#n()<CR>
-nnoremap O    O<Cmd>call user#newline#p()<CR>
-inoremap <CR> <CR><Cmd>call user#newline#n()<CR>
 
 inoremap , <Cmd>call plug#autopairs#comma()<CR>
 inoremap ; <Cmd>call plug#autopairs#semi()<CR>
@@ -142,10 +138,10 @@ nnoremap <silent> gz :<C-u>Goyo 100<CR>
 nmap     <silent> gx <Plug>(openbrowser-smart-search)
 vmap     <silent> gx <Plug>(openbrowser-smart-search)
 
-nnoremap <silent> <Leader>w :<C-u>w<CR>
+nnoremap <Leader>w <Cmd>w<CR>
 nnoremap <silent> <Leader>r :<C-u>Fern . -reveal=%<CR>
 nnoremap <silent> <Leader><C-r> :<C-u>vs<CR>:<C-u>Fern . -reveal=%<CR>
-nnoremap <silent> <Leader>t :<C-u>call fzf#sonictemplate#run()<CR>
+" nnoremap <silent> <Leader>t :<C-u>call fzf#sonictemplate#run()<CR>
 nnoremap <silent> <Leader>o :<C-u>ProjectMru<CR>
 nnoremap <silent> <Leader>i :<C-u>Files<CR>
 nnoremap <silent> <Leader>u :<C-u>GFiles?<CR>
@@ -202,7 +198,7 @@ nnoremap X  <Cmd>lua require('substitute.exchange').operator()<CR>
 xnoremap X  <Cmd>lua require('substitute.exchange').visual()<CR>
 nnoremap Xx <Cmd>lua require('substitute.exchange').cancel()<CR>
 
-nmap gl     <Plug>(quickhl-manual-this)
+nmap gl     <Plug>(quickhl-manual-this-whole-word)
 xmap gl     <Plug>(quickhl-manual-this)
 nmap gL     <Plug>(quickhl-manual-reset)
 xmap gL     <Plug>(quickhl-manual-reset)
@@ -251,11 +247,6 @@ augroup MyRest
   autocmd FileType http nmap <buffer> <CR> <Plug>RestNvim
 augroup END
 
-nnoremap <Leader>k <Cmd>lua require("duck").hatch('🫀')<CR>
-nnoremap <Leader>K <Cmd>lua require("duck").cook()<CR>
-
-call plugins#load()
-
 lua require'user.mappings'
 lua require'user.options'
 lua require'plugins'
@@ -279,5 +270,5 @@ augroup END
 
 " TODO: default に戻す
 se bg=dark
-let s:colorscheme = !empty($COLORSCHEME) ? $COLORSCHEME : 'nord'
+let s:colorscheme = !empty($COLORSCHEME) ? $COLORSCHEME : 'hydrangea'
 exe 'colorscheme ' . s:colorscheme

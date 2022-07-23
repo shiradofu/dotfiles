@@ -11,9 +11,11 @@ trim_trailing_whitespace = true
 [*.md]
 trim_trailing_whitespace = false
 
-[*.ron]
-indent_style = space
+[karabiner.json]
 indent_size = 4
 
-[Makefile]
+[*.ron]
+indent_size = 4
+
+[Makefile,*.mak]
 indent_style = tab
