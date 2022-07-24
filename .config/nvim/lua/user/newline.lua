@@ -25,7 +25,8 @@ local function get_line(row)
   if not row then
     return ''
   end
-  return vim.api.nvim_buf_get_lines(0, row, row + 1, false)[1]
+  local line = vim.api.nvim_buf_get_lines(0, row, row + 1, false)[1]
+  return line or ''
 end
 
 ---@param row number | nil

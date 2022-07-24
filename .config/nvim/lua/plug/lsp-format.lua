@@ -6,6 +6,8 @@ local WAIT_MS = 1000
 vim.g.enable_auto_format = true
 vim.api.nvim_create_user_command('AutoFormatToggle', function()
   vim.g.enable_auto_format = not vim.g.enable_auto_format
+  local state = vim.g.enable_auto_format and 'enabled' or 'disabled'
+  print('Auto formatting ' .. state)
 end, { nargs = 0 })
 
 local fmt_group = vim.api.nvim_create_augroup('LspFormatting', {})
@@ -63,12 +65,8 @@ M.go = function(_, bufnr)
     -- https://github.com/golang/tools/blob/master/gopls/doc/vim.md#neovim-imports
     local params = vim.lsp.util.make_range_params()
     params.context = { only = { 'source.organizeImports' } }
-    local result = vim.lsp.buf_request_sync(
-      0,
-      'textDocument/codeAction',
-      params,
-      WAIT_MS
-    )
+    local result =
+      vim.lsp.buf_request_sync(0, 'textDocument/codeAction', params, WAIT_MS)
     for _, res in pairs(result or {}) do
       for _, r in pairs(res.result or {}) do
         if r.edit then

@@ -13,5 +13,6 @@ export ZINIT_HOME="$XDG_STATE_HOME/zinit/zinit.git"
 export ASDF_DIR="$XDG_STATE_HOME/asdf/repo"
 export ASDF_DATA_DIR="$XDG_STATE_HOME/asdf/data"
 export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
+export PRETTIERD_DEFAULT_CONFIG="$XDG_CONFIG_HOME/prettier/.prettierrc.yml"
 
 skip_global_compinit=1

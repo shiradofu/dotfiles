@@ -16,7 +16,6 @@ unsetopt prompt_sp           # 改行で終わらない出力を保護しない(
 # setopt sh_word_split         # 変数を含むコマンド実行時にスペースで分割する
 
 setopt auto_cd      # パスのみでcd
-cdpath=(~ $(ghq root)/github.com)
 
 # 単語の一部として扱う文字のセットから/=;を除外: Ctrl-w(単語削除)が止まる
 WORDCHARS='*?_-.[]~&!#$%^(){}<>'
@@ -189,7 +188,7 @@ bindkey -e '^g' ghq_fzf
 bindkey -s '^[a' '^Qtms^M'
 
 # fzf のキーバインドは CTRL-R のみ取り出して使用
-# CTRL-R - Paste the selected command from history into the command line
+# Paste the selected command from history into the command line
 fzf-history-widget() {
   local selected num
   setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null

@@ -70,6 +70,7 @@ function M.lsp_action()
 end
 function M.lsp_format(fn)
   k('n', '=', fn, b)
+  k('n', '<Leader>=', '<Cmd>AutoFormatToggle<CR>')
 end
 
 function M.luasnip()

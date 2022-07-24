@@ -16,6 +16,12 @@ require('diffview').setup {
         vim.cmd [[set filetype=gitstatus]]
         vim.cmd [[file Git status]]
       end
+      if
+        #p.path_args == 1
+        and vim.fn.filereadable(vim.fn.fnamemodify(p.path_args[1], ':p')) == 1
+      then
+        vim.t.diffview_single_file = true
+      end
     end,
   },
   file_panel = {
@@ -71,20 +77,37 @@ require('diffview').setup {
       ['dd'] = a.restore_entry,
     },
     file_history_panel = {
+      ['j'] = function()
+        vim.cmd [[normal! j]]
+        if vim.t.diffview_single_file then
+          pcall(a.select_entry)
+        end
+      end,
+      ['k'] = function()
+        vim.cmd [[normal! k]]
+        if vim.t.diffview_single_file then
+          pcall(a.select_entry)
+        end
+      end,
       ['l'] = function()
-        a.select_entry()
+        if not pcall(a.select_entry) then
+          return
+        end
         local view = lib.get_current_view()
         if view.panel.single_file then
           return
         end
         local entry = view.panel:get_item_at_cursor()
-        if entry:instanceof(LogEntry) then
+        if entry and entry:instanceof(LogEntry) then
           a.next_entry()
         end
       end,
       ['h'] = function()
         local view = lib.get_current_view()
         local entry = view.panel:get_item_at_cursor()
+        if not entry then
+          return
+        end
         while not entry:instanceof(LogEntry) and fn.line '.' ~= 5 do
           a.prev_entry()
           entry = view.panel:get_item_at_cursor()

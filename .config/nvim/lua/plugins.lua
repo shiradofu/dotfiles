@@ -307,21 +307,6 @@ return require('packer').startup(function(use)
     requires = { 'fzf' },
   }
 
-  -- use {
-  --   "nvim-telescope/telescope.nvim",
-  --   requires = { "nvim-lua/plenary.nvim" },
-  -- }
-  -- use{
-  -- 'nvim-telescope/telescope-fzf-native.nvim',
-  -- run = 'make',
-  -- config = function()require('telescope').load_extension('fzf')end,
-  -- }
-  -- use{
-  --  'nvim-telescope/telescope-frecency.nvim',
-  --  after = { 'telescope.nvim' },
-  --  config = function()require'telescope'.load_extension'frecency'end,
-  -- }
-
   --------------------------------------------------------------
   -- Git
 
@@ -335,7 +320,6 @@ return require('packer').startup(function(use)
   }
   use {
     'lewis6991/gitsigns.nvim',
-    tag = 'release',
     config = function()
       require 'plug.gitsigns'
     end,
@@ -482,18 +466,12 @@ return require('packer').startup(function(use)
   --------------------------------------------------------------
   -- Appearance
 
-  -- use {
-  --   'Pocco81/TrueZen.nvim',
-  --   config = function()
-  --     require 'plug.truezen'
-  --   end,
-  --   cmd = { 'TZAtaraxis', 'TZMinimalist', 'TZFocus' },
-  -- }
   use {
     'folke/zen-mode.nvim',
     config = function()
-      require('zen-mode').setup {}
+      require 'plug.zen-mode'
     end,
+    cmd = 'ZenMode',
   }
   use {
     'kwkarlwang/bufresize.nvim',
@@ -518,6 +496,8 @@ return require('packer').startup(function(use)
     end,
     event = 'WinNew',
   }
+
+  use 'marko-cerovac/material.nvim'
   use 'EdenEast/nightfox.nvim'
   use 'shaunsingh/nord.nvim'
   use 'sainnhe/everforest'

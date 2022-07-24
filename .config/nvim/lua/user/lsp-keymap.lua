@@ -31,6 +31,7 @@ end
 
 M.format = function(fn)
   k('n', '=', fn, bo)
+  k('n', '<Leader>=', '<Cmd>AutoFormatToggle<CR>')
 end
 
 return M

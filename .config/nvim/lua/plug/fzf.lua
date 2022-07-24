@@ -25,19 +25,10 @@ fzf.setup {
     },
   },
   actions = {
-    -- These override the default tables completely
-    -- no need to set to `false` to disable an action
-    -- delete or modify is sufficient
     files = {
       -- providers that inherit these actions:
-      --   files, git_files, git_status, grep, lsp
-      --   oldfiles, quickfix, loclist, tags, btags
-      --   args
-      -- default action opens a single selection
-      -- or sends multiple selection to quickfix
-      -- replace the default action with the below
-      -- to open all files whether single or multiple
-      -- ["default"]     = actions.file_edit,
+      --   files, git_files, git_status, grep, lsp, oldfiles,
+      --   quickfix, loclist, tags, btags, args
       ['default'] = actions.file_edit_or_qf,
       ['ctrl-x'] = actions.file_split,
       ['ctrl-v'] = actions.file_vsplit,
@@ -45,8 +36,21 @@ fzf.setup {
       ['ctrl-q'] = actions.file_sel_to_qf,
     },
   },
+  previewers = {
+    bat = {
+      theme = 'Coldark-Dark', -- TODO: read from env
+    },
+    git_diff = {
+      pager = 'delta --width=$FZF_PREVIEW_COLUMNS',
+    },
+  },
+  file_icon_padding = ' ',
 }
 
 vim.lsp.handlers['textDocument/definition'] = function()
   fzf.lsp_definitions { jump_to_single_result = true }
+end
+
+vim.lsp.handlers['textDocument/references'] = function()
+  fzf.lsp_references()
 end

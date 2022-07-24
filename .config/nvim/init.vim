@@ -28,7 +28,7 @@ set fileencodings=utf-8,cp932,euc-jp,iso-20220-jp,default,latin  " ファイル�
 set helplang=ja,en            " ヘルプページの言語
 set termguicolors             " TUIで24bitカラーを有効にする
 set fillchars=vert:\ ,eob:\ , " ステータスライン・バッファの終わりを埋める文字を空白化
-set shada+='10000             " 以前に編集したファイルを最大で1000件記憶
+set shada+='10000             " 以前に編集したファイルを最大で10000件記憶
 set shada-='100               " 以前に編集したファイルの最大記憶数のデフォルト(100件)を除去
 set formatoptions+=ro         " 行コメント改行時にコメント文字を自動挿入
 set noswapfile                " スワップファイルを無効化
@@ -75,9 +75,8 @@ command! RE
   \ execute 'source ' . $MYVIMRC |
   \ echo "loaded"
 
-" run `ulimit -S -n 200048` if fails
 " https://github.com/wbthomason/packer.nvim/issues/202#issuecomment-796619161
-command! PS PackerSync
+command! PS exe 'silent !ulimit -S -n 200048' | PackerSync
 command! PC PackerCompile
 
 let mapleader = "\<Space>"
@@ -89,8 +88,6 @@ nnoremap g<BS> <Cmd>call user#win#tabclose()<CR>
 " nmap     <silent> zz :<C-u>call user#zz#do(1)<CR>
 nnoremap <silent> ]q :<C-u>call user#zz#after('cmd', 'cnext')<CR>
 nnoremap <silent> [q :<C-u>call user#zz#after('cmd', 'cprev')<CR>
-nnoremap <silent> ]c :<C-u>call user#zz#after('map', "\<Plug>(GitGutterNextHunk)")<CR>
-nnoremap <silent> [c :<C-u>call user#zz#after('map', "\<Plug>(GitGutterPrevHunk)")<CR>
 nmap     <silent> g; :<C-u>call user#zz#after('cmd', 'normal! g;')<CR>
 nmap     <silent> g, :<C-u>call user#zz#after('cmd', 'normal! g,')<CR>
 nmap f <Plug>(clever-f-f)
@@ -139,16 +136,13 @@ nmap     <silent> gx <Plug>(openbrowser-smart-search)
 vmap     <silent> gx <Plug>(openbrowser-smart-search)
 
 nnoremap <Leader>w <Cmd>w<CR>
-nnoremap <silent> <Leader>r :<C-u>Fern . -reveal=%<CR>
-nnoremap <silent> <Leader><C-r> :<C-u>vs<CR>:<C-u>Fern . -reveal=%<CR>
-" nnoremap <silent> <Leader>t :<C-u>call fzf#sonictemplate#run()<CR>
-nnoremap <silent> <Leader>o :<C-u>ProjectMru<CR>
-nnoremap <silent> <Leader>i :<C-u>Files<CR>
-nnoremap <silent> <Leader>u :<C-u>GFiles?<CR>
-" nnoremap <Leader>f :<C-u>RgIgnore<Space>
-" vnoremap <Leader>f :<C-u>call user#rg#visual('RgIgnore')<CR>
-" nnoremap <expr> <Leader>g ':<C-u>RgIgnore ' . user#rg#cword() . '<CR>'
-" vnoremap <Leader>g :<C-u>call user#rg#visual('RgIgnore')<CR><CR>
+nnoremap <leader>t <Cmd>lua require('plug.fzf-templates')()<CR>
+nnoremap <Leader>r <Cmd>Fern . -reveal=%<CR>
+nnoremap <Leader><C-r> <Cmd>vs<CR><Cmd>Fern . -reveal=%<CR>
+nnoremap <Leader>o <Cmd>ProjectMru<CR>
+nnoremap <Leader>i <Cmd>Files<CR>
+nnoremap <Leader>u <Cmd>FzfLua git_status<CR>
+
 nnoremap <Leader>f :<C-u>FzfLua live_grep_glob<CR>
 nnoremap <Leader>F :<C-u>RgNoIgnore<Space>
 vnoremap <Leader>f <Cmd>FzfLua grep_visual<CR>
@@ -157,19 +151,20 @@ nnoremap <Leader>g <Cmd>FzfLua grep_cword<CR>
 nnoremap <expr> <Leader>G ':<C-u>RgNoIgnore ' . user#rg#cword() . '<CR>'
 vnoremap <Leader>g <Cmd>FzfLua grep_visual<CR>
 vnoremap <Leader>G :<C-u>call user#rg#visual('RgNoIgnore')<CR><CR>
-nnoremap <silent> <Leader>: :<C-u>History:<CR>
-nnoremap <silent> <Leader>q :<C-u>botright copen<CR>
-nnoremap <silent> <Leader>d :<C-u>DiffviewOpen -- %<CR>
-nnoremap <silent> <Leader>s :<C-u>call user#win#goto_or('Git status', 'DiffviewOpen')<CR>
-nnoremap <silent> <Leader>S :<C-u>DiffviewOpen main<CR>
-nnoremap <silent> <Leader>y :<C-u>DiffviewFileHistory %<CR>
-nnoremap <silent> <Leader>Y :<C-u>DiffviewFileHistory<CR>
-nnoremap <silent> <Leader>b :<C-u>Git blame<CR>
-nnoremap <silent> <Leader>B :<C-u>OpenGithubFile<CR>
+nnoremap <silent> <Leader>y <Cmd>FzfLua lsp_document_symbols<CR>
+nnoremap <silent> <Leader>: <Cmd>History:<CR>
+nnoremap <silent> <Leader>q <Cmd>botright copen<CR>
+nnoremap <silent> <Leader>d <Cmd>DiffviewOpen -- %<CR>
+nnoremap <silent> <Leader>s <Cmd>call user#win#goto_or('Git status', 'DiffviewOpen')<CR>
+nnoremap <silent> <Leader>S <Cmd>DiffviewOpen main<CR>
+nnoremap <silent> <Leader>h <Cmd>DiffviewFileHistory %<CR>
+nnoremap <silent> <Leader>H <Cmd>DiffviewFileHistory<CR>
+nnoremap <silent> <Leader>b <Cmd>Git blame<CR>
+nnoremap <silent> <Leader>B <Cmd>OpenGithubFile<CR>
 vnoremap <silent> <Leader>B :OpenGithubFile<CR>
-nnoremap <silent> <Leader>, :<C-u>Gin commit<CR>
-nnoremap <silent> <Leader>. :<C-u>Gin push<CR>
-nnoremap <silent> <Leader>l :<C-u>SymbolsOutline<CR>
+nnoremap <silent> <Leader>, <Cmd>Gin commit<CR>
+nnoremap <silent> <Leader>. <Cmd>Gin push<CR>
+
 nnoremap <Leader>p <Cmd>call print_debug#print_debug()<CR>
 nnoremap <Leader>e <Cmd>Trouble<CR>
 
@@ -270,5 +265,6 @@ augroup END
 
 " TODO: default に戻す
 se bg=dark
-let s:colorscheme = !empty($COLORSCHEME) ? $COLORSCHEME : 'hydrangea'
+let g:material_style = "lighter"
+let s:colorscheme = !empty($COLORSCHEME) ? $COLORSCHEME : 'everforest'
 exe 'colorscheme ' . s:colorscheme

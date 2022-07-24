@@ -10,11 +10,52 @@ brew_i() { msg "\n🍺  installing $1:\n"; brew install "$1"; }
 npm_i()  { msg "\n🍔  installing $1:\n"; npm install -g "$1"; }
 go_i()   { msg "]n🍙  installing $1:\n"; go install "$1"; }
 
-DOTFILES_ROOT=$(cd "$(dirname "$0")" && pwd)
-source "${DOTFILES_ROOT}/.config/zsh/.zshenv"
+DOT_ROOT=$(cd "$(dirname "$0")" && pwd)
+source "$DOT_ROOT/.config/zsh/.zshenv"
+TIME=$(date "+%F-%H-%M-%S")
+
+# $1: relative path from dotfiles root
+# $2: directory where symlink will be created
+deploy() {
+  fullpath="$DOT_ROOT/$1"
+  basename="$(basename "$1")"
+  linkname="$2/$basename"
+  [ -d "$2" ] || mkdir -p "$2"
+  if [ -e "$linkname" ]; then mv "$linkname" "$linkname.$TIME.bak"; fi
+  ln -s "$fullpath" "$linkname" > /dev/null 2>&1
+}
+# $1: 'config' or 'data'
+# $2: directory where symlink will be created
+deploy_all_in() {
+  for d in "$DOT_ROOT/$1"/*; do
+    deploy "$(basename "$d")" "$2"
+  done
+}
+
+
+#
+# Deploy files
+#
+deploy config/zsh/.zshenv "$HOME"
+deploy bin "$HOME" && hash -r
+deploy_all_in data   "$XDG_DATA_HOME"
+deploy_all_in config "$XDG_CONFIG_HOME"
+
+[ -f ".gitconfig" ] && mv .gitconfig ".gitconfig.$TIME.bak"
+cp "${DOT_ROOT}/.config/git/config.tpl" "${DOT_ROOT}/.config/git/config"
+# set -e
+# [ -f ".zshenv" ] && mv .zshenv ".zshenv.$TIME.bak"
+# ln -s "${DOT_ROOT}/.config/zsh/.zshenv" "$HOME"
+# [ -d ".config" ] && mv .config ".config.$TIME.bak"
+# ln -s "${DOT_ROOT}/.config" .
+# [ -d "bin" ] && mv bin "bin.$TIME.bak"
+# ln -s "${DOT_ROOT}/bin" . && hash -r
+# if ! [ -f "$HOME/.bashrc" ] || ! grep "$HOME/.bashrc" -xq 'source ~/.zshenv'; then
+#   echo 'source ~/.zshenv' >> "$HOME/.bashrc"
+# fi
 
 brew_i zsh
-if ! cat /etc/shells | grep -xq "${HOMEBREW_PREFIX}/bin/zsh"; then
+if ! grep -xq "${HOMEBREW_PREFIX}/bin/zsh" /etc/shells; then
   echo "$password" | sudo -S sh -c "printf '${HOMEBREW_PREFIX}/bin/zsh\n' >> /etc/shells"
 fi
 mkdir -p "$XDG_STATE_HOME/zsh" && touch "$XDG_STATE_HOME/zsh/history"
@@ -119,25 +160,6 @@ git clone --depth 1 \
   "$XDG_DATA_HOME/nvim/site/pack/packer/opt/packer.nvim"
 nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
 
-
-#
-# Deploy files
-#
-cd
-set -e
-RAND=$RANDOM
-[ -f ".zshenv" ] && mv .zshenv .zshenv.${RAND}.bak
-ln -s ${DOTFILES_ROOT}/.config/zsh/.zshenv
-[ -d ".config" ] && mv .config .config.${RAND}.bak
-ln -s ${DOTFILES_ROOT}/.config
-[ -d "bin" ] && mv bin bin.${RAND}.bak
-ln -s ${DOTFILES_ROOT}/bin && hash -r
-[ -f ".gitconfig" ] && mv .gitconfig .gitconfig.${RAND}.bak
-cp "${DOTFILES_ROOT}/.config/git/config.tpl" "${DOTFILES_ROOT}/.config/git/config"
-
-if ! [ -f ".bashrc" ] || ! cat .bashrc | grep -xq 'source ~/.zshenv'; then
-  echo 'source ~/.zshenv' >> .bashrc
-fi
 
 #
 # OS-spesific settings

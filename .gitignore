@@ -20,6 +20,7 @@
 !/.config/nvim/lua/*.lua
 !/.config/nvim/lua/**/*.lua
 !/.config/nvim/init.vim
+!/.config/prettier/.prettierrc.yml
 !/.config/starship/starship.toml
 !/.config/stylua/stylua.toml
 !/.config/tmux/tmux.conf

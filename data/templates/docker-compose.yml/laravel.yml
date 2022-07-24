@@ -1,0 +1,62 @@
+version: "3.7"
+
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: ./docker/app/Dockerfile
+      target: dev
+    volumes:
+      - .:/var/www/app
+    command: >
+      sh -c
+      'if [ ! -d ./vendor ]; then composer install; fi &&
+      ./docker/app/wait-for-it.sh db:3306 -t 30 &&
+      find storage/ ! -name ".gitignore" | xargs chmod 777 &&
+      chown -R www-data:www-data ./storage/logs ./storage/framework &&
+      php artisan migrate --force &&
+      php artisan optimize:clear &&
+      php artisan db:seed &&
+      php-fpm'
+
+  web:
+    build:
+      context: ./
+      dockerfile: ./docker/web/Dockerfile
+      args:
+        FASTCGI_HOST: app
+    volumes:
+      - .:/var/www/app
+    ports:
+      - ${NGINX_PORT}:80
+    depends_on:
+      - app
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      TZ: Asia/Tokyo
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./docker/db/initdb.d:/docker-entrypoint-initdb.d
+
+  redis:
+    image: redis:6.2-alpine
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/data
+
+  dialogflow:
+    image: clue/json-server
+    volumes:
+      - ./docker/dialogflow/:/data/
+    command: --watch
+
+volumes:
+  db_data:
+  redis_data:

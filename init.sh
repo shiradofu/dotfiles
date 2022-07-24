@@ -2,9 +2,9 @@
 
 set -eu
 
-msg() { printf "\033[1;34m$1\033[0m\n"; }
-err() { printf "\033[1;31m$1\033[0m\n" 1>&2; return 1; }
-exists() { type $1 > /dev/null 2>&1; }
+msg() { printf "\033[1;34m%s\033[0m\n" "$1"; }
+err() { printf "\033[1;31m%s\033[0m\n" "$1" 1>&2; return 1; }
+exists() { type "$1" > /dev/null 2>&1; }
 
 hash -r
 if ! exists sudo; then
@@ -33,7 +33,7 @@ trap 'stty echo' INT PIPE TERM EXIT
 [ -t 1 ] && exec < /dev/tty
 msg "Please input password"
 stty -echo
-read password
+read -r password
 stty echo
 sudo -K
 echo "${password}" | sudo -lS >/dev/null 2>&1 || exit 1
@@ -69,12 +69,12 @@ if ! exists "brew"; then
   NONINTERACTIVE=1 bash _homebrew.sh
   rm _homebrew.sh
 
-  test -f /usr/local/bin/brew && eval $(/usr/local/bin/brew shellenv)
-  test -d /opt/homebrew && eval $(/opt/homebrew/bin/brew shellenv)
-  test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
-  test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+  test -f /usr/local/bin/brew && eval "$(/usr/local/bin/brew shellenv)"
+  test -d /opt/homebrew && eval "$(/opt/homebrew/bin/brew shellenv)"
+  test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+  test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-  echo "$password" | sudo -S chown -R $(whoami) $(brew --prefix)
+  echo "$password" | sudo -S chown -R "$(whoami)" "$(brew --prefix)"
 fi
 
 msg "\n🍺  installing ghq:\n"
@@ -85,7 +85,7 @@ repo=github.com/shiradofu/dotfiles
 ghq get --shallow --update https://${repo}
 
 msg "\n🚀  Start installing!\n"
-bash $(ghq root)/${repo}/install.sh $password
+bash "$(ghq root)/${repo}/install.sh" "$password"
 
 unset password
 
