@@ -3,6 +3,9 @@ require('neotest').setup {
     -- require 'neotest-jest',
     require 'neotest-vitest',
     require 'neotest-phpunit',
+    require 'neotest-go' {
+      experimental = { test_table = true },
+    },
   },
   floating = {
     border = 'single',
@@ -26,5 +29,5 @@ require('neotest').setup {
   },
 }
 
-local logger = require 'neotest.logging'
-logger:set_level 'trace'
+-- local logger = require 'neotest.logging'
+-- logger:set_level 'trace'

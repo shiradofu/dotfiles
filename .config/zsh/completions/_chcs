@@ -3,14 +3,13 @@
 _chcs() {
   _values \
     'name' \
-    'iceberg' \
-    'nord' \
-    'hydrangea' \
-    'mirodark' \
-    'gotham' \
-    'farout' \
-    'mellow' \
-    'monotone'
+    'poimandres' \
+    'zenwritten' \
+    '--dark' \
+    '-d' \
+    '--light' \
+    '-l' \
+    '--toggle'
 }
 
 _chcs "$@"

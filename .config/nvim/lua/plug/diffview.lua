@@ -6,20 +6,28 @@ local LogEntry = require('diffview.git.log_entry').LogEntry
 require('diffview').setup {
   hooks = {
     view_enter = function(view)
+      local p = view.panel
+      -- path にファイルを指定したかどうか
+      local file_given = (
+        #p.path_args == 1
+        and vim.fn.filereadable(vim.fn.fnamemodify(p.path_args[1], ':p')) == 1
+      )
+      -- visual モードで範囲を指定したかどうか
+      local range_given = p.log_options and #p.log_options.single_file.L == 1
+
       if fn.bufname():find [[^diffview:///]] ~= nil then
         if vim.bo.ft ~= 'DiffviewFiles' then
           a.focus_files()
         end
       end
-      local p = view.panel
-      if not p.rev_pretty_name and #p.path_args == 0 then
+
+      -- 何も指定しなかったときは git status 相当の表示になる
+      if not p.rev_pretty_name and #p.path_args == 0 and not range_given then
         vim.cmd [[set filetype=gitstatus]]
         vim.cmd [[file Git status]]
       end
-      if
-        #p.path_args == 1
-        and vim.fn.filereadable(vim.fn.fnamemodify(p.path_args[1], ':p')) == 1
-      then
+
+      if file_given or range_given then
         vim.t.diffview_single_file = true
       end
     end,
@@ -116,7 +124,7 @@ require('diffview').setup {
         view.panel:render()
         view.panel:redraw()
       end,
-      ['<cr>'] = a.focus_entry,
+      ['<CR>'] = a.focus_entry,
       ['go'] = a.goto_file,
       ['<C-g>'] = a.toggle_files,
       ['<BS>'] = fn['user#win#tabclose'],

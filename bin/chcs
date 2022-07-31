@@ -2,29 +2,18 @@
 
 # chcs - CHange ColorScheme
 
-__chcs_winterm() {
-  [ -f /proc/sys/fs/binfmt_misc/WSLInterop ] || return # if not in wsl, do nothing
-  local dir; dir="$XDG_CONFIG_HOME/winterm"
-  if ! [ -f "$dir/settings.tpl.json" ]; then return; fi
-  winterm-gen "$1"
-  wslsync winterm --no-backup
-}
-
-__chcs_alacritty() {
-  local dir; dir="$XDG_CONFIG_HOME/alacritty"
-  if
-    ! [ -d "$dir" ] ||
-    ! [ -f "$dir/base.yml" ] ||
-    ! [ -f "$dir/colorschemes/$1.yml" ];
-  then
-    echo An error occurred in chcs alacritty.
+__chcs_wezterm() {
+  local dir; dir="$XDG_CONFIG_HOME/wezterm"
+  local file; file="$dir/_wezterm.lua"
+  if ! [ -d "$dir" ] || ! [ -f "$file" ]; then
+    echo An error occurred in chcs tmux.
     return 1
   fi
-  cat "$dir/base.yml" "$dir/colorschemes/$1.yml" >| "$dir/alacritty.yml"
+  sed -e s/WEZTERM_COLOR/"$1"/ -e s/WEZTERM_OPACITY/"$2"/ \
+    "$file" >| "$dir/wezterm.lua"
 }
 
 __chcs_tmux() {
-  if ! type tmux > /dev/null 2>&1; then return; fi
   local dir; dir="$XDG_CONFIG_HOME/tmux"
   local file; file="$dir/styles/$1.conf"
   if ! [ -d "$dir" ] || ! [ -f "$file" ]; then
@@ -35,14 +24,6 @@ __chcs_tmux() {
   if [ -n "$TMUX" ]; then tmux source "$dir/tmux.conf"; fi
 }
 
-__chcs_bat() {
-  if ! type bat > /dev/null 2>&1; then return; fi
-  if ! [ -d "$(bat --config-dir)" ]; then
-    mkdir -p "$(bat --config-dir)"
-  fi
-  printf -- "--theme=%s\n" "$1" >| "$(bat --config-file)"
-}
-
 __chcs_nvim() {
   local dir; dir="$XDG_CONFIG_HOME/nvim"
   if ! [ -d "$dir" ]; then
@@ -50,67 +31,90 @@ __chcs_nvim() {
     return 1
   fi
   echo "let g:colorscheme = '$1'" >| "$dir/_color.vim"
+  echo "set background=$2" >> "$dir/_color.vim"
+  for s in "$XDG_CACHE_HOME"/nvim/*.pipe; do
+    nvim --server "$s" --remote-send "<CMD>set bg=$2<CR>" > /dev/null 2>&1
+    nvim --server "$s" --remote-send "<CMD>colorscheme $1<CR>" > /dev/null 2>&1
+  done
 }
 
-case $1 in
-  iceberg )
-    __chcs_winterm iceberg
-    __chcs_alacritty iceberg
-    __chcs_tmux iceberg
-    __chcs_bat iceberg
-    __chcs_nvim iceberg
+__chcs_mode() {
+  # osx
+  if uname | grep Darwin -q; then
+    case "$1" in
+      dark ) osascript -e 'tell app "System Events" to tell appearance preferences to set dark mode to true';;
+      light ) osascript -e 'tell app "System Events" to tell appearance preferences to set dark mode to false';;
+    esac
+  fi
+  if uname -r | grep microsoft -q; then
+    # TODO: fix
+    case "$1" in
+      # dark ) powershell.exe -c 'Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme -Value 0';;
+      # light ) powershell.exe -c 'Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme -Value 1';;
+    esac
+  fi
+}
+
+SAVE_FILE="$XDG_CONFIG_HOME/colorscheme"
+name=
+mode=dark # light or dark
+if [ -f "$SAVE_FILE" ]; then
+  name=$(head -n 1 "$SAVE_FILE")
+  mode=$(tail -n 1 "$SAVE_FILE")
+fi
+
+for ARG; do
+  case $ARG in
+    --dark | -d ) mode=dark;;
+    --light | -l ) mode=light;;
+    --toggle )
+      if [ "$mode" == "dark" ]; then
+        mode=light
+      elif [ "$mode" == "light" ]; then
+        mode=dark
+      fi
+      ;;
+    * )
+      name="$ARG"
+  esac
+done
+
+if [ -z "$name" ]; then
+  echo colorscheme name required.
+  exit 1
+fi
+
+echo name: "${name}, mode: ${mode}"
+
+case "${name}_${mode}" in
+  zenwritten_light )
+    __chcs_tmux light
+    __chcs_nvim zenwritten light
+    __chcs_wezterm zenwritten_light 0.9
     ;;
-  nord )
-    __chcs_winterm nord
-    __chcs_alacritty nord
-    __chcs_tmux nord
-    __chcs_bat Nord
-    __chcs_nvim nord
+  zenwritten_dark )
+    __chcs_tmux dark
+    __chcs_nvim zenwritten dark
+    __chcs_wezterm zenwritten_dark 0.9
     ;;
-  hydrangea )
-    __chcs_winterm nord
-    __chcs_alacritty nord
-    __chcs_tmux hydrangea
-    __chcs_bat mirodark
-    __chcs_nvim hydrangea
+  poimandres_light ) # does not exist
+    __chcs_tmux light
+    __chcs_nvim zenwritten light
+    __chcs_wezterm zenwritten_light 0.9
     ;;
-  mirodark )
-    __chcs_winterm nord
-    __chcs_alacritty nord
-    __chcs_tmux hydrangea
-    __chcs_bat mirodark
-    __chcs_nvim mirodark
-    ;;
-  gotham )
-    __chcs_winterm gotham
-    __chcs_alacritty gotham
-    __chcs_tmux gotham
-    __chcs_bat gotham
-    __chcs_nvim gotham
-    ;;
-  farout )
-    __chcs_winterm mellow
-    __chcs_alacritty mellow
-    __chcs_tmux mellow
-    __chcs_bat zenburn
-    __chcs_nvim farout
-    ;;
-  mellow )
-    __chcs_winterm mellow
-    __chcs_alacritty mellow
-    __chcs_tmux mellow
-    __chcs_bat zenburn
-    __chcs_nvim mellow
-    ;;
-  monotone )
-    __chcs_winterm monotone
-    __chcs_alacritty monotone
-    __chcs_tmux monotone
-    __chcs_bat monotone
-    __chcs_nvim monotone
+  poimandres_dark )
+    __chcs_tmux dark
+    __chcs_nvim poimandres dark
+    __chcs_wezterm zenwritten_dark 0.9
     ;;
   * )
     echo colorscheme not found.
     exit 1
     ;;
 esac
+
+__chcs_mode "$mode"
+
+# save current colorscheme name
+echo "$name" >| "$SAVE_FILE"
+echo "$mode" >> "$SAVE_FILE"

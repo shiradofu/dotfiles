@@ -1,6 +1,5 @@
 local M = {} -- keys are filetypes
-local map = require('user/lsp-keymap').format
-local t = require('user/utils').table
+local map = require('user.mappings').lsp_format
 local WAIT_MS = 1000
 
 vim.g.enable_auto_format = true
@@ -24,18 +23,15 @@ end
 
 local function create_au(bufnr, fn, config)
   config = config or {}
-  vim.api.nvim_create_autocmd(
-    'BufWritePre',
-    t.merge({
-      group = fmt_group,
-      buffer = bufnr,
-      callback = function()
-        if vim.g.enable_auto_format then
-          fn { bufnr = bufnr }
-        end
-      end,
-    }, config)
-  )
+  vim.api.nvim_create_autocmd('BufWritePre', {
+    group = fmt_group,
+    buffer = bufnr,
+    callback = function()
+      if vim.g.enable_auto_format then
+        fn { bufnr = bufnr }
+      end
+    end,
+  })
 end
 
 local function basic(_, bufnr)

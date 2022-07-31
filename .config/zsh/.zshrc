@@ -163,15 +163,15 @@ required() {
 }
 
 __ghq_fzf() {
-  local preview_cmd
-  if (( $+commands[glow] )); then
-    preview_cmd="glow --style=dark $(ghq root)/{}/README.*"
-  elif (( $+commands[bat] )); then
-    preview_cmd="bat -n --color=always --line-range :80 $(ghq root)/{}/README.*"
-  else
-    preview_cmd="cat $(ghq root)/{}/README .* | head -n 80"
-  fi
-  ghq list | fzf-tmux -p90%,70% --preview "${preview_cmd}" --no-multi
+  # local preview_cmd
+  # if (( $+commands[glow] )); then
+  #   preview_cmd="glow --style=light $(ghq root)/{}/README.*"
+  # elif (( $+commands[bat] )); then
+  #   preview_cmd="bat -n --color=always --line-range :80 $(ghq root)/{}/README.*"
+  # else
+  #   preview_cmd="cat $(ghq root)/{}/README.* | head -n 80"
+  # fi
+  ghq list | fzf-tmux -p50%,70% --preview "${preview_cmd}" --no-multi
 }
 
 ghq_fzf() {

@@ -3,13 +3,13 @@ local a = n.builtins.code_actions
 local f = n.builtins.formatting
 local d = n.builtins.diagnostics
 local fmt = require 'plug.lsp-format'
-local map = require 'user/lsp-keymap'
+local mappings = require 'user.mappings'
 
-map.diagnostic()
+mappings.lsp_diagnostic()
 
 local function on_attach(client, bufnr)
-  map.hover()
-  map.action()
+  mappings.lsp_hover()
+  mappings.lsp_action()
   local ft = vim.api.nvim_buf_get_option(bufnr, 'filetype')
   fmt[fmt[ft] and ft or '_'](client, bufnr)
 end

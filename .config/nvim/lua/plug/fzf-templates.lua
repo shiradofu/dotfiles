@@ -3,7 +3,7 @@ local config = require 'fzf-lua.config'
 local actions = require 'fzf-lua.actions'
 local path = require 'fzf-lua.path'
 
-local actions_read_file = function(selected, opts)
+local function actions_read_file(selected, opts)
   local vimcmd = 'r'
   actions.vimcmd_file(vimcmd, selected, opts)
   vim.cmd [[normal! k']]

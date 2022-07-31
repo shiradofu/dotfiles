@@ -21,6 +21,80 @@
                 },
                 "rules": [
                     {
+                        "description": "cmd → left-option for wezterm with tmux",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "right_command",
+                                    "modifiers": {
+                                        "optional": ["shift"]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "left_option"
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "frontmost_application_if",
+                                        "bundle_identifiers": [
+                                            "^com\\.github\\.wez\\.wezterm$"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "tab",
+                                    "modifiers": {
+                                        "mandatory": ["left_option"],
+                                        "optional": ["shift"]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "tab",
+                                        "modifiers": ["command"]
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "frontmost_application_if",
+                                        "bundle_identifiers": [
+                                            "^com\\.github\\.wez\\.wezterm$"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "spacebar",
+                                    "modifiers": {
+                                        "mandatory": ["left_option"]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "spacebar",
+                                        "modifiers": ["command"]
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "frontmost_application_if",
+                                        "bundle_identifiers": [
+                                            "^com\\.github\\.wez\\.wezterm$"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
                         "description": "CapsLock → Control",
                         "manipulators": [
                             {
@@ -59,6 +133,7 @@
                                     {
                                         "type": "frontmost_application_unless",
                                         "bundle_identifiers": [
+                                            "^com\\.github\\.wez\\.wezterm$",
                                             "^io\\.alacritty$",
                                             "^com\\.apple\\.Terminal$",
                                             "^com\\.googlecode\\.iterm2$"
@@ -83,6 +158,7 @@
                                     {
                                         "type": "frontmost_application_unless",
                                         "bundle_identifiers": [
+                                            "^com\\.github\\.wez\\.wezterm$",
                                             "^io\\.alacritty$",
                                             "^com\\.apple\\.Terminal$",
                                             "^com\\.googlecode\\.iterm2$"
@@ -93,7 +169,37 @@
                         ]
                     },
                     {
-                        "description": "Control + BS/Control + w → alt + BS",
+                        "description": "Ctrl-h → BS",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "h",
+                                    "modifiers": {
+                                        "mandatory": ["control"]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "delete_or_backspace"
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "frontmost_application_unless",
+                                        "bundle_identifiers": [
+                                            "^com\\.github\\.wez\\.wezterm$",
+                                            "^io\\.alacritty$",
+                                            "^com\\.apple\\.Terminal$",
+                                            "^com\\.googlecode\\.iterm2$"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Ctrl-BS/Ctrl-w → alt-BS",
                         "manipulators": [
                             {
                                 "type": "basic",
@@ -113,6 +219,7 @@
                                     {
                                         "type": "frontmost_application_unless",
                                         "bundle_identifiers": [
+                                            "^com\\.github\\.wez\\.wezterm$",
                                             "^io\\.alacritty$",
                                             "^com\\.apple\\.Terminal$",
                                             "^com\\.googlecode\\.iterm2$"
@@ -138,6 +245,7 @@
                                     {
                                         "type": "frontmost_application_unless",
                                         "bundle_identifiers": [
+                                            "^com\\.github\\.wez\\.wezterm$",
                                             "^io\\.alacritty$",
                                             "^com\\.apple\\.Terminal$",
                                             "^com\\.googlecode\\.iterm2$"
@@ -167,6 +275,7 @@
                                     {
                                         "type": "frontmost_application_if",
                                         "bundle_identifiers": [
+                                            "^com\\.github\\.wez\\.wezterm$",
                                             "^io\\.alacritty$",
                                             "^com\\.apple\\.Terminal$",
                                             "^com\\.googlecode\\.iterm2$"
@@ -195,6 +304,7 @@
                                     {
                                         "type": "frontmost_application_if",
                                         "bundle_identifiers": [
+                                            "^com\\.github\\.wez\\.wezterm$",
                                             "^io\\.alacritty$",
                                             "^com\\.apple\\.Terminal$",
                                             "^com\\.googlecode\\.iterm2$"

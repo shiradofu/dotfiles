@@ -1,9 +1,8 @@
 local M = {}
 local root_pattern = require('lspconfig').util.root_pattern
-local map = require 'user/lsp-keymap'
+local mappings = require 'user.mappings'
 local fmt = require 'plug.lsp-format'
 local diagnostics = require 'plug.lsp-diagnostics'
-local t = require('user/utils').table
 
 local border = {
   { '┌', 'FloatBorder' },
@@ -22,13 +21,13 @@ function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
   return orig_util_open_floating_preview(contents, syntax, opts, ...)
 end
 
-map.diagnostic()
+mappings.lsp_diagnostic()
 
 local function on_attach(client, bufnr)
-  map.jump()
-  map.hover()
-  map.rename()
-  map.action()
+  mappings.lsp_jump()
+  mappings.lsp_hover()
+  mappings.lsp_rename()
+  mappings.lsp_action()
   local ft = vim.api.nvim_buf_get_option(bufnr, 'filetype')
   fmt[fmt[ft] and ft or '_'](client, bufnr)
   diagnostics[diagnostics[ft] and ft or '_'](client, bufnr)
@@ -42,7 +41,7 @@ local base_config = {
   },
 }
 
-M.sumneko_lua = t.merge(base_config, {
+M.sumneko_lua = vim.tbl_deep_extend('force', base_config, {
   settings = {
     Lua = {
       runtime = 'LuaJIT',
@@ -57,15 +56,15 @@ M.sumneko_lua = t.merge(base_config, {
   },
 })
 
-M.ccls = t.copy(base_config)
-M.gopls = t.copy(base_config)
-M.golangci_lint_ls = t.copy(base_config)
+M.ccls = vim.deepcopy(base_config)
+M.gopls = vim.deepcopy(base_config)
+M.golangci_lint_ls = vim.deepcopy(base_config)
 
-M.tsserver = t.merge(base_config, {
+M.tsserver = vim.tbl_deep_extend('force', base_config, {
   root_dir = root_pattern('package.json', 'tsconfig.json', 'jsconfig.json'),
 })
 
-M.denols = t.merge(base_config, {
+M.denols = vim.tbl_deep_extend('force', base_config, {
   root_dir = root_pattern('deno.json', 'deno.jsonc'),
   single_file_support = false,
   init_options = {
@@ -81,20 +80,20 @@ M.denols = t.merge(base_config, {
   },
 })
 
-M.html = t.copy(base_config)
-M.cssls = t.copy(base_config)
-M.cssmodules_ls = t.copy(base_config)
-M.intelephense = t.merge(base_config, {
+M.html = vim.deepcopy(base_config)
+M.cssls = vim.deepcopy(base_config)
+M.cssmodules_ls = vim.deepcopy(base_config)
+M.intelephense = vim.tbl_deep_extend('force', base_config, {
   handlers = {
     ['textDocument/publishDiagnostics'] = function(...) end,
   },
 })
-M.bashls = t.copy(base_config)
-M.sqls = t.copy(base_config)
-M.dockerls = t.copy(base_config)
-M.yamlls = t.copy(base_config)
+M.bashls = vim.deepcopy(base_config)
+M.sqls = vim.deepcopy(base_config)
+M.dockerls = vim.deepcopy(base_config)
+M.yamlls = vim.deepcopy(base_config)
 
-M.jsonls = t.merge(base_config, {
+M.jsonls = vim.tbl_deep_extend('force', base_config, {
   settings = {
     json = {
       schemas = require('schemastore').json.schemas(),
@@ -103,6 +102,6 @@ M.jsonls = t.merge(base_config, {
   },
 })
 
-M.vimls = t.copy(base_config)
+M.vimls = vim.deepcopy(base_config)
 
 return M

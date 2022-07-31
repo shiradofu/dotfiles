@@ -7,6 +7,7 @@ function! plug#clever_f#setup() abort
   augroup END
   call plug#clever_f#hl()
 
+  let g:clever_f_across_no_line = 1
   let g:clever_f_mark_char = 1
   let g:clever_f_mark_direct = 1
   let g:clever_f_mark_char_color = 'CleverF'

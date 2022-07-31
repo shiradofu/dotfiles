@@ -14,5 +14,6 @@ export ASDF_DIR="$XDG_STATE_HOME/asdf/repo"
 export ASDF_DATA_DIR="$XDG_STATE_HOME/asdf/data"
 export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
 export PRETTIERD_DEFAULT_CONFIG="$XDG_CONFIG_HOME/prettier/.prettierrc.yml"
+export NVIM_PLUG_DIR="$XDG_DATA_HOME/nvim/site/pack/packer"
 
 skip_global_compinit=1

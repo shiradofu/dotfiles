@@ -6,6 +6,7 @@ npairs.setup {
   map_c_h = true,
   map_c_w = true,
   enable_bracket_in_quote = false,
+  ignored_next_char = '[^])}>]',
 }
 
 local cmp_autopairs = require 'nvim-autopairs.completion.cmp'

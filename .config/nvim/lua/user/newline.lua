@@ -1,11 +1,7 @@
 local utils = require 'nvim-treesitter-playground.utils'
+local feedkeys = require('user.utils').feedkeys
 
 local M = {}
-
-local function feedkeys(key, mode)
-  key = vim.api.nvim_replace_termcodes(key, true, false, true)
-  vim.api.nvim_feedkeys(key, mode, false)
-end
 
 ---@param relative number | nil
 ---@return number | nil
@@ -78,7 +74,7 @@ end
 local function is_line_comment_with_commentstring(bufnr, row)
   local first_non_blank_chars = get_line(row):match '%S+'
   local commentstring = vim.bo[bufnr].commentstring
-  if not first_non_blank_chars or not commentstring then
+  if not first_non_blank_chars or not commentstring or commentstring == '' then
     return false
   end
   commentstring = commentstring:match('%S+'):gsub('%%s', '')

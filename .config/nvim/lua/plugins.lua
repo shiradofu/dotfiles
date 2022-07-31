@@ -1,13 +1,3 @@
-function Log(x)
-  print(vim.inspect(x))
-end
-local function r(modname, fn)
-  return 'require("' .. modname .. '")' .. (fn and '.' .. fn .. '()' or '')
-end
-local function v(fn)
-  return 'vim.fn["' .. fn .. '"]()'
-end
-
 local install_path = vim.fn.stdpath 'data'
   .. '/site/pack/packer/opt/packer.nvim'
 if vim.fn.empty(vim.fn.glob(install_path)) == 1 then
@@ -67,7 +57,9 @@ return require('packer').startup(function(use)
   use {
     'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate',
-    config = r 'plug.treesitter',
+    config = function()
+      require 'plug.treesitter'
+    end,
   }
   use {
     'yioneko/nvim-yati', -- improve indentation
@@ -78,6 +70,10 @@ return require('packer').startup(function(use)
     'nvim-treesitter/nvim-treesitter-textobjects',
     requires = 'nvim-treesitter/nvim-treesitter',
     event = 'VimEnter',
+  }
+  use {
+    'JoosepAlviste/nvim-ts-context-commentstring',
+    requires = 'nvim-treesitter/nvim-treesitter',
   }
   use {
     'nvim-treesitter/playground',
@@ -93,7 +89,9 @@ return require('packer').startup(function(use)
   -- Text Objects and Operators
   use {
     'kana/vim-textobj-user',
-    config = v 'plug#textobj#config',
+    config = function()
+      vim.fn['plug#textobj#config']()
+    end,
   }
   use {
     'sgur/vim-textobj-parameter',
@@ -117,7 +115,7 @@ return require('packer').startup(function(use)
   }
   use {
     'tpope/vim-commentary',
-    keys = '<Plug>Commentary',
+    -- keys = '<Plug>Commentary',
   }
   use {
     'machakann/vim-sandwich',
@@ -128,7 +126,9 @@ return require('packer').startup(function(use)
   }
   use {
     'gbprod/substitute.nvim',
-    config = r('substitute', 'setup'),
+    config = function()
+      require('substitute').setup {}
+    end,
     module = 'substitute',
   }
 
@@ -150,9 +150,15 @@ return require('packer').startup(function(use)
     end,
   }
   use 'jose-elias-alvarez/typescript.nvim'
-  use 'ray-x/go.nvim'
   use 'b0o/SchemaStore.nvim'
   use 'gennaro-tedesco/nvim-jqx'
+  use {
+    'ray-x/go.nvim',
+    ft = 'go',
+    config = function()
+      require('go').setup()
+    end,
+  }
   use {
     'williamboman/nvim-lsp-installer',
     -- TODO: requires 書く？
@@ -161,12 +167,12 @@ return require('packer').startup(function(use)
       require 'plug.lsp-installer'
     end,
   }
-  -- use {
-  --   'ray-x/lsp_signature.nvim',
-  --   config = function()
-  --     require 'plug.lsp-signature'
-  --   end,
-  -- }
+  use {
+    'ray-x/lsp_signature.nvim',
+    config = function()
+      require 'plug.lsp-signature'
+    end,
+  }
 
   --------------------------------
   -- Filetype
@@ -233,8 +239,10 @@ return require('packer').startup(function(use)
   use 'hrsh7th/cmp-buffer'
   use 'hrsh7th/cmp-path'
   use 'hrsh7th/cmp-cmdline'
-  use 'hrsh7th/cmp-nvim-lsp-signature-help'
+  -- use 'hrsh7th/cmp-nvim-lsp-signature-help'
   use 'saadparwaiz1/cmp_luasnip'
+  use 'lukas-reineke/cmp-rg'
+  use 'davidsierradz/cmp-conventionalcommits'
 
   --------------------------------
   -- Snippet
@@ -247,14 +255,6 @@ return require('packer').startup(function(use)
 
   --------------------------------
   -- Other Features
-  use {
-    'folke/trouble.nvim',
-    requires = 'kyazdani42/nvim-web-devicons',
-    config = function()
-      require('trouble').setup {}
-    end,
-    cmd = { 'Trouble', 'TroubleToggle' },
-  }
   use {
     'weilbith/nvim-code-action-menu',
     config = function()
@@ -279,12 +279,12 @@ return require('packer').startup(function(use)
       'haydenmeade/neotest-jest',
       'shiradofu/neotest-vitest',
       'olimorris/neotest-phpunit',
+      'nvim-neotest/neotest-go',
     },
-    config = r 'plug.neotest',
-  }
-  use {
-    'shiradofu/neotest-vitest',
-    branch = 'follow-neotest-jest-12138a1',
+    config = function()
+      require 'plug.neotest'
+    end,
+    -- module = 'neotest',
   }
 
   --------------------------------------------------------------
@@ -299,7 +299,9 @@ return require('packer').startup(function(use)
   use {
     'ibhagwan/fzf-lua',
     requires = { 'kyazdani42/nvim-web-devicons' },
-    config = r 'plug.fzf',
+    config = function()
+      require 'plug.fzf'
+    end,
   }
   use {
     'junegunn/fzf.vim',
@@ -373,7 +375,6 @@ return require('packer').startup(function(use)
       require('scrollbar').setup {}
     end,
   }
-  -- TODO: 必要性検証
   -- use {
   --   'deris/vim-shot-f',
   --   setup = function()
@@ -384,7 +385,9 @@ return require('packer').startup(function(use)
   -- TODO: 必要性検証
   use {
     'rhysd/clever-f.vim',
-    setup = v 'plug#clever_f#setup',
+    setup = function()
+      vim.fn['plug#clever_f#setup']()
+    end,
     keys = { '<Plug>(clever-f-' },
   }
   -- TODO: 必要性検証
@@ -426,6 +429,13 @@ return require('packer').startup(function(use)
     'johmsalas/text-case.nvim',
     module = 'textcase',
   }
+  use {
+    'danymat/neogen',
+    config = function()
+      require('neogen').setup { snippet_engine = 'luasnip' }
+    end,
+    requires = 'nvim-treesitter/nvim-treesitter',
+  }
 
   --------------------------------
   -- Workspace
@@ -435,6 +445,9 @@ return require('packer').startup(function(use)
       'junegunn/fzf',
       'nvim-treesitter/nvim-treesitter',
     },
+    config = function()
+      require 'plug.bqf'
+    end,
     ft = 'qf',
   }
   use {
@@ -489,18 +502,20 @@ return require('packer').startup(function(use)
       }
     end,
   }
-  use {
-    'luukvbaal/stabilize.nvim',
-    config = function()
-      require('stabilize').setup()
-    end,
-    event = 'WinNew',
-  }
 
+  use {
+    'mcchrish/zenbones.nvim',
+    requires = 'rktjmp/lush.nvim',
+  }
+  use 'olivercederborg/poimandres.nvim'
   use 'marko-cerovac/material.nvim'
-  use 'EdenEast/nightfox.nvim'
-  use 'shaunsingh/nord.nvim'
-  use 'sainnhe/everforest'
-  use 'yuttie/hydrangea-vim'
-  use 'xiyaowong/nvim-transparent'
+
+  use {
+    'xiyaowong/nvim-transparent',
+    config = function()
+      require('transparent').setup {
+        enable = true,
+      }
+    end,
+  }
 end)

@@ -27,10 +27,10 @@ cmp.setup {
     ['<C-l>'] = { i = maps['<C-l>'] },
   },
   view = view,
-  sources = cmp.config.sources {
+  sources = cmp.config.sources({
     { name = 'luasnip' },
     { name = 'nvim_lsp' },
-    { name = 'nvim_lsp_signature_help' },
+    -- { name = 'nvim_lsp_signature_help' },
     { name = 'path' },
     {
       name = 'buffer',
@@ -40,10 +40,8 @@ cmp.setup {
           local bufs = {}
           local all = vim.api.nvim_list_bufs()
           for _, buf in ipairs(all) do
-            local byte_size = vim.api.nvim_buf_get_offset(
-              buf,
-              vim.api.nvim_buf_line_count(buf)
-            )
+            local byte_size =
+              vim.api.nvim_buf_get_offset(buf, vim.api.nvim_buf_line_count(buf))
             if byte_size <= 1024 * 1024 then -- 1 Megabyte max
               bufs[#bufs + 1] = buf
             end
@@ -52,7 +50,9 @@ cmp.setup {
         end,
       },
     },
-  },
+  }, {
+    { name = 'rg' },
+  }),
 }
 
 cmp.setup.cmdline('/', {
@@ -77,5 +77,12 @@ cmp.setup.cmdline(':', {
   sources = cmp.config.sources {
     { name = 'cmdline' },
     { name = 'path' },
+  },
+})
+
+cmp.setup.filetype('gitcommit', {
+  sources = cmp.config.sources {
+    { name = 'conventionalcommits' },
+    { name = 'buffer' },
   },
 })

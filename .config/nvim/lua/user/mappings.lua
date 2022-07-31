@@ -1,31 +1,119 @@
-local req = require('user.utils').fn.req
-local function k(mode, lhs, rhs, opts)
-  opts = vim.tbl_extend('force', { silent = true }, opts or {})
+-- stylua: ignore start
+local req = require('user.utils').req
+local feedkeys = require('user.utils').feedkeys
+local function k(mode, lhs, rhs, ...)
+  local opts = { silent = true }
+  if select('#', ...) > 0 then
+    opts = vim.tbl_extend('force', { silent = true }, ...)
+  end
   vim.keymap.set(mode, lhs, rhs, opts)
 end
+
+local S = { silent = false }
 local r = { remap = true }
 local b = { buffer = true }
 local e = { expr = true }
 
 local M = {}
 
+vim.g.mapleader = ' '
+
+function M.misc()
+  k('n', '<Leader>w', '<Cmd>w<CR>')
+  k('n', '<Leader>W', '<Cmd>wall<CR>')
+  k('n', '<Leader>q', '<Cmd>botright copen<CR>')
+  k('n', '<BS>',  '<Cmd>call user#win#quit()<CR>')
+  k('n', '<Del>', '<Cmd>bp<bar>sp<bar>bn<bar>bd<CR>')
+  k('n', 'g<BS>', '<Cmd>call user#win#tabclose()<CR>')
+  k('n', 'gy', "<Cmd>let @+=expand('%')<CR>")
+  k('n', 'gY', "<Cmd>let @+=expand('%:p')<CR>'%')<CR>")
+  k('n', 'zp', '<Cmd>call print_debug#print_debug()<CR>')
+  k('n', 'cl', '"_cl')
+  k('n', 'ch', '"_ch')
+  k('n', 'Y', 'y$', r)
+  k('n', 'gh', '<Cmd>call user#win#focus_float()<CR>')
+  k({'n', 'v'}, 'gx', '<Plug>(openbrowser-smart-search)')
+  k({'n', 'v'}, 'gX', ':OpenGithubFile<CR>')
+end
+M.misc()
+
+function M.fzf()
+  local m = 'fzf-lua'
+  local fd_noignore =
+    '--color=never --type f --hidden --follow --exclude .git --no-ignore-vcs'
+  local rg_noignore =
+    '--column --line-number --no-heading --color=always --smart-case --max-columns=512 --no-ignore-vcs'
+
+  k('n', '<Leader>o', function()require('plug.fzf-project-mru')()end)
+  k('n', '<Leader>t', function()require('plug.fzf-templates')()end)
+  k('n', '<Leader>i', req(m, 'files', {fd_opts = fd_noignore}))
+  k('n', '<Leader>u', req(m, 'git_status'))
+  k('n', '<Leader>f', req(m, 'live_grep_resume'))
+  k('n', '<Leader>F', req(m, 'live_grep_resume', {rg_opts = rg_noignore}))
+  k('v', '<Leader>f', req(m, 'grep_visual'))
+  k('v', '<Leader>F', req(m, 'grep_visual',{rg_opts = rg_noignore}))
+  k('n', '<Leader>g', req(m, 'grep_cword'))
+  k('n', '<Leader>G', req(m, 'grep_cword', {rg_opts = rg_noignore}))
+  k('n', '<Leader>y', req(m, 'lsp_document_symbols'))
+  k('n', '<Leader>:', req(m, 'command_history'))
+  k('n', '<Leader>e', req(m, 'lsp_workspace_diagnostics'))
+end
+M.fzf()
+
+function M.diffview()
+  k('n', '<Leader>d', '<Cmd>DiffviewOpen -- %<CR>')
+  k('n', '<Leader>s', "<Cmd>call user#win#goto_or('Git status', 'DiffviewOpen')<CR>")
+  k('n', '<Leader>S', '<Cmd>DiffviewOpen main<CR>')
+  k('n', '<Leader>h', '<Cmd>DiffviewFileHistory %<CR>')
+  k('v', '<Leader>h', ':DiffviewFileHistory<CR>')
+  k('n', '<Leader>H', '<Cmd>DiffviewFileHistory<CR>')
+end
+M.diffview()
+
+function M.fern()
+  k('n', '<Leader>r', '<Cmd>Fern . -reveal=%<CR>')
+  k('n', '<Leader><C-r>', '<Cmd>vs<CR><Cmd>Fern . -reveal=%<CR>')
+end
+M.fern()
+
+function M.gin()
+  k('n', '<Leader>,', '<Cmd>Gin commit<CR>')
+  k('n', '<Leader>.', '<Cmd>Gin push<CR>')
+end
+M.gin()
+
 function M.neotest()
-  local mod = 'neotest'
-  k('n', '<Leader>j', function()
-    require(mod).run.run()
-  end)
-  k('n', '<Leader>J', function()
-    require(mod).run.run(vim.fn.expand '%')
-  end)
-  k('n', '<Leader><C-j>', function()
-    require(mod).summary.toggle()
-  end)
+  local m = 'neotest'
+  k('n', '<Leader>k', function()require(m).run.run()end)
+  k('n', '<Leader>K', function()require(m).run.run(vim.fn.expand '%')end)
+  k('n', '<Leader><C-k>', function()require(m).summary.toggle()end)
 end
 M.neotest()
+
+function M.lsp_diagnostic()
+  k('n', '[e', vim.diagnostic.goto_prev)
+  k('n', ']e', vim.diagnostic.goto_next)
+end
+function M.lsp_jump()
+  k('n', 'gd', vim.lsp.buf.definition, b)
+  k('n', 'gD', '<Cmd>vs|lua vim.lsp.buf.definition()<CR>', b)
+  k('n', 'gr', vim.lsp.buf.references, b)
+end
+function M.lsp_format(fn)
+  k('n', '=', fn, b)
+  k('n', '<Leader>=', '<Cmd>AutoFormatToggle<CR>')
+end
+local hover = require 'user.lsp-hover'
+function M.lsp_hover()
+  k('n', 'K', hover, b)
+end
+function M.lsp_rename() k('n', '_', vim.lsp.buf.rename, b) end
+function M.lsp_action() k('n', 'ga', vim.lsp.buf.code_action, b) end
 
 function M.tab_move()
   k('n', '<C-n>', 'gt')
   k('n', '<C-p>', 'gT')
+  k('n', 'go', '<Cmd>call user#win#move(v:count)<CR>')
 end
 M.tab_move()
 
@@ -47,37 +135,90 @@ function M.win_resize()
   k('n', '<Plug>(wr)<C-k>', "<Cmd>call user#win#resize('k')<CR><Plug>(wr)", r)
   k('n', '<Plug>(wr)<C-l>', "<Cmd>call user#win#resize('l')<CR><Plug>(wr)", r)
   k('n', '<Plug>(wr)', '<Nop>', r)
+  k('n', '<C-g>', '<Cmd>ZenMode<CR>')
 end
 M.win_resize()
 
-function M.lsp_diagnostic()
-  k('n', '[e', vim.diagnostic.goto_prev)
-  k('n', ']e', vim.diagnostic.goto_next)
+function M.motion()
+  k('n', '(', '^')
+  k('n', ')', '$')
+  k('n', ';',  '<Cmd>FuzzyMotion<CR>')
+  k({'n', 'x'}, '*',  "<Plug>(asterisk-z*):<C-u>lua require('hlslens').start()<CR>")
+  k({'n', 'x'}, 'g*', "<Plug>(asterisk-gz*):<C-u>lua require('hlslens').start()<CR>")
+  k({'n', 'x'}, '#',  "<Plug>(asterisk-z#):<C-u>lua require('hlslens').start()<CR>")
+  k({'n', 'x'}, 'g#', "<Plug>(asterisk-gz#):<C-u>lua require('hlslens').start()<CR>")
+  k('n', ']q', '<Cmd>cnext<CR>')
+  k('n', '[q', '<Cmd>cprev<CR>')
+  k('n', 'g;', 'g;')
+  k('n', 'g,', 'g,')
+  k('n', 'n', "<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>")
+  k('n', 'N', "<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>")
 end
-function M.lsp_jump()
-  k('n', 'gd', vim.lsp.buf.definition, b)
-  k('n', 'gD', '<Cmd>vs|lua vim.lsp.buf.definition()<CR>', b)
-  k('n', '<leader>n', vim.lsp.buf.references, b)
+M.motion()
+
+function M.treesitter()
+  return {
+    textobjects = {
+        ['af'] = '@function.outer',
+        ['if'] = '@function.inner',
+    },
+    motion = {
+      next = {
+        [']f'] = '@function.outer',
+        [']]'] = '@class.outer',
+      },
+      prev =  {
+        ['[f'] = '@function.outer',
+        ['[['] = '@class.outer',
+      },
+    }
+  }
 end
-function M.lsp_hover()
-  k('n', 'K', vim.lsp.buf.hover, b)
+
+function M.gitsigns(gitsigns)
+  k('n', ']c', function()
+    if vim.wo.diff then return ']c' end
+    vim.schedule(function()gitsigns.next_hunk()end)
+    return '<Ignore>'
+  end, e)
+  k('n', '[c', function()
+    if vim.wo.diff then return '[c' end
+    vim.schedule(function()gitsigns.prev_hunk()end)
+    return '<Ignore>'
+  end, e)
+
+  k({ 'o', 'x' }, 'ig', ':<C-u>Gitsigns select_hunk<CR>')
+  k({ 'o', 'x' }, 'ag', ':<C-u>Gitsigns select_hunk<CR>')
 end
-function M.lsp_rename()
-  k('n', 'gr', vim.lsp.buf.rename, b)
+
+function M.clever_f()
+  k({'n', 'x', 'o'}, 'f', '<Plug>(clever-f-f)')
+  k({'n', 'x', 'o'}, 'F', '<Plug>(clever-f-F)')
+  k({'x', 'o'},      't', '<Plug>(clever-f-t)')
+  k({'x', 'o'},      'T', '<Plug>(clever-f-T)')
 end
-function M.lsp_action()
-  k('n', 'ga', vim.lsp.buf.code_action, b)
+M.clever_f()
+
+function M.quickhl()
+  k('n', 'gl',     '<Plug>(quickhl-manual-this-whole-word)')
+  k('x', 'gl',     '<Plug>(quickhl-manual-this)')
+  k('n', 'gL',     '<Plug>(quickhl-manual-reset)')
+  k('n', 'g<C-l>', '<Plug>(quickhl-cword-toggle)')
 end
-function M.lsp_format(fn)
-  k('n', '=', fn, b)
-  k('n', '<Leader>=', '<Cmd>AutoFormatToggle<CR>')
-end
+M.quickhl()
 
 function M.luasnip()
   local mod = 'luasnip'
-  k({ 'i', 's' }, '<C-j>', req(mod, 'jump', 1))
-  k({ 'i', 's' }, '<C-k>', req(mod, 'jump', -1))
+  k({ 'i', 's' }, '<C-j>', function() require(mod).jump(1) end)
+  k({ 'i', 's' }, '<C-k>', function()
+    if require(mod).jumpable(-1) then
+      require(mod).jump(-1)
+    else
+      feedkeys('<C-o>D', 'in')
+    end
+  end)
 end
+-- M.luasnip() --
 
 function M.cmp_selection(cmp)
   return {
@@ -107,6 +248,7 @@ function M.cmp_selection(cmp)
     ['<C-l>'] = cmp.mapping.abort(),
   }
 end
+-- M.cmp_selection() --
 
 function M.textcase()
   local mod = 'textcase'
@@ -124,6 +266,29 @@ function M.textcase()
 end
 M.textcase()
 
+function M.substitute()
+  k('n', 't', req('substitute', 'operator'))
+  k('x', 't', req('substitute', 'visual'))
+  k('n', 'T', req('substitute', 'eol'))
+  k('n', 'X', req('substitute.exchange', 'operator'))
+  k('x', 'X', req('substitute.exchange', 'visual'))
+  k('n', 'XX',req('substitute.exchange', 'cancel'))
+end
+M.substitute()
+
+function M.sandwich()
+  k({'n', 'x', 'o'}, 'gs', '<Plug>(sandwich-add)')
+  k('n', 'ds', '<Plug>(sandwich-delete)')
+  k('n', 'cs', '<Plug>(sandwich-replace)')
+end
+M.sandwich()
+
+function M.autopairs()
+  k('i', ',', '<Cmd>call plug#autopairs#comma()<CR>')
+  k('i', ';', '<Cmd>call plug#autopairs#semi()<CR>')
+end
+M.autopairs()
+
 function M.newline()
   k('n', 'o', "o<Cmd>lua require('user.newline').next()<CR>")
   k('n', 'O', "O<Cmd>lua require('user.newline').prev()<CR>")
@@ -133,5 +298,77 @@ function M.newline()
   end, e)
 end
 M.newline()
+
+function M.comment()
+  k('n', 'ss', '<Cmd>Neogen<CR>')
+  k(
+    {'n', 'x', 'o'}, 's',
+    [[v:lua.context_commentstring.update_commentstring_and_run('Commentary')]],
+    e
+  )
+  k('n', 'S', '<Plug>Commentary<Plug>Commentary')
+  -- invert selected comments
+  k('x', 'S', '<Cmd>let b:S = @/<CR>:g/./Commentary<CR><Cmd>nohl<CR><Cmd>let @/ = b:S<CR>')
+end
+M.comment()
+
+function M.insert_ctrl()
+  k('!', '<C-b>', '<Left>',  S)
+  k('!', '<C-f>', '<Right>', S)
+  k('!', '<C-a>', '<Home>',  S)
+  k('!', '<C-e>', '<End>',   S)
+  k('!', '<C-d>', '<Del>',   S)
+  k('!', '<C-y>', '<C-r>+',  S)
+  k('i', '<C-n>', '<Down>',  S)
+  k('i', '<C-p>', '<Up>',    S)
+  k('c', '<C-j>', '<Down>',  S)
+  k('c', '<C-k>', '<Up>',    S)
+  k('c', '<C-x>', "<C-r>=expand('%:p')<CR>", S)
+  k('s', '<BS>', '<BS>i')
+  k('s', '<C-h>', '<C-h>i')
+end
+M.insert_ctrl()
+
+function M.bqf()
+  return {
+    open = 'l',
+    openc = '<CR>',
+    tab = 't',
+    tabc = '<C-t>',
+    split = '<C-x>',
+    vsplit = '<C-v>',
+    prevfile = '<C-p>',
+    nextfile = '<C-n>',
+    prevhist = '<',
+    nexthist = '>',
+    stoggleup = '<S-Tab>',
+    stoggledown = '<Tab>',
+    stogglevm = '<Tab>',
+    sclear = 'X',
+    pscrollup = '<C-y>',
+    pscrolldown = '<C-e>',
+    ptogglemode = '<C-g>',
+    ptoggleauto = 'p',
+    filter = 'f',
+    filterr = 'F',
+    fzffilter = '<C-f>',
+  }
+end
+
+function M.ft_quickfix()
+  k('n', 'dd', '<Cmd>call user#quickfix#del()<CR>', b)
+  k('n', 'u',  '<Cmd>call user#quickfix#undo_del()<CR>', b)
+  k('n', 'R',  '<Cmd>Qfreplace topleft split<CR>', b)
+  k('n', '<C-g>', '<Nop>', b)
+end
+
+function M.ft_markdown()
+  k('n', '<Leader><CR>', '<Plug>MarkdownPreviewToggle', b)
+  k({'n', 'i'}, '<C-x>', '<Cmd>call plug#checkbox#toggle()<CR>', b)
+end
+
+function M.ft_http()
+  k('n', '<Leader><CR>', '<Plug>RestNvim', b)
+end
 
 return M

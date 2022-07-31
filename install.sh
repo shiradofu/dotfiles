@@ -99,6 +99,7 @@ asdf plugin add golang     &&
 asdf install golang latest &&
 asdf global golang latest
 go_i golang.org/x/tools/cmd/goimports@latest
+go_i github.com/x-motemen/gore/cmd/gore@latest
 
 msg "\ndeno:\n"
 asdf plugin add deno     &&
