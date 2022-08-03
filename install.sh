@@ -81,7 +81,8 @@ brew_i awscli
 brew_i cmake
 
 msg "\n🚀 installing starship:\n"
-curl -sS https://starship.rs/install.sh | sh -s -- --yes
+mkdir -p "$STARSHIP_BIN_DIR"
+curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir "$STARSHIP_BIN_DIR"
 
 #
 # Languages and Package Managers
@@ -190,7 +191,7 @@ if is_wsl && exists wslvar; then
   chmod +x /tmp/win32yank.exe
   mv /tmp/win32yank.exe ./bin
 
-  userprofile=$(wslpath "$(wslvar USERPROFILE)")
+  # userprofile=$(wslpath "$(wslvar USERPROFILE)")
   wslsync .wslconfig
   wslsync wls.conf --password "$password"
   winterm-gen --colorscheme Iceberg

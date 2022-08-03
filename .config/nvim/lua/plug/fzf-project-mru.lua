@@ -24,13 +24,11 @@ return function(opts)
     return
   end
 
-  local current_buffer = vim.api.nvim_get_current_buf()
-  local current_file = vim.api.nvim_buf_get_name(current_buffer)
+  local cwd = opts.cwd or vim.loop.cwd()
   local sess_tbl = {}
 
   -- 重複を確認するためのテーブル
   local files_memo = {}
-  files_memo[current_file] = true
 
   if opts.include_current_session then
     for _, buffer in ipairs(vim.split(vim.fn.execute ':buffers! t', '\n')) do
@@ -38,7 +36,7 @@ return function(opts)
       if bufnr then
         local file = vim.api.nvim_buf_get_name(bufnr)
         local fs_stat = not opts.stat_file and true or vim.loop.fs_stat(file)
-        if #file > 0 and fs_stat and bufnr ~= current_buffer then
+        if #file > 0 and fs_stat and path.is_relative(file, cwd) then
           files_memo[file] = true
           table.insert(sess_tbl, file)
         end
@@ -46,24 +44,17 @@ return function(opts)
     end
   end
 
-  local fd_cmd = 'fd --type f --absolute-path ' .. opts.fd_additional_opts
-  local git_files = vim.fn.systemlist(fd_cmd)
-
   local contents = function(cb)
     local function add_entry(x, co)
       x = make_entry.file(x, opts)
-      if not x then
-        return
+      if x then
+        cb(x, function(err)
+          coroutine.resume(co, 0)
+          if err then
+            cb(nil)
+          end
+        end)
       end
-      cb(x, function(err)
-        coroutine.resume(co)
-        if err then
-          -- close the pipe to fzf, this
-          -- removes the loading indicator in fzf
-          cb(nil)
-        end
-      end)
-      coroutine.yield()
     end
 
     -- run in a coroutine for async progress indication
@@ -74,7 +65,6 @@ return function(opts)
         add_entry(file, co)
       end
 
-      local cwd = opts.cwd or vim.loop.cwd()
       -- local start = os.time(); for _ = 1,10000,1 do
       for _, file in ipairs(vim.v.oldfiles) do
         local fs_stat = not opts.stat_file and true or vim.loop.fs_stat(file)
@@ -85,13 +75,36 @@ return function(opts)
       end
       -- end; print("took", os.time()-start, "seconds.")
 
-      for _, file in ipairs(git_files) do
-        if not files_memo[file] then
-          add_entry(file, co)
+      local function on_event(_, data, event)
+        if event == 'stdout' then
+          for _, file in ipairs(data) do
+            if file ~= '' and not files_memo[file] then
+              add_entry(file, co)
+            end
+          end
+        elseif event == 'stderr' then
+          vim.cmd 'echohl Error'
+          vim.cmd('echomsg "' .. table.concat(data, '') .. '"')
+          vim.cmd 'echohl None'
+          coroutine.resume(co, 2)
+        elseif event == 'exit' then
+          coroutine.resume(co, 1)
         end
       end
 
-      -- done
+      local fd_cmd = 'fd --type f --absolute-path ' .. opts.fd_additional_opts
+      vim.fn.jobstart(fd_cmd, {
+        on_stderr = on_event,
+        on_stdout = on_event,
+        on_exit = on_event,
+        cwd = cwd,
+      })
+
+      repeat
+        -- waiting for a call to 'resume'
+        local ret = coroutine.yield()
+      until ret ~= 0
+
       cb(nil)
     end)()
   end

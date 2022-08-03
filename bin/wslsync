@@ -6,7 +6,7 @@ files=""
 password=''
 
 for arg; do
-  case $1 in
+  case $arg in
     --no-backup ) backup=false ;;
     --password  ) shift; password=$1 ;; # use only when non-interactive
     '' ) ;;

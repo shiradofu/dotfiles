@@ -253,7 +253,7 @@ end
 function M.textcase()
   local mod = 'textcase'
   k('n', 'gc', '<Nop>')
-  for mode, fn in pairs { n = 'operator', x = 'visual' } do
+  for mode, fn in pairs { n = 'current_word', x = 'visual' } do
     k(mode, 'gcu', req(mod, fn, 'to_upper_case'))
     k(mode, 'gcl', req(mod, fn, 'to_lower_case'))
     k(mode, 'gcc', req(mod, fn, 'to_camel_case'))

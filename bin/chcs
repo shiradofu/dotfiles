@@ -6,7 +6,7 @@ __chcs_wezterm() {
   local dir; dir="$XDG_CONFIG_HOME/wezterm"
   local file; file="$dir/_wezterm.lua"
   if ! [ -d "$dir" ] || ! [ -f "$file" ]; then
-    echo An error occurred in chcs tmux.
+    echo An error occurred in chcs wezterm.
     return 1
   fi
   sed -e s/WEZTERM_COLOR/"$1"/ -e s/WEZTERM_OPACITY/"$2"/ \
@@ -21,7 +21,7 @@ __chcs_tmux() {
     return 1
   fi
   command cp -f "$file" "$dir/_style.conf"
-  if [ -n "$TMUX" ]; then tmux source "$dir/tmux.conf"; fi
+  tmux source "$dir/tmux.conf"
 }
 
 __chcs_nvim() {
@@ -49,8 +49,12 @@ __chcs_mode() {
   if uname -r | grep microsoft -q; then
     # TODO: fix
     case "$1" in
-      # dark ) powershell.exe -c 'Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme -Value 0';;
-      # light ) powershell.exe -c 'Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme -Value 1';;
+      dark )
+        # shellcheck disable=SC1001
+        powershell.exe /c Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme -Value 0;;
+      light )
+        # shellcheck disable=SC1001
+        powershell.exe /c Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme -Value 1;;
     esac
   fi
 }
@@ -90,7 +94,7 @@ case "${name}_${mode}" in
   zenwritten_light )
     __chcs_tmux light
     __chcs_nvim zenwritten light
-    __chcs_wezterm zenwritten_light 0.9
+    __chcs_wezterm zenwritten_light 0.93
     ;;
   zenwritten_dark )
     __chcs_tmux dark
@@ -100,7 +104,7 @@ case "${name}_${mode}" in
   poimandres_light ) # does not exist
     __chcs_tmux light
     __chcs_nvim zenwritten light
-    __chcs_wezterm zenwritten_light 0.9
+    __chcs_wezterm zenwritten_light 0.93
     ;;
   poimandres_dark )
     __chcs_tmux dark

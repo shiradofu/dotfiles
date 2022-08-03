@@ -150,7 +150,6 @@ _direnv_hook() {
   (( $+commands[direnv] )) || return
   trap -- '' SIGINT;eval "$(direnv export zsh)";trap - SIGINT;
 }
-precmd_functions=( _direnv_hook ${precmd_functions[@]} )
 chpwd_functions=( _direnv_hook ${chpwd_functions[@]} )
 
 required() {
@@ -207,6 +206,7 @@ fzf-history-widget() {
 zle -N fzf-history-widget
 bindkey -e '^R' fzf-history-widget
 
+path=("$STARSHIP_BIN_DIR"(N-/) "$path[@]")
 eval "$(starship init zsh)"
 
 source "$ZINIT_HOME/zinit.zsh"
