@@ -1,0 +1,9 @@
+#compdef dotsync
+
+_dotsync() {
+  _arguments \
+    ': :(apply backup restore)' \
+    ': :(wezterm alt-tab wslconfig wsl_conf)'
+}
+
+_dotsync "$@"

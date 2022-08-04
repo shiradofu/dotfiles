@@ -1,0 +1,88 @@
+#!/bin/bash
+
+config_home="${XDG_CONFIG_HOME:-~/.config}"
+mode=
+d= # dotfiles内のファイルパス
+u= # 実際に使われている設定ファイルのファイルパス
+password=
+
+if echo "$OSTYPE" | grep darwin -q; then
+  platform=mac
+elif [ -e /proc/sys/fs/binfmt_misc/WSLInterop ]; then
+  platform=wsl
+else
+  platform=linux
+fi
+
+__dotsync_wezterm() {
+  if [[ $platform != 'wsl' ]]; then exit 1; fi
+  u="/mnt/c/Program Files/WezTerm/wezterm.lua"
+  d="$config_home/wezterm/wezterm.lua"
+  __dotsync_do
+}
+
+__dotsync_alt-tab() {
+  if [[ $platform != 'mac' ]]; then exit 1; fi
+  d="$config_home/alt-tab/com.lwouis.alt-tab-macos.plist"
+  u="$HOME/Library/Preferences/com.lwouis.alt-tab-macos.plist"
+  __dotsync_do
+}
+
+__dotsync_wslconfig() {
+  if [[ $platform != 'wsl' ]]; then exit 1; fi
+  userprofile=$(wslpath "$(wslvar USERPROFILE)")
+  d="$config_home/wsl/.wslconfig"
+  u="$userprofile/.wslconfig"
+  __dotsync_do
+}
+
+__dotsync_wsl_conf() {
+  if [[ $platform != 'wsl' ]]; then exit 1; fi
+  d="$config_home/wsl/wsl.conf"
+  u="/etc/wsl.conf"
+  __dotsync_sudo
+}
+
+__dotsync_do() {
+  case "$mode" in
+    APPLY ) cp -f "$d" "$u";;
+    IMPORT ) cp -f "$u" "$d";;
+    BACKUP ) cp -f "$u" "$d.bak";;
+    RESTORE ) cp -f "$d.bak" "$u";;
+  esac
+}
+
+__dotsync_sudo() {
+  if [ -z "$password" ]; then
+    echo -n "password: "
+    read -r -s password
+    echo
+  fi
+  case "$mode" in
+    APPLY ) echo "$password" | sudo -S cp -f "$d" "$u";;
+    IMPORT ) echo "$password" | sudo -S cp -f "$u" "$d";;
+    BACKUP ) echo "$password" | sudo -S cp -f "$u" "$d.bak";;
+    RESTORE ) echo "$password" | sudo -S cp -f "$d.bak" "$u";;
+  esac
+}
+
+for ARG; do
+  case $1 in
+    apply ) mode=APPLY;;
+    import ) mode=IMPORT;;
+    backup ) mode=BACKUP;;
+    restore ) mode=RESTORE;;
+    --password )
+      shift
+      password="$1"
+      ;;
+    alt-tab | wezterm | wslconfig | wsl_conf )
+      "__dotsync_${ARG}"
+      ;;
+    * )
+      echo "invalid argument: $ARG"
+      exit 1
+      ;;
+  esac
+  shift
+done

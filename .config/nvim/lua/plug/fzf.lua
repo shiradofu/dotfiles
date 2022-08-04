@@ -51,9 +51,6 @@ fzf.setup {
     },
   },
   previewers = {
-    bat = {
-      theme = 'Coldark-Dark', -- TODO: read from env
-    },
     git_diff = {
       pager = 'delta --width=$FZF_PREVIEW_COLUMNS',
     },

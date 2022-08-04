@@ -1,4 +1,6 @@
-local mappings = require('user.mappings').treesitter()
+local mappings = require 'user.mappings'
+local ts_map = mappings.treesitter()
+local ctx_comment_map = mappings.commentary()
 
 require('nvim-treesitter.configs').setup {
   ensure_installed = 'all',
@@ -17,17 +19,18 @@ require('nvim-treesitter.configs').setup {
       enable = true,
       -- Automatically jump forward to textobj, similar to targets.vim
       lookahead = true,
-      keymaps = mappings.textobjects,
+      keymaps = ts_map.textobjects,
     },
     move = {
       enable = true,
       set_jumps = true, -- whether to set jumps in the jumplist
-      goto_next_start = mappings.motion.next,
-      goto_previous_start = mappings.motion.prev,
+      goto_next_start = ts_map.motion.next,
+      goto_previous_start = ts_map.motion.prev,
     },
   },
   context_commentstring = {
     enable = true,
+    commentary_integration = ctx_comment_map,
   },
   endwise = {
     enable = true,

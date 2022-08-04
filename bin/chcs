@@ -2,19 +2,30 @@
 
 # chcs - CHange ColorScheme
 
+config_home="${XDG_CONFIG_HOME:-~/.config}"
+is_wsl() { [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; }
+
 __chcs_wezterm() {
-  local dir; dir="$XDG_CONFIG_HOME/wezterm"
-  local file; file="$dir/_wezterm.lua"
-  if ! [ -d "$dir" ] || ! [ -f "$file" ]; then
-    echo An error occurred in chcs wezterm.
+  local dir;
+  if is_wsl; then
+    dir="/mnt/c/Program Files/WezTerm"
+  else
+    dir="$config_home/wezterm"
+  fi
+  if ! [ -d "$dir" ]; then
+    echo "$dir is not a directory."
     return 1
   fi
-  sed -e s/WEZTERM_COLOR/"$1"/ -e s/WEZTERM_OPACITY/"$2"/ \
-    "$file" >| "$dir/wezterm.lua"
+  cat << EOF >| "$dir/color.lua"
+return {
+  window_background_opacity = $2,
+  color_scheme = '$1',
+}
+EOF
 }
 
 __chcs_tmux() {
-  local dir; dir="$XDG_CONFIG_HOME/tmux"
+  local dir; dir="$config_home/tmux"
   local file; file="$dir/styles/$1.conf"
   if ! [ -d "$dir" ] || ! [ -f "$file" ]; then
     echo An error occurred in chcs tmux.
@@ -25,7 +36,7 @@ __chcs_tmux() {
 }
 
 __chcs_nvim() {
-  local dir; dir="$XDG_CONFIG_HOME/nvim"
+  local dir; dir="$config_home/nvim"
   if ! [ -d "$dir" ]; then
     echo An error occurred in chcs nvim.
     return 1
@@ -38,16 +49,27 @@ __chcs_nvim() {
   done
 }
 
-__chcs_mode() {
-  # osx
-  if uname | grep Darwin -q; then
+__chcs_delta() {
+  local dir; dir="$config_home/git"
+  if ! [ -d "$dir" ]; then
+    echo An error occurred in chcs delta.
+    return 1
+  fi
+  [ "$mode" = 'light' ] && val='true' || val='false'
+  echo "[delta]"         >| "$dir/delta_theme"
+  echo "  light = $val" >> "$dir/delta_theme"
+}
+
+__chcs_os() {
+  # mac
+  if echo "$OSTYPE" | grep darwin -q; then
     case "$1" in
       dark ) osascript -e 'tell app "System Events" to tell appearance preferences to set dark mode to true';;
       light ) osascript -e 'tell app "System Events" to tell appearance preferences to set dark mode to false';;
     esac
   fi
+  # wsl
   if uname -r | grep microsoft -q; then
-    # TODO: fix
     case "$1" in
       dark )
         # shellcheck disable=SC1001
@@ -59,9 +81,11 @@ __chcs_mode() {
   fi
 }
 
-SAVE_FILE="$XDG_CONFIG_HOME/colorscheme"
-name=
+# default values
+name=zenwritten
 mode=dark # light or dark
+
+SAVE_FILE="$config_home/colorscheme"
 if [ -f "$SAVE_FILE" ]; then
   name=$(head -n 1 "$SAVE_FILE")
   mode=$(tail -n 1 "$SAVE_FILE")
@@ -78,36 +102,31 @@ for ARG; do
         mode=dark
       fi
       ;;
-    * )
-      name="$ARG"
+    --no-os ) no_os=true;;
+    * ) name="$ARG";;
   esac
 done
 
-if [ -z "$name" ]; then
-  echo colorscheme name required.
-  exit 1
-fi
-
 echo name: "${name}, mode: ${mode}"
+
+[ -z "$no_os" ] && __chcs_os "$mode"
+__chcs_tmux "$mode"
+__chcs_delta "$mode"
 
 case "${name}_${mode}" in
   zenwritten_light )
-    __chcs_tmux light
     __chcs_nvim zenwritten light
     __chcs_wezterm zenwritten_light 0.93
     ;;
   zenwritten_dark )
-    __chcs_tmux dark
     __chcs_nvim zenwritten dark
     __chcs_wezterm zenwritten_dark 0.9
     ;;
   poimandres_light ) # does not exist
-    __chcs_tmux light
     __chcs_nvim zenwritten light
     __chcs_wezterm zenwritten_light 0.93
     ;;
   poimandres_dark )
-    __chcs_tmux dark
     __chcs_nvim poimandres dark
     __chcs_wezterm zenwritten_dark 0.9
     ;;
@@ -116,8 +135,6 @@ case "${name}_${mode}" in
     exit 1
     ;;
 esac
-
-__chcs_mode "$mode"
 
 # save current colorscheme name
 echo "$name" >| "$SAVE_FILE"

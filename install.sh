@@ -191,11 +191,10 @@ if is_wsl && exists wslvar; then
   chmod +x /tmp/win32yank.exe
   mv /tmp/win32yank.exe ./bin
 
-  # userprofile=$(wslpath "$(wslvar USERPROFILE)")
-  wslsync .wslconfig
-  wslsync wls.conf --password "$password"
-  winterm-gen --colorscheme Iceberg
-  wslsync winterm
+  dotsync backup wslconfig
+  dotsync apply wslconfig
+  dotsync --password "$password" backup wsl_conf
+  dotsync --password "$password" apply wsl_conf
 
   git config --global credential.helper \
     "/mnt/c/Program\ Files/Git/mingw64/libexec/git-core/git-credential-manager.exe"

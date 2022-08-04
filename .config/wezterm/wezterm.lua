@@ -2,8 +2,19 @@ local wezterm = require 'wezterm'
 local mux = wezterm.mux
 local act = wezterm.action
 
+local function is_unix()
+  return package.config:sub(1, 1) == '/'
+end
 local function is_windows()
   return package.config:sub(1, 1) == '\\'
+end
+local function merge(base, ...)
+  local tables = { ... }
+  for _, t in ipairs(tables) do
+    for k, v in pairs(t) do
+      base[k] = v
+    end
+  end
 end
 
 wezterm.on('gui-startup', function(cmd)
@@ -11,7 +22,7 @@ wezterm.on('gui-startup', function(cmd)
   window:gui_window():maximize()
 end)
 
-return {
+local config = {
   use_ime = true,
   window_decorations = 'RESIZE',
   hide_tab_bar_if_only_one_tab = true,
@@ -43,7 +54,21 @@ return {
     end
     return keys
   end)(),
-  default_prog = is_windows() and { 'wsl.exe' } or { 'zsh' },
-  window_background_opacity = tonumber 'WEZTERM_OPACITY',
-  color_scheme = 'WEZTERM_COLOR',
+  window_background_opacity = tonumber '0.9',
+  color_scheme = 'zenwritten_dark',
 }
+
+local ok, color = pcall(require, 'color')
+if ok then
+  merge(config, color)
+end
+
+if is_unix() then
+  merge(config, { default_prog = { 'zsh' } })
+end
+
+if is_windows() then
+  merge(config, { default_prog = { 'wsl.exe' } })
+end
+
+return config

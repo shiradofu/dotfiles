@@ -24,7 +24,7 @@
 !/.config/stylua/stylua.toml
 !/.config/tmux/tmux.conf
 !/.config/tmux/styles/*.conf
-!/.config/wezterm/_wezterm.lua
+!/.config/wezterm/wezterm.lua
 !/.config/winterm/settings.tpl.json
 !/.config/wsl/.wslconfig
 !/.config/wsl/wsl.conf
@@ -38,6 +38,7 @@
 !/data/templates/**/*
 
 !/bin/chcs
+!/bin/dotsync
 !/bin/git-wt
 !/bin/mk
 !/bin/rand

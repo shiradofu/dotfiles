@@ -3,7 +3,7 @@ local config = require 'fzf-lua.config'
 local make_entry = require 'fzf-lua.make_entry'
 local path = require 'fzf-lua.path'
 
-local config_globals_project_mru = {
+local default_opts = {
   previewer = config._default_previewer_fn,
   prompt = 'MRU> ',
   file_icons = true and config._has_devicons,
@@ -14,12 +14,13 @@ local config_globals_project_mru = {
   _actions = function()
     return config.globals.actions.files
   end,
+  exclude = function(file)
+    return file:find '/%.git/'
+  end,
 }
 
-config_globals_project_mru.include_current_session = true
-
 return function(opts)
-  opts = config.normalize_opts(opts, config_globals_project_mru)
+  opts = config.normalize_opts(opts, default_opts)
   if not opts then
     return
   end
@@ -30,16 +31,19 @@ return function(opts)
   -- 重複を確認するためのテーブル
   local files_memo = {}
 
-  if opts.include_current_session then
-    for _, buffer in ipairs(vim.split(vim.fn.execute ':buffers! t', '\n')) do
-      local bufnr = tonumber(buffer:match '%s*(%d+)')
-      if bufnr then
-        local file = vim.api.nvim_buf_get_name(bufnr)
-        local fs_stat = not opts.stat_file and true or vim.loop.fs_stat(file)
-        if #file > 0 and fs_stat and path.is_relative(file, cwd) then
-          files_memo[file] = true
-          table.insert(sess_tbl, file)
-        end
+  for _, buffer in ipairs(vim.split(vim.fn.execute ':buffers! t', '\n')) do
+    local bufnr = tonumber(buffer:match '%s*(%d+)')
+    if bufnr then
+      local file = vim.api.nvim_buf_get_name(bufnr)
+      local fs_stat = not opts.stat_file and true or vim.loop.fs_stat(file)
+      if
+        #file > 0
+        and fs_stat
+        and path.is_relative(file, cwd)
+        and not opts.exclude(file)
+      then
+        files_memo[file] = true
+        table.insert(sess_tbl, file)
       end
     end
   end
@@ -68,7 +72,12 @@ return function(opts)
       -- local start = os.time(); for _ = 1,10000,1 do
       for _, file in ipairs(vim.v.oldfiles) do
         local fs_stat = not opts.stat_file and true or vim.loop.fs_stat(file)
-        if fs_stat and not files_memo[file] and path.is_relative(file, cwd) then
+        if
+          fs_stat
+          and not files_memo[file]
+          and path.is_relative(file, cwd)
+          and not opts.exclude(file)
+        then
           files_memo[file] = true
           add_entry(file, co)
         end

@@ -299,18 +299,34 @@ function M.newline()
 end
 M.newline()
 
-function M.comment()
+function M.neogen()
   k('n', 'ss', '<Cmd>Neogen<CR>')
-  k(
-    {'n', 'x', 'o'}, 's',
-    [[v:lua.context_commentstring.update_commentstring_and_run('Commentary')]],
-    e
-  )
-  k('n', 'S', '<Plug>Commentary<Plug>Commentary')
-  -- invert selected comments
-  k('x', 'S', '<Cmd>let b:S = @/<CR>:g/./Commentary<CR><Cmd>nohl<CR><Cmd>let @/ = b:S<CR>')
 end
-M.comment()
+M.neogen()
+
+function M.commentary()
+  -- invert selected comments
+  k('x', 'S', function ()
+    vim.cmd[[exe "normal! \<Esc>"]]
+    local v_start = vim.fn.getpos("'<")[2]
+    local v_end = vim.fn.getpos("'>")[2]
+    if v_start > v_end then
+      v_start, v_end = v_end, v_start
+    end
+    for i = v_start, v_end do
+      vim.cmd(string.format('normal! %dG', i))
+      require('ts_context_commentstring.internal').update_commentstring()
+      vim.cmd[[Commentary]]
+    end
+  end)
+
+  return {
+    Commentary = 's',
+    CommentaryUndo = 'S',
+    CommentaryLine = false,
+    ChangeCommentary = false,
+  }
+end
 
 function M.insert_ctrl()
   k('!', '<C-b>', '<Left>',  S)

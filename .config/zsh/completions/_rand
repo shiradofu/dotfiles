@@ -1,11 +1,7 @@
-#compdef chcs
+#compdef rand
 
-_chcs() {
-  _values \
-    'port' \
-    'sha1' \
-    'sha256' \
-    'sha512'
+_rand() {
+  _arguments ': :(port sha1 sha256 sha512)'
 }
 
-_chcs "$@"
+_rand "$@"
