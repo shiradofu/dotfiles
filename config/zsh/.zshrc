@@ -197,15 +197,8 @@ navi-widget() {
   local pipe; pipe="${XDG_CACHE_HOME:-~/.cache}/navi_cmd"
   if [ -n "$TMUX" ]; then
     required navi fzf || return 127
-    if [ -e "$pipe" ]; then
-      if [ -p "$pipe" ]; then
-        printf '' > "$pipe"
-      else
-        rm -f "$pipe"
-      fi
-    else
-      mkfifo "$pipe"
-    fi
+    rm -f "$pipe"
+    mkfifo "$pipe"
     (tmux popup -E -w 80% -h 70% \
       "source ~/.zshenv && navi --print --fzf-overrides '--height 100%' > $pipe" &)
     cmd=$(cat "$pipe")
