@@ -81,6 +81,7 @@ require('diffview').setup {
       ['A'] = a.stage_all,
       ['s'] = a.toggle_stage_entry,
       ['S'] = a.stage_all,
+      ['u'] = a.toggle_stage_entry,
       ['U'] = a.unstage_all,
       ['dd'] = a.restore_entry,
     },

@@ -170,21 +170,56 @@ __ghq_fzf() {
   # else
   #   preview_cmd="cat $(ghq root)/{}/README.* | head -n 80"
   # fi
-  ghq list | fzf-tmux -p50%,70% --preview "${preview_cmd}" --no-multi
+  ghq list | fzf-tmux -p50%,70% --preview "${preview_cmd}" $1
 }
 
-ghq_fzf() {
+ghq-fzf() {
   required ghq fzf || return 127
-  local repo=$(__ghq_fzf)
+  local repo=$(__ghq_fzf --no-multi)
   if [ -n "${repo}" ]; then
     BUFFER="cd $(ghq root | sed -e "s@${HOME}@~@")/${repo}"
     zle accept-line
   fi
   zle reset-prompt
 }
-zle -N ghq_fzf
-bindkey -e '^g' ghq_fzf
+zle -N ghq-fzf
+bindkey -e '^g' ghq-fzf
 bindkey -s '^[a' '^Qtms^M'
+
+ghq-rm() {
+  required ghq fzf || return 127
+  local repos=$(__ghq_fzf)
+  [ -n "$repos" ] && echo "$repos" | xargs -I{} rm -rf $(ghq root)/{}
+}
+
+navi-widget() {
+  local cmd
+  local pipe; pipe="${XDG_CACHE_HOME:-~/.cache}/navi_cmd"
+  if [ -n "$TMUX" ]; then
+    required navi fzf || return 127
+    if [ -e "$pipe" ]; then
+      if [ -p "$pipe" ]; then
+        printf '' > "$pipe"
+      else
+        rm -f "$pipe"
+      fi
+    else
+      mkfifo "$pipe"
+    fi
+    (tmux popup -E -w 80% -h 70% \
+      "source ~/.zshenv && navi --print --fzf-overrides '--height 100%' > $pipe" &)
+    cmd=$(cat "$pipe")
+    rm -f "$pipe"
+  else
+    cmd=$(navi --print)
+  fi
+  if [ -z "$cmd" ]; then return; fi
+  BUFFER="$cmd"
+  zle accept-line
+  zle reset-prompt
+}
+zle -N navi-widget
+bindkey -e '^t' navi-widget
 
 # fzf のキーバインドは CTRL-R のみ取り出して使用
 # Paste the selected command from history into the command line

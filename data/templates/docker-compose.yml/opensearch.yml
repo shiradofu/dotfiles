@@ -1,6 +1,4 @@
-version: "3"
-
-services:
+  # version: "3"
   opensearch:
     build: ./opensearch
     environment:
@@ -20,5 +18,6 @@ services:
       - opensearch_data:/usr/share/opensearch/data
     ports:
       - ${OPENSEARCH_EXPOSED_PORT}:9200
-volumes:
-  opensearch_data:
+
+# volumes:
+  # opensearch_data:

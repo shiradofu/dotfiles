@@ -69,6 +69,7 @@ brew_i fd
 brew_i jq
 brew_i bat
 brew_i tmux
+brew_i navi
 brew_i hexyl
 brew_i glow
 brew_i git
@@ -177,7 +178,6 @@ if is_mac; then
   brew_i gzip
   brew_i wget
   brew_i gpg
-  brew_i koekeishiya/formulae/skhd
 
   git config --global credential.helper osxkeychain
   defaults write NSGlobalDomain AppleKeyboardUIMode -int 3

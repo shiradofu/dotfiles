@@ -1,0 +1,10 @@
+% main
+
+# Update neovim plugins
+ulimit -S -n 200048; nvim -c 'PackerSync'
+
+# Reload zsh completion functions
+rm -f $ZDOTDIR/.zcompdump && exec -l $SHELL
+
+# Time zsh initialization
+for i in $(seq 1 10); do time zsh -i -c exit > /dev/null 2>&1 ; done

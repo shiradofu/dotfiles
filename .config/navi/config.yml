@@ -1,0 +1,22 @@
+style:
+  tag:
+    color: cyan
+    width_percentage: 10
+    min_width: 5
+  comment:
+    color: blue
+    width_percentage: 30
+    min_width: 30
+  snippet:
+    color: white
+    width_percentage: 60
+
+finder:
+  command: fzf
+
+cheats:
+  paths:
+    - $XDG_CONFIG_HOME/navi
+
+shell:
+  command: zsh

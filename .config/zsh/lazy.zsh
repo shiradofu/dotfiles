@@ -31,7 +31,7 @@ zinit wait lucid is-snippet as"completion" nocd for \
     https://github.com/aws/aws-cli/blob/v2/bin/aws_zsh_completer.sh
 
 [ -f "${XDG_CONFIG_HOME}"/fzf/fzf.zsh ] && source "${XDG_CONFIG_HOME}"/fzf/fzf.zsh
-export FZF_DEFAULT_OPTS="--height 40% --reverse --border=sharp --multi \
+export FZF_DEFAULT_OPTS="--height 50% --reverse --border=sharp --multi \
 --bind=ctrl-l:toggle-preview \
 --bind=ctrl-d:delete-char \
 --bind=ctrl-j:preview-down \

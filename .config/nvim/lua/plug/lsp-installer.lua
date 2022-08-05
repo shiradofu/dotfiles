@@ -31,3 +31,11 @@ for _, server in ipairs(installer.get_installed_servers()) do
     lspconfig[server.name].setup(config[server.name])
   end
 end
+
+local notify = vim.notify
+vim.notify = function(msg, ...)
+  if msg:match 'warning: multiple different client offset_encodings' then
+    return
+  end
+  notify(msg, ...)
+end

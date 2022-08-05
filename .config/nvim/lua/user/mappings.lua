@@ -101,7 +101,8 @@ function M.lsp_jump()
 end
 function M.lsp_format(fn)
   k('n', '=', fn, b)
-  k('n', '<Leader>=', '<Cmd>AutoFormatToggle<CR>')
+  k('n', '<Leader>-', '<Cmd>AutoFormatToggleBuf<CR>')
+  k('n', '<Leader>=', '<Cmd>AutoFormatToggleGlobal<CR>')
 end
 local hover = require 'user.lsp-hover'
 function M.lsp_hover()
@@ -306,6 +307,8 @@ M.neogen()
 
 function M.commentary()
   -- invert selected comments
+  k({'n', 'x', 'o'}, 's', '<Plug>Commentary')
+  k('n', 'S', '<Plug>Commentary<Plug>Commentary')
   k('x', 'S', function ()
     vim.cmd[[exe "normal! \<Esc>"]]
     local v_start = vim.fn.getpos("'<")[2]
@@ -315,7 +318,8 @@ function M.commentary()
     end
     for i = v_start, v_end do
       vim.cmd(string.format('normal! %dG', i))
-      require('ts_context_commentstring.internal').update_commentstring()
+      local ctx = require('ts_context_commentstring.internal')
+      pcall(ctx.update_commentstring)
       vim.cmd[[Commentary]]
     end
   end)

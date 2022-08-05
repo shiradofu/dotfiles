@@ -6,10 +6,11 @@ if vim.fn.empty(vim.fn.glob(install_path)) == 1 then
 end
 
 vim.cmd [[packadd packer.nvim]]
+---@diagnostic disable-next-line: different-requires
 require 'plug.packer'
 
 ---@diagnostic disable-next-line: different-requires
-return require('packer').startup(function(use)
+require('packer').startup(function(use)
   use { 'wbthomason/packer.nvim', opt = true }
 
   -- ------------------------------------------------------------
@@ -48,6 +49,13 @@ return require('packer').startup(function(use)
     end,
   }
   use 'lambdalisue/fern-hijack.vim'
+  use 'lewis6991/impatient.nvim'
+  use {
+    'nathom/filetype.nvim',
+    config = function()
+      require 'plug.filetype'
+    end,
+  }
 
   -- ------------------------------------------------------------
   -- Treesitter & Text Objects
@@ -60,20 +68,25 @@ return require('packer').startup(function(use)
     config = function()
       require 'plug.treesitter'
     end,
+    opt = true,
   }
   use {
     'yioneko/nvim-yati', -- improve indentation
     requires = 'nvim-treesitter/nvim-treesitter',
-    event = 'VimEnter',
+    opt = true,
   }
   use {
     'nvim-treesitter/nvim-treesitter-textobjects',
     requires = 'nvim-treesitter/nvim-treesitter',
-    event = 'VimEnter',
+    opt = true,
   }
   use {
     'JoosepAlviste/nvim-ts-context-commentstring',
-    requires = 'nvim-treesitter/nvim-treesitter',
+    requires = {
+      'nvim-treesitter/nvim-treesitter',
+      { 'tpope/vim-commentary' },
+    },
+    opt = true,
   }
   use {
     'nvim-treesitter/playground',
@@ -92,31 +105,13 @@ return require('packer').startup(function(use)
     config = function()
       vim.fn['plug#textobj#config']()
     end,
+    opt = true,
   }
-  use {
-    'sgur/vim-textobj-parameter',
-    event = 'VimEnter',
-  }
-  use {
-    'kana/vim-textobj-entire',
-    event = 'VimEnter',
-  }
-  use {
-    'kana/vim-textobj-indent',
-    event = 'VimEnter',
-  }
-  use {
-    'kana/vim-textobj-line',
-    event = 'VimEnter',
-  }
-  use {
-    'glts/vim-textobj-comment',
-    event = 'VimEnter',
-  }
-  use {
-    'tpope/vim-commentary',
-    -- keys = '<Plug>Commentary',
-  }
+  use { 'sgur/vim-textobj-parameter', opt = true }
+  use { 'kana/vim-textobj-entire', opt = true }
+  use { 'kana/vim-textobj-indent', opt = true }
+  use { 'kana/vim-textobj-line', opt = true }
+  use { 'glts/vim-textobj-comment', opt = true }
   use {
     'machakann/vim-sandwich',
     setup = function()
@@ -129,7 +124,7 @@ return require('packer').startup(function(use)
     config = function()
       require('substitute').setup {}
     end,
-    module = 'substitute',
+    opt = true,
   }
 
   --------------------------------------------------------------
@@ -142,12 +137,14 @@ return require('packer').startup(function(use)
     config = function()
       require 'plug.lspconfig'
     end,
+    opt = true,
   }
   use {
     'jose-elias-alvarez/null-ls.nvim',
     config = function()
       require 'plug.null-ls'
     end,
+    opt = true,
   }
   use 'jose-elias-alvarez/typescript.nvim'
   use 'b0o/SchemaStore.nvim'
@@ -161,17 +158,17 @@ return require('packer').startup(function(use)
   }
   use {
     'williamboman/nvim-lsp-installer',
-    -- TODO: requires 書く？
-    -- requires = { 'lspconfig', 'cmp-lsp' },
     config = function()
       require 'plug.lsp-installer'
     end,
+    opt = true,
   }
   use {
     'ray-x/lsp_signature.nvim',
     config = function()
       require 'plug.lsp-signature'
     end,
+    opt = true,
   }
 
   --------------------------------
@@ -229,20 +226,21 @@ return require('packer').startup(function(use)
       require 'plug.cmp'
     end,
     requires = { 'LuaSnip' },
+    opt = true,
   }
   use {
     'hrsh7th/cmp-nvim-lsp',
     config = function()
       require 'plug.cmp-lsp'
     end,
+    opt = true,
   }
-  use 'hrsh7th/cmp-buffer'
-  use 'hrsh7th/cmp-path'
-  use 'hrsh7th/cmp-cmdline'
-  -- use 'hrsh7th/cmp-nvim-lsp-signature-help'
-  use 'saadparwaiz1/cmp_luasnip'
-  use 'lukas-reineke/cmp-rg'
-  use 'davidsierradz/cmp-conventionalcommits'
+  use { 'hrsh7th/cmp-buffer', opt = true }
+  use { 'hrsh7th/cmp-path', opt = true }
+  use { 'hrsh7th/cmp-cmdline', opt = true }
+  use { 'saadparwaiz1/cmp_luasnip', opt = true }
+  use { 'lukas-reineke/cmp-rg', opt = true }
+  use { 'davidsierradz/cmp-conventionalcommits', opt = true }
 
   --------------------------------
   -- Snippet
@@ -251,6 +249,7 @@ return require('packer').startup(function(use)
     config = function()
       require 'plug.luasnip'
     end,
+    opt = true,
   }
 
   --------------------------------
@@ -260,10 +259,7 @@ return require('packer').startup(function(use)
     config = function()
       require 'plug.code-action-menu'
     end,
-  }
-  use {
-    'simrat39/symbols-outline.nvim',
-    cmd = 'SymbolsOutline',
+    opt = true,
   }
   use 'gpanders/editorconfig.nvim'
 
@@ -273,40 +269,36 @@ return require('packer').startup(function(use)
   use {
     'nvim-neotest/neotest',
     requires = {
-      'nvim-lua/plenary.nvim',
-      'nvim-treesitter/nvim-treesitter',
-      'antoinemadec/FixCursorHold.nvim',
-      'haydenmeade/neotest-jest',
-      'shiradofu/neotest-vitest',
-      'olimorris/neotest-phpunit',
-      'nvim-neotest/neotest-go',
+      { 'nvim-lua/plenary.nvim' },
+      { 'nvim-treesitter/nvim-treesitter' },
+      { 'antoinemadec/FixCursorHold.nvim' },
+      { 'haydenmeade/neotest-jest' },
+      { 'shiradofu/neotest-vitest' },
+      { 'olimorris/neotest-phpunit' },
+      { 'nvim-neotest/neotest-go' },
     },
     config = function()
       require 'plug.neotest'
     end,
-    -- module = 'neotest',
+    opt = true,
   }
 
   --------------------------------------------------------------
   -- Fuzzy Finder
 
-  use {
-    'junegunn/fzf',
-    run = function()
-      vim.fn['fzf#install']()
-    end,
-  }
+  -- use {
+  --   'junegunn/fzf',
+  --   run = function()
+  --     vim.fn['fzf#install']()
+  --   end,
+  --   opt = true,
+  -- }
   use {
     'ibhagwan/fzf-lua',
     requires = { 'kyazdani42/nvim-web-devicons' },
     config = function()
       require 'plug.fzf'
     end,
-  }
-  use {
-    'junegunn/fzf.vim',
-    config = 'vim.cmd[[call plug#fzf#setup()]]',
-    requires = { 'fzf' },
   }
 
   --------------------------------------------------------------
@@ -325,6 +317,7 @@ return require('packer').startup(function(use)
     config = function()
       require 'plug.gitsigns'
     end,
+    opt = true,
   }
   use {
     'lambdalisue/gin.vim',
@@ -335,6 +328,7 @@ return require('packer').startup(function(use)
     config = function()
       require('git-conflict').setup()
     end,
+    opt = true,
   }
   use {
     'samoshkin/vim-mergetool',
@@ -342,6 +336,7 @@ return require('packer').startup(function(use)
       vim.g.mergetool_layout = 'LmR'
       vim.g.mergetool_prefer_revision = 'base'
     end,
+    opt = true,
   }
   use {
     'tyru/open-browser-github.vim',
@@ -360,29 +355,22 @@ return require('packer').startup(function(use)
     setup = function()
       vim.g['asterisk#keeppos'] = 1
     end,
+    opt = true,
   }
   use {
     'kevinhwang91/nvim-hlslens',
     config = function()
       require 'plug.hlslens'
     end,
-    module = 'hlslens',
-    keys = { '/' },
+    opt = true,
   }
   use {
     'petertriho/nvim-scrollbar',
     config = function()
       require('scrollbar').setup {}
     end,
+    opt = true,
   }
-  -- use {
-  --   'deris/vim-shot-f',
-  --   setup = function()
-  --     vim.g.shot_f_no_default_key_mappings = true
-  --   end,
-  --   keys = { '<Plug>(shot-f-' },
-  -- }
-  -- TODO: 必要性検証
   use {
     'rhysd/clever-f.vim',
     setup = function()
@@ -390,7 +378,6 @@ return require('packer').startup(function(use)
     end,
     keys = { '<Plug>(clever-f-' },
   }
-  -- TODO: 必要性検証
   use {
     'yuki-yano/fuzzy-motion.vim',
     config = function()
@@ -407,6 +394,7 @@ return require('packer').startup(function(use)
     config = function()
       require('colorizer').setup()
     end,
+    opt = true,
   }
   use {
     't9md/vim-quickhl',
@@ -417,6 +405,7 @@ return require('packer').startup(function(use)
     setup = function()
       vim.fn['plug#whitespace#setup']()
     end,
+    opt = true,
   }
   use {
     'windwp/nvim-autopairs',
@@ -435,6 +424,7 @@ return require('packer').startup(function(use)
       require('neogen').setup { snippet_engine = 'luasnip' }
     end,
     requires = 'nvim-treesitter/nvim-treesitter',
+    cmd = 'Neogen',
   }
 
   --------------------------------
@@ -459,7 +449,10 @@ return require('packer').startup(function(use)
   --------------------------------------------------------------
   -- Others
 
-  use 'tyru/open-browser.vim'
+  use {
+    'tyru/open-browser.vim',
+    opt = true,
+  }
   use {
     'NTBBloodbath/rest.nvim',
     requires = { 'nvim-lua/plenary.nvim' },
@@ -486,19 +479,18 @@ return require('packer').startup(function(use)
     end,
     cmd = 'ZenMode',
   }
-  use {
-    'kwkarlwang/bufresize.nvim',
-    config = function()
-      require('bufresize').setup()
-    end,
-    event = 'WinNew',
-  }
+  -- use {
+  --   'kwkarlwang/bufresize.nvim',
+  --   config = function()
+  --     require('bufresize').setup()
+  --   end,
+  --   event = 'WinNew',
+  -- }
   use {
     'lukas-reineke/indent-blankline.nvim',
     config = function()
       require('indent_blankline').setup {
         show_current_context = true,
-        show_current_context_start = true,
       }
     end,
   }
@@ -513,9 +505,7 @@ return require('packer').startup(function(use)
   use {
     'xiyaowong/nvim-transparent',
     config = function()
-      require('transparent').setup {
-        enable = true,
-      }
+      require('transparent').setup { enable = true }
     end,
   }
 end)

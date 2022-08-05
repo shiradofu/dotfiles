@@ -16,5 +16,6 @@ export STARSHIP_BIN_DIR="$XDG_STATE_HOME/starship/bin"
 export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
 export PRETTIERD_DEFAULT_CONFIG="$XDG_CONFIG_HOME/prettier/.prettierrc.yml"
 export NVIM_PLUG_DIR="$XDG_DATA_HOME/nvim/site/pack/packer"
+export NAVI_CONFIG="$XDG_CONFIG_HOME/navi/config.yml"
 
 skip_global_compinit=1

@@ -3,9 +3,9 @@ local config = {
   nearest_only = true,
 }
 
-local ok, scrollbar = pcall(require, "scrollbar.handlers.search")
+local ok, scrollbar = pcall(require, 'scrollbar.handlers.search')
 if ok then
   scrollbar.setup(config)
 else
-  require("hlslens").setup(config)
+  require('hlslens').setup(config)
 end

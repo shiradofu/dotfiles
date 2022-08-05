@@ -31,6 +31,9 @@ require('nvim-treesitter.configs').setup {
   context_commentstring = {
     enable = true,
     commentary_integration = ctx_comment_map,
+    config = {
+      cpp = { __default = '// %s', __multiline = '/* %s */' },
+    },
   },
   endwise = {
     enable = true,

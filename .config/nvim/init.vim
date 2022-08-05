@@ -50,15 +50,14 @@ let g:loaded_getscriptPlugin   = 1
 let g:loaded_netrwPlugin       = 1
 let g:loaded_netrwSettings     = 1
 let g:loaded_netrwFileHandlers = 1
+let g:loaded_node_provider     = 0
 let g:loaded_ruby_provider     = 0
 let g:loaded_perl_provider     = 0
 let g:loaded_python3_provider  = 0
 let g:vim_json_conceal         = 0
 let g:vim_markdown_conceal     = 0
 
-let g:config_dir = $XDG_CONFIG_HOME . '/nvim'
-let s:asdf_dir = $ASDF_DATA_DIR . '/installs'
-let g:node_host_prog = s:asdf_dir . '/nodejs/lts/.npm/lib/node_modules/neovim/bin/cli.js'
+let g:config_dir = stdpath('config')
 
 " Log function/command for debugging
 function! Log(var) abort
@@ -67,17 +66,14 @@ endfunction
 command! -nargs=1 Log call Log(<args>)
 lua function Log(...) print(vim.inspect(...)) end
 
-" https://github.com/wbthomason/packer.nvim/issues/202#issuecomment-796619161
-command! PS exe 'silent! !ulimit -S -n 200048' | PackerSync
-command! PC PackerCompile
-command! RE execute 'source ' . $MYVIMRC | echo "loaded"
-
+lua pcall(require, 'impatient')
 lua require 'user.mappings'
-lua require 'user.ft'
+lua require 'user.filetype'
 lua require 'user.colorscheme'
-lua require 'plugins'
+lua require 'plug'
+lua require 'plug._compiled'
+lua require 'plug._lazy'
 
 exe 'source ' . g:config_dir . '/_color.vim'
 let s:colorscheme = get(g:, 'colorscheme', 'default')
 exe 'colorscheme ' . s:colorscheme
-nnoremap <leader>j <Cmd>TransparentToggle<CR>

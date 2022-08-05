@@ -4,6 +4,7 @@
 
 !/.config/alacritty/base.yml
 !/.config/direnv/direnvrc
+!/.config/espanso/config/default.yml
 !/.config/gh/config.yml
 !/.config/git/_config
 !/.config/git/ignore
@@ -12,11 +13,12 @@
 /.config/iterm2/*
 !/.config/iterm2/com.googlecode.iterm2.plist
 !/.config/karabiner/karabiner.json
+!/.config/navi/*
 !/.config/nvim/autoload/*.vim
 !/.config/nvim/autoload/plug/*.vim
 !/.config/nvim/autoload/user/*.vim
-!/.config/nvim/lua/*.lua
 !/.config/nvim/lua/**/*.lua
+/.config/nvim/lua/plug/_compiled.lua
 !/.config/nvim/init.vim
 !/.config/prettier/.prettierrc.yml
 !/.config/skhd/skhdrc

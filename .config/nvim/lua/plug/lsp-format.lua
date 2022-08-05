@@ -1,12 +1,29 @@
 local M = {} -- keys are filetypes
 local map = require('user.mappings').lsp_format
+local get = require('user.utils').get
 local WAIT_MS = 1000
 
-vim.g.enable_auto_format = true
-vim.api.nvim_create_user_command('AutoFormatToggle', function()
-  vim.g.enable_auto_format = not vim.g.enable_auto_format
-  local state = vim.g.enable_auto_format and 'enabled' or 'disabled'
-  print('Auto formatting ' .. state)
+local function is_enabled(scope)
+  return get(vim[scope], 'enable_auto_format', true)
+end
+local function toggle_enabled(scope)
+  local bool = not is_enabled(scope)
+  vim[scope].enable_auto_format = bool
+  return bool
+end
+
+vim.api.nvim_create_user_command('AutoFormatToggleBuf', function()
+  print(
+    '(Buffer) Auto formatting '
+      .. (toggle_enabled 'b' and 'enabled' or 'disabled')
+  )
+end, { nargs = 0 })
+
+vim.api.nvim_create_user_command('AutoFormatToggleGlobal', function()
+  print(
+    '(Global) Auto formatting '
+      .. (toggle_enabled 'g' and 'enabled' or 'disabled')
+  )
 end, { nargs = 0 })
 
 local fmt_group = vim.api.nvim_create_augroup('LspFormatting', {})
@@ -27,7 +44,7 @@ local function create_au(bufnr, fn, config)
     group = fmt_group,
     buffer = bufnr,
     callback = function()
-      if vim.g.enable_auto_format then
+      if is_enabled 'g' and is_enabled 'b' then
         fn { bufnr = bufnr }
       end
     end,

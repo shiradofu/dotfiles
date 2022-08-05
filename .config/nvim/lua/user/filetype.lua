@@ -8,13 +8,6 @@ c('FileType', { group = qf, pattern = 'qf', callback = m.ft_quickfix })
 local http = g('FtHttp', {})
 c('FileType', { group = http, pattern = 'http', callback = m.ft_http })
 
-local dotenv = g('FtDotenv', {})
-c('BufEnter', {
-  group = dotenv,
-  pattern = '.env.*',
-  command = 'setlocal ft=sh',
-})
-
 local gitcommit = g('FtGitCommit', {})
 c('BufWinEnter', {
   group = gitcommit,
@@ -35,23 +28,9 @@ c('BufEnter', {
   end,
 })
 
-local cpp = g('FtCpp', {})
-c('FileType', {
-  group = cpp,
-  pattern = 'cpp',
-  command = [[setlocal commentstring=//\ %s]],
-})
-
-local php = g('FtPhp', {})
-c('FileType', {
-  group = php,
-  pattern = 'php',
-  command = [[setlocal commentstring=//\ %s]],
-})
-
-local toml = g('FtToml', {})
-c('FileType', {
-  group = toml,
-  pattern = 'toml',
-  command = [[setlocal commentstring=#\ %s]],
+local template = g('FtTemplate', {})
+c('BufEnter', {
+  group = template,
+  pattern = '*/data/templates/*',
+  command = 'let b:enable_auto_format = v:false',
 })
