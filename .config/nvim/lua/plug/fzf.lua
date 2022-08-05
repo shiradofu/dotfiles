@@ -7,11 +7,6 @@ fzf.setup {
     height = 0.9,
     width = 0.9,
     border = 'single',
-    -- preview = {
-    --   default = 'bat',
-    --   vertical = 'down:50%:sharp',
-    --   horizontal = 'right:55%:sharp',
-    -- },
   },
   fzf_opts = {
     ['--info'] = 'default',
@@ -29,8 +24,8 @@ fzf.setup {
       ['ctrl-a'] = 'beginning-of-line',
       ['ctrl-e'] = 'end-of-line',
       ['ctrl-l'] = 'toggle-preview',
-      ['ctrl-j'] = 'preview-page-down',
-      ['ctrl-k'] = 'preview-page-up',
+      ['ctrl-j'] = 'preview-down',
+      ['ctrl-k'] = 'preview-up',
     },
   },
   actions = {

@@ -10,10 +10,7 @@ require('nvim-treesitter.configs').setup {
     additional_vim_regex_highlighting = { 'markdown' },
   },
   indent = { enable = false },
-  yati = {
-    enable = true,
-    disable = { 'markdown', 'php' },
-  },
+  yati = { enable = true },
   textobjects = {
     select = {
       enable = true,

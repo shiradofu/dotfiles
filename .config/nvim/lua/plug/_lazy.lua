@@ -1,6 +1,12 @@
 -- 依存順序注意
 vim.defer_fn(function()
   require('packer').loader(
+    'nvim-web-devicons',
+    'fzf-lua',
+    'vim-repeat',
+    'denops.vim',
+    'gin.vim',
+    'fuzzy-motion.vim',
     'LuaSnip',
     'nvim-cmp',
     'cmp-nvim-lsp',
@@ -26,8 +32,6 @@ vim.defer_fn(function()
     'vim-textobj-line',
     'vim-textobj-comment',
     'substitute.nvim',
-    'plenary.nvim',
-    'FixCursorHold.nvim',
     'neotest-jest',
     'neotest-vitest',
     'neotest-phpunit',
@@ -43,4 +47,4 @@ vim.defer_fn(function()
     'vim-better-whitespace',
     'open-browser.vim'
   )
-end, 20)
+end, 0)

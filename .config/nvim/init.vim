@@ -67,6 +67,7 @@ command! -nargs=1 Log call Log(<args>)
 lua function Log(...) print(vim.inspect(...)) end
 
 lua pcall(require, 'impatient')
+lua require 'user'
 lua require 'user.mappings'
 lua require 'user.filetype'
 lua require 'user.colorscheme'

@@ -359,19 +359,11 @@ function M.bqf()
     vsplit = '<C-v>',
     prevfile = '<C-p>',
     nextfile = '<C-n>',
-    prevhist = '<',
-    nexthist = '>',
-    stoggleup = '<S-Tab>',
-    stoggledown = '<Tab>',
     stogglevm = '<Tab>',
-    sclear = 'X',
     pscrollup = '<C-y>',
     pscrolldown = '<C-e>',
     ptogglemode = '<C-g>',
     ptoggleauto = 'p',
-    filter = 'f',
-    filterr = 'F',
-    fzffilter = '<C-f>',
   }
 end
 
@@ -379,7 +371,8 @@ function M.ft_quickfix()
   k('n', 'dd', '<Cmd>call user#quickfix#del()<CR>', b)
   k('n', 'u',  '<Cmd>call user#quickfix#undo_del()<CR>', b)
   k('n', 'R',  '<Cmd>Qfreplace topleft split<CR>', b)
-  k('n', '<C-g>', '<Nop>', b)
+  k('n', 'F',  '<Cmd>FzfLua quickfix<CR>', b)
+  -- k('n', '<C-g>', '<Nop>', b)
 end
 
 function M.ft_markdown()

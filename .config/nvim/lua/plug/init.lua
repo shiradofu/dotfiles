@@ -6,29 +6,17 @@ if vim.fn.empty(vim.fn.glob(install_path)) == 1 then
 end
 
 vim.cmd [[packadd packer.nvim]]
----@diagnostic disable-next-line: different-requires
 require 'plug.packer'
 
----@diagnostic disable-next-line: different-requires
 require('packer').startup(function(use)
   use { 'wbthomason/packer.nvim', opt = true }
 
   -- ------------------------------------------------------------
   -- Library
 
-  --------------------------------
-  -- Vim script Library
-  use { 'tpope/vim-repeat', event = 'VimEnter' }
-
-  --------------------------------
-  -- Lua Library
   use 'nvim-lua/plenary.nvim' -- do not lazy load
-  use 'antoinemadec/FixCursorHold.nvim'
-  use 'kyazdani42/nvim-web-devicons'
-
-  --------------------------------
-  -- Denops Library
-  use 'vim-denops/denops.vim'
+  use { 'tpope/vim-repeat', opt = true }
+  use { 'vim-denops/denops.vim', opt = true }
 
   -- ------------------------------------------------------------
   -- Fundamental
@@ -286,19 +274,13 @@ require('packer').startup(function(use)
   --------------------------------------------------------------
   -- Fuzzy Finder
 
-  -- use {
-  --   'junegunn/fzf',
-  --   run = function()
-  --     vim.fn['fzf#install']()
-  --   end,
-  --   opt = true,
-  -- }
   use {
     'ibhagwan/fzf-lua',
     requires = { 'kyazdani42/nvim-web-devicons' },
     config = function()
       require 'plug.fzf'
     end,
+    opt = true,
   }
 
   --------------------------------------------------------------
@@ -322,6 +304,7 @@ require('packer').startup(function(use)
   use {
     'lambdalisue/gin.vim',
     requires = 'vim-denops/denops.vim',
+    opt = true,
   }
   use {
     'akinsho/git-conflict.nvim',
@@ -388,6 +371,8 @@ require('packer').startup(function(use)
         'W', 'D', 'R', 'S', 'Z', 'X', 'T', 'Q',
       }
     end,
+    requires = 'vim-denops/denops.vim',
+    opt = true,
   }
   use {
     'norcalli/nvim-colorizer.lua',
@@ -479,13 +464,6 @@ require('packer').startup(function(use)
     end,
     cmd = 'ZenMode',
   }
-  -- use {
-  --   'kwkarlwang/bufresize.nvim',
-  --   config = function()
-  --     require('bufresize').setup()
-  --   end,
-  --   event = 'WinNew',
-  -- }
   use {
     'lukas-reineke/indent-blankline.nvim',
     config = function()
