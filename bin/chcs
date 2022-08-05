@@ -16,7 +16,7 @@ __chcs_wezterm() {
     echo "$dir is not a directory."
     return 1
   fi
-  cat << EOF >| "$dir/color.lua"
+  cat << EOF >| "$dir/_color.lua"
 return {
   window_background_opacity = $2,
   color_scheme = '$1',
@@ -56,8 +56,8 @@ __chcs_delta() {
     return 1
   fi
   [ "$mode" = 'light' ] && val='true' || val='false'
-  echo "[delta]"         >| "$dir/delta_theme"
-  echo "  light = $val" >> "$dir/delta_theme"
+  echo "[delta]"        >| "$dir/_delta_theme"
+  echo "  light = $val" >> "$dir/_delta_theme"
 }
 
 __chcs_os() {
@@ -85,7 +85,7 @@ __chcs_os() {
 name=zenwritten
 mode=dark # light or dark
 
-SAVE_FILE="$config_home/colorscheme"
+SAVE_FILE="$config_home/_colorscheme"
 if [ -f "$SAVE_FILE" ]; then
   name=$(head -n 1 "$SAVE_FILE")
   mode=$(tail -n 1 "$SAVE_FILE")

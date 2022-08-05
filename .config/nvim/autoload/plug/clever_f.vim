@@ -9,9 +9,7 @@ function! plug#clever_f#setup() abort
 
   let g:clever_f_across_no_line = 1
   let g:clever_f_mark_char = 1
-  let g:clever_f_mark_direct = 1
   let g:clever_f_mark_char_color = 'CleverF'
-  let g:clever_f_mark_direct_color = 'CleverF'
 endfunction
 
 function plug#clever_f#hl() abort

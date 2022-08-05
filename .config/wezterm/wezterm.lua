@@ -58,7 +58,7 @@ local config = {
   color_scheme = 'zenwritten_dark',
 }
 
-local ok, color = pcall(require, 'color')
+local ok, color = pcall(require, '_color')
 if ok then
   merge(config, color)
 end

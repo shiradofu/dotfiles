@@ -22,18 +22,11 @@ require('packer').startup(function(use)
   -- Fundamental
 
   use {
-    'mattn/vim-findroot',
-    setup = function()
-      vim.g.findroot_patterns = { '.git/' }
-      vim.g.findroot_not_for_subdir = 0
-    end,
-  }
-  use {
     'lambdalisue/fern.vim',
     requires = 'antoinemadec/FixCursorHold.nvim',
     branch = 'main',
     setup = function()
-      vim.fn['plug#fern#setup']()
+      require 'plug.fern'
     end,
   }
   use 'lambdalisue/fern-hijack.vim'

@@ -73,7 +73,7 @@ lua require 'user.filetype'
 lua require 'user.colorscheme'
 lua require 'plug'
 lua require 'plug._compiled'
-lua require 'plug._lazy'
+lua require 'plug.lazy'
 
 exe 'source ' . g:config_dir . '/_color.vim'
 let s:colorscheme = get(g:, 'colorscheme', 'default')
