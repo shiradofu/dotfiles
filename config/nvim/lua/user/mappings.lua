@@ -187,9 +187,11 @@ function M.gitsigns(gitsigns)
     vim.schedule(function()gitsigns.prev_hunk()end)
     return '<Ignore>'
   end, e)
-
+  k({'n', 'v'}, 'g<', ':Gitsigns stage_hunk<CR>')
+  k('n', 'g>', gitsigns.undo_stage_hunk)
   k({ 'o', 'x' }, 'ig', ':<C-u>Gitsigns select_hunk<CR>')
   k({ 'o', 'x' }, 'ag', ':<C-u>Gitsigns select_hunk<CR>')
+  k('n', '<leader>b', gitsigns.toggle_current_line_blame)
 end
 
 function M.clever_f()

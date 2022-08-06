@@ -5,13 +5,14 @@ password=$1
 git_name=$2
 git_email=$3
 
-msg()    { printf "\033[1;34m%s\033[0m\n" "$1"; }
+i=0
+msg()    { printf "\033[1;3$((i++%6+1))m%s\033[0m\n" "$1"; }
 exists() { type "$1" > /dev/null 2>&1; }
 is_mac() { echo "$OSTYPE" | grep darwin -q; }
-is_wsl() { uname -r | grep microsoft -q; }
-brew_i() { for X; do msg "\n🍺  installing $X:\n"; brew install "$X";   done }
+is_wsl() { [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; }
+brew_i() { for X; do msg "\n🍺  installing $X:\n"; brew install "$X"; done }
 npm_i()  { for X; do msg "\n🍔  installing $X:\n"; npm install -g "$X"; done }
-go_i()   { for X; do msg "]n🍙  installing $X:\n"; go install "$X";     done }
+go_i()   { for X; do msg "]n🍙  installing $X:\n"; go install "$X"; done }
 
 DOT_ROOT=$(cd "$(dirname "$0")" && pwd)
 source "$DOT_ROOT/.config/zsh/.zshenv"
@@ -69,7 +70,7 @@ zsh -i -c exit > /dev/null 2>&1
 brew_i fzf
 "${HOMEBREW_PREFIX}/opt/fzf/install" --xdg --completion --no-update-rc --no-key-bindings
 brew_i cmake starship fd rg bat glow git-delta jq tmux navi hexyl tokei \
-  docker gh act awscli
+  direnv docker gh act awscli
 
 #
 # Languages and Package Managers
@@ -161,4 +162,4 @@ if is_wsl && exists wslvar; then
     "/mnt/c/Program\ Files/Git/mingw64/libexec/git-core/git-credential-manager.exe"
 fi
 
-unset "$password"
+unset password git_name git_email

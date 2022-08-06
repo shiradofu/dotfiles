@@ -11,12 +11,5 @@ style:
     color: white
     width_percentage: 60
 
-finder:
-  command: fzf
-
-cheats:
-  paths:
-    - $XDG_CONFIG_HOME/navi
-
 shell:
   command: zsh

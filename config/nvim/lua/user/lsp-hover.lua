@@ -3,7 +3,8 @@
 
 local function on_cursor_hold()
   if vim.lsp.buf.server_ready() then
-    vim.diagnostic.open_float()
+    -- タイミングによってはエラーになるので抑制
+    pcall(vim.diagnostic.open_float)
   end
 end
 

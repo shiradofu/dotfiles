@@ -1,2 +1,4 @@
+% linux
+
 # bios
-read x;[ "$x" = 'y' ] && sudo systemctl reboot --firmware-setup
+read && sudo systemctl reboot --firmware-setup

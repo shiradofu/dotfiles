@@ -1,3 +1,8 @@
+setopt no_global_rcs > /dev/null 2>&1
+is_mac() { [[ "$OSTYPE" == "darwin"* ]]; }
+is_wsl() { [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; }
+is_pure_linux() { ! is_mac && ! is_wsl; }
+
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
@@ -8,14 +13,27 @@ export PAGER="less"
 export LESS="-g -i -M -R -S -W"
 export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 
+if [ -f /usr/local/bin/brew  ]; then
+  export HOMEBREW_PREFIX="/usr/local";
+  export HOMEBREW_CELLAR="/usr/local/Cellar";
+  export HOMEBREW_REPOSITORY="/usr/local/Homebrew";
+elif [ -d ~/.linuxbrew ]; then
+  export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew";
+  export HOMEBREW_CELLAR="/home/linuxbrew/.linuxbrew/Cellar";
+  export HOMEBREW_REPOSITORY="/home/linuxbrew/.linuxbrew/Homebrew";
+fi
+# { test -d /opt/homebrew && eval $(/opt/homebrew/bin/brew shellenv) } \
+# || { test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv) }
+
 export GOPATH="$XDG_STATE_HOME/go"
-export ZINIT_HOME="$XDG_STATE_HOME/zinit/zinit.git"
 export ASDF_DIR="$XDG_STATE_HOME/asdf/repo"
 export ASDF_DATA_DIR="$XDG_STATE_HOME/asdf/data"
-export STARSHIP_BIN_DIR="$XDG_STATE_HOME/starship/bin"
-export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship/starship.toml"
-export PRETTIERD_DEFAULT_CONFIG="$XDG_CONFIG_HOME/prettier/.prettierrc.yml"
-export NVIM_PLUG_DIR="$XDG_DATA_HOME/nvim/site/pack/packer"
-export NAVI_CONFIG="$XDG_CONFIG_HOME/navi/config.yml"
+
+export PATH="$HOMEBREW_PREFIX/sbin:$PATH"
+export PATH="$HOMEBREW_PREFIX/bin:$PATH"
+export PATH="$ASDF_DATA_DIR/shims:$PATH"
+export PATH="$ASDF_DIR/bin:$PATH"
+export PATH="$GOPATH/bin:$PATH"
+export PATH="$HOME/bin:$PATH"
 
 skip_global_compinit=1
