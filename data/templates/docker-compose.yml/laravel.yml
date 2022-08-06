@@ -51,12 +51,6 @@ services:
     volumes:
       - redis_data:/data
 
-  dialogflow:
-    image: clue/json-server
-    volumes:
-      - ./docker/dialogflow/:/data/
-    command: --watch
-
 volumes:
   db_data:
   redis_data:

@@ -27,9 +27,10 @@ local config = {
   window_decorations = 'RESIZE',
   hide_tab_bar_if_only_one_tab = true,
   window_padding = { left = 0, right = 0, top = 0, bottom = 0 },
-  font_size = 18,
+  font_size = 14,
   font = wezterm.font_with_fallback {
-    { family = 'SF Mono Square', weight = 1000 },
+    { family = 'JetBrains Mono', weight = 500 },
+    { family = 'SF Mono', weight = 500 },
   },
   keys = (function()
     local keys = {}
@@ -54,8 +55,6 @@ local config = {
     end
     return keys
   end)(),
-  window_background_opacity = tonumber '0.9',
-  color_scheme = 'zenwritten_dark',
 }
 
 local ok, color = pcall(require, '_color')

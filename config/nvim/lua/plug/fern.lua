@@ -20,7 +20,7 @@ vim.api.nvim_create_autocmd('FileType', {
       pos = bufname:find [[file:///]]
     end
     vim.b.fern_name = bufname:sub(pos, -2)
-    vim.api.nvim_buf_set_name(0, vim.b.fern_name)
+    -- vim.api.nvim_buf_set_name(0, vim.b.fern_name)
 
     vim.cmd [[setlocal signcolumn=number]]
     mappings()

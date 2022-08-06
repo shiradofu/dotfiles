@@ -13,20 +13,19 @@ if ! exists sudo; then
 fi
 
 DIST=''
-for dist in debian redhat fedora; do
-  if [ -e "/etc/${dist}-release" ] || [ -e "/etc/${dist}_version" ]; then
-    DIST="${dist}"
-    break
-  fi
-done
-
+if [ "$(uname)" = "Darwin" ]; then
+  DIST=mac
+else
+  for dist in debian redhat fedora; do
+    if [ -e "/etc/${dist}-release" ] || [ -e "/etc/${dist}_version" ]; then
+      DIST="${dist}"
+      break
+    fi
+  done
+fi
 if [ -z "${DIST}" ]; then
-  if [ "$(uname)" = "Darwin" ]; then
-    DIST=darwin
-  else
-    err "Sorry, your operating system is not supported."
-    exit 1
-  fi
+  err "Sorry, your operating system is not supported."
+  exit 1
 fi
 
 trap 'stty echo' INT PIPE TERM EXIT
@@ -37,6 +36,34 @@ read -r password
 stty echo
 sudo -K
 echo "${password}" | sudo -lS >/dev/null 2>&1 || exit 1
+printf "Password successfully verified!\n"
+
+while true; do
+  msg "Please input git username"
+  read -r git_name
+  msg "Please input git email"
+  read -r git_email
+
+  printf "\nname:\t%s\nemail:\t%s\n\nOK?(y/n)" "$git_name" "$git_email"
+  read yn
+  case "$yn" in [Yy] ) break;; esac
+done
+
+clear
+printf "\n ==========================================\n\n"
+printf "   "
+printf "\033[0;31mOK, "
+printf "\033[1;33mnow "
+printf "\033[1;32myou "
+printf "\033[0;32mcan "
+printf "\033[0;36mleave "
+printf "\033[0;34mthe "
+printf "\033[0;35mcomputer! "
+printf "\033[0m☕"
+printf "\n\n ==========================================\n"
+
+sleep 3
+exit
 
 case "${DIST}" in
   debian )
@@ -54,7 +81,7 @@ case "${DIST}" in
     echo "${password}" | sudo -S yum -y groupinstall 'Development Tools'
     echo "${password}" | sudo -S yum -y install procps-ng curl file git bash
     ;;
-  darwin )
+  mac )
     if ! exists "xcode-select"; then
         msg "installing xcode-select..."
         xcode-select --install
@@ -85,7 +112,7 @@ repo=github.com/shiradofu/dotfiles
 ghq get --shallow --update https://${repo}
 
 msg "\n🚀  Start installing!\n"
-bash "$(ghq root)/${repo}/install.sh" "$password"
+bash "$(ghq root)/${repo}/install.sh" "$password" "$git_name" "$git_email"
 
 unset password
 
