@@ -60,6 +60,7 @@ zstyle ':completion:*:complete:(cd|pushd):*' tag-order \
     'local-directories named-directories'
 
 # 履歴
+setopt share_history        # 履歴をシェル間で共有
 setopt extended_history     # 履歴にコマンド実行時刻/所要時間も記録
 setopt hist_ignore_space    # spaceで始まる場合、コマンド履歴に追加しない
 setopt hist_reduce_blanks   # 余分なスペースを削除してヒストリに記録する
@@ -267,6 +268,7 @@ docker-rmi() {
   fi
 }
 
+export GHQ_ROOT=$(ghq root)
 export PRETTIERD_DEFAULT_CONFIG="$XDG_CONFIG_HOME/prettier/.prettierrc.yml"
 export NODE_REPL_HISTORY="$XDG_STATE_HOME/node_history"
 export SQLITE_HISTORY="$XDG_STATE_HOME/sqlite_history"

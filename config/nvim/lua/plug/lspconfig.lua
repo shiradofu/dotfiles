@@ -46,7 +46,7 @@ M.sumneko_lua = vim.tbl_deep_extend('force', base_config, {
     Lua = {
       runtime = 'LuaJIT',
       diagnostics = {
-        globals = { 'vim' },
+        globals = { 'vim', 'before_each', 'describe', 'it' },
       },
       library = vim.api.nvim_get_runtime_file('', true),
       telemetry = {

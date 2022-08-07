@@ -11,7 +11,7 @@ packer.startup(function(use)
 
   use 'nvim-lua/plenary.nvim' -- do not lazy load
   use { 'tpope/vim-repeat', opt = true }
-  use { 'vim-denops/denops.vim', opt = true }
+  use { 'vim-denops/denops.vim' }
 
   -- ------------------------------------------------------------
   -- Fundamental
@@ -245,13 +245,13 @@ packer.startup(function(use)
   use {
     'nvim-neotest/neotest',
     requires = {
-      { 'nvim-lua/plenary.nvim' },
-      { 'nvim-treesitter/nvim-treesitter' },
-      { 'antoinemadec/FixCursorHold.nvim' },
-      { 'haydenmeade/neotest-jest' },
-      { 'shiradofu/neotest-vitest' },
-      { 'olimorris/neotest-phpunit' },
-      { 'nvim-neotest/neotest-go' },
+      'nvim-lua/plenary.nvim',
+      'nvim-treesitter/nvim-treesitter',
+      'antoinemadec/FixCursorHold.nvim',
+      'haydenmeade/neotest-jest',
+      'shiradofu/neotest-vitest',
+      'olimorris/neotest-phpunit',
+      'nvim-neotest/neotest-go',
     },
     config = function()
       require 'plug.neotest'
@@ -404,10 +404,7 @@ packer.startup(function(use)
   -- Workspace
   use {
     'kevinhwang91/nvim-bqf',
-    requires = {
-      'junegunn/fzf',
-      'nvim-treesitter/nvim-treesitter',
-    },
+    requires = 'nvim-treesitter/nvim-treesitter',
     config = function()
       require 'plug.bqf'
     end,

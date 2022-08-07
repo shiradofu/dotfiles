@@ -6,11 +6,6 @@
     },
     "profiles": [
         {
-            "name": "ASCII",
-            "selected": true,
-            "parameters": {
-                "delay_milliseconds_before_open_device": 1000
-            },
             "complex_modifications": {
                 "parameters": {
                     "basic.simultaneous_threshold_milliseconds": 50,
@@ -24,7 +19,6 @@
                         "description": "CapsLock → Control",
                         "manipulators": [
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "caps_lock",
                                     "modifiers": {
@@ -35,7 +29,8 @@
                                     {
                                         "key_code": "left_control"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             }
                         ]
                     },
@@ -43,7 +38,17 @@
                         "description": "Control + n/p → arrow",
                         "manipulators": [
                             {
-                                "type": "basic",
+                                "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "^com\\.github\\.wez\\.wezterm$",
+                                            "^io\\.alacritty$",
+                                            "^com\\.apple\\.Terminal$",
+                                            "^com\\.googlecode\\.iterm2$"
+                                        ],
+                                        "type": "frontmost_application_unless"
+                                    }
+                                ],
                                 "from": {
                                     "key_code": "n",
                                     "modifiers": {
@@ -55,20 +60,20 @@
                                         "key_code": "down_arrow"
                                     }
                                 ],
+                                "type": "basic"
+                            },
+                            {
                                 "conditions": [
                                     {
-                                        "type": "frontmost_application_unless",
                                         "bundle_identifiers": [
                                             "^com\\.github\\.wez\\.wezterm$",
                                             "^io\\.alacritty$",
                                             "^com\\.apple\\.Terminal$",
                                             "^com\\.googlecode\\.iterm2$"
-                                        ]
+                                        ],
+                                        "type": "frontmost_application_unless"
                                     }
-                                ]
-                            },
-                            {
-                                "type": "basic",
+                                ],
                                 "from": {
                                     "key_code": "p",
                                     "modifiers": {
@@ -80,17 +85,7 @@
                                         "key_code": "up_arrow"
                                     }
                                 ],
-                                "conditions": [
-                                    {
-                                        "type": "frontmost_application_unless",
-                                        "bundle_identifiers": [
-                                            "^com\\.github\\.wez\\.wezterm$",
-                                            "^io\\.alacritty$",
-                                            "^com\\.apple\\.Terminal$",
-                                            "^com\\.googlecode\\.iterm2$"
-                                        ]
-                                    }
-                                ]
+                                "type": "basic"
                             }
                         ]
                     },
@@ -98,7 +93,17 @@
                         "description": "Ctrl-h → BS",
                         "manipulators": [
                             {
-                                "type": "basic",
+                                "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "^com\\.github\\.wez\\.wezterm$",
+                                            "^io\\.alacritty$",
+                                            "^com\\.apple\\.Terminal$",
+                                            "^com\\.googlecode\\.iterm2$"
+                                        ],
+                                        "type": "frontmost_application_unless"
+                                    }
+                                ],
                                 "from": {
                                     "key_code": "h",
                                     "modifiers": {
@@ -110,17 +115,7 @@
                                         "key_code": "delete_or_backspace"
                                     }
                                 ],
-                                "conditions": [
-                                    {
-                                        "type": "frontmost_application_unless",
-                                        "bundle_identifiers": [
-                                            "^com\\.github\\.wez\\.wezterm$",
-                                            "^io\\.alacritty$",
-                                            "^com\\.apple\\.Terminal$",
-                                            "^com\\.googlecode\\.iterm2$"
-                                        ]
-                                    }
-                                ]
+                                "type": "basic"
                             }
                         ]
                     },
@@ -128,7 +123,17 @@
                         "description": "Ctrl-BS/Ctrl-w → alt-BS",
                         "manipulators": [
                             {
-                                "type": "basic",
+                                "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "^com\\.github\\.wez\\.wezterm$",
+                                            "^io\\.alacritty$",
+                                            "^com\\.apple\\.Terminal$",
+                                            "^com\\.googlecode\\.iterm2$"
+                                        ],
+                                        "type": "frontmost_application_unless"
+                                    }
+                                ],
                                 "from": {
                                     "key_code": "delete_or_backspace",
                                     "modifiers": {
@@ -141,20 +146,20 @@
                                         "modifiers": ["option"]
                                     }
                                 ],
+                                "type": "basic"
+                            },
+                            {
                                 "conditions": [
                                     {
-                                        "type": "frontmost_application_unless",
                                         "bundle_identifiers": [
                                             "^com\\.github\\.wez\\.wezterm$",
                                             "^io\\.alacritty$",
                                             "^com\\.apple\\.Terminal$",
                                             "^com\\.googlecode\\.iterm2$"
-                                        ]
+                                        ],
+                                        "type": "frontmost_application_unless"
                                     }
-                                ]
-                            },
-                            {
-                                "type": "basic",
+                                ],
                                 "from": {
                                     "key_code": "w",
                                     "modifiers": {
@@ -167,17 +172,7 @@
                                         "modifiers": ["option"]
                                     }
                                 ],
-                                "conditions": [
-                                    {
-                                        "type": "frontmost_application_unless",
-                                        "bundle_identifiers": [
-                                            "^com\\.github\\.wez\\.wezterm$",
-                                            "^io\\.alacritty$",
-                                            "^com\\.apple\\.Terminal$",
-                                            "^com\\.googlecode\\.iterm2$"
-                                        ]
-                                    }
-                                ]
+                                "type": "basic"
                             }
                         ]
                     },
@@ -185,7 +180,17 @@
                         "description": "Esc → Eisu + Esc (only in terminal)",
                         "manipulators": [
                             {
-                                "type": "basic",
+                                "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "^com\\.github\\.wez\\.wezterm$",
+                                            "^io\\.alacritty$",
+                                            "^com\\.apple\\.Terminal$",
+                                            "^com\\.googlecode\\.iterm2$"
+                                        ],
+                                        "type": "frontmost_application_if"
+                                    }
+                                ],
                                 "from": {
                                     "key_code": "escape"
                                 },
@@ -197,20 +202,20 @@
                                         "key_code": "escape"
                                     }
                                 ],
+                                "type": "basic"
+                            },
+                            {
                                 "conditions": [
                                     {
-                                        "type": "frontmost_application_if",
                                         "bundle_identifiers": [
                                             "^com\\.github\\.wez\\.wezterm$",
                                             "^io\\.alacritty$",
                                             "^com\\.apple\\.Terminal$",
                                             "^com\\.googlecode\\.iterm2$"
-                                        ]
+                                        ],
+                                        "type": "frontmost_application_if"
                                     }
-                                ]
-                            },
-                            {
-                                "type": "basic",
+                                ],
                                 "from": {
                                     "key_code": "c",
                                     "modifiers": {
@@ -226,17 +231,7 @@
                                         "modifiers": ["control"]
                                     }
                                 ],
-                                "conditions": [
-                                    {
-                                        "type": "frontmost_application_if",
-                                        "bundle_identifiers": [
-                                            "^com\\.github\\.wez\\.wezterm$",
-                                            "^io\\.alacritty$",
-                                            "^com\\.apple\\.Terminal$",
-                                            "^com\\.googlecode\\.iterm2$"
-                                        ]
-                                    }
-                                ]
+                                "type": "basic"
                             }
                         ]
                     },
@@ -300,6 +295,28 @@
                                 "type": "basic"
                             }
                         ]
+                    },
+                    {
+                        "description": "Alfred を開くときに確実に IME をオフにする",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "spacebar",
+                                    "modifiers": {
+                                        "mandatory": ["command"]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "japanese_eisuu"
+                                    },
+                                    {
+                                        "shell_command": "open -a 'Alfred 4'"
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
                     }
                 ]
             },
@@ -314,8 +331,9 @@
                         "vendor_id": 10522
                     },
                     "ignore": false,
-                    "manipulate_caps_lock_led": false,
-                    "simple_modifications": []
+                    "manipulate_caps_lock_led": true,
+                    "simple_modifications": [],
+                    "treat_as_built_in_keyboard": false
                 },
                 {
                     "disable_built_in_keyboard_if_exists": false,
@@ -327,8 +345,9 @@
                         "vendor_id": 1452
                     },
                     "ignore": false,
-                    "manipulate_caps_lock_led": false,
-                    "simple_modifications": []
+                    "manipulate_caps_lock_led": true,
+                    "simple_modifications": [],
+                    "treat_as_built_in_keyboard": false
                 },
                 {
                     "disable_built_in_keyboard_if_exists": false,
@@ -341,7 +360,8 @@
                     },
                     "ignore": true,
                     "manipulate_caps_lock_led": false,
-                    "simple_modifications": []
+                    "simple_modifications": [],
+                    "treat_as_built_in_keyboard": false
                 },
                 {
                     "disable_built_in_keyboard_if_exists": false,
@@ -354,7 +374,8 @@
                     },
                     "ignore": false,
                     "manipulate_caps_lock_led": true,
-                    "simple_modifications": []
+                    "simple_modifications": [],
+                    "treat_as_built_in_keyboard": false
                 },
                 {
                     "disable_built_in_keyboard_if_exists": true,
@@ -367,10 +388,137 @@
                     },
                     "ignore": true,
                     "manipulate_caps_lock_led": false,
-                    "simple_modifications": []
+                    "simple_modifications": [],
+                    "treat_as_built_in_keyboard": false
                 }
             ],
-            "fn_function_keys": [],
+            "fn_function_keys": [
+                {
+                    "from": {
+                        "key_code": "f1"
+                    },
+                    "to": [
+                        {
+                            "consumer_key_code": "display_brightness_decrement"
+                        }
+                    ]
+                },
+                {
+                    "from": {
+                        "key_code": "f2"
+                    },
+                    "to": [
+                        {
+                            "consumer_key_code": "display_brightness_increment"
+                        }
+                    ]
+                },
+                {
+                    "from": {
+                        "key_code": "f3"
+                    },
+                    "to": [
+                        {
+                            "apple_vendor_keyboard_key_code": "mission_control"
+                        }
+                    ]
+                },
+                {
+                    "from": {
+                        "key_code": "f4"
+                    },
+                    "to": [
+                        {
+                            "apple_vendor_keyboard_key_code": "spotlight"
+                        }
+                    ]
+                },
+                {
+                    "from": {
+                        "key_code": "f5"
+                    },
+                    "to": [
+                        {
+                            "consumer_key_code": "dictation"
+                        }
+                    ]
+                },
+                {
+                    "from": {
+                        "key_code": "f6"
+                    },
+                    "to": [
+                        {
+                            "key_code": "f6"
+                        }
+                    ]
+                },
+                {
+                    "from": {
+                        "key_code": "f7"
+                    },
+                    "to": [
+                        {
+                            "consumer_key_code": "rewind"
+                        }
+                    ]
+                },
+                {
+                    "from": {
+                        "key_code": "f8"
+                    },
+                    "to": [
+                        {
+                            "consumer_key_code": "play_or_pause"
+                        }
+                    ]
+                },
+                {
+                    "from": {
+                        "key_code": "f9"
+                    },
+                    "to": [
+                        {
+                            "consumer_key_code": "fast_forward"
+                        }
+                    ]
+                },
+                {
+                    "from": {
+                        "key_code": "f10"
+                    },
+                    "to": [
+                        {
+                            "consumer_key_code": "mute"
+                        }
+                    ]
+                },
+                {
+                    "from": {
+                        "key_code": "f11"
+                    },
+                    "to": [
+                        {
+                            "consumer_key_code": "volume_decrement"
+                        }
+                    ]
+                },
+                {
+                    "from": {
+                        "key_code": "f12"
+                    },
+                    "to": [
+                        {
+                            "consumer_key_code": "volume_increment"
+                        }
+                    ]
+                }
+            ],
+            "name": "ASCII",
+            "parameters": {
+                "delay_milliseconds_before_open_device": 1000
+            },
+            "selected": true,
             "simple_modifications": [],
             "virtual_hid_keyboard": {
                 "country_code": 0,

@@ -39,7 +39,7 @@ local config_globals_templates = {
 }
 
 local _opts = {
-  template_dir = os.getenv 'XDG_DATA_HOME' .. '/templates',
+  template_dir = os.getenv 'XDG_DATA_HOME' .. '/templates/',
   subdir = function(template_dir)
     local bufname = vim.api.nvim_buf_get_name(0)
     local basename = path.basename(bufname)

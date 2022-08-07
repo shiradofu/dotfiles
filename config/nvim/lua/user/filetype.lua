@@ -31,6 +31,6 @@ c('BufEnter', {
 local template = g('FtTemplate', {})
 c('BufEnter', {
   group = template,
-  pattern = '*/data/templates/*',
+  pattern = '*/dotfiles/data/templates/*',
   command = 'let b:enable_auto_format = v:false',
 })
