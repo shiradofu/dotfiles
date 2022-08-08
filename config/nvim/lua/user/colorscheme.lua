@@ -6,7 +6,7 @@ math.randomseed(os.time())
 while
   not pcall(
     vim.fn.serverstart,
-    string.format('%s/server-%d.pipe', cache_dir, math.random(65535))
+    string.format('%s/server-%d.pipe', cache_dir, math.random(49152, 65535))
   )
 do
 end
