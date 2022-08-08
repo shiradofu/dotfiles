@@ -17,6 +17,15 @@ packer.startup(function(use)
   -- Fundamental
 
   use {
+    'shiradofu/project-note.nvim',
+    branch = 'feat/basics',
+    config = function()
+      require 'plug.project-note'
+    end,
+    requires = 'nvim-lua/plenary.nvim',
+  }
+
+  use {
     'lambdalisue/fern.vim',
     requires = 'antoinemadec/FixCursorHold.nvim',
     branch = 'main',
@@ -292,7 +301,6 @@ packer.startup(function(use)
   use {
     'lambdalisue/gin.vim',
     requires = 'vim-denops/denops.vim',
-    opt = true,
   }
   use {
     'akinsho/git-conflict.nvim',
@@ -360,7 +368,6 @@ packer.startup(function(use)
       }
     end,
     requires = 'vim-denops/denops.vim',
-    opt = true,
   }
   use {
     'norcalli/nvim-colorizer.lua',
@@ -479,9 +486,6 @@ vim.defer_fn(function()
     'nvim-web-devicons',
     'fzf-lua',
     'vim-repeat',
-    'denops.vim',
-    'gin.vim',
-    'fuzzy-motion.vim',
     'LuaSnip',
     'nvim-cmp',
     'cmp-nvim-lsp',

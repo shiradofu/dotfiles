@@ -108,9 +108,12 @@ asdf install python 3.10.4 &&
 asdf global python 3.10.4
 
 msg "\nphp:\n"
-# TODO: asdfy
-brew_i php
-brew_i composer
+# deps from https://github.com/asdf-community/asdf-php/blob/master/.github/workflows/workflow.yml
+brew install autoconf automake bison freetype gd gettext icu4c krb5 libedit libiconv libjpeg libpng libxml2 libzip openssl@1.1 pkg-config re2c zlib
+if is_mac; then brew install gmp libsodium imagemagick; fi
+asdf plugin add php &&
+asdf install php latest &&
+asdf global php latest
 
 msg "\ndirenv:\n"
 asdf plugin add direnv     &&
