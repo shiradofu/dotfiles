@@ -70,23 +70,28 @@ function M.diffview()
 end
 M.diffview()
 
+function M.project_note()
+  k('n', '<Leader>k', function() require('project-note').open() end)
+end
+M.project_note()
+
 function M.fern()
   k('n', '<Leader>r', '<Cmd>Fern . -reveal=%<CR>')
   k('n', '<Leader><C-r>', '<Cmd>vs<CR><Cmd>Fern . -reveal=%<CR>')
 end
 M.fern()
 
-function M.gin()
-  k('n', '<Leader>,', '<Cmd>Gin commit<CR>')
-  k('n', '<Leader>.', '<Cmd>Gin push<CR>')
+function M.git()
+  k('n', '<Leader>,', function()require'user.git'.commit()end)
+  k('n', '<Leader>.', function()require'user.git'.push()end)
 end
-M.gin()
+M.git()
 
 function M.neotest()
   local m = 'neotest'
-  k('n', '<Leader>k', function()require(m).run.run()end)
-  k('n', '<Leader>K', function()require(m).run.run(vim.fn.expand '%')end)
-  k('n', '<Leader><C-k>', function()require(m).summary.toggle()end)
+  k('n', '<Leader>j', function()require(m).run.run()end)
+  k('n', '<Leader>J', function()require(m).run.run(vim.fn.expand '%')end)
+  k('n', '<Leader><C-j>', function()require(m).summary.toggle()end)
 end
 M.neotest()
 
@@ -143,7 +148,7 @@ M.win_resize()
 function M.motion()
   k('n', '(', '^')
   k('n', ')', '$')
-  k('n', ';',  '<Cmd>FuzzyMotion<CR>')
+  k({'n', 'x'}, ';',  '<Cmd>Pounce<CR>')
   k({'n', 'x'}, '*',  "<Plug>(asterisk-z*):<C-u>lua require('hlslens').start()<CR>")
   k({'n', 'x'}, 'g*', "<Plug>(asterisk-gz*):<C-u>lua require('hlslens').start()<CR>")
   k({'n', 'x'}, '#',  "<Plug>(asterisk-z#):<C-u>lua require('hlslens').start()<CR>")

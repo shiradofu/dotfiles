@@ -103,6 +103,7 @@ _direnv_hook() {
   trap -- '' SIGINT;eval "$(direnv export zsh)";trap - SIGINT;
 }
 chpwd_functions=( _direnv_hook ${chpwd_functions[@]} )
+_direnv_hook >/dev/null 2>&1
 
 required() {
   for arg; do

@@ -44,8 +44,8 @@ __chcs_nvim() {
   echo "let g:colorscheme = '$1'" >| "$dir/_color.vim"
   echo "set background=$2" >> "$dir/_color.vim"
   for s in "$XDG_CACHE_HOME"/nvim/*.pipe; do
-    nvim --server "$s" --remote-send "<CMD>set bg=$2<CR>" > /dev/null 2>&1
-    nvim --server "$s" --remote-send "<CMD>colorscheme $1<CR>" > /dev/null 2>&1
+    timeout 1 nvim --server "$s" --remote-send "<CMD>set bg=$2<CR>" > /dev/null 2>&1
+    timeout 1 nvim --server "$s" --remote-send "<CMD>colorscheme $1<CR>" > /dev/null 2>&1
   done
 }
 
@@ -115,20 +115,20 @@ __chcs_delta "$mode"
 
 case "${name}_${mode}" in
   zenwritten_light )
-    __chcs_nvim zenwritten light
     __chcs_wezterm zenwritten_light 0.93
+    __chcs_nvim zenwritten light
     ;;
   zenwritten_dark )
-    __chcs_nvim zenwritten dark
     __chcs_wezterm zenwritten_dark 0.9
+    __chcs_nvim zenwritten dark
     ;;
   poimandres_light ) # does not exist
-    __chcs_nvim zenwritten light
     __chcs_wezterm zenwritten_light 0.93
+    __chcs_nvim zenwritten light
     ;;
   poimandres_dark )
-    __chcs_nvim poimandres dark
     __chcs_wezterm zenwritten_dark 0.9
+    __chcs_nvim poimandres dark
     ;;
   * )
     echo colorscheme not found.

@@ -8,13 +8,6 @@ c('FileType', { group = qf, pattern = 'qf', callback = m.ft_quickfix })
 local http = g('FtHttp', {})
 c('FileType', { group = http, pattern = 'http', callback = m.ft_http })
 
-local gitcommit = g('FtGitCommit', {})
-c('BufWinEnter', {
-  group = gitcommit,
-  pattern = '.git/COMMIT_EDITMSG',
-  command = 'startinsert',
-})
-
 local md = g('FtMarkdown', {})
 c('BufEnter', {
   group = md,

@@ -138,6 +138,8 @@ git clone --depth 1 \
   https://github.com/wbthomason/packer.nvim \
   "$XDG_DATA_HOME/nvim/site/pack/packer/opt/packer.nvim"
 nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+pip3 install neovim-remote
+asdf reshim
 
 "$HOME/chcs"
 

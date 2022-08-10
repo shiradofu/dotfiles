@@ -93,7 +93,7 @@ function! user#win#resize(direction) abort
   let win_first_col_pos = winpos[1]
 
   " if tabline is shown, first line pos is 2
-  " let is_top = win_first_line_pos == 1 || win_first_line_pos == 2
+  let is_top = win_first_line_pos == 1 || win_first_line_pos == 2
   let is_bottom = win_first_line_pos + winheight(0) + &cmdheight >= &lines
   " let is_leftmost = win_first_col_pos == 1
   let is_rightmost = win_first_col_pos - 1 + winwidth(0) == &columns
@@ -101,8 +101,8 @@ function! user#win#resize(direction) abort
   let cmds = {
         \ 'h': is_rightmost ? '>' : '<',
         \ 'l': is_rightmost ? '<' : '>',
-        \ 'k': is_bottom    ? '+' : '-',
-        \ 'j': is_bottom    ? '-' : '+',
+        \ 'k': is_bottom && !is_top ? '+' : '-',
+        \ 'j': is_bottom && !is_top ? '-' : '+',
         \ }
 
   exe 'wincmd ' . cmds[a:direction]

@@ -1,19 +1,17 @@
-local packer = require 'packer'
-
 vim.cmd [[packadd packer.nvim]]
 require 'plug.packer'
 
+local packer = require 'packer'
 packer.startup(function(use)
   use { 'wbthomason/packer.nvim', opt = true }
 
-  -- ------------------------------------------------------------
+  -------------------------------------------------------------
   -- Library
 
   use 'nvim-lua/plenary.nvim' -- do not lazy load
   use { 'tpope/vim-repeat', opt = true }
-  use { 'vim-denops/denops.vim' }
 
-  -- ------------------------------------------------------------
+  --------------------------------------------------------------
   -- Fundamental
 
   use {
@@ -42,7 +40,7 @@ packer.startup(function(use)
     end,
   }
 
-  -- ------------------------------------------------------------
+  --------------------------------------------------------------
   -- Treesitter & Text Objects
 
   --------------------------------
@@ -277,7 +275,6 @@ packer.startup(function(use)
     config = function()
       require 'plug.fzf'
     end,
-    opt = true,
   }
 
   --------------------------------------------------------------
@@ -297,10 +294,6 @@ packer.startup(function(use)
       require 'plug.gitsigns'
     end,
     opt = true,
-  }
-  use {
-    'lambdalisue/gin.vim',
-    requires = 'vim-denops/denops.vim',
   }
   use {
     'akinsho/git-conflict.nvim',
@@ -358,16 +351,11 @@ packer.startup(function(use)
     keys = { '<Plug>(clever-f-' },
   }
   use {
-    'yuki-yano/fuzzy-motion.vim',
+    'rlane/pounce.nvim',
     config = function()
-      -- stylua: ignore
-      vim.g.fuzzy_motion_labels = {
-        'I', 'H', 'J', 'K', 'L', 'U', 'O', 'N', 'M',
-        'P', 'Y', 'F', 'G', 'E', 'A', 'V', 'C', 'B',
-        'W', 'D', 'R', 'S', 'Z', 'X', 'T', 'Q',
-      }
+      require 'plug.pounce'
     end,
-    requires = 'vim-denops/denops.vim',
+    cmd = 'Pounce',
   }
   use {
     'norcalli/nvim-colorizer.lua',
@@ -484,7 +472,6 @@ end)
 vim.defer_fn(function()
   packer.loader(
     'nvim-web-devicons',
-    'fzf-lua',
     'vim-repeat',
     'LuaSnip',
     'nvim-cmp',
