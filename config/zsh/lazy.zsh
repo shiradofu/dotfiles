@@ -190,7 +190,7 @@ bindkey -e '^g' ghq-fzf
 
 ghq-rm() {
   required ghq fzf || return 127
-  local repos=$(fzf-tmux ${FZF_TMUX_OPTS})
+  local repos=$(ghq list | fzf-tmux ${FZF_TMUX_OPTS})
   [ -n "$repos" ] && echo "$repos" | xargs -I{} rm -rf $(ghq root)/{}
 }
 
@@ -270,7 +270,7 @@ docker-rmi() {
 }
 
 export GHQ_ROOT=$(ghq root)
-export PRETTIERD_DEFAULT_CONFIG="$XDG_CONFIG_HOME/prettier/.prettierrc.yml"
+export PRETTIERD_DEFAULT_CONFIG="$XDG_CONFIG_HOME/prettier/rc.yml"
 export NODE_REPL_HISTORY="$XDG_STATE_HOME/node_history"
 export SQLITE_HISTORY="$XDG_STATE_HOME/sqlite_history"
 export MYSQL_HISTFILE="$XDG_STATE_HOME/mysql_history"

@@ -19,10 +19,11 @@ local M = {}
 vim.g.mapleader = ' '
 
 function M.misc()
+  local win = require'user.win'
   k('n', '<Leader>w', '<Cmd>w<CR>')
   k('n', '<Leader>W', '<Cmd>wall<CR>')
   k('n', '<Leader>q', '<Cmd>botright copen<CR>')
-  k('n', '<BS>',  '<Cmd>call user#win#quit()<CR>')
+  k('n', '<BS>', win.close)
   k('n', '<Del>', '<Cmd>bp<bar>sp<bar>bn<bar>bd<CR>')
   k('n', 'g<BS>', '<Cmd>call user#win#tabclose()<CR>')
   k('n', 'gy', "<Cmd>let @+=expand('%')<CR>")
@@ -34,6 +35,7 @@ function M.misc()
   k('n', 'gh', '<Cmd>call user#win#focus_float()<CR>')
   k({'n', 'v'}, 'gx', '<Plug>(openbrowser-smart-search)')
   k({'n', 'v'}, 'gX', ':OpenGithubFile<CR>')
+  k('n', '<Leader>-', require'user.readonly')
 end
 M.misc()
 
@@ -96,8 +98,9 @@ end
 M.neotest()
 
 function M.lsp_diagnostic()
-  k('n', '[e', vim.diagnostic.goto_prev)
-  k('n', ']e', vim.diagnostic.goto_next)
+  local n = 'nice-scroll'
+  k('n', '[e', function() require(n).hook(vim.diagnostic.goto_prev)end)
+  k('n', ']e', function() require(n).hook(vim.diagnostic.goto_next)end)
 end
 function M.lsp_jump()
   k('n', 'gd', vim.lsp.buf.definition, b)
@@ -106,7 +109,6 @@ function M.lsp_jump()
 end
 function M.lsp_format(fn)
   k('n', '=', fn, b)
-  k('n', '<Leader>-', '<Cmd>AutoFormatToggleBuf<CR>')
   k('n', '<Leader>=', '<Cmd>AutoFormatToggleGlobal<CR>')
 end
 local hover = require 'user.lsp-hover'
@@ -146,6 +148,7 @@ end
 M.win_resize()
 
 function M.motion()
+  local n = 'nice-scroll'
   k('n', '(', '^')
   k('n', ')', '$')
   k({'n', 'x'}, ';',  '<Cmd>Pounce<CR>')
@@ -153,12 +156,14 @@ function M.motion()
   k({'n', 'x'}, 'g*', "<Plug>(asterisk-gz*):<C-u>lua require('hlslens').start()<CR>")
   k({'n', 'x'}, '#',  "<Plug>(asterisk-z#):<C-u>lua require('hlslens').start()<CR>")
   k({'n', 'x'}, 'g#', "<Plug>(asterisk-gz#):<C-u>lua require('hlslens').start()<CR>")
-  k('n', ']q', '<Cmd>cnext<CR>')
-  k('n', '[q', '<Cmd>cprev<CR>')
-  k('n', 'g;', 'g;')
-  k('n', 'g,', 'g,')
-  k('n', 'n', "<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>")
-  k('n', 'N', "<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>")
+  k('n', ']q', function()require(n).hook('<Cmd>cnext<CR>', { countable = true })end)
+  k('n', '[q', function()require(n).hook('<Cmd>cprev<CR>', { countable = true })end)
+  k('n', 'g;', function()require(n).hook('g;', { countable = true })end)
+  k('n', 'g,', function()require(n).hook('g,', { countable = true })end)
+  k('n', 'n',  function()require(n).hook('n')end)
+  k('n', 'N',  function()require(n).hook('N')end)
+  k('n', 'zh', "<Plug>(nice-scroll-adjust)")
+  k('n', 'zl', "<Plug>(nice-scroll-adjust-r)")
 end
 M.motion()
 
@@ -399,6 +404,7 @@ function M.bqf()
     pscrollup = '<C-y>',
     pscrolldown = '<C-e>',
     ptogglemode = '<C-g>',
+    ptoggleitem = '',
     ptoggleauto = 'p',
   }
 end

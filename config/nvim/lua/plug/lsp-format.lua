@@ -12,12 +12,12 @@ local function toggle_enabled(scope)
   return bool
 end
 
-vim.api.nvim_create_user_command('AutoFormatToggleBuf', function()
-  print(
-    '(Buffer) Auto formatting '
-      .. (toggle_enabled 'b' and 'enabled' or 'disabled')
-  )
-end, { nargs = 0 })
+-- vim.api.nvim_create_user_command('AutoFormatToggleBuf', function()
+--   print(
+--     '(Buffer) Auto formatting '
+--       .. (toggle_enabled 'b' and 'enabled' or 'disabled')
+--   )
+-- end, { nargs = 0 })
 
 vim.api.nvim_create_user_command('AutoFormatToggleGlobal', function()
   print(

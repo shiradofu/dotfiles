@@ -2,17 +2,15 @@
 # shellcheck disable=SC1091
 
 password=$1
-git_name=$2
-git_email=$3
 
 i=0
 msg()    { printf "\033[1;3$((i++%6+1))m%s\033[0m\n" "$1"; }
 exists() { type "$1" > /dev/null 2>&1; }
 is_mac() { echo "$OSTYPE" | grep darwin -q; }
 is_wsl() { [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; }
-brew_i() { for X; do msg "\n🍺  installing $X:\n"; brew install "$X"; done }
-npm_i()  { for X; do msg "\n🍔  installing $X:\n"; npm install -g "$X"; done }
-go_i()   { for X; do msg "]n🍙  installing $X:\n"; go install "$X"; done }
+brew_i() { for X; do msg "\n🍺  Installing $X:\n"; brew install "$X"; done }
+npm_i()  { for X; do msg "\n🍔  Installing $X:\n"; npm install -g "$X"; done }
+go_i()   { for X; do msg "]n🍙  Installing $X:\n"; go install "$X"; done }
 
 DOT_ROOT=$(cd "$(dirname "$0")" && pwd)
 source "$DOT_ROOT/.config/zsh/.zshenv"
@@ -55,10 +53,6 @@ cp "${DOT_ROOT}/.config/git/template" "${DOT_ROOT}/.config/git/config"
 #
 # CLI tools
 #
-brew_i git
-git config --global user.name "$git_name"
-git config --global user.email "$git_email"
-
 brew_i zsh
 if ! grep -xq "${HOMEBREW_PREFIX}/bin/zsh" /etc/shells; then
   echo "$password" | sudo -S sh -c "printf '${HOMEBREW_PREFIX}/bin/zsh\n' >> /etc/shells"
@@ -167,4 +161,4 @@ if is_wsl && exists wslvar; then
     "/mnt/c/Program\ Files/Git/mingw64/libexec/git-core/git-credential-manager.exe"
 fi
 
-unset password git_name git_email
+unset password

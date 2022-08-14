@@ -45,7 +45,7 @@ while true; do
   read -r git_email
 
   printf "\nname:\t%s\nemail:\t%s\n\nOK?(y/n)" "$git_name" "$git_email"
-  read yn
+  read -r yn
   case "$yn" in [Yy] ) break;; esac
 done
 
@@ -104,15 +104,22 @@ if ! exists "brew"; then
   echo "$password" | sudo -S chown -R "$(whoami)" "$(brew --prefix)"
 fi
 
-msg "\n🍺  installing ghq:\n"
+msg "\n🍺  Installing git:\n"
+brew install git
+git config --global user.name "$git_name"
+git config --global user.email "$git_email"
+
+msg "\n🍺  Installing ghq:\n"
 brew install ghq
 
 msg "\n✨  Cloning dotfiles repository...\n"
 repo=github.com/shiradofu/dotfiles
 ghq get --shallow --update https://${repo}
+repo_root="$(ghq root)/${repo}"
+git -C "${repo_root}" config --local diff.ignoreSubmodules all
 
 msg "\n🚀  Start installing!\n"
-bash "$(ghq root)/${repo}/install.sh" "$password" "$git_name" "$git_email"
+bash "${repo_root}/install.sh" "$password"
 
 unset password
 

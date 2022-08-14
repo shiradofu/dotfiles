@@ -19,4 +19,5 @@ function M.req(modname, fn, ...)
     return require(modname)[fn](unpack(va))
   end
 end
+
 return M

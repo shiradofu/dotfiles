@@ -7,6 +7,9 @@ fzf.setup {
     height = 0.9,
     width = 0.9,
     border = 'single',
+    hl = {
+      normal = 'NormalFloat',
+    },
   },
   fzf_opts = {
     ['--info'] = 'default',
@@ -63,3 +66,8 @@ end
 vim.lsp.handlers['textDocument/references'] = function()
   fzf.lsp_references()
 end
+
+vim.api.nvim_create_autocmd('VimResized', {
+  pattern = '*',
+  command = 'tabdo wincmd = | lua require("fzf-lua").redraw()',
+})

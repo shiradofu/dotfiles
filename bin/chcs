@@ -127,7 +127,7 @@ case "${name}_${mode}" in
     __chcs_nvim zenwritten light
     ;;
   poimandres_dark )
-    __chcs_wezterm zenwritten_dark 0.9
+    __chcs_wezterm iceberg-dark 0.9
     __chcs_nvim poimandres dark
     ;;
   * )

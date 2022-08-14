@@ -33,21 +33,8 @@ n.setup {
       end,
     },
     f.prettierd.with {
-      filetypes = {
-        'javascript',
-        'javascriptreact',
-        'typescript',
-        'typescriptreact',
-        'vue',
-        'css',
-        'scss',
-        'less',
-        'html',
-        'json',
-        'jsonc',
-        'yaml',
-        'graphql',
-        'handlebars',
+      env = {
+        PRETTIERD_DEFAULT_CONFIG = vim.env.PRETTIERD_DEFAULT_CONFIG,
       },
       condition = function(utils)
         return not utils.has_file { 'deno.json', 'deno.jsonc' }

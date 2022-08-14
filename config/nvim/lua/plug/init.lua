@@ -15,15 +15,6 @@ packer.startup(function(use)
   -- Fundamental
 
   use {
-    'shiradofu/project-note.nvim',
-    branch = 'feat/basics',
-    config = function()
-      require 'plug.project-note'
-    end,
-    requires = 'nvim-lua/plenary.nvim',
-  }
-
-  use {
     'lambdalisue/fern.vim',
     requires = 'antoinemadec/FixCursorHold.nvim',
     branch = 'main',
@@ -344,6 +335,15 @@ packer.startup(function(use)
     opt = true,
   }
   use {
+    'shiradofu/nice-scroll.nvim',
+    config = function()
+      require('nice-scroll').setup {}
+    end,
+    requires = 'kevinhwang91/nvim-hlslens',
+    after = 'nvim-hlslens',
+    opt = true,
+  }
+  use {
     'rhysd/clever-f.vim',
     setup = function()
       vim.fn['plug#clever_f#setup']()
@@ -433,6 +433,15 @@ packer.startup(function(use)
       vim.fn['plug#print_debug#config']()
     end,
   }
+  use {
+    'shiradofu/project-note.nvim',
+    config = function()
+      require 'plug.project-note'
+    end,
+    requires = 'nvim-lua/plenary.nvim',
+    opt = true,
+    run = './server.sh restart',
+  }
 
   --------------------------------------------------------------
   -- Appearance
@@ -443,6 +452,15 @@ packer.startup(function(use)
       require 'plug.zen-mode'
     end,
     cmd = 'ZenMode',
+  }
+  use {
+    'rose-pine/neovim',
+    as = 'rose-pine',
+    config = function()
+      require('rose-pine').setup {
+        dark_variant = 'moon',
+      }
+    end,
   }
   use {
     'lukas-reineke/indent-blankline.nvim',
@@ -511,6 +529,8 @@ vim.defer_fn(function()
     'nvim-hlslens',
     'nvim-colorizer.lua',
     'vim-better-whitespace',
-    'open-browser.vim'
+    'open-browser.vim',
+    'nice-scroll.nvim',
+    'project-note.nvim'
   )
 end, 0)

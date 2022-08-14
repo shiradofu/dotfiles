@@ -27,5 +27,6 @@ require('project-note').setup {
   end,
   auto_push = true,
   auto_pull = true,
+  auto_delete_empty = true,
   branch = 'main',
 }
