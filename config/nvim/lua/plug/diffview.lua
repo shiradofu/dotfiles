@@ -16,9 +16,7 @@ require('diffview').setup {
       local range_given = p.log_options and #p.log_options.single_file.L == 1
 
       if fn.bufname():find [[^diffview:///]] ~= nil then
-        if vim.bo.ft ~= 'DiffviewFiles' then
-          a.focus_files()
-        end
+        if vim.bo.ft ~= 'DiffviewFiles' then a.focus_files() end
       end
 
       -- 何も指定しなかったときは git status 相当の表示になる
@@ -27,9 +25,9 @@ require('diffview').setup {
         vim.cmd [[file Git status]]
       end
 
-      if file_given or range_given then
-        vim.t.diffview_single_file = true
-      end
+      if file_given or range_given then vim.t.diffview_single_file = true end
+
+      vim.t.door2note_open_fn = 'open_float'
     end,
   },
   file_panel = {
@@ -69,9 +67,7 @@ require('diffview').setup {
       ['<cr>'] = a.focus_entry,
 
       ['<C-j>'] = function()
-        if not pcall(a.focus_entry) then
-          vim.cmd [[wincmd p]]
-        end
+        if not pcall(a.focus_entry) then vim.cmd [[wincmd p]] end
       end,
       ['<C-t>'] = a.goto_file_tab,
       ['<C-g>'] = a.toggle_files,
@@ -88,35 +84,23 @@ require('diffview').setup {
     file_history_panel = {
       ['j'] = function()
         vim.cmd [[normal! j]]
-        if vim.t.diffview_single_file then
-          pcall(a.select_entry)
-        end
+        if vim.t.diffview_single_file then pcall(a.select_entry) end
       end,
       ['k'] = function()
         vim.cmd [[normal! k]]
-        if vim.t.diffview_single_file then
-          pcall(a.select_entry)
-        end
+        if vim.t.diffview_single_file then pcall(a.select_entry) end
       end,
       ['l'] = function()
-        if not pcall(a.select_entry) then
-          return
-        end
+        if not pcall(a.select_entry) then return end
         local view = lib.get_current_view()
-        if view.panel.single_file then
-          return
-        end
+        if view.panel.single_file then return end
         local entry = view.panel:get_item_at_cursor()
-        if entry and entry:instanceof(LogEntry) then
-          a.next_entry()
-        end
+        if entry and entry:instanceof(LogEntry) then a.next_entry() end
       end,
       ['h'] = function()
         local view = lib.get_current_view()
         local entry = view.panel:get_item_at_cursor()
-        if not entry then
-          return
-        end
+        if not entry then return end
         while not entry:instanceof(LogEntry) and fn.line '.' ~= 5 do
           a.prev_entry()
           entry = view.panel:get_item_at_cursor()

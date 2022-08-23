@@ -15,8 +15,8 @@ c('BufEnter', {
   callback = function()
     m.ft_markdown()
     vim.cmd [[
-      syntax match checkedItem containedin=ALL '\v\s*(-\s+)?\[x\]\s+.*'
-      hi link checkedItem Comment
+      syntax match MdCheckedItem containedin=ALL '\v\s*(-\s+)?\[x\]\s+.*'
+      hi link MdCheckedItem Comment
     ]]
   end,
 })

@@ -64,7 +64,7 @@ zsh -i -c exit > /dev/null 2>&1
 brew_i fzf
 "${HOMEBREW_PREFIX}/opt/fzf/install" --xdg --completion --no-update-rc --no-key-bindings
 brew_i cmake starship fd rg bat glow git-delta jq tmux navi hexyl tokei \
-  direnv docker gh act awscli
+  direnv docker gh act awscli aws-cdk
 
 #
 # Languages and Package Managers

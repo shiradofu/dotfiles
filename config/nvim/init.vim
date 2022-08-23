@@ -1,7 +1,7 @@
 set encoding=utf-8            " エンコーディングをUTF-8に設定
 set mouse=a                   " マウスを有効化
-set showtabline=1             " タブを常に表示
-set laststatus=2              " statusline を非表示
+set showtabline=1             " タブが複数ある場合はタブを表示
+set laststatus=2              " statusline を常に表示
 set hidden                    " 保存せずにバッファを切り替え可能にする
 set splitbelow                " :splitで画面を下に開く
 set splitright                " :vsplitで画面を右に開く

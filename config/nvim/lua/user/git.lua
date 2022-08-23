@@ -65,11 +65,7 @@ G.push = function()
       echo "remote is not set."
       return
     fi
-    if git name-rev @{u} >/dev/null 2>&1; then
-      git push origin HEAD
-    else
-      git push -u origin HEAD
-    fi]]
+    git -c push.default=current push]]
 
   local on_event = _on_event()
   vim.fn.jobstart(cmd, {

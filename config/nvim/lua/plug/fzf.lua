@@ -59,15 +59,8 @@ fzf.setup {
   file_icon_padding = ' ',
 }
 
-vim.lsp.handlers['textDocument/definition'] = function()
-  fzf.lsp_definitions { jump_to_single_result = true }
-end
+vim.lsp.handlers['textDocument/definition'] =
+  function() fzf.lsp_definitions { jump_to_single_result = true } end
 
-vim.lsp.handlers['textDocument/references'] = function()
-  fzf.lsp_references()
-end
-
-vim.api.nvim_create_autocmd('VimResized', {
-  pattern = '*',
-  command = 'tabdo wincmd = | lua require("fzf-lua").redraw()',
-})
+vim.lsp.handlers['textDocument/references'] =
+  function() fzf.lsp_references() end

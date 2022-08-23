@@ -19,19 +19,21 @@ end
 --   )
 -- end, { nargs = 0 })
 
-vim.api.nvim_create_user_command('AutoFormatToggleGlobal', function()
-  print(
-    '(Global) Auto formatting '
-      .. (toggle_enabled 'g' and 'enabled' or 'disabled')
-  )
-end, { nargs = 0 })
+vim.api.nvim_create_user_command(
+  'AutoFormatToggleGlobal',
+  function()
+    print(
+      '(Global) Auto formatting '
+        .. (toggle_enabled 'g' and 'enabled' or 'disabled')
+    )
+  end,
+  { nargs = 0 }
+)
 
 local fmt_group = vim.api.nvim_create_augroup('LspFormatting', {})
 
 local function create_fn(bufnr, servers)
-  return function()
-    vim.lsp.buf.formatting_seq_sync({ bufnr = bufnr }, WAIT_MS, servers)
-  end
+  return function() vim.lsp.buf.formatting_seq_sync({ bufnr = bufnr }, WAIT_MS, servers) end
 end
 
 local function clear_au(bufnr)
@@ -44,9 +46,7 @@ local function create_au(bufnr, fn, config)
     group = fmt_group,
     buffer = bufnr,
     callback = function()
-      if is_enabled 'g' and is_enabled 'b' then
-        fn { bufnr = bufnr }
-      end
+      if is_enabled 'g' and is_enabled 'b' then fn { bufnr = bufnr } end
     end,
   })
 end

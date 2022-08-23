@@ -72,10 +72,10 @@ function M.diffview()
 end
 M.diffview()
 
-function M.project_note()
-  k('n', '<Leader>k', function() require('project-note').open() end)
+function M.door2note()
+  k('n', '<Leader>n', '<Cmd>Door2NoteOpen<CR>')
 end
-M.project_note()
+M.door2note()
 
 function M.fern()
   k('n', '<Leader>r', '<Cmd>Fern . -reveal=%<CR>')
@@ -419,7 +419,8 @@ end
 
 function M.ft_markdown()
   k('n', '<Leader><CR>', '<Plug>MarkdownPreviewToggle', b)
-  k({'n', 'i'}, '<C-x>', '<Cmd>call plug#checkbox#toggle()<CR>', b)
+  k('n', 'sh', '<Cmd>call plug#checkbox#toggle()<CR>', b)
+  k('i', '<C-x>', '<Cmd>call plug#checkbox#toggle()<CR>', b)
 end
 
 function M.ft_http()

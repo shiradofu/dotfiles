@@ -7,22 +7,16 @@ vim.api.nvim_create_autocmd('BufEnter', {
   pattern = '*',
   callback = function(e)
     local parent = vim.loop.fs_realpath(e.file .. '/../')
-    if not parent then
-      return
-    end
+    if not parent then return end
     local git_root = find_root('/%.git$', parent)
-    if git_root then
-      vim.cmd('lcd ' .. git_root)
-    end
+    if git_root then vim.cmd('lcd ' .. git_root) end
   end,
 })
 
 -- quickfix は常に botright で開く
 local cmd = vim.cmd
 vim.cmd = function(str)
-  if str == 'copen' then
-    return cmd [[botright copen]]
-  end
+  if str == 'copen' then return cmd [[botright copen]] end
   return cmd(str)
 end
 
