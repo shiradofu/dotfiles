@@ -51,6 +51,7 @@ done
 
 clear
 printf "\n ==========================================\n\n"
+printf "   "
 printf "\033[0;31mOK, "
 printf "\033[1;33mnow "
 printf "\033[1;32myou "
@@ -62,7 +63,6 @@ printf "\033[0m☕"
 printf "\n\n ==========================================\n"
 
 sleep 3
-exit
 
 case "${DIST}" in
   debian )
