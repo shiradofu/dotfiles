@@ -71,8 +71,8 @@ tags
 # Persistent undo
 [._]*.un~
 
-# Plugins
-.scratch.md
+# My Config
+.root
 
 ##########
 # VScode #

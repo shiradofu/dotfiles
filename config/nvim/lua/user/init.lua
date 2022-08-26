@@ -1,14 +1,12 @@
 local find_root = require 'user.find-root'
 
--- バッファのレポジトリルートに移動
+-- バッファのリポジトリルートに移動
 local root = vim.api.nvim_create_augroup('MyRoot', {})
-vim.api.nvim_create_autocmd('BufEnter', {
+vim.api.nvim_create_autocmd('VimEnter', {
   group = root,
   pattern = '*',
-  callback = function(e)
-    local parent = vim.loop.fs_realpath(e.file .. '/../')
-    if not parent then return end
-    local git_root = find_root('/%.git$', parent)
+  callback = function()
+    local git_root = find_root { '/%.git$', '/%.root$' }
     if git_root then vim.cmd('lcd ' .. git_root) end
   end,
 })
@@ -41,4 +39,35 @@ vim.api.nvim_create_autocmd('CmdlineLeave', {
       vim.cmd 'nohl'
     end, 0)
   end,
+})
+
+-- Diff でないときにカーソル・スクロール動悸することがあるのを防止
+local nodiff = vim.api.nvim_create_augroup('NoDiff', {})
+vim.api.nvim_create_autocmd('BufEnter', {
+  group = nodiff,
+  pattern = '*',
+  callback = function()
+    if not vim.o.diff then vim.cmd 'set nocursorbind | set noscrollbind' end
+  end,
+})
+
+-- markdown のチェックボックスのハイライト
+local md = vim.api.nvim_create_augroup('FtMarkdown', {})
+vim.api.nvim_create_autocmd('BufEnter', {
+  group = md,
+  pattern = '*.md',
+  callback = function()
+    vim.cmd [[
+      syntax match MdCheckedItem containedin=ALL '\v\s*(-\s+)?\[x\]\s+.*'
+      hi link MdCheckedItem Comment
+    ]]
+  end,
+})
+
+-- テンプレートは自動フォーマットしない
+local template = vim.api.nvim_create_augroup('FtTemplate', {})
+vim.api.nvim_create_autocmd('BufEnter', {
+  group = template,
+  pattern = '*/dotfiles/data/templates/*',
+  command = 'let b:enable_auto_format = v:false',
 })

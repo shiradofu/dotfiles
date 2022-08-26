@@ -11,19 +11,13 @@ local default_opts = {
   git_icons = false,
   stat_file = true,
   fd_additional_opts = '--color=never --hidden --follow --exclude .git',
-  _actions = function()
-    return config.globals.actions.files
-  end,
-  exclude = function(file)
-    return file:find '/%.git/'
-  end,
+  _actions = function() return config.globals.actions.files end,
+  exclude = function(file) return file:find '/%.git/' end,
 }
 
 return function(opts)
   opts = config.normalize_opts(opts, default_opts)
-  if not opts then
-    return
-  end
+  if not opts then return end
 
   local cwd = opts.cwd or vim.loop.cwd()
   local sess_tbl = {}
@@ -54,9 +48,7 @@ return function(opts)
       if x then
         cb(x, function(err)
           coroutine.resume(co, 0)
-          if err then
-            cb(nil)
-          end
+          if err then cb(nil) end
         end)
       end
     end
@@ -87,9 +79,7 @@ return function(opts)
       local function on_event(_, data, event)
         if event == 'stdout' then
           for _, file in ipairs(data) do
-            if file ~= '' and not files_memo[file] then
-              add_entry(file, co)
-            end
+            if file ~= '' and not files_memo[file] then add_entry(file, co) end
           end
         elseif event == 'stderr' then
           vim.cmd 'echohl Error'

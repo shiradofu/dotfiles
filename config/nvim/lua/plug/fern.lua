@@ -10,16 +10,13 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = 'fern',
   callback = function()
     local bufname = vim.api.nvim_buf_get_name(0)
-    local git_root = find_root '/%.git$'
-    local pos = 1
+    local git_root = find_root { '/%.git$' }
     if git_root then
       local parent = vim.loop.fs_realpath(git_root .. '/../')
-      _, pos = bufname:find(parent)
-      pos = pos + 2
-    else
-      pos = bufname:find [[file:///]]
+      if parent then parent = parent:gsub('-', '%%-') end
+      bufname = bufname:match(parent .. '/(.+)%$$') or ''
     end
-    vim.b.fern_name = bufname:sub(pos, -2)
+    vim.b.fern_name = bufname
     -- vim.api.nvim_buf_set_name(0, vim.b.fern_name)
 
     vim.cmd [[setlocal signcolumn=number]]

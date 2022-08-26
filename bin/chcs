@@ -32,7 +32,10 @@ __chcs_tmux() {
     return 1
   fi
   command cp -f "$file" "$dir/_style.conf"
-  tmux source "$dir/tmux.conf"
+
+  if tmux list-clients > /dev/null 2>&1; then
+    tmux source "$dir/tmux.conf"
+  fi
 }
 
 __chcs_nvim() {

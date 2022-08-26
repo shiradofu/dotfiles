@@ -2,9 +2,7 @@ local g = vim.api.nvim_create_augroup
 local c = vim.api.nvim_create_autocmd
 vim.g.material_style = 'lighter'
 
-local function hl(name, val)
-  vim.api.nvim_set_hl(0, name, val)
-end
+local function hl(name, val) vim.api.nvim_set_hl(0, name, val) end
 
 local cache_dir = vim.fn.stdpath 'cache'
 

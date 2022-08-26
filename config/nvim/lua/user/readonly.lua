@@ -29,9 +29,7 @@ vim.api.nvim_create_autocmd('BufEnter', {
   group = g,
   pattern = '*',
   callback = function()
-    if vim.g.the_readonly_world then
-      vim.defer_fn(the_readonly_world, 0)
-    end
+    if vim.g.the_readonly_world then vim.defer_fn(the_readonly_world, 0) end
   end,
 })
 

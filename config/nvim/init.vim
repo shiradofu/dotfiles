@@ -67,13 +67,13 @@ command! -nargs=1 Log call Log(<args>)
 lua function Log(...) print(vim.inspect(...)) end
 
 lua pcall(require, 'impatient')
+lua require 'plug'
 lua require 'user'
 lua require 'user.mappings'
-lua require 'user.filetype'
 lua require 'user.colorscheme'
-lua require 'plug'
-lua require 'plug._compiled'
 
-exe 'source ' . g:config_dir . '/_color.vim'
+if filereadable(g:config_dir . '/_color.vim')
+  exe 'source ' . g:config_dir . '/_color.vim'
+endif
 let s:colorscheme = get(g:, 'colorscheme', 'default')
 exe 'colorscheme ' . s:colorscheme

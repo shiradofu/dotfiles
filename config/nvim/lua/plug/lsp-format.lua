@@ -1,10 +1,11 @@
 local M = {} -- keys are filetypes
 local map = require('user.mappings').lsp_format
-local get = require('user.utils').get
 local WAIT_MS = 1000
 
 local function is_enabled(scope)
-  return get(vim[scope], 'enable_auto_format', true)
+  local val = vim[scope].enable_auto_format
+  if val == nil then return true end
+  return val
 end
 local function toggle_enabled(scope)
   local bool = not is_enabled(scope)

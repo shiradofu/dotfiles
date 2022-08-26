@@ -3,16 +3,8 @@ local lspconfig = require 'lspconfig'
 local config = require 'plug.lspconfig'
 local cmp = require 'plug.cmp-lsp'
 
-local function getkeys(t)
-  local r = {}
-  for key, _ in pairs(t) do
-    table.insert(r, key)
-  end
-  return r
-end
-
 installer.setup {
-  ensure_installed = getkeys(config),
+  ensure_installed = vim.tbl_keys(config),
   ui = {
     border = 'rounded',
     icons = {

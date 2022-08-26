@@ -8,6 +8,9 @@ manpath=("$HOMEBREW_PREFIX/share/man" $manpath)
 typeset -gaU infopath
 infopath=("$HOMEBREW_PREFIX/share/info" $infopath)
 
+export LDFLAGS="-L$HOMEBREW_PREFIX/opt/llvm/lib"
+export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/llvm/include"
+
 if is_mac; then
   export PATH="$HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin:$PATH"
   export PATH="$HOMEBREW_PREFIX/opt/findutils/libexec/gnubin:$PATH"
@@ -17,15 +20,11 @@ if is_mac; then
   export PATH="$HOMEBREW_PREFIX/opt/gnu-sed/libexec/gnubin:$PATH"
   export PATH="$HOMEBREW_PREFIX/opt/gnu-tar/libexec/gnubin:$PATH"
   export PATH="$HOMEBREW_PREFIX/opt/llvm/bin:$PATH"
-
   export MANPATH="$HOMEBREW_PREFIX/opt/coreutils/libexec/gnuman:$MANPATH"
   export MANPATH="$HOMEBREW_PREFIX/opt/findutils/libexec/gnuman:$MANPATH"
   export MANPATH="$HOMEBREW_PREFIX/opt/grep/libexec/gnuman:$MANPATH"
   export MANPATH="$HOMEBREW_PREFIX/opt/gnu-sed/libexec/gnuman:$MANPATH"
   export MANPATH="$HOMEBREW_PREFIX/opt/gnu-tar/libexec/gnuman:$MANPATH"
-
-  export LDFLAGS="-L$HOMEBREW_PREFIX/opt/llvm/lib"
-  export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/llvm/include"
 fi
 
 if is_wsl; then
@@ -270,6 +269,7 @@ docker-rmi() {
 }
 
 export GHQ_ROOT=$(ghq root)
+export NVIM_PLUG="$XDG_DATA_HOME/nvim/site/pack/packer/"
 export PRETTIERD_DEFAULT_CONFIG="$XDG_CONFIG_HOME/prettier/rc.yml"
 export NODE_REPL_HISTORY="$XDG_STATE_HOME/node_history"
 export SQLITE_HISTORY="$XDG_STATE_HOME/sqlite_history"

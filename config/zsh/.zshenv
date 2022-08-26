@@ -28,7 +28,9 @@ fi
 export GOPATH="$XDG_STATE_HOME/go"
 export ASDF_DIR="$XDG_STATE_HOME/asdf/repo"
 export ASDF_DATA_DIR="$XDG_STATE_HOME/asdf/data"
+export BUN_INSTALL="$XDG_STATE_HOME/bun"
 
+export PATH="$BUN_INSTALL/bin:$PATH"
 export PATH="$HOMEBREW_PREFIX/sbin:$PATH"
 export PATH="$HOMEBREW_PREFIX/bin:$PATH"
 export PATH="$ASDF_DATA_DIR/shims:$PATH"

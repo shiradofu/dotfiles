@@ -24,7 +24,6 @@ return require('door2note').setup {
       if packer_n then
         local name = root:sub(packer_n + 1)
         local plugin = packer_plugins[name]
-        vim.pretty_print(packer_plugins)
         if not plugin then return '' end
         local url = plugin.url
         local fname = url:match 'https://github%.com/(.+)%.git$'

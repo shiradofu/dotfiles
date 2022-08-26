@@ -2,12 +2,8 @@ local wezterm = require 'wezterm'
 local mux = wezterm.mux
 local act = wezterm.action
 
-local function is_unix()
-  return package.config:sub(1, 1) == '/'
-end
-local function is_windows()
-  return package.config:sub(1, 1) == '\\'
-end
+local function is_unix() return package.config:sub(1, 1) == '/' end
+local function is_windows() return package.config:sub(1, 1) == '\\' end
 local function merge(base, ...)
   local tables = { ... }
   for _, t in ipairs(tables) do
@@ -58,16 +54,10 @@ local config = {
 }
 
 local ok, color = pcall(require, '_color')
-if ok then
-  merge(config, color)
-end
+if ok then merge(config, color) end
 
-if is_unix() then
-  merge(config, { default_prog = { 'zsh' } })
-end
+if is_unix() then merge(config, { default_prog = { 'zsh' } }) end
 
-if is_windows() then
-  merge(config, { default_prog = { 'wsl.exe' } })
-end
+if is_windows() then merge(config, { default_prog = { 'wsl.exe' } }) end
 
 return config

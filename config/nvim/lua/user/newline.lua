@@ -1,5 +1,5 @@
 local utils = require 'nvim-treesitter-playground.utils'
-local feedkeys = require('user.utils').feedkeys
+local feedkeys = require('user.util').feedkeys
 
 local M = {}
 
@@ -9,18 +9,14 @@ local function get_row_num(relative)
   relative = relative or 0
   local row = vim.api.nvim_win_get_cursor(0)[1]
   row = row - 1 + relative
-  if row < 0 then
-    return nil
-  end
+  if row < 0 then return nil end
   return row
 end
 
 ---@param row number | nil
 ---@return string
 local function get_line(row)
-  if not row then
-    return ''
-  end
+  if not row then return '' end
   local line = vim.api.nvim_buf_get_lines(0, row, row + 1, false)[1]
   return line or ''
 end
@@ -28,13 +24,9 @@ end
 ---@param row number | nil
 ---@return number | nil
 local function get_first_non_blank_col_num(row)
-  if not row then
-    return nil
-  end
+  if not row then return nil end
   local col = get_line(row):find '%S'
-  if not col then
-    return nil
-  end
+  if not col then return nil end
   return col - 1
 end
 
@@ -44,22 +36,16 @@ end
 ---@param col number | nil
 ---@return boolean
 local function is_comment(bufnr, row, col)
-  if not row or not col then
-    return false
-  end
+  if not row or not col then return false end
   local results = utils.get_hl_groups_at_position(bufnr, row, col)
   for _, hl in pairs(results) do
-    if hl.capture == 'comment' then
-      return true
-    end
+    if hl.capture == 'comment' then return true end
   end
   if vim.bo[bufnr].syntax ~= '' then
     for _, syntax_id in ipairs(vim.fn.synstack(row, col)) do
       local syntax_group_id = vim.fn.synIDtrans(syntax_id)
       local sytnax_group_name = vim.fn.synIDattr(syntax_group_id, 'name')
-      if sytnax_group_name == 'Comment' then
-        return true
-      end
+      if sytnax_group_name == 'Comment' then return true end
     end
   end
   return false
@@ -88,12 +74,8 @@ local function is_line_comment(bufnr, relative)
   relative = relative or 0
   local row = get_row_num(relative)
   local col = get_first_non_blank_col_num(row)
-  if is_comment(bufnr, row, col) then
-    return true
-  end
-  if is_line_comment_with_commentstring(bufnr, row) then
-    return true
-  end
+  if is_comment(bufnr, row, col) then return true end
+  if is_line_comment_with_commentstring(bufnr, row) then return true end
   return false
 end
 
@@ -103,9 +85,7 @@ end
 ---@return boolean
 local function is_multiline_comment(bufnr, relative)
   relative = relative or 0
-  if not is_line_comment(bufnr, relative) then
-    return false
-  end
+  if not is_line_comment(bufnr, relative) then return false end
   local ft = vim.bo[bufnr].ft
   -- filetypeによるドキュメンテーションコメントのチェック
   if
@@ -121,9 +101,7 @@ local function is_multiline_comment(bufnr, relative)
     }, ft)
   then
     local line = get_line(get_row_num(relative))
-    if line:find '^%s*/%*%*?%s*' or line:find '^%s*%*%s*' then
-      return true
-    end
+    if line:find '^%s*/%*%*?%s*' or line:find '^%s*%*%s*' then return true end
   end
   return false
 end
@@ -134,9 +112,7 @@ end
 ---または改行前の行が複数行スタイルのコメント内部である場合を除き、
 ---改行後に挿入されるコメント文字を削除する。
 function M.next()
-  if get_line(get_row_num()):find '^%s*$' then
-    return
-  end
+  if get_line(get_row_num()):find '^%s*$' then return end
   local bufnr = vim.api.nvim_get_current_buf()
 
   if
@@ -154,9 +130,7 @@ end
 ---または改行前の行が複数行スタイルのコメント内部である場合を除き、
 ---改行後に挿入されるコメント文字を削除する。
 function M.prev()
-  if get_line(get_row_num()):find '^%s*$' then
-    return
-  end
+  if get_line(get_row_num()):find '^%s*$' then return end
   local bufnr = vim.api.nvim_get_current_buf()
 
   if

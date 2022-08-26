@@ -1,6 +1,6 @@
 -- stylua: ignore start
-local req = require('user.utils').req
-local feedkeys = require('user.utils').feedkeys
+local util = require 'user.util'
+local win = require 'user.win'
 local function k(mode, lhs, rhs, ...)
   local opts = { silent = true }
   if select('#', ...) > 0 then
@@ -19,7 +19,6 @@ local M = {}
 vim.g.mapleader = ' '
 
 function M.misc()
-  local win = require'user.win'
   k('n', '<Leader>w', '<Cmd>w<CR>')
   k('n', '<Leader>W', '<Cmd>wall<CR>')
   k('n', '<Leader>q', '<Cmd>botright copen<CR>')
@@ -40,31 +39,27 @@ end
 M.misc()
 
 function M.fzf()
-  local m = 'fzf-lua'
-  local fd_noignore =
-    '--color=never --type f --hidden --follow --exclude .git --no-ignore-vcs'
-  local rg_noignore =
-    '--column --line-number --no-heading --color=always --smart-case --max-columns=512 --no-ignore-vcs'
-
+  local fzf = 'fzf-lua'
   k('n', '<Leader>o', function()require('plug.fzf-project-mru')()end)
   k('n', '<Leader>t', function()require('plug.fzf-templates')()end)
-  k('n', '<Leader>i', req(m, 'files', {fd_opts = fd_noignore}))
-  k('n', '<Leader>u', req(m, 'git_status'))
-  k('n', '<Leader>f', req(m, 'live_grep_resume'))
-  k('n', '<Leader>F', req(m, 'live_grep_resume', {rg_opts = rg_noignore}))
-  k('v', '<Leader>f', req(m, 'grep_visual'))
-  k('v', '<Leader>F', req(m, 'grep_visual',{rg_opts = rg_noignore}))
-  k('n', '<Leader>g', req(m, 'grep_cword'))
-  k('n', '<Leader>G', req(m, 'grep_cword', {rg_opts = rg_noignore}))
-  k('n', '<Leader>y', req(m, 'lsp_document_symbols'))
-  k('n', '<Leader>:', req(m, 'command_history'))
-  k('n', '<Leader>e', req(m, 'lsp_workspace_diagnostics'))
+  k('n', '<Leader>i', function()require(fzf).files{fd_opts = util.fzf_fd_noignore}end)
+  k('n', '<Leader>u', function()require(fzf).git_status()end)
+  k('n', '<Leader>f', function()require(fzf).live_grep_resume()end)
+  k('n', '<Leader>F', function()require(fzf).live_grep_resume{rg_opts = util.fzf_rg_noignore}end)
+  k('v', '<Leader>f', function()require(fzf).grep_visual()end)
+  k('v', '<Leader>F', function()require(fzf).grep_visual{rg_opts = util.fzf_rg_noignore}end)
+  k('n', '<Leader>g', function()require(fzf).grep_cword()end)
+  k('n', '<Leader>G', function()require(fzf).grep_cword{rg_opts = util.fzf_rg_noignore}end)
+  k('n', '<Leader>y', function()require(fzf).lsp_document_symbols()end)
+  k('n', '<Leader>:', function()require(fzf).command_history()end)
+  k('n', '<Leader>e', function()require(fzf).lsp_workspace_diagnostics()end)
 end
 M.fzf()
 
 function M.diffview()
   k('n', '<Leader>d', '<Cmd>DiffviewOpen -- %<CR>')
-  k('n', '<Leader>s', "<Cmd>call user#win#goto_or('Git status', 'DiffviewOpen')<CR>")
+  -- k('n', '<Leader>s', "<Cmd>call user#win#goto_or('Git status', 'DiffviewOpen')<CR>")
+  k('n', '<Leader>s', function()win.reuse('is_git_status', 'DiffviewOpen')end)
   k('n', '<Leader>S', '<Cmd>DiffviewOpen main<CR>')
   k('n', '<Leader>h', '<Cmd>DiffviewFileHistory %<CR>')
   k('v', '<Leader>h', ':DiffviewFileHistory<CR>')
@@ -115,7 +110,7 @@ local hover = require 'user.lsp-hover'
 function M.lsp_hover()
   k('n', 'K', hover, b)
 end
-function M.lsp_rename() k('n', '_', vim.lsp.buf.rename, b) end
+function M.lsp_rename() k('n', 'gn', vim.lsp.buf.rename, b) end
 function M.lsp_action() k('n', 'ga', vim.lsp.buf.code_action, b) end
 
 function M.tab_move()
@@ -149,11 +144,9 @@ M.win_resize()
 
 function M.motion()
   local n = 'nice-scroll'
-  k('n', '(', '^')
-  k('n', ')', '$')
   k({'n', 'x'}, ';',  '<Cmd>Pounce<CR>')
   k({'n', 'x'}, '*',  "<Plug>(asterisk-z*):<C-u>lua require('hlslens').start()<CR>")
-  k({'n', 'x'}, 'g*', "<Plug>(asterisk-gz*):<C-u>lua require('hlslens').start()<CR>")
+  k({'n', 'x'}, 'g*', "<Plug>(asterisk-gz*):<-u>lua require('hlslens').start()<CR>")
   k({'n', 'x'}, '#',  "<Plug>(asterisk-z#):<C-u>lua require('hlslens').start()<CR>")
   k({'n', 'x'}, 'g#', "<Plug>(asterisk-gz#):<C-u>lua require('hlslens').start()<CR>")
   k('n', ']q', function()require(n).hook('<Cmd>cnext<CR>', { countable = true })end)
@@ -162,8 +155,8 @@ function M.motion()
   k('n', 'g,', function()require(n).hook('g,', { countable = true })end)
   k('n', 'n',  function()require(n).hook('n')end)
   k('n', 'N',  function()require(n).hook('N')end)
-  k('n', 'zh', "<Plug>(nice-scroll-adjust)")
-  k('n', 'zl', "<Plug>(nice-scroll-adjust-r)")
+  k('n', 'zh', function()require(n).adjust()end)
+  k('n', 'zl', function()require(n).adjust('r')end)
 end
 M.motion()
 
@@ -227,7 +220,7 @@ function M.luasnip()
     if require(mod).jumpable(-1) then
       require(mod).jump(-1)
     else
-      feedkeys('<C-o>D', 'in')
+      util.feedkeys('<C-o>D', 'in')
     end
   end)
 end
@@ -267,25 +260,25 @@ function M.textcase()
   local mod = 'textcase'
   k('n', 'gc', '<Nop>')
   for mode, fn in pairs { n = 'current_word', x = 'visual' } do
-    k(mode, 'gcu', req(mod, fn, 'to_upper_case'))
-    k(mode, 'gcl', req(mod, fn, 'to_lower_case'))
-    k(mode, 'gcc', req(mod, fn, 'to_camel_case'))
-    k(mode, 'gcs', req(mod, fn, 'to_snake_case'))
-    k(mode, 'gck', req(mod, fn, 'to_dash_case'))
-    k(mode, 'gcn', req(mod, fn, 'to_constant_case'))
-    k(mode, 'gcd', req(mod, fn, 'to_dot_case'))
-    k(mode, 'gcp', req(mod, fn, 'to_pascal_case'))
+    k(mode, 'gcu', function() require(mod)[fn]('to_upper_case')end)
+    k(mode, 'gcl', function() require(mod)[fn]('to_lower_case')end)
+    k(mode, 'gcc', function() require(mod)[fn]('to_camel_case')end)
+    k(mode, 'gcs', function() require(mod)[fn]('to_snake_case')end)
+    k(mode, 'gck', function() require(mod)[fn]('to_dash_case')end)
+    k(mode, 'gcn', function() require(mod)[fn]('to_constant_case')end)
+    k(mode, 'gcd', function() require(mod)[fn]('to_dot_case')end)
+    k(mode, 'gcp', function() require(mod)[fn]('to_pascal_case')end)
   end
 end
 M.textcase()
 
 function M.substitute()
-  k('n', 't', req('substitute', 'operator'))
-  k('x', 'T', req('substitute', 'visual'))
-  k('n', 'T', req('substitute', 'eol'))
-  k('n', 'X', req('substitute.exchange', 'operator'))
-  k('x', 'X', req('substitute.exchange', 'visual'))
-  k('n', 'XX',req('substitute.exchange', 'cancel'))
+  k('n', 't', function()require('substitute').operator()end)
+  k('x', 'T', function()require('substitute').visual()end)
+  k('n', 'T', function()require('substitute').eol()end)
+  k('n', 'X', function()require('substitute.exchange').operator()end)
+  k('x', 'X', function()require('substitute.exchange').visual()end)
+  k('n', 'XX',function()require('substitute.exchange').cancel()end)
 end
 M.substitute()
 
@@ -319,8 +312,6 @@ M.neogen()
 
 function M.commentary()
   -- invert selected comments
-  k({'n', 'x', 'o'}, 's', '<Plug>Commentary')
-  k('n', 'S', '<Plug>Commentary<Plug>Commentary')
   k('x', 'S', function ()
     vim.cmd[[exe "normal! \<Esc>"]]
     local v_start = vim.fn.getpos("'<")[2]
@@ -362,7 +353,7 @@ end
 M.insert_ctrl()
 
 function M.fern_local()
-  k('n', '<BS>',  '<Cmd>call user#win#quit()<CR>',       b)
+  k('n', '<BS>',  win.close,                             b)
   k('n', '<C-c>', '<Plug>(fern-action-cancel)',          b)
   k('n', 'yy',    '<Plug>(fern-action-clipboard-copy)',  b)
   k('n', 'Y',     '<Plug>(fern-action-clipboard-copy)',  b)
@@ -388,6 +379,10 @@ function M.fern_local()
   k('n', '<C-t>', '<Plug>(fern-action-open:tabedit)',    b)
   k('n', 'gy',    '<Plug>(fern-action-yank:label)',      b)
   k('n', 'gY',    '<Plug>(fern-action-yank:bufname)',    b)
+
+  local fzf_fern = require 'plug.fzf-fern'
+  k('n', '<Leader>f', function()fzf_fern()end, b)
+  k('n', '<Leader>F', function()fzf_fern(true)end, b)
 end
 
 function M.bqf()
@@ -416,15 +411,24 @@ function M.ft_quickfix()
   k('n', 'F',  '<Cmd>FzfLua quickfix<CR>', b)
   -- k('n', '<C-g>', '<Nop>', b)
 end
+local qf = vim.api.nvim_create_augroup('MapQuickfix', {})
+vim.api.nvim_create_autocmd('FileType',
+  { group = qf, pattern = 'qf', callback = M.ft_quickfix })
 
 function M.ft_markdown()
   k('n', '<Leader><CR>', '<Plug>MarkdownPreviewToggle', b)
   k('n', 'sh', '<Cmd>call plug#checkbox#toggle()<CR>', b)
   k('i', '<C-x>', '<Cmd>call plug#checkbox#toggle()<CR>', b)
 end
+local markdown = vim.api.nvim_create_augroup('MapMarkdown', {})
+vim.api.nvim_create_autocmd('FileType',
+  { group = markdown, pattern = 'markdown', callback = M.ft_markdown })
 
 function M.ft_http()
   k('n', '<Leader><CR>', '<Plug>RestNvim', b)
 end
+local http = vim.api.nvim_create_augroup('MapHttp', {})
+vim.api.nvim_create_autocmd('FileType',
+  { group = http, pattern = 'http', callback = M.ft_http })
 
 return M

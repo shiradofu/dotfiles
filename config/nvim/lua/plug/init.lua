@@ -2,6 +2,7 @@ vim.cmd [[packadd packer.nvim]]
 require 'plug.packer'
 
 local packer = require 'packer'
+local util = require 'user.util'
 packer.startup(function(use)
   use { 'wbthomason/packer.nvim', opt = true }
 
@@ -10,6 +11,10 @@ packer.startup(function(use)
 
   use 'nvim-lua/plenary.nvim' -- do not lazy load
   use { 'tpope/vim-repeat', opt = true }
+  use {
+    'kyazdani42/nvim-web-devicons',
+    module = 'nvim-web-devicons',
+  }
 
   --------------------------------------------------------------
   -- Fundamental
@@ -36,25 +41,25 @@ packer.startup(function(use)
     'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate',
     config = function() require 'plug.treesitter' end,
-    opt = true,
+    cmd = { 'TSUpdate', 'TSUpdateSync' },
   }
   use {
     'yioneko/nvim-yati', -- improve indentation
     requires = 'nvim-treesitter/nvim-treesitter',
-    opt = true,
+    event = 'ModeChanged',
   }
   use {
     'nvim-treesitter/nvim-treesitter-textobjects',
     requires = 'nvim-treesitter/nvim-treesitter',
-    opt = true,
+    event = 'ModeChanged',
   }
   use {
     'JoosepAlviste/nvim-ts-context-commentstring',
     requires = {
       'nvim-treesitter/nvim-treesitter',
-      { 'tpope/vim-commentary' },
+      { 'tpope/vim-commentary', event = 'ModeChanged' },
     },
-    opt = true,
+    event = 'ModeChanged',
   }
   use {
     'nvim-treesitter/playground',
@@ -73,11 +78,11 @@ packer.startup(function(use)
     config = function() vim.fn['plug#textobj#config']() end,
     opt = true,
   }
-  use { 'sgur/vim-textobj-parameter', opt = true }
-  use { 'kana/vim-textobj-entire', opt = true }
-  use { 'kana/vim-textobj-indent', opt = true }
-  use { 'kana/vim-textobj-line', opt = true }
-  use { 'glts/vim-textobj-comment', opt = true }
+  use { 'sgur/vim-textobj-parameter', event = 'ModeChanged' }
+  use { 'kana/vim-textobj-entire', event = 'ModeChanged' }
+  use { 'kana/vim-textobj-indent', event = 'ModeChanged' }
+  use { 'kana/vim-textobj-line', event = 'ModeChanged' }
+  use { 'glts/vim-textobj-comment', event = 'ModeChanged' }
   use {
     'machakann/vim-sandwich',
     setup = function() vim.fn['plug#sandwich#setup']() end,
@@ -104,9 +109,9 @@ packer.startup(function(use)
     config = function() require 'plug.null-ls' end,
     opt = true,
   }
-  use 'jose-elias-alvarez/typescript.nvim'
-  use 'b0o/SchemaStore.nvim'
-  use 'gennaro-tedesco/nvim-jqx'
+  use { 'jose-elias-alvarez/typescript.nvim', opt = true }
+  use { 'b0o/SchemaStore.nvim', opt = true }
+  use { 'gennaro-tedesco/nvim-jqx', opt = true }
   use {
     'ray-x/go.nvim',
     ft = 'go',
@@ -115,7 +120,7 @@ packer.startup(function(use)
   use {
     'williamboman/nvim-lsp-installer',
     config = function() require 'plug.lsp-installer' end,
-    opt = true,
+    cmd = 'LspInstall',
   }
   use {
     'ray-x/lsp_signature.nvim',
@@ -164,31 +169,29 @@ packer.startup(function(use)
 
   --------------------------------
   -- Completion
+  local cmp_e = { 'InsertEnter', 'CmdlineEnter' }
   use {
     'hrsh7th/nvim-cmp',
     config = function() require 'plug.cmp' end,
-    requires = { 'LuaSnip' },
-    opt = true,
+    requires = 'L3MON4D3/LuaSnip',
+    after = 'LuaSnip',
+    module = 'cmp',
   }
-  use {
-    'hrsh7th/cmp-nvim-lsp',
-    config = function() require 'plug.cmp-lsp' end,
-    opt = true,
-  }
-  use { 'hrsh7th/cmp-buffer', opt = true }
-  use { 'hrsh7th/cmp-path', opt = true }
-  use { 'hrsh7th/cmp-cmdline', opt = true }
-  use { 'saadparwaiz1/cmp_luasnip', opt = true }
-  use { 'lukas-reineke/cmp-rg', opt = true }
-  use { 'davidsierradz/cmp-conventionalcommits', opt = true }
-  use { 'hrsh7th/cmp-nvim-lua', opt = true }
+  use { 'hrsh7th/cmp-nvim-lsp', module = 'cmp_nvim_lsp' }
+  use { 'hrsh7th/cmp-buffer', event = cmp_e }
+  use { 'hrsh7th/cmp-path', event = cmp_e }
+  use { 'hrsh7th/cmp-cmdline', event = cmp_e }
+  use { 'saadparwaiz1/cmp_luasnip', event = cmp_e }
+  use { 'lukas-reineke/cmp-rg', event = cmp_e }
+  use { 'davidsierradz/cmp-conventionalcommits', event = cmp_e }
+  use { 'hrsh7th/cmp-nvim-lua', event = cmp_e }
 
   --------------------------------
   -- Snippet
   use {
     'L3MON4D3/LuaSnip',
     config = function() require 'plug.luasnip' end,
-    opt = true,
+    module = 'luasnip',
   }
 
   --------------------------------
@@ -198,7 +201,7 @@ packer.startup(function(use)
     config = function() require 'plug.code-action-menu' end,
     opt = true,
   }
-  use 'gpanders/editorconfig.nvim'
+  use { 'gpanders/editorconfig.nvim', opt = true }
 
   --------------------------------------------------------------
   -- Testing and Debugging
@@ -209,21 +212,21 @@ packer.startup(function(use)
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
       'antoinemadec/FixCursorHold.nvim',
-      'haydenmeade/neotest-jest',
-      'shiradofu/neotest-vitest',
-      'olimorris/neotest-phpunit',
-      'nvim-neotest/neotest-go',
     },
     config = function() require 'plug.neotest' end,
-    opt = true,
+    module = 'neotest',
   }
+  use { 'haydenmeade/neotest-jest', ft = util.js_family }
+  use { 'shiradofu/neotest-vitest', ft = util.js_family }
+  use { 'olimorris/neotest-phpunit', ft = 'php' }
+  use { 'nvim-neotest/neotest-go', ft = 'go' }
 
   --------------------------------------------------------------
   -- Fuzzy Finder
 
   use {
     'ibhagwan/fzf-lua',
-    requires = { 'kyazdani42/nvim-web-devicons' },
+    requires = 'kyazdani42/nvim-web-devicons',
     config = function() require 'plug.fzf' end,
   }
 
@@ -257,6 +260,7 @@ packer.startup(function(use)
   use {
     'tyru/open-browser-github.vim',
     requires = 'open-browser.vim',
+    after = 'open-browser.vim',
     cmd = 'OpenGithubFile',
   }
 
@@ -267,9 +271,8 @@ packer.startup(function(use)
   -- Inside buffer
   use {
     'haya14busa/vim-asterisk',
-    keys = { '<Plug>(asterisk-' },
+    keys = '<Plug>(asterisk-',
     setup = function() vim.g['asterisk#keeppos'] = 1 end,
-    opt = true,
   }
   use {
     'kevinhwang91/nvim-hlslens',
@@ -279,14 +282,14 @@ packer.startup(function(use)
   use {
     'petertriho/nvim-scrollbar',
     config = function() require('scrollbar').setup {} end,
-    opt = true,
+    module = 'scrollbar.handlers.search',
   }
   use {
     'shiradofu/nice-scroll.nvim',
     config = function() require('nice-scroll').setup {} end,
     requires = 'kevinhwang91/nvim-hlslens',
     after = 'nvim-hlslens',
-    opt = true,
+    module = 'nice-scroll',
   }
   use {
     'rhysd/clever-f.vim',
@@ -347,6 +350,7 @@ packer.startup(function(use)
 
   use {
     'tyru/open-browser.vim',
+    map = '<Plug>(openbrowser-',
     opt = true,
   }
   use {
@@ -394,6 +398,7 @@ packer.startup(function(use)
         show_current_context = true,
       }
     end,
+    opt = true,
   }
 
   use {
@@ -409,54 +414,32 @@ packer.startup(function(use)
   }
 end)
 
--- 依存順序注意
-vim.defer_fn(
-  function()
+if pcall(require, 'plug._compiled') then
+  vim.defer_fn(function()
     packer.loader(
-      'nvim-web-devicons',
+      -- 依存順序注意
       'vim-repeat',
-      'LuaSnip',
-      'nvim-cmp',
-      'cmp-nvim-lsp',
-      'cmp-buffer',
-      'cmp-path',
-      'cmp-cmdline',
-      'cmp_luasnip',
-      'cmp-rg',
-      'cmp-conventionalcommits',
-      'cmp-nvim-lua',
+      'editorconfig.nvim',
+      'typescript.nvim',
+      'SchemaStore.nvim',
+      'nvim-jqx',
       'nvim-lspconfig',
       'null-ls.nvim',
       'nvim-lsp-installer',
       'lsp_signature.nvim',
       'nvim-code-action-menu',
       'nvim-treesitter',
-      'nvim-yati',
-      'nvim-treesitter-textobjects',
-      'nvim-ts-context-commentstring',
-      'vim-textobj-user',
-      'vim-textobj-parameter',
-      'vim-textobj-entire',
-      'vim-textobj-indent',
-      'vim-textobj-line',
-      'vim-textobj-comment',
-      'substitute.nvim',
-      'neotest-jest',
-      'neotest-vitest',
-      'neotest-phpunit',
-      'neotest-go',
-      'neotest',
       'gitsigns.nvim',
       'git-conflict.nvim',
       'vim-mergetool',
-      'vim-asterisk',
-      'nvim-scrollbar',
+      'indent-blankline.nvim',
       'nvim-hlslens',
+      'nvim-scrollbar',
       'nvim-colorizer.lua',
       'vim-better-whitespace',
-      'open-browser.vim',
-      'nice-scroll.nvim'
+      'vim-textobj-user',
+      'substitute.nvim',
+      'open-browser.vim'
     )
-  end,
-  0
-)
+  end, 0)
+end

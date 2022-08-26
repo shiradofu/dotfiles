@@ -21,8 +21,7 @@ require('diffview').setup {
 
       -- 何も指定しなかったときは git status 相当の表示になる
       if not p.rev_pretty_name and #p.path_args == 0 and not range_given then
-        vim.cmd [[set filetype=gitstatus]]
-        vim.cmd [[file Git status]]
+        vim.t.is_git_status = true
       end
 
       if file_given or range_given then vim.t.diffview_single_file = true end
