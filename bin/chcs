@@ -8,7 +8,12 @@ is_wsl() { [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; }
 __chcs_wezterm() {
   local dir;
   if is_wsl; then
-    dir="/mnt/c/Program Files/WezTerm"
+    # wezterm must be installed by winget with `--location %APPDATA%/WezTerm`
+    if ! appdata=$(wslpath "$(wslvar APPDATA)"); then
+      echo 'Failed to get APPDATA'
+      exit 1
+    fi
+    dir="$appdata/WezTerm"
   else
     dir="$config_home/wezterm"
   fi

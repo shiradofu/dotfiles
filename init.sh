@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# for debug
+[ -n "$1" ] && branch="$1" || branch=main
+
 set -eu
 
 msg() { printf "\033[1;34m%s\033[0m\n" "$1"; }
@@ -52,7 +55,7 @@ while true; do
 done
 
 if is_wsl; then
-  if exists cmd.exe; then
+  if ! exists cmd.exe; then
     err 'cmd.exe not found.'
     exit 127
   fi
@@ -151,7 +154,7 @@ repo=github.com/shiradofu/dotfiles
 ghq get --update https://${repo}
 repo_root="$(ghq root)/${repo}"
 git -C "${repo_root}" config --local diff.ignoreSubmodules all
-[ -n "$1" ] && git -C "${repo_root}" checkout "$1" # for debug
+git -C "${repo_root}" checkout "$branch"
 
 printf '\n'; msg '🚀  Start installing!'; printf '\n'
 bash "${repo_root}/install.sh" "$password" "$git_name" "$git_email"

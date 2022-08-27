@@ -165,7 +165,7 @@ if is_wsl; then
     dotsync apply espanso
   fi
 
-  git_cred="/mnt/c/Program\ Files/Git/mingw64/libexec/git-core/git-credential-manager.exe"
+  git_cred="/mnt/c/Program Files/Git/mingw64/libexec/git-core/git-credential-manager.exe"
   if [ ! -f git_cred ]; then
     err "$git_cred does not exist."
   else

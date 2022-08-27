@@ -22,11 +22,11 @@ __dotsync_alt-tab() {
 }
 
 __dotsync_espanso() {
-  d="$config_home/espanso/config/default.yml"
   if ! appdata=$(wslpath "$(wslvar APPDATA)"); then
-    echo 'Failed to find APPDATA'
+    echo 'Failed to get APPDATA'
     exit 1
   fi
+  d="$config_home/espanso/config/default.yml"
   u=$appdata/espanso/config/default.yml
   __dotsync_do
 }
@@ -39,9 +39,14 @@ __dotsync_rectangle() {
 }
 
 __dotsync_wezterm() {
+  # wezterm must be installed by winget with `--location %APPDATA%/WezTerm`
   if [[ $platform != 'wsl' ]]; then exit 1; fi
-  u="/mnt/c/Program Files/WezTerm/wezterm.lua"
+  if ! appdata=$(wslpath "$(wslvar APPDATA)"); then
+    echo 'Failed to get APPDATA'
+    exit 1
+  fi
   d="$config_home/wezterm/wezterm.lua"
+  u="$appdata/WezTerm/wezterm.lua"
   __dotsync_do
 }
 
@@ -79,6 +84,7 @@ __dotsync_sudo() {
   fi
   echo "$password" | sudo -S mkdir -p "$(dirname "$u")"
   case "$mode" in
+    LINK ) echo "$password" | sudo -S ln -s "$d" "$u";;
     APPLY ) echo "$password" | sudo -S cp -f "$d" "$u";;
     IMPORT ) echo "$password" | sudo -S cp -f "$u" "$d";;
     BACKUP ) echo "$password" | sudo -S cp -f "$u" "$d.bak";;
@@ -88,6 +94,7 @@ __dotsync_sudo() {
 
 for ARG; do
   case $1 in
+    link ) mode=LINK;;
     apply ) mode=APPLY;;
     import ) mode=IMPORT;;
     backup ) mode=BACKUP;;
@@ -96,7 +103,7 @@ for ARG; do
       shift
       password="$1"
       ;;
-    alt-tab | espanso | rectangle | wezterm | wslconfig | wsl_conf )
+    alt-tab | espanso | rectangle |  wslconfig | wsl_conf )
       "__dotsync_${ARG}"
       ;;
     * )
