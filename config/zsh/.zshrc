@@ -21,6 +21,7 @@ alias d='direnv edit .'
 alias clear="clear && printf '\e[3J'"
 if is_wsl; then
   alias open=wslview
+  winget() { cmd.exe /c "gsudo winget $*"; }
 fi
 
 # lazy に置くと展開に失敗する

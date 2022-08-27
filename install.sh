@@ -7,6 +7,7 @@ git_email=$3
 
 i=0
 msg()    { printf "\033[1;3$((i++%6+1))m%s\033[0m\n" "$1"; }
+err()    { printf "\033[1;31m%s\033[0m\n" "$1" 1>&2; return 1; }
 exists() { type "$1" > /dev/null 2>&1; }
 is_mac() { echo "$OSTYPE" | grep darwin -q; }
 is_wsl() { [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; }
@@ -69,7 +70,7 @@ git clone --depth 1 https://github.com/zdharma-continuum/zinit "${XDG_STATE_HOME
 brew_i fzf
 "${HOMEBREW_PREFIX}/opt/fzf/install" --xdg --completion --no-update-rc --no-key-bindings
 brew_i cmake starship fd rg bat glow git-delta jq tmux navi hexyl tokei \
-  direnv docker gh act awscli aws-cdk
+  direnv docker docker-compose gh act awscli aws-cdk
 
 #
 # Languages and Package Managers
@@ -147,20 +148,41 @@ if is_mac; then
   git config --global credential.helper osxkeychain
 fi
 
-if is_wsl && exists wslvar; then
+if is_wsl; then
   curl -sLo /tmp/win32yank.zip \
     https://github.com/equalsraf/win32yank/releases/download/v0.0.4/win32yank-x64.zip
   unzip -p /tmp/win32yank.zip win32yank.exe > /tmp/win32yank.exe
   chmod +x /tmp/win32yank.exe
   mv /tmp/win32yank.exe ./bin
 
-  dotsync backup wslconfig
-  dotsync apply wslconfig
+  dotsync link wezterm
   dotsync --password "$password" backup wsl_conf
   dotsync --password "$password" apply wsl_conf
 
-  git config --global credential.helper \
-    "/mnt/c/Program\ Files/Git/mingw64/libexec/git-core/git-credential-manager.exe"
+  if exists wslvar && exists wslpath; then
+    dotsync backup wslconfig
+    dotsync apply wslconfig
+    dotsync apply espanso
+  fi
+
+  git_cred="/mnt/c/Program\ Files/Git/mingw64/libexec/git-core/git-credential-manager.exe"
+  if [ ! -f git_cred ]; then
+    err "$git_cred does not exist."
+  else
+    git config --global credential.helper "$git_cred"
+  fi
 fi
+
+printf '\n  ====================================================================\n\n'
+printf '  👏  \033[1;32mInstallation successfully completed! \033[0m\n\n'
+cat << EOF
+  What to do next:
+
+  - $HOMEBREW_PREFIX/bin/zsh (to install plugins)
+  - chsh -s $HOMEBREW_PREFIX/bin/zsh (to set zsh to default shell)
+  - aws configure (access key is required)
+  - gh auth login
+EOF
+printf '\n  ====================================================================\n\n'
 
 unset password

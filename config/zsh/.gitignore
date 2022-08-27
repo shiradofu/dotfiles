@@ -1,0 +1,7 @@
+*
+!*/
+!.gitignore
+!.zshenv
+!.zshrc
+!lazy.zsh
+!/completions/*

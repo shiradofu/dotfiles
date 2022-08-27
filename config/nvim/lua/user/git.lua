@@ -1,11 +1,6 @@
 local G = {}
 
 local aug = vim.api.nvim_create_augroup('MyGit', {})
-vim.api.nvim_create_autocmd('BufWinEnter', {
-  group = aug,
-  pattern = '.git/COMMIT_EDITMSG',
-  command = 'startinsert',
-})
 
 -- nvim remote は開いたバッファが delete された時点で戻るので、
 -- これらのバッファは常に hidden = deleted としておく
@@ -17,7 +12,7 @@ vim.api.nvim_create_autocmd('FileType', {
 
 vim.api.nvim_create_autocmd('BufWinEnter', {
   group = aug,
-  pattern = '.git/COMMIT_EDITMSG',
+  pattern = '*/.git/COMMIT_EDITMSG',
   command = 'startinsert',
 })
 

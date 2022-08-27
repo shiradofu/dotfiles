@@ -28,9 +28,10 @@ if is_mac; then
 fi
 
 if is_wsl; then
-  export PATH="$PATH:/mnt/c/Program Files/Docker/Docker/resources/bin"
-  export PATH="$PATH:/mnt/c/ProgramData/DockerDesktop/version-bin"
+  # export PATH="$PATH:/mnt/c/Program Files/Docker/Docker/resources/bin"
+  # export PATH="$PATH:/mnt/c/ProgramData/DockerDesktop/version-bin"
   export PATH="$PATH:/mnt/c/Windows/System32"
+  export PATH="$PATH:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0"
 fi
 
 #

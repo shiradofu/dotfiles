@@ -4,6 +4,8 @@ set -eu
 
 msg() { printf "\033[1;34m%s\033[0m\n" "$1"; }
 err() { printf "\033[1;31m%s\033[0m\n" "$1" 1>&2; return 1; }
+is_mac() { [ "$(uname)" = "Darwin" ]; }
+is_wsl() { [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; }
 exists() { type "$1" > /dev/null 2>&1; }
 
 hash -r
@@ -13,7 +15,7 @@ if ! exists sudo; then
 fi
 
 DIST=''
-if [ "$(uname)" = "Darwin" ]; then
+if is_mac; then
   DIST=mac
 else
   for dist in debian redhat fedora; do
@@ -49,6 +51,22 @@ while true; do
   case "$yn" in [Yy] ) break;; esac
 done
 
+if is_wsl; then
+  if exists cmd.exe; then
+    err 'cmd.exe not found.'
+    exit 127
+  fi
+  for wincmd in winget gsudo; do
+    if ! cmd.exe /c "where $wincmd" >/dev/null 2>&1; then
+      err "$wincmd not found."
+      exit 127
+    fi
+  done
+  if ! cmd.exe /c "where git" >/dev/null 2>&1; then
+    cmd.exe /c "gsudo winget install -e --id Git.Git"
+  fi
+fi
+
 clear
 printf "\n ==========================================\n\n"
 printf "   "
@@ -60,7 +78,7 @@ printf "\033[0;36mleave "
 printf "\033[0;34mthe "
 printf "\033[0;35mcomputer! "
 printf "\033[0m☕"
-printf "\n\n ==========================================\n"
+printf "\n\n ==========================================\n\n"
 
 sleep 3
 
@@ -78,6 +96,7 @@ case "${DIST}" in
     echo "${password}" | sudo -S apt -y install make build-essential libssl-dev zlib1g-dev \
       libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
       libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+    if is_wsl; then echo "${password}" | sudo -S apt -y install wslu; fi
     ;;
   redhat | fedora )
     msg "installing basic packages..."
@@ -121,33 +140,21 @@ if [ "$DIST" = 'mac' ]; then
   brew install openssl readline sqlite3 xz zlib
 fi
 
-msg "\n🍺  Installing git:\n"
+printf '\n'; msg '🍺  Installing git:'; printf '\n'
 brew install git
 
-msg "\n🍺  Installing ghq:\n"
+printf '\n'; msg '🍺  Installing ghq:'; printf '\n'
 brew install ghq
 
-msg "\n✨  Cloning dotfiles repository...\n"
+printf '\n'; msg '✨  Cloning dotfiles repository...'; printf '\n'
 repo=github.com/shiradofu/dotfiles
 ghq get --update https://${repo}
 repo_root="$(ghq root)/${repo}"
 git -C "${repo_root}" config --local diff.ignoreSubmodules all
 [ -n "$1" ] && git -C "${repo_root}" checkout "$1" # for debug
 
-msg "\n🚀  Start installing!\n"
+printf '\n'; msg '🚀  Start installing!'; printf '\n'
 bash "${repo_root}/install.sh" "$password" "$git_name" "$git_email"
-
-printf '\n  ====================================================================\n\n'
-printf '  👏  \033[1;32mInstallation successfully completed! \033[0m\n\n'
-cat << 'EOF'
-  What to do next:
-
-  - Run zsh to install plugin
-  - Run `chsh -s $(brew --prefix)/bin/zsh` to set zsh to default shell
-  - `aws configure` (access key is required)
-  - `gh auth login`
-EOF
-printf '\n  ====================================================================\n\n'
 
 unset password
 

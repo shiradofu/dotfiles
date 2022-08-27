@@ -17,7 +17,7 @@ if [ -f /usr/local/bin/brew  ]; then
   export HOMEBREW_PREFIX="/usr/local";
   export HOMEBREW_CELLAR="/usr/local/Cellar";
   export HOMEBREW_REPOSITORY="/usr/local/Homebrew";
-elif [ -d ~/.linuxbrew ]; then
+elif [ -d /home/linuxbrew ]; then
   export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew";
   export HOMEBREW_CELLAR="/home/linuxbrew/.linuxbrew/Cellar";
   export HOMEBREW_REPOSITORY="/home/linuxbrew/.linuxbrew/Homebrew";

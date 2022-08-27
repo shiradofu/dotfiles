@@ -14,17 +14,34 @@ else
   platform=linux
 fi
 
-__dotsync_wezterm() {
-  if [[ $platform != 'wsl' ]]; then exit 1; fi
-  u="/mnt/c/Program Files/WezTerm/wezterm.lua"
-  d="$config_home/wezterm/wezterm.lua"
-  __dotsync_do
-}
-
 __dotsync_alt-tab() {
   if [[ $platform != 'mac' ]]; then exit 1; fi
   d="$config_home/alt-tab/com.lwouis.alt-tab-macos.plist"
   u="$HOME/Library/Preferences/com.lwouis.alt-tab-macos.plist"
+  __dotsync_do
+}
+
+__dotsync_espanso() {
+  d="$config_home/espanso/config/default.yml"
+  if ! appdata=$(wslpath "$(wslvar APPDATA)"); then
+    echo 'Failed to find APPDATA'
+    exit 1
+  fi
+  u=$appdata/espanso/config/default.yml
+  __dotsync_do
+}
+
+__dotsync_rectangle() {
+  if [[ $platform != 'mac' ]]; then exit 1; fi
+  d="$config_home/rectangle/config.json"
+  u="$HOME/Library/Application Support/Rectangle/RectangleConfig.json"
+  __dotsync_do
+}
+
+__dotsync_wezterm() {
+  if [[ $platform != 'wsl' ]]; then exit 1; fi
+  u="/mnt/c/Program Files/WezTerm/wezterm.lua"
+  d="$config_home/wezterm/wezterm.lua"
   __dotsync_do
 }
 
@@ -44,7 +61,9 @@ __dotsync_wsl_conf() {
 }
 
 __dotsync_do() {
+  mkdir -p "$(dirname "$u")"
   case "$mode" in
+    LINK ) ln -s "$d" "$u";;
     APPLY ) cp -f "$d" "$u";;
     IMPORT ) cp -f "$u" "$d";;
     BACKUP ) cp -f "$u" "$d.bak";;
@@ -58,6 +77,7 @@ __dotsync_sudo() {
     read -r -s password
     echo
   fi
+  echo "$password" | sudo -S mkdir -p "$(dirname "$u")"
   case "$mode" in
     APPLY ) echo "$password" | sudo -S cp -f "$d" "$u";;
     IMPORT ) echo "$password" | sudo -S cp -f "$u" "$d";;
@@ -76,7 +96,7 @@ for ARG; do
       shift
       password="$1"
       ;;
-    alt-tab | wezterm | wslconfig | wsl_conf )
+    alt-tab | espanso | rectangle | wezterm | wslconfig | wsl_conf )
       "__dotsync_${ARG}"
       ;;
     * )
