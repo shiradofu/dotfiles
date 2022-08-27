@@ -3,6 +3,9 @@
 # Update neovim plugins
 read && ulimit -S -n 200048; nvim -c 'PackerSync'
 
+# Upgrade wezterm
+brew upgrade --cask wez/wezterm/wezterm-nightly
+
 # Reload zsh completion functions
 rm -f $ZDOTDIR/.zcompdump && exec -l $SHELL
 
