@@ -78,13 +78,18 @@ __chcs_os() {
   fi
   # wsl
   if uname -r | grep microsoft -q; then
+    ps="/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe"
+    if [ ! -f "$ps" ]; then
+      echo "$ps does not exist."
+      return 1
+    fi
     case "$1" in
       dark )
         # shellcheck disable=SC1001
-        powershell.exe /c Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme -Value 0;;
+        $ps -c 'Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme -Value 0';;
       light )
         # shellcheck disable=SC1001
-        powershell.exe /c Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme -Value 1;;
+        $ps -c 'Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme -Value 1';;
     esac
   fi
 }

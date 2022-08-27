@@ -103,7 +103,7 @@ for ARG; do
       shift
       password="$1"
       ;;
-    alt-tab | espanso | rectangle |  wslconfig | wsl_conf )
+    alt-tab | espanso | rectangle | wezterm | wslconfig | wsl_conf )
       "__dotsync_${ARG}"
       ;;
     * )

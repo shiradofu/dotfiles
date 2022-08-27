@@ -155,14 +155,13 @@ if is_wsl; then
   chmod +x /tmp/win32yank.exe
   mv /tmp/win32yank.exe ./bin
 
-  dotsync link wezterm
   dotsync --password "$password" backup wsl_conf
   dotsync --password "$password" apply wsl_conf
 
   if exists wslvar && exists wslpath; then
-    dotsync backup wslconfig
-    dotsync apply wslconfig
     dotsync apply espanso
+    dotsync apply wezterm
+    dotsync apply wslconfig
   fi
 
   git_cred="/mnt/c/Program Files/Git/mingw64/libexec/git-core/git-credential-manager.exe"
