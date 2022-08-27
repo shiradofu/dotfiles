@@ -27,7 +27,6 @@ deploy() {
   basename="$(basename "$1")"
   linkname="$2/$basename"
   if [ -e "$linkname" ]; then
-    echo "$linkname backup created"
     mv "$linkname" "$linkname.$TIME.bak";
     echo "backed up $linkname"
   fi
