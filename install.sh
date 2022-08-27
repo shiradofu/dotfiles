@@ -69,7 +69,7 @@ git clone --depth 1 https://github.com/zdharma-continuum/zinit "${XDG_STATE_HOME
 
 brew_i fzf
 "${HOMEBREW_PREFIX}/opt/fzf/install" --xdg --completion --no-update-rc --no-key-bindings
-brew_i cmake starship fd rg bat glow git-delta jq tmux navi hexyl tokei \
+brew_i cmake starship fd rg bat tree glow git-delta jq yq tmux navi hexyl tokei \
   direnv docker docker-compose gh act awscli aws-cdk
 
 #
@@ -164,12 +164,8 @@ if is_wsl; then
     dotsync apply wslconfig
   fi
 
-  git_cred="/mnt/c/Program Files/Git/mingw64/libexec/git-core/git-credential-manager.exe"
-  if [ ! -f git_cred ]; then
-    err "$git_cred does not exist."
-  else
-    git config --global credential.helper "$git_cred"
-  fi
+  git config --global credential.helper \
+    "/mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager-core.exe"
 fi
 
 printf '\n  ====================================================================\n\n'

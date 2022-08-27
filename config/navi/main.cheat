@@ -9,8 +9,8 @@ rm -f $ZDOTDIR/.zcompdump && exec -l $SHELL
 # Time zsh initialization
 for i in $(seq 1 10); do time zsh -i -c exit > /dev/null 2>&1 ; done
 
-# asdf direnv local [tool] [version]
-asdf direnv local <asdf_name> <asdf_version>
+# asdf local [tool] [version]
+asdf local <asdf_name> <asdf_version>
 $ asdf_name: asdf plugin-list
 $ asdf_version: asdf list $asdf_name
 
