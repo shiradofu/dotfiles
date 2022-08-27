@@ -70,7 +70,6 @@ if is_wsl; then
   fi
 fi
 
-clear
 printf "\n ==========================================\n\n"
 printf "   "
 printf "\033[0;31mOK, "
@@ -91,6 +90,9 @@ case "${DIST}" in
     export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true
     echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections
     echo "${password}" | sudo -S apt -y update
+    if is_wsl && ! exists wslvar; then
+      echo "${password}" | sudo -S apt -y install wslu && wslvar > /dev/null 2>&1;
+    fi
     # required by homebrew
     echo "${password}" | sudo -S apt -y install build-essential procps curl file git bash
     # required by asdf-deno and bun
@@ -99,7 +101,6 @@ case "${DIST}" in
     echo "${password}" | sudo -S apt -y install make build-essential libssl-dev zlib1g-dev \
       libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
       libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
-    if is_wsl; then echo "${password}" | sudo -S apt -y install wslu; fi
     ;;
   redhat | fedora )
     msg "installing basic packages..."

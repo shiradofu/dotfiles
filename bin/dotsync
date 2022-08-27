@@ -22,6 +22,7 @@ __dotsync_alt-tab() {
 }
 
 __dotsync_espanso() {
+  if [[ $platform != 'wsl' ]]; then exit 1; fi
   if ! appdata=$(wslpath "$(wslvar APPDATA)"); then
     echo 'Failed to get APPDATA'
     exit 1

@@ -18,7 +18,7 @@ pip3_i() { for X; do msg $'\n🧪  Installing '"$X"$':\n'; pip3 install "$X"; do
 
 DOT_ROOT=$(cd "$(dirname "$0")" && pwd)
 source "$DOT_ROOT/config/zsh/.zshenv"
-TIME=$(date "+%F-%H-%M")
+TIME=$(date "+%F-%H%M")
 
 # $1: relative path from dotfiles repo root
 # $2: directory where symlink will be created
@@ -26,7 +26,6 @@ deploy() {
   fullpath="$DOT_ROOT/$1"
   basename="$(basename "$1")"
   linkname="$2/$basename"
-  [ -d "$2" ] || mkdir -p "$2"
   if [ -e "$linkname" ]; then
     echo "$linkname backup created"
     mv "$linkname" "$linkname.$TIME.bak";
@@ -38,6 +37,8 @@ deploy() {
 # $1: 'config' or 'data'
 # $2: directory where symlink will be created
 deploy_all_in() {
+  [ -e "$2" ] && [ ! -d "$2" ] && mv "$2" "$2.$TIME.bak"
+  mkdir -p "$2"
   for d in "$DOT_ROOT/$1"/*; do
     if [ -d "$d" ]; then
       deploy "$1/$(basename "$d")" "$2"
@@ -70,7 +71,7 @@ git clone --depth 1 https://github.com/zdharma-continuum/zinit "${XDG_STATE_HOME
 brew_i fzf
 "${HOMEBREW_PREFIX}/opt/fzf/install" --xdg --completion --no-update-rc --no-key-bindings
 brew_i cmake starship fd rg bat tree glow git-delta jq yq tmux navi hexyl tokei \
-  direnv docker docker-compose gh act awscli aws-cdk
+  ngrok direnv docker docker-compose gh act awscli aws-cdk
 
 #
 # Languages and Package Managers
@@ -145,6 +146,8 @@ asdf reshim
 #
 if is_mac; then
   brew_i binutils coreutils findutils grep gawk gnu-sed gnu-tar gzip wget gpg
+  dotsync apply alt-tab
+  dotsync apply rectangle
   git config --global credential.helper osxkeychain
 fi
 
@@ -159,6 +162,8 @@ if is_wsl; then
   dotsync --password "$password" apply wsl_conf
 
   if exists wslvar && exists wslpath; then
+    # https://github.com/wslutilities/wslu/issues/199
+    echo 65001 > "$XDG_CONFIG_HOME/wslu/oemcp"
     dotsync apply espanso
     dotsync apply wezterm
     dotsync apply wslconfig
@@ -168,7 +173,6 @@ if is_wsl; then
     "/mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager-core.exe"
 fi
 
-HOMEBREW_PREFIX="/usr/local"
 longest="- chsh -s $HOMEBREW_PREFIX/bin/zsh (to set zsh to default shell)"
 printf '\n '
 printf "%${#longest}s==\n\n" | tr " " "="

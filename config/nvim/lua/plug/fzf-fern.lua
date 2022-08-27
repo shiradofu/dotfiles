@@ -12,5 +12,5 @@ return function(noignore)
   if not dir then print(('dir %s not found.'):format(dir)) end
   local fzf_opts = { cwd = dir }
   if noignore then fzf_opts.rg_opts = util.fzf_rg_noignore end
-  require('fzf-lua').live_grep_resume(fzf_opts)
+  require('fzf-lua').live_grep_glob(fzf_opts)
 end
