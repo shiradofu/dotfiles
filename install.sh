@@ -168,16 +168,20 @@ if is_wsl; then
     "/mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager-core.exe"
 fi
 
-printf '\n  ====================================================================\n\n'
+HOMEBREW_PREFIX="/usr/local"
+longest="- chsh -s $HOMEBREW_PREFIX/bin/zsh (to set zsh to default shell)"
+printf '\n '
+printf "%${#longest}s==\n\n" | tr " " "="
 printf '  👏  \033[1;32mInstallation successfully completed! \033[0m\n\n'
 cat << EOF
   What to do next:
 
-  - $HOMEBREW_PREFIX/bin/zsh (to install plugins)
   - chsh -s $HOMEBREW_PREFIX/bin/zsh (to set zsh to default shell)
+  - $HOMEBREW_PREFIX/bin/zsh (to install plugins)
   - aws configure (access key is required)
   - gh auth login
 EOF
-printf '\n  ====================================================================\n\n'
+printf '\n '
+printf "%${#longest}s==\n\n" | tr " " "="
 
 unset password
