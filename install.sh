@@ -64,7 +64,7 @@ brew_i zsh
 if ! grep -xq "${HOMEBREW_PREFIX}/bin/zsh" /etc/shells; then
   echo "$password" | sudo -S sh -c "printf '${HOMEBREW_PREFIX}/bin/zsh\n' >> /etc/shells"
 fi
-echo "$password" | chsh -s $HOMEBREW_PREFIX/bin/zsh
+echo "$password" | chsh -s $HOMEBREW_PREFIX/bin/zsh >/dev/null
 mkdir -p "$XDG_STATE_HOME/zsh" && touch "$XDG_STATE_HOME/zsh/history"
 git clone --depth 1 https://github.com/zdharma-continuum/zinit "${XDG_STATE_HOME}/zinit/zinit.git"
 
@@ -171,7 +171,7 @@ if is_wsl; then
     "/mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager-core.exe"
 fi
 
-longest="- chsh -s $HOMEBREW_PREFIX/bin/zsh (to set zsh to default shell)"
+longest="- $HOMEBREW_PREFIX/bin/zsh (to install plugins)"
 printf '\n\n\n '
 printf "%${#longest}s==\n\n" | tr " " "="
 printf '  👏  \033[1;32mInstallation successfully completed! \033[0m\n\n'
