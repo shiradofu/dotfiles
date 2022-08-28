@@ -1,0 +1,23 @@
+  # version: "3"
+  opensearch:
+    build: ./opensearch
+    environment:
+      - cluster.name=docker-cluster
+      - node.name=os-node
+      - cluster.initial_master_nodes=os-node
+      - http.host=0.0.0.0
+      - transport.host=127.0.0.1
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+      - plugins.security.disabled=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - opensearch_data:/usr/share/opensearch/data
+    ports:
+      - ${OPENSEARCH_EXPOSED_PORT}:9200
+
+# volumes:
+  # opensearch_data:

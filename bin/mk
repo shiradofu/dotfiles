@@ -1,11 +1,13 @@
 #!/bin/sh
 
-if [ -z $1 ]; then
-  return 1
-elif [ "$(echo $1 | rev | cut -c 1)" = / ]; then
-  mkdir -p $1
-else
-  dir="$(echo $1 | sed 's@[^/]*$@@')"
-  [ -n "$dir" ] && mkdir -p $dir
-  touch $1
-fi
+for ARG; do
+  if [ -z "$ARG" ]; then
+    return 1
+  elif [ "$(printf '%s' "$ARG" | tail -c 1)" = '/' ]; then
+    mkdir -p "$ARG"
+  else
+    dir="$(printf '%s' "$ARG" | sed 's@[^/]*$@@')"
+    [ -n "$dir" ] && mkdir -p $dir
+    touch "$ARG"
+  fi
+done

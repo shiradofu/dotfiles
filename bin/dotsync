@@ -1,0 +1,113 @@
+#!/bin/bash
+
+config_home="${XDG_CONFIG_HOME:-~/.config}"
+mode=
+d= # dotfiles内のファイルパス
+u= # 実際に使われている設定ファイルのファイルパス
+password=
+prompt='password: '
+
+if echo "$OSTYPE" | grep darwin -q; then
+  platform=mac
+elif [ -e /proc/sys/fs/binfmt_misc/WSLInterop ]; then
+  platform=wsl
+else
+  platform=linux
+fi
+
+__dotsync_alt-tab() {
+  if [[ $platform != 'mac' ]]; then exit 1; fi
+  d="$config_home/alt-tab/com.lwouis.alt-tab-macos.plist"
+  u="$HOME/Library/Preferences/com.lwouis.alt-tab-macos.plist"
+  __dotsync_do
+}
+
+__dotsync_espanso() {
+  if [[ $platform != 'wsl' ]]; then exit 1; fi
+  if ! appdata=$(wslpath "$(wslvar APPDATA)"); then
+    echo 'Failed to get APPDATA'
+    exit 1
+  fi
+  d="$config_home/espanso/config/default.yml"
+  u=$appdata/espanso/config/default.yml
+  __dotsync_do
+}
+
+__dotsync_rectangle() {
+  if [[ $platform != 'mac' ]]; then exit 1; fi
+  d="$config_home/rectangle/config.json"
+  u="$HOME/Library/Application Support/Rectangle/RectangleConfig.json"
+  __dotsync_do
+}
+
+__dotsync_wezterm() {
+  # wezterm must be installed by winget with `--location %APPDATA%/WezTerm`
+  if [[ $platform != 'wsl' ]]; then exit 1; fi
+  if ! appdata=$(wslpath "$(wslvar APPDATA)"); then
+    echo 'Failed to get APPDATA'
+    exit 1
+  fi
+  d="$config_home/wezterm/wezterm.lua"
+  u="$appdata/WezTerm/wezterm.lua"
+  __dotsync_do
+}
+
+__dotsync_wslconfig() {
+  if [[ $platform != 'wsl' ]]; then exit 1; fi
+  userprofile=$(wslpath "$(wslvar USERPROFILE)")
+  d="$config_home/wsl/.wslconfig"
+  u="$userprofile/.wslconfig"
+  __dotsync_do
+}
+
+__dotsync_wsl_conf() {
+  if [[ $platform != 'wsl' ]]; then exit 1; fi
+  d="$config_home/wsl/wsl.conf"
+  u="/etc/wsl.conf"
+  __dotsync_sudo
+}
+
+__dotsync_do() {
+  mkdir -p "$(dirname "$u")"
+  case "$mode" in
+    LINK ) ln -s "$d" "$u";;
+    APPLY ) cp -f "$d" "$u";;
+    IMPORT ) cp -f "$u" "$d";;
+    BACKUP ) cp -f "$u" "$d.bak";;
+    RESTORE ) cp -f "$d.bak" "$u";;
+  esac
+}
+
+__dotsync_sudo() {
+  if [ -z "$password" ]; then
+    echo -n "$prompt"
+    read -r -s password
+    echo
+  fi
+  echo "$password" | sudo -S mkdir -p "$(dirname "$u")"
+  case "$mode" in
+    LINK ) echo "$password" | sudo -S ln -s "$d" "$u";;
+    APPLY ) echo "$password" | sudo -S cp -f "$d" "$u";;
+    IMPORT ) echo "$password" | sudo -S cp -f "$u" "$d";;
+    BACKUP ) echo "$password" | sudo -S cp -f "$u" "$d.bak";;
+    RESTORE ) echo "$password" | sudo -S cp -f "$d.bak" "$u";;
+  esac
+}
+
+for ARG; do
+  case $ARG in
+    link ) mode=LINK;;
+    apply ) mode=APPLY;;
+    import ) mode=IMPORT;;
+    backup ) mode=BACKUP;;
+    restore ) mode=RESTORE;;
+    -S ) prompt='';;
+    alt-tab | espanso | rectangle | wezterm | wslconfig | wsl_conf )
+      "__dotsync_${ARG}"
+      ;;
+    * )
+      echo "invalid argument: $ARG"
+      exit 1
+      ;;
+  esac
+done

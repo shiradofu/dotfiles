@@ -20,46 +20,49 @@
 delete=false
 
 for ARG; do
-  case $ARG in
+  case "$ARG" in
     -d | --delete ) delete=true;;
     *             ) branch=$ARG;;
   esac
 done
 
-if [ -z "${branch}" ]; then
+if [ -z "$branch" ]; then
   git worktree list
   exit $?
 fi
 
 root=$(git rev-parse --show-toplevel)
-! [ -d "${root}" ] && exit 1
-wtdir="${root}-$(echo $branch | sed -e 's@/@-@g')/"
+! [ -d "$root" ] && exit 1
+wtdir="${root}-$(echo "$branch" | sed -e 's@/@-@g')/"
 
-cd ${root}
+cd "$root" || exit 1
 
-if [ "${delete}" = "false" ]; then
-  __git-wt-add
+if [ "$delete" = "false" ]; then
+  __git_wt_add
 else
-  __git-wt-del
+  __git_wt_del
 fi
 
-__git-wt_add() {
-  if [ -d "${wtdir}" ]; then
-     echo "worktree for '${branch}' already exists."
-     exit 1
+__git_wt_add() {
+  if [ -d "$wtdir" ]; then
+    echo "worktree for '$branch' already exists."
+    exit 1
   fi
 
   # ブランチ存在確認
   git fetch --all > /dev/null
-  if ! git show-ref --quiet $branch; then
-     echo "branch '${branch}' does not exist."
+  if ! git show-ref --quiet "$branch"; then
+    echo "branch '$branch' does not exist."
   fi
 
-  printf "create worktree for '${branch}'? (y to continue): "
-  read create_yn
-  [ "${create_yn}" != 'y' ] && { echo canceled.; exit 1 }
+  printf "create worktree for '%s'? (y to continue): " "$branch"
+  read -r create_yn
+  if [ "$create_yn" != 'y' ]; then
+    echo canceled.
+    exit 1
+  fi
 
-  git worktree add ${wtdir} ${branch}
+  git worktree add "$wtdir" "$branch"
 
   # git 管理下にないファイルをコピー
   {
@@ -67,20 +70,23 @@ __git-wt_add() {
     grep -v "^.git/" | \
     git check-ignore --stdin | \
     sed 's@^@+ /@' ; printf '+ */\n- *\n';
-  } | \time rsync -aR --prune-empty-dirs --filter='. -' . ${wtdir}/
+  } | \time rsync -aR --prune-empty-dirs --filter='. -' . "$wtdir/"
 
-  echo "\ncompleted."
+  printf "\ncompleted.\n"
 }
 
-__git-wt_del() {
-  if ! [ -d "${wtdir}" ]; then
-     echo "worktree for '${branch}' does not exist."
-     exit 1
+__git_wt_del() {
+  if ! [ -d "$wtdir" ]; then
+    echo "worktree for '${branch}' does not exist."
+    exit 1
   fi
 
-  printf "delete worktree for '${branch}'? (y to continue): "
-  read del_yn
-  [ "${del_yn}" != 'y' ] && { echo canceled.; exit 1 }
+  printf "delete worktree for '%s'? (y to continue): " "$branch"
+  read -r del_yn
+  if [ "$del_yn" != 'y' ]; then
+    echo canceled.
+    exit 1
+  fi
 
-  git worktree remove ${wtdir}
+  git worktree remove "$wtdir"
 }

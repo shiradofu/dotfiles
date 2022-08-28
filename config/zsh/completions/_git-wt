@@ -1,0 +1,18 @@
+#compdef git-wt
+
+__list_branches() {
+  echo $(git branch -a |
+    grep -v HEAD |
+    awk '{sub(/^[*+]? */, "");sub(/^ *remotes\/[^\/]+\//, "");print}' |
+    sort -r |
+    uniq)
+}
+
+_git-wt() {
+  _arguments \
+    ':: :((-d\:"Delete worktree" --delete\:"Delete worktree"))' \
+    + '(branch)' \
+    "(branch):branch:($(__list_branches))"
+}
+
+_git-wt "$@"

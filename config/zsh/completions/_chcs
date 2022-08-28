@@ -1,0 +1,13 @@
+#compdef chcs
+
+_chcs() {
+  _arguments \
+    + '(mode)' \
+      {-d,--dark}'[dark mode]' \
+      {-l,--light}'[light mode]' \
+      '(name)--toggle[toggle mode]' \
+    + '(name)' \
+      '*:colorscheme names:(zenwritten poimandres)' \
+}
+
+_chcs "$@"

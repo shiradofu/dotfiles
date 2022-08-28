@@ -1,0 +1,9 @@
+*
+!.gitignore
+!chcs
+!dotsync
+!git-wt
+!google-ime-sync
+!mk
+!rand
+!tms

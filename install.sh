@@ -1,148 +1,186 @@
 #!/bin/bash
+# shellcheck disable=SC1091
 
 password=$1
+git_name=$2
+git_email=$3
 
-msg() { printf "\033[1;34m$1\033[0m\n"; }
-exists() { type $1 > /dev/null 2>&1; }
-is_mac() { uname | grep Darwin -q; }
-is_wsl() { uname -r | grep microsoft -q; }
-brew_i() { msg "\n🍺  installing $1:\n"; brew install $1; }
+i=0
+msg()    { printf "\033[1;3$((i++%6+1))m%s\033[0m\n" "$1"; }
+err()    { printf "\033[1;31m%s\033[0m\n" "$1" 1>&2; return 1; }
+exists() { type "$1" > /dev/null 2>&1; }
+is_mac() { echo "$OSTYPE" | grep darwin -q; }
+is_wsl() { [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; }
+brew_i() { for X; do msg $'\n🍺  Installing '"$X"$':\n'; brew install "$X"; done }
+npm_i()  { for X; do msg $'\n🍔  Installing '"$X"$':\n'; npm install -g "$X"; done }
+go_i()   { for X; do msg $'\n🍙  Installing '"$X"$':\n'; go install "$X"; done }
+pip3_i() { for X; do msg $'\n🧪  Installing '"$X"$':\n'; pip3 install "$X"; done }
 
-DOTFILES_ROOT=$(cd $(dirname $0) && pwd)
-source ${DOTFILES_ROOT}/.config/zsh/.zshenv
+DOT_ROOT=$(cd "$(dirname "$0")" && pwd)
+source "$DOT_ROOT/config/zsh/.zshenv"
+TIME=$(date "+%F-%H%M")
 
-brew_i zsh
-if ! cat /etc/shells | grep -xq ${HOMEBREW_PREFIX}/bin/zsh; then
-  echo "$password" | sudo -S sh -c "printf '${HOMEBREW_PREFIX}/bin/zsh\n' >> /etc/shells"
-fi
-mkdir -p "$XDG_STATE_HOME/zsh" && touch "$XDG_STATE_HOME/zsh/history"
-git clone --depth 1 https://github.com/zdharma-continuum/zinit "${XDG_STATE_HOME}/zinit/zinit.git"
-
-brew_i fzf
-${HOMEBREW_PREFIX}/opt/fzf/install --completion --no-update-rc --no-key-bindings --xdg
-
-brew_i rg
-brew_i fd
-brew_i jq
-brew_i bat
-brew_i tmux
-brew_i starship
-brew_i hexyl
-brew_i git
-brew_i git-delta
-brew_i gh
-brew_i gitui
-brew_i tokei
-brew_i act
-brew_i awscli
-
-#
-# Languages and Package Managers
-#
-brew_i asdf
-source $HOMEBREW_PREFIX/opt/asdf/libexec/asdf.sh
-
-msg "\nc/c++:\n"
-brew_i gcc
-brew_i llvm
-brew_i ccls
-
-msg "\ngolang:\n"
-asdf plugin add golang     &&
-asdf install golang latest &&
-asdf global golang latest
-go install golang.org/x/tools/cmd/goimports@latest
-
-msg "\ndeno:\n"
-asdf plugin add deno     &&
-asdf install deno latest &&
-asdf global deno latest
-
-msg "\nnodejs:\n"
-asdf plugin add nodejs  &&
-asdf install nodejs lts &&
-asdf global nodejs lts  &&
-npm install --global npm
-brew_i yarn
-
-msg "\npython:\n"
-brew install openssl readline sqlite3 xz zlib &&
-asdf plugin add python     &&
-asdf install python 2.7.18 &&
-asdf install python 3.10.4 &&
-asdf global python 3.10.4
-
-msg "\nphp:\n"
-brew_i php
-brew_i composer
-
-#
-# Vim
-#
-brew_i vim
-brew_i nvim
-npm install --global neovim
-brew_i watchman # coc-tsserver
-
-curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > dein.sh
-vim_plugin_dir=$XDG_STATE_HOME/nvim/dein
-mkdir -p "${vim_plugin_dir}"
-sh ./dein.sh "${vim_plugin_dir}"
+# $1: relative path from dotfiles repo root
+# $2: directory where symlink will be created
+deploy() {
+  fullpath="$DOT_ROOT/$1"
+  basename="$(basename "$1")"
+  linkname="$2/$basename"
+  if [ -e "$linkname" ]; then
+    mv "$linkname" "$linkname.$TIME.bak";
+    echo "backed up $linkname"
+  fi
+  ln -s "$fullpath" "$linkname"
+  echo "deployed  $linkname"
+}
+# $1: 'config' or 'data'
+# $2: directory where symlink will be created
+deploy_all_in() {
+  [ -e "$2" ] && [ ! -d "$2" ] && mv "$2" "$2.$TIME.bak"
+  mkdir -p "$2"
+  for d in "$DOT_ROOT/$1"/*; do
+    if [ -d "$d" ]; then
+      deploy "$1/$(basename "$d")" "$2"
+    fi
+  done
+}
 
 #
 # Deploy files
 #
-cd
-set -e
-RAND=$RANDOM
-[ -f ".zshenv" ] && mv .zshenv .zshenv.${RAND}.bak
-ln -s ${DOTFILES_ROOT}/.config/zsh/.zshenv
-[ -d ".config" ] && mv .config .config.${RAND}.bak
-ln -s ${DOTFILES_ROOT}/.config
-[ -d "bin" ] && mv bin bin.${RAND}.bak
-ln -s ${DOTFILES_ROOT}/bin && hash -r
-[ -f ".gitconfig" ] && mv .gitconfig .gitconfig.${RAND}.bak
-cp ${DOTFILES_ROOT}/.config/git/config.tpl ${DOTFILES_ROOT}/.config/git/config
+deploy config/zsh/.zshenv "$HOME"
+deploy bin "$HOME" && hash -r
+deploy_all_in data   "$XDG_DATA_HOME"
+deploy_all_in config "$XDG_CONFIG_HOME"
+[ -f ".gitconfig" ] && mv .gitconfig ".gitconfig.$TIME.bak"
+cp "${DOT_ROOT}/config/git/template" "${DOT_ROOT}/config/git/config"
+git config --global user.name "$git_name"
+git config --global user.email "$git_email"
 
-if ! [ -f ".bashrc" ] || ! cat .bashrc | grep -xq 'source ~/.zshenv'; then
-  echo 'source ~/.zshenv' >> .bashrc
+#
+# CLI tools
+#
+brew_i zsh
+if ! grep -xq "${HOMEBREW_PREFIX}/bin/zsh" /etc/shells; then
+  echo "$password" | sudo -S sh -c "printf '${HOMEBREW_PREFIX}/bin/zsh\n' >> /etc/shells"
 fi
+echo "$password" | chsh -s $HOMEBREW_PREFIX/bin/zsh >/dev/null 2>&1
+mkdir -p "$XDG_STATE_HOME/zsh" && touch "$XDG_STATE_HOME/zsh/history"
+git clone --depth 1 https://github.com/zdharma-continuum/zinit "${XDG_STATE_HOME}/zinit/zinit.git"
+
+brew_i fzf
+"${HOMEBREW_PREFIX}/opt/fzf/install" --xdg --completion --no-update-rc --no-key-bindings
+brew_i cmake starship fd rg bat tree glow git-delta jq yq tmux navi hexyl tokei \
+  ngrok direnv docker docker-compose gh act awscli aws-cdk
+
+#
+# Languages and Package Managers
+#
+msg $'\nc/c++:\n'
+brew_i gcc llvm
+
+git clone https://github.com/asdf-vm/asdf.git "$ASDF_DIR"
+git -C "$ASDF_DIR" checkout -q "$(git -C "$ASDF_DIR" describe --abbrev=0 --tags)"
+source "$ASDF_DIR/asdf.sh"
+
+msg $'\ngolang:\n'
+asdf plugin add golang     &&
+asdf install golang latest &&
+asdf global golang latest
+go_i golang.org/x/tools/cmd/goimports@latest
+go_i github.com/x-motemen/gore/cmd/gore@latest
+
+msg $'\ndeno:\n'
+asdf plugin add deno     &&
+asdf install deno latest &&
+asdf global deno latest
+
+msg $'\nnodejs:\n'
+asdf plugin add nodejs
+asdf list-all nodejs > /dev/null
+asdf install nodejs lts &&
+asdf global nodejs lts  &&
+npm_i npm yarn pnpm
+msg $'\n🍔  Installing bun:\n'
+curl https://bun.sh/install | BUN_INSTALL="$XDG_STATE_HOME/bun" bash
+
+msg $'\npython:\n'
+asdf plugin add python
+asdf install python 2.7.18
+asdf install python 3.10.6 &&
+asdf global python 3.10.6
+
+msg $'\nphp:\n'
+brew install php
+
+msg $'\nmysql:\n'
+asdf plugin-add mysql     &&
+asdf install mysql 5.7.38 &&
+asdf global mysql 5.7.38
+
+msg $'\nlinters/formatters:\n'
+brew_i stylua shellcheck cfn-lint actionlint
+npm_i eslint_d @fsouza/prettierd stylelint
+go_i github.com/editorconfig-checker/editorconfig-checker/cmd/editorconfig-checker@latest
+
+#
+# Vim
+#
+brew_i vim nvim
+git clone --depth 1 \
+  https://github.com/wbthomason/packer.nvim \
+  "$XDG_DATA_HOME/nvim/site/pack/packer/opt/packer.nvim"
+msg $'\ninstalling neovim plugins...\n'
+nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+msg $'\n\ninstalling treesitter parsers/language servers...\n'
+timeout 300 nvim --headless
+printf '\n'
+pip3_i neovim-remote
+
+asdf reshim
+
+"$HOME/bin/chcs"
 
 #
 # OS-spesific settings
 #
 if is_mac; then
-  brew_i binutils
-  brew_i coreutils
-  brew_i findutils
-  brew_i grep
-  brew_i gawk
-  brew_i gnu-sed
-  brew_i gnu-tar
-  brew_i gzip
-  brew_i wget
-  brew_i gpg
-
+  brew_i binutils coreutils findutils grep gawk gnu-sed gnu-tar gzip wget gpg
+  dotsync apply alt-tab
+  dotsync apply rectangle
   git config --global credential.helper osxkeychain
-  defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
-  defaults write com.apple.Dock autohide-delay -float 3600; killall Dock
 fi
 
-if is_wsl && exists wslvar; then
+if is_wsl; then
+  echo "$password" | dotsync -S apply wsl_conf >/dev/null 2>&1
+  if exists wslvar && exists wslpath; then
+    dotsync apply espanso >/dev/null 2>&1
+    dotsync apply wezterm >/dev/null 2>&1
+    dotsync apply wslconfig >/dev/null 2>&1
+  fi
+
   curl -sLo /tmp/win32yank.zip \
     https://github.com/equalsraf/win32yank/releases/download/v0.0.4/win32yank-x64.zip
   unzip -p /tmp/win32yank.zip win32yank.exe > /tmp/win32yank.exe
   chmod +x /tmp/win32yank.exe
   mv /tmp/win32yank.exe ./bin
 
-  userprofile=$(wslpath $(wslvar USERPROFILE))
-  wslsync .wslconfig
-  wslsync wls.conf --password $password
-  winterm-gen --colorscheme Iceberg
-  wslsync winterm
-
   git config --global credential.helper \
-    "/mnt/c/Program\ Files/Git/mingw64/libexec/git-core/git-credential-manager.exe"
+    "/mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager-core.exe"
 fi
 
-unset $password
+longest="- $HOMEBREW_PREFIX/bin/zsh (to install plugins)"
+printf '\n\n\n '
+printf "%${#longest}s==\n\n" | tr " " "="
+printf '  👏  \033[1;32mInstallation successfully completed! \033[0m\n\n'
+cat << EOF
+  What to do next:
+
+  - $HOMEBREW_PREFIX/bin/zsh (to install plugins)
+  - aws configure (access key is required)
+  - gh auth login
+EOF
+printf '\n '
+printf "%${#longest}s==\n\n" | tr " " "="
+
+unset password

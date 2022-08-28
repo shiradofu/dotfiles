@@ -25,16 +25,18 @@ case "${selected}" in
   '[new]' )
     while [ -z "${name}" ] || tmux ls 2>/dev/null | grep -q "${name}"; do
       printf 'new session name: '
-      read name < /dev/tty
+      read -r name < /dev/tty
       [ -z "${name}" ] && printf "name required.\n\n" && continue
       name=$(echo "${name}" | sed 's/[.:]/_/g') # session_name で使えない文字を変換
-      tmux ls 2>/dev/null | grep -q "${name}" && printf "${name} already exists.\n\n"
+      tmux ls 2>/dev/null | grep -q "${name}" && printf "%s already exists.\n\n" "$name"
     done
     tmux new -d -s "${name}"
     selected=${name}
     ;;
 esac
 
-[ -n "$TMUX" ] \
-  && tmux switch-client -t "${selected}" \
-  || tmux attach-session -t "${selected}"
+if [ -n "$TMUX" ]; then
+  tmux switch-client -t "${selected}"
+else
+  tmux attach-session -t "${selected}"
+fi

@@ -1,7 +1,0 @@
-    "fmt": "prettier --write './**/*.{js,jsx,ts,tsx,json}'",
-  "prettier": {
-    "tabWidth": 2,
-    "semi": false,
-    "singleQuote": true,
-    "trailingComma": "es5"
-  }

@@ -1,0 +1,23 @@
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
+$line_break\
+$character
+"""
+
+[directory]
+style = "bold"
+truncation_length = 1000
+
+[git_status]
+deleted = "✗"
+
+[character]
+success_symbol = "[>>](bold green)"
+error_symbol = "[>>](bold red)"

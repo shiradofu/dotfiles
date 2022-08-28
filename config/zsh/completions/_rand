@@ -1,0 +1,7 @@
+#compdef rand
+
+_rand() {
+  _arguments ': :(port sha1 sha256 sha512)'
+}
+
+_rand "$@"

@@ -1,0 +1,4 @@
+% linux
+
+# bios
+read && sudo systemctl reboot --firmware-setup

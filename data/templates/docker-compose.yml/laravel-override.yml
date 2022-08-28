@@ -1,0 +1,13 @@
+# .env
+# DB_HOST=127.0.0.1
+# DB_PORT=$(rand port)
+
+version: "3.7"
+services:
+  app:
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+  db:
+    ports:
+      - ${DB_PORT}:3306
