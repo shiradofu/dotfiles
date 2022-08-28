@@ -158,10 +158,10 @@ if is_wsl; then
   mv /tmp/win32yank.exe ./bin
 
   echo "$password" | dotsync -S apply wsl_conf
+
+  # https://github.com/wslutilities/wslu/issues/199
+  [ -d "$XDG_CONFIG_HOME/wslu" ] && echo 65001 > "$XDG_CONFIG_HOME/wslu/oemcp"
   if exists wslvar && exists wslpath; then
-    # https://github.com/wslutilities/wslu/issues/199
-    mkdir -p "$XDG_CONFIG_HOME/wslu"
-    echo 65001 > "$XDG_CONFIG_HOME/wslu/oemcp"
     dotsync apply espanso
     dotsync apply wezterm
     dotsync apply wslconfig
@@ -172,7 +172,7 @@ if is_wsl; then
 fi
 
 longest="- chsh -s $HOMEBREW_PREFIX/bin/zsh (to set zsh to default shell)"
-printf '\n '
+printf '\n\n\n '
 printf "%${#longest}s==\n\n" | tr " " "="
 printf '  👏  \033[1;32mInstallation successfully completed! \033[0m\n\n'
 cat << EOF

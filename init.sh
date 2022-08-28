@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # for debug
-[ -n "$1" ] && branch="$1" || branch=main
+[ -n "$1" ] && branch="$1" || branch=''
 
 set -eu
 
@@ -155,7 +155,7 @@ repo=github.com/shiradofu/dotfiles
 ghq get --update https://${repo}
 repo_root="$(ghq root)/${repo}"
 git -C "${repo_root}" config --local diff.ignoreSubmodules all
-git -C "${repo_root}" checkout "$branch"
+[ -z "$branch" ] || git -C "${repo_root}" checkout "$branch"
 
 printf '\n'; msg '🚀  Start installing!'; printf '\n'
 bash "${repo_root}/install.sh" "$password" "$git_name" "$git_email"

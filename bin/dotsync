@@ -5,6 +5,7 @@ mode=
 d= # dotfiles内のファイルパス
 u= # 実際に使われている設定ファイルのファイルパス
 password=
+prompt='password: '
 
 if echo "$OSTYPE" | grep darwin -q; then
   platform=mac
@@ -79,7 +80,7 @@ __dotsync_do() {
 
 __dotsync_sudo() {
   if [ -z "$password" ]; then
-    echo -n "password: "
+    echo -n "$prompt"
     read -r -s password
     echo
   fi
@@ -100,7 +101,7 @@ for ARG; do
     import ) mode=IMPORT;;
     backup ) mode=BACKUP;;
     restore ) mode=RESTORE;;
-    -S ) read -r -s password;;
+    -S ) prompt='';;
     alt-tab | espanso | rectangle | wezterm | wslconfig | wsl_conf )
       "__dotsync_${ARG}"
       ;;
