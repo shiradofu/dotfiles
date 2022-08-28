@@ -151,7 +151,7 @@ __fzf_extract_command() {
 
 if (( $+commands[fd] )); then
   _fzf_compgen_path() { fd --hidden --follow . "$1"; }
-  _fzf_compgen_dir() { fd --type d --hidden --follow -E '.git/*' "$1"; }
+  _fzf_compgen_dir() { fd --type d --hidden --follow -E '.git/*' . "$1"; }
   _fzf_complete_mk() {
     local l_save
     zle backward-delete-char
