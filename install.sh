@@ -64,6 +64,7 @@ brew_i zsh
 if ! grep -xq "${HOMEBREW_PREFIX}/bin/zsh" /etc/shells; then
   echo "$password" | sudo -S sh -c "printf '${HOMEBREW_PREFIX}/bin/zsh\n' >> /etc/shells"
 fi
+echo "$password" | sudo -S chsh -s $HOMEBREW_PREFIX/bin/zsh
 mkdir -p "$XDG_STATE_HOME/zsh" && touch "$XDG_STATE_HOME/zsh/history"
 git clone --depth 1 https://github.com/zdharma-continuum/zinit "${XDG_STATE_HOME}/zinit/zinit.git"
 
@@ -151,14 +152,7 @@ if is_mac; then
 fi
 
 if is_wsl; then
-  curl -sLo /tmp/win32yank.zip \
-    https://github.com/equalsraf/win32yank/releases/download/v0.0.4/win32yank-x64.zip
-  unzip -p /tmp/win32yank.zip win32yank.exe > /tmp/win32yank.exe
-  chmod +x /tmp/win32yank.exe
-  mv /tmp/win32yank.exe ./bin
-
   echo "$password" | dotsync -S apply wsl_conf
-
   # https://github.com/wslutilities/wslu/issues/199
   [ -d "$XDG_CONFIG_HOME/wslu" ] && echo 65001 > "$XDG_CONFIG_HOME/wslu/oemcp"
   if exists wslvar && exists wslpath; then
@@ -166,6 +160,12 @@ if is_wsl; then
     dotsync apply wezterm
     dotsync apply wslconfig
   fi
+
+  curl -sLo /tmp/win32yank.zip \
+    https://github.com/equalsraf/win32yank/releases/download/v0.0.4/win32yank-x64.zip
+  unzip -p /tmp/win32yank.zip win32yank.exe > /tmp/win32yank.exe
+  chmod +x /tmp/win32yank.exe
+  mv /tmp/win32yank.exe ./bin
 
   git config --global credential.helper \
     "/mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager-core.exe"
@@ -178,7 +178,6 @@ printf '  👏  \033[1;32mInstallation successfully completed! \033[0m\n\n'
 cat << EOF
   What to do next:
 
-  - chsh -s $HOMEBREW_PREFIX/bin/zsh (to set zsh to default shell)
   - $HOMEBREW_PREFIX/bin/zsh (to install plugins)
   - aws configure (access key is required)
   - gh auth login
