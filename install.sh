@@ -64,7 +64,7 @@ brew_i zsh
 if ! grep -xq "${HOMEBREW_PREFIX}/bin/zsh" /etc/shells; then
   echo "$password" | sudo -S sh -c "printf '${HOMEBREW_PREFIX}/bin/zsh\n' >> /etc/shells"
 fi
-echo "$password" | sudo -S chsh -s $HOMEBREW_PREFIX/bin/zsh
+echo "$password" | chsh -s $HOMEBREW_PREFIX/bin/zsh
 mkdir -p "$XDG_STATE_HOME/zsh" && touch "$XDG_STATE_HOME/zsh/history"
 git clone --depth 1 https://github.com/zdharma-continuum/zinit "${XDG_STATE_HOME}/zinit/zinit.git"
 
@@ -152,13 +152,13 @@ if is_mac; then
 fi
 
 if is_wsl; then
-  echo "$password" | dotsync -S apply wsl_conf
-  # https://github.com/wslutilities/wslu/issues/199
-  [ -d "$XDG_CONFIG_HOME/wslu" ] && echo 65001 > "$XDG_CONFIG_HOME/wslu/oemcp"
+  echo "$password" | dotsync -S apply wsl_conf >/dev/null
   if exists wslvar && exists wslpath; then
-    dotsync apply espanso
-    dotsync apply wezterm
-    dotsync apply wslconfig
+    # https://github.com/wslutilities/wslu/issues/199
+    [ -d "$XDG_CONFIG_HOME/wslu" ] && echo 65001 > "$XDG_CONFIG_HOME/wslu/oemcp"
+    dotsync apply espanso >/dev/null
+    dotsync apply wezterm >/dev/null
+    dotsync apply wslconfig >/dev/null
   fi
 
   curl -sLo /tmp/win32yank.zip \
