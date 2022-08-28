@@ -94,16 +94,13 @@ __dotsync_sudo() {
 }
 
 for ARG; do
-  case $1 in
+  case $ARG in
     link ) mode=LINK;;
     apply ) mode=APPLY;;
     import ) mode=IMPORT;;
     backup ) mode=BACKUP;;
     restore ) mode=RESTORE;;
-    --password )
-      shift
-      password="$1"
-      ;;
+    -S ) read -r -s password;;
     alt-tab | espanso | rectangle | wezterm | wslconfig | wsl_conf )
       "__dotsync_${ARG}"
       ;;
@@ -112,5 +109,4 @@ for ARG; do
       exit 1
       ;;
   esac
-  shift
 done

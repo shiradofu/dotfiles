@@ -91,7 +91,7 @@ case "${DIST}" in
     echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections
     echo "${password}" | sudo -S apt -y update
     if is_wsl && ! exists wslvar; then
-      echo "${password}" | sudo -S apt -y install wslu && wslvar > /dev/null 2>&1;
+      echo "${password}" | sudo -S apt -y install wslu && : "$(wslvar > /dev/null 2>&1)";
     fi
     # required by homebrew
     echo "${password}" | sudo -S apt -y install build-essential procps curl file git bash

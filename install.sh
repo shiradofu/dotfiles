@@ -157,11 +157,10 @@ if is_wsl; then
   chmod +x /tmp/win32yank.exe
   mv /tmp/win32yank.exe ./bin
 
-  dotsync --password "$password" backup wsl_conf
-  dotsync --password "$password" apply wsl_conf
-
+  echo "$password" | dotsync -S apply wsl_conf
   if exists wslvar && exists wslpath; then
     # https://github.com/wslutilities/wslu/issues/199
+    mkdir -p "$XDG_CONFIG_HOME/wslu"
     echo 65001 > "$XDG_CONFIG_HOME/wslu/oemcp"
     dotsync apply espanso
     dotsync apply wezterm
