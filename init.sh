@@ -100,7 +100,7 @@ case "${DIST}" in
     if is_wsl && ! exists wslvar; then
       echo "${password}" | sudo -S apt -y install wslu && : "$(wslvar > /dev/null 2>&1)";
       # https://github.com/wslutilities/wslu/issues/199
-      [ -d "$HOME/.config/wslu" ] && echo 65001 > "$HOME/.config/wslu/wslu/oemcp"
+      [ -d "$HOME/.config/wslu" ] && echo 65001 > "$HOME/.config/wslu/oemcp"
     fi
     # required by homebrew
     echo "${password}" | sudo -S apt -y install build-essential procps curl file git bash
