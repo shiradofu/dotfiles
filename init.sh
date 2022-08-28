@@ -43,15 +43,22 @@ sudo -K
 echo "${password}" | sudo -lS >/dev/null 2>&1 || exit 1
 printf "Password successfully verified!\n"
 
-while true; do
+input_git() {
+  printf '\n'
   msg "Please input git username"
   read -r git_name
   msg "Please input git email"
   read -r git_email
-
-  printf "\nname:\t%s\nemail:\t%s\n\nOK?(y/n)" "$git_name" "$git_email"
+  printf "\nname:\t%s\nemail:\t%s\n\n" "$git_name" "$git_email"
+}
+input_git
+while true; do
+  printf "OK?(y/n)"
   read -r yn
-  case "$yn" in [Yy] ) break;; esac
+  case "$yn" in
+    [Yy] ) break;;
+    [Nn] ) input_git;;
+  esac
 done
 
 if is_wsl; then
