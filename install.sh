@@ -109,6 +109,7 @@ asdf plugin add python
 asdf install python 2.7.18
 asdf install python 3.10.6 &&
 asdf global python 3.10.6
+pip3 install --upgrade pip
 
 msg $'\nphp:\n'
 brew install php

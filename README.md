@@ -14,5 +14,5 @@
 ## Installation
 
 ```sh
-curl -L https://www.shiradofu.com/dotfiles | sh
+sh -c "$(curl -sL https://shiradofu.com/dotfiles)"
 ```
