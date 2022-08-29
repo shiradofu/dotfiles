@@ -17,5 +17,8 @@ indent_size = 4
 [karabiner.json]
 indent_size = 4
 
+[config/gh/config.yml]
+indent_size = 4
+
 [{Makefile,*.mak}]
 indent_style = tab
