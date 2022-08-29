@@ -66,7 +66,7 @@ end
 if is_windows() then
   merge(config, {
     default_prog = { 'wsl.exe', '~' },
-    font_size = 11,
+    font_size = 10,
   })
 end
 

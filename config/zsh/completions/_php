@@ -1,0 +1,25 @@
+#compdef php
+
+_php_artisan_get_command_list () {
+  php artisan --raw --no-ansi list 2>/dev/null | sed "s/[[:space:]].*//g"
+}
+
+_php_artisan () {
+  _arguments "1: :(artisan)"
+  words=("${=words[1,CURRENT]}")
+  if [[ $words[2] = 'artisan' ]]; then
+    _arguments "2: :($(_php_artisan_get_command_list))"
+  fi
+  if [[ $words[3] = 'test' ]]; then
+    local -a test_files=( tests/**/*.php )
+    _multi_parts / test_files
+  fi
+}
+
+_php() {
+  if [[ -f artisan ]]; then
+    _php_artisan
+  fi
+}
+
+_php "$@"

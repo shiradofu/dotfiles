@@ -311,7 +311,7 @@ end
 M.neogen()
 
 function M.commentary()
-  k('n', 's', "<Plug>Commentary")
+  k({ 'n', 'x' }, 's', "<Plug>Commentary")
   k('n', 'S', "<Plug>Commentary<Plug>Commentary")
   -- invert selected comments
   k('x', 'S', function ()
