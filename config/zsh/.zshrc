@@ -7,6 +7,17 @@ bindkey -e                   # emacsキーバインド
 bindkey '^[[3~' delete-char  # deleteキー有効化
 bindkey -e '^d' delete-char  # ^dで補完候補を出さない
 
+# カーソル左に何もなければ C-u で tmux copy-mode
+function _backward-kill-line_or_copy_mode() {
+  if [[ $#LBUFFER -gt 0 ]]; then
+    zle backward-kill-line
+  elif [[ ! -z ${TMUX} ]]; then
+    tmux copy-mode
+  fi
+}
+zle -N backward-kill-line_or_copy_mode _backward-kill-line_or_copy_mode
+bindkey '^u' backward-kill-line_or_copy_mode
+
 # lazy に置くと履歴検索が壊れる
 HISTFILE="$XDG_STATE_HOME/zsh/history"
 HISTSIZE=1000000

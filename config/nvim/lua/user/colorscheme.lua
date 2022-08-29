@@ -17,15 +17,15 @@ end
 
 local function pounce()
   if vim.o.background == 'dark' then
-    hl('PounceUnmatched', { fg = '#666666' })
+    hl('PounceUnmatched', { fg = '#4A4A4A' })
     hl('PounceGap', { fg = '#888888' })
-    hl('PounceMatch', { fg = '#BBBBBB' })
+    hl('PounceMatch', { fg = '#E9E9E9' })
     hl('PounceAccept', { fg = '#FFAF60', bold = true })
     hl('PounceAcceptBest', { fg = '#FF0000', bold = true })
   else
-    hl('PounceUnmatched', { fg = '#AAAAAA' })
+    hl('PounceUnmatched', { fg = '#BBBBBB' })
     hl('PounceGap', { fg = '#888888' })
-    hl('PounceMatch', { fg = '#777777' })
+    hl('PounceMatch', { fg = '#555555' })
     hl('PounceAccept', { fg = '#026cf7', bold = true })
     hl('PounceAcceptBest', { fg = '#FF0000', bold = true })
   end

@@ -7,7 +7,7 @@ _chcs() {
       {-l,--light}'[light mode]' \
       '(name)--toggle[toggle mode]' \
     + '(name)' \
-      '*:colorscheme names:(zenwritten poimandres)' \
+      '*:colorscheme names:(iceberg rose-pine)' \
 }
 
 _chcs "$@"

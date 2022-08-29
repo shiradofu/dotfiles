@@ -383,15 +383,6 @@ packer.startup(function(use)
     cmd = 'ZenMode',
   }
   use {
-    'rose-pine/neovim',
-    as = 'rose-pine',
-    config = function()
-      require('rose-pine').setup {
-        dark_variant = 'moon',
-      }
-    end,
-  }
-  use {
     'lukas-reineke/indent-blankline.nvim',
     config = function()
       require('indent_blankline').setup {
@@ -401,12 +392,8 @@ packer.startup(function(use)
     opt = true,
   }
 
-  use {
-    'mcchrish/zenbones.nvim',
-    requires = 'rktjmp/lush.nvim',
-  }
-  use 'olivercederborg/poimandres.nvim'
-  use 'marko-cerovac/material.nvim'
+  use { 'cocopon/iceberg.vim', opt = true }
+  use { 'rose-pine/neovim', as = 'rose-pine', module = 'rose-pine' }
 
   use {
     'xiyaowong/nvim-transparent',

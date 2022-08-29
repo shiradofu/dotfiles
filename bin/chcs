@@ -95,7 +95,7 @@ __chcs_os() {
 }
 
 # default values
-name=zenwritten
+name=iceberg
 mode=dark # light or dark
 
 SAVE_FILE="$config_home/_colorscheme"
@@ -127,21 +127,21 @@ __chcs_tmux "$mode"
 __chcs_delta "$mode"
 
 case "${name}_${mode}" in
-  zenwritten_light )
-    __chcs_wezterm zenwritten_light 0.93
-    __chcs_nvim zenwritten light
+  iceberg_light )
+    __chcs_wezterm iceberg-light 0.93
+    __chcs_nvim iceberg light
     ;;
-  zenwritten_dark )
-    __chcs_wezterm zenwritten_dark 0.9
-    __chcs_nvim zenwritten dark
-    ;;
-  poimandres_light ) # does not exist
-    __chcs_wezterm zenwritten_light 0.93
-    __chcs_nvim zenwritten light
-    ;;
-  poimandres_dark )
+  iceberg_dark )
     __chcs_wezterm iceberg-dark 0.9
-    __chcs_nvim poimandres dark
+    __chcs_nvim iceberg dark
+    ;;
+  rose-pine_light ) # does not exist
+    __chcs_wezterm 'Rosé Pine Dawn (base16)' 0.93
+    __chcs_nvim rose-pine light
+    ;;
+  rose-pine_dark )
+    __chcs_wezterm 'Rosé Pine (base16)' 0.9
+    __chcs_nvim rose-pine dark
     ;;
   * )
     echo colorscheme not found.

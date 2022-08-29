@@ -140,7 +140,8 @@ pip3_i neovim-remote
 
 asdf reshim
 
-"$HOME/bin/chcs"
+msg $'\nsetting colorscheme:'
+"$HOME/bin/chcs" --no-os
 
 #
 # OS-spesific settings

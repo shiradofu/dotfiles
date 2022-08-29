@@ -50,6 +50,7 @@ local config = {
     end
     return keys
   end)(),
+  enable_csi_u_key_encoding = true,
 }
 
 local ok, color = pcall(require, '_color')

@@ -2,8 +2,9 @@
 
 _dotsync() {
   _arguments \
-    ': :(apply backup restore)' \
-    ': :(wezterm alt-tab wslconfig wsl_conf)'
+    '-S[read password from stdin]' \
+    ': :(apply link import backup restore)' \
+    ': :(alt-tab espanso rectangle wezterm wslconfig wsl_conf)'
 }
 
 _dotsync "$@"
