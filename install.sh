@@ -102,7 +102,8 @@ asdf install nodejs lts &&
 asdf global nodejs lts  &&
 npm_i npm yarn pnpm
 msg $'\n🍔  Installing bun:\n'
-curl https://bun.sh/install | BUN_INSTALL="$XDG_STATE_HOME/bun" bash
+# SHELL='' は zshrc の自動アップデート防止のため
+curl https://bun.sh/install | BUN_INSTALL="$XDG_STATE_HOME/bun" SHELL='' bash
 
 msg $'\npython:\n'
 asdf plugin add python
