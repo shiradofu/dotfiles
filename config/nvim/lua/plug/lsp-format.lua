@@ -103,7 +103,7 @@ local function prettier_or_deno(client, bufnr)
   end
   local fmt_fn = create_fn(bufnr, { 'null-ls', 'denols' })
   local function fn()
-    require('typescript').actions.organizeImports { sync = true }
+    -- require('typescript').actions.organizeImports { sync = true }
     fmt_fn()
   end
   map(fn)

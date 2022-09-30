@@ -1,12 +1,20 @@
-CLUSTER_NAME := cluster
+CLUSTER_NAME := app-name-stateless
 
-# AWS CDK
-# make app-prod.d => cdk deploy "*app-prod*"
+# Makefile as a deploy script
+# `make app-prod.d` を実行すると cdk deploy "*app-prod*" が走ります。
+# `static` stack がデプロイされる場合は自動的にビルドも行われます。
+
 %.s:
 	cdk synth "*$**"
 
 %.d:
+	@IS_DEV="$(findstring $*,static-dev)"; IS_PROD="$(findstring $*,static-prod)"; \
+		[ -z "$$IS_DEV$$IS_PROD" ] || [ -n "$$IS_DEV" -a -n "$$IS_PROD" ] || \
+		if [ -n "$$IS_PROD" ]; then \
+		echo npm run build:prod; npm run build:prod --prefix ../frontend; else \
+		echo run build:dev; npm run build:dev --prefix ../frontend; fi
 	cdk deploy "*$**"
+	docker rmi $(docker images | grep 'cdkasset') >/dev/null 2>&1 || true
 
 # dev.exec, prod.exec で ECS EXEC を使用可能
 %.exec:

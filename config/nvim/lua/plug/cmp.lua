@@ -25,7 +25,7 @@ cmp.setup {
     ['<C-l>'] = { i = maps['<C-l>'] },
   },
   view = view,
-  sources = cmp.config.sources({
+  sources = cmp.config.sources {
     { name = 'luasnip' },
     { name = 'nvim_lsp' },
     { name = 'nvim_lua' },
@@ -48,9 +48,10 @@ cmp.setup {
       },
     },
     { name = 'path' },
-  }, {
+  },
+  {
     { name = 'rg' },
-  }),
+  },
 }
 
 cmp.setup.cmdline('/', {

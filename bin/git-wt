@@ -37,12 +37,6 @@ wtdir="${root}-$(echo "$branch" | sed -e 's@/@-@g')/"
 
 cd "$root" || exit 1
 
-if [ "$delete" = "false" ]; then
-  __git_wt_add
-else
-  __git_wt_del
-fi
-
 __git_wt_add() {
   if [ -d "$wtdir" ]; then
     echo "worktree for '$branch' already exists."
@@ -90,3 +84,10 @@ __git_wt_del() {
 
   git worktree remove "$wtdir"
 }
+
+if [ "$delete" = "false" ]; then
+  __git_wt_add
+else
+  __git_wt_del
+fi
+

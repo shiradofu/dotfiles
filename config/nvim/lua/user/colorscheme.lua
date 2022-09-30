@@ -15,7 +15,8 @@ while
 do
 end
 
-local function pounce()
+local function adjust()
+  -- pounce
   if vim.o.background == 'dark' then
     hl('PounceUnmatched', { fg = '#4A4A4A' })
     hl('PounceGap', { fg = '#888888' })
@@ -31,5 +32,7 @@ local function pounce()
   end
 end
 
+adjust()
+
 local aug = g('MyColorScheme', {})
-c('ColorScheme', { group = aug, pattern = '*', callback = pounce })
+c('ColorScheme', { group = aug, pattern = '*', callback = adjust })

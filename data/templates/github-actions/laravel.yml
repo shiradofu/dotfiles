@@ -1,5 +1,5 @@
-name: Laravel Test
-on: [push]
+name: Laravel
+on: push
 jobs:
   laravel-test:
     runs-on: ubuntu-18.04

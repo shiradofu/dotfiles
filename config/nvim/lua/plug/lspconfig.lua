@@ -88,6 +88,7 @@ M.intelephense = vim.tbl_deep_extend('force', base_config, {
     ['textDocument/publishDiagnostics'] = function(...) end,
   },
 })
+M.tailwindcss = vim.deepcopy(base_config)
 M.bashls = vim.deepcopy(base_config)
 M.sqls = vim.deepcopy(base_config)
 M.dockerls = vim.deepcopy(base_config)

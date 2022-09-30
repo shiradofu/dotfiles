@@ -217,7 +217,7 @@ packer.startup(function(use)
     module = 'neotest',
   }
   use { 'haydenmeade/neotest-jest', ft = util.js_family }
-  use { 'shiradofu/neotest-vitest', ft = util.js_family }
+  use { 'KaiSpencer/neotest-vitest', ft = util.js_family }
   use { 'olimorris/neotest-phpunit', ft = 'php' }
   use { 'nvim-neotest/neotest-go', ft = 'go' }
 
@@ -397,7 +397,7 @@ packer.startup(function(use)
 
   use {
     'xiyaowong/nvim-transparent',
-    config = function() require('transparent').setup { enable = true } end,
+    config = function() require 'plug.transparent' end,
   }
 end)
 

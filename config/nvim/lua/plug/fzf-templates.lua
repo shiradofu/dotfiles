@@ -51,7 +51,6 @@ local function actions_read_file(selected, opts)
     return
   end
   local replacement = vim.api.nvim_buf_get_lines(tmpbuf, 0, -1, true)
-  vim.pretty_print(replacement)
   local current_line = vim.api.nvim_win_get_cursor(0)[1]
   vim.api.nvim_buf_set_lines(0, current_line, current_line, true, replacement)
 

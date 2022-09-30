@@ -15,7 +15,7 @@ RUN docker-php-source extract && \
   git clone -b 5.3.4 --depth 1 https://github.com/phpredis/phpredis.git /usr/src/php/ext/redis && \
   docker-php-ext-install /usr/src/php/ext/redis
 
-RUN docker-php-ext-install soap pdo_mysql \
+RUN docker-php-ext-install soap pdo_mysql && \
   apk del .build-dependencies
 COPY --from=composer:2.0 /usr/bin/composer /usr/bin/composer
 
