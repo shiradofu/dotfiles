@@ -59,7 +59,7 @@ if ok then merge(config, color) end
 if is_unix() then
   merge(config, {
     default_prog = { 'zsh' },
-    font_size = 14,
+    font_size = 13,
   })
 end
 

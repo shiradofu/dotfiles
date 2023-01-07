@@ -162,10 +162,6 @@ packer.startup(function(use)
     'Decodetalkers/csv-tools.lua',
     ft = 'csv',
   }
-  use {
-    'Shougo/vinarise.vim',
-    cmd = 'Vinarise',
-  }
 
   --------------------------------
   -- Completion

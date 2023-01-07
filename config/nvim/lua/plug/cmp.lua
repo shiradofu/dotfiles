@@ -50,7 +50,12 @@ cmp.setup {
     { name = 'path' },
   },
   {
-    { name = 'rg' },
+    {
+      name = 'rg',
+      option = {
+        additional_arguments = '--g !*.svg',
+      },
+    },
   },
 }
 

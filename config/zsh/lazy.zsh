@@ -12,6 +12,7 @@ export LDFLAGS="-L$HOMEBREW_PREFIX/opt/llvm/lib"
 export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/llvm/include"
 
 if is_mac; then
+  # export PATH="$HOMEBREW_PREFIX/opt/binutils/libexec/gnubin:$PATH"
   export PATH="$HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin:$PATH"
   export PATH="$HOMEBREW_PREFIX/opt/findutils/libexec/gnubin:$PATH"
   export PATH="$HOMEBREW_PREFIX/opt/grep/libexec/gnubin:$PATH"

@@ -14,7 +14,7 @@ CLUSTER_NAME := app-name-stateless
 		echo npm run build:prod; npm run build:prod --prefix ../frontend; else \
 		echo run build:dev; npm run build:dev --prefix ../frontend; fi
 	cdk deploy "*$**"
-	docker rmi $(docker images | grep 'cdkasset') >/dev/null 2>&1 || true
+	docker rmi -f $$(docker images | grep -e 'cdkasset' -e 'amazonaws.com/cdk-' | awk 'NR>1{print $3}' ) >/dev/null 2>&1 || true
 
 # dev.exec, prod.exec で ECS EXEC を使用可能
 %.exec:
