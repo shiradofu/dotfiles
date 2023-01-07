@@ -1,7 +1,7 @@
 local fn = vim.fn
 local a = require 'diffview.actions'
 local lib = require 'diffview.lib'
-local LogEntry = require('diffview.git.log_entry').LogEntry
+local LogEntry = require('diffview.vcs.log_entry').LogEntry
 
 require('diffview').setup {
   hooks = {
