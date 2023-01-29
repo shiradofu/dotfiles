@@ -27,16 +27,19 @@ local config = {
     { family = 'JetBrains Mono', weight = 500 },
     { family = 'SF Mono', weight = 500 },
   },
+  window_close_confirmation = 'NeverPrompt',
   keys = (function()
     local keys = {}
     for c in
       string.gmatch([[`1234567890-=qwertyuiopasdfghjkl;'zxcvbnm,./]], '.')
     do
-      keys[#keys + 1] = {
-        key = c,
-        mods = 'CMD',
-        action = act.SendKey { key = c, mods = 'ALT' },
-      }
+      if c ~= 'q' then
+        keys[#keys + 1] = {
+          key = c,
+          mods = 'CMD',
+          action = act.SendKey { key = c, mods = 'ALT' },
+        }
+      end
       keys[#keys + 1] = {
         key = c,
         mods = 'CMD|SHIFT',

@@ -41,7 +41,7 @@ vim.api.nvim_create_autocmd('CmdlineLeave', {
   end,
 })
 
--- Diff でないときにカーソル・スクロール動悸することがあるのを防止
+-- Diff でないときにカーソル・スクロール同期することがあるのを防止
 local nodiff = vim.api.nvim_create_augroup('NoDiff', {})
 vim.api.nvim_create_autocmd('BufEnter', {
   group = nodiff,

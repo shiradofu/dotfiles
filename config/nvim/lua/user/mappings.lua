@@ -27,7 +27,8 @@ function M.misc()
   k('n', 'g<BS>', '<Cmd>call user#win#tabclose()<CR>')
   k('n', 'gy', "<Cmd>let @+=expand('%:t')<CR>")
   k('n', 'gY', "<Cmd>let @+=expand('%:p')<CR>'%')<CR>")
-  k('n', 'zp', '<Cmd>call print_debug#print_debug()<CR>')
+  k('n', 'zp', function()require('print-debug').add()end)
+  k('n', 'zP', function()require('print-debug').clear()end)
   k('n', 'cl', '"_cl')
   k('n', 'ch', '"_ch')
   k('n', 'Y', 'y$', r)
@@ -35,6 +36,8 @@ function M.misc()
   k({'n', 'v'}, 'gx', '<Plug>(openbrowser-smart-search)')
   k({'n', 'v'}, 'gX', ':OpenGithubFile<CR>')
   k('n', '<Leader>-', require'user.readonly')
+  -- k('n', 'Q', 'qq')
+  -- k('n', '@', '@q')
 end
 M.misc()
 
@@ -145,7 +148,7 @@ function M.motion()
   local n = 'nice-scroll'
   k({'n', 'x'}, ';',  '<Cmd>Pounce<CR>')
   k({'n', 'x'}, '*',  "<Plug>(asterisk-z*):<C-u>lua require('hlslens').start()<CR>")
-  k({'n', 'x'}, 'g*', "<Plug>(asterisk-gz*):<-u>lua require('hlslens').start()<CR>")
+  k({'n', 'x'}, 'g*', "<Plug>(asterisk-gz*):<C-u>lua require('hlslens').start()<CR>")
   k({'n', 'x'}, '#',  "<Plug>(asterisk-z#):<C-u>lua require('hlslens').start()<CR>")
   k({'n', 'x'}, 'g#', "<Plug>(asterisk-gz#):<C-u>lua require('hlslens').start()<CR>")
   k('n', ']q', function()require(n).hook('<Cmd>cnext<CR>', { countable = true })end)
@@ -156,43 +159,41 @@ function M.motion()
   k('n', 'N',  function()require(n).hook('N')end)
   k('n', 'zh', function()require(n).adjust()end)
   k('n', 'zl', function()require(n).adjust('r')end)
+
+  local function ts(direction, start_or_end, capture)
+    local mod = require('nvim-treesitter.textobjects.move')
+    local fn_name = 'goto_' .. direction .. '_' .. start_or_end
+    mod[fn_name](capture, "textobjects")
+  end
+  k('n', ']f', function()require(n).hook(ts('next', 'start', '@function.outer'), { countable = true })end)
+  k('n', '[f', function()require(n).hook(ts('previous', 'start', '@function.outer'), { countable = true })end)
+  k('n', ']]', function()require(n).hook(ts('next', 'start', '@class.outer'), { countable = true })end)
+  k('n', '[[', function()require(n).hook(ts('previous', 'start', '@class.outer'), { countable = true })end)
+  k('n', ']c', function()require(n).hook(ts('next', 'start', '@comment'), { countable = true })end)
+  k('n', '[c', function()require(n).hook(ts('previous', 'start', '@comment'), { countable = true })end)
 end
 M.motion()
 
-function M.treesitter()
-  return {
-    textobjects = {
-        ['af'] = '@function.outer',
-        ['if'] = '@function.inner',
-    },
-    motion = {
-      next = {
-        [']f'] = '@function.outer',
-        [']]'] = '@class.outer',
-      },
-      prev =  {
-        ['[f'] = '@function.outer',
-        ['[['] = '@class.outer',
-      },
-    }
-  }
-end
+M.treesitter_textobjects = {
+  ['af'] = '@function.outer',
+  ['if'] = '@function.inner',
+}
 
 function M.gitsigns(gitsigns)
-  k('n', ']c', function()
-    if vim.wo.diff then return ']c' end
+  k('n', ']d', function()
+    if vim.wo.diff then return ']d' end
     vim.schedule(function()gitsigns.next_hunk()end)
     return '<Ignore>'
   end, e)
-  k('n', '[c', function()
-    if vim.wo.diff then return '[c' end
+  k('n', '[d', function()
+    if vim.wo.diff then return '[d' end
     vim.schedule(function()gitsigns.prev_hunk()end)
     return '<Ignore>'
   end, e)
   k({'n', 'v'}, 'g<', ':Gitsigns stage_hunk<CR>')
   k('n', 'g>', gitsigns.undo_stage_hunk)
-  k({ 'o', 'x' }, 'ig', ':<C-u>Gitsigns select_hunk<CR>')
-  k({ 'o', 'x' }, 'ag', ':<C-u>Gitsigns select_hunk<CR>')
+  k({ 'o', 'x' }, 'id', ':<C-u>Gitsigns select_hunk<CR>')
+  k({ 'o', 'x' }, 'ad', ':<C-u>Gitsigns select_hunk<CR>')
   k('n', '<leader>b', gitsigns.toggle_current_line_blame)
 end
 
@@ -264,7 +265,7 @@ function M.textcase()
     k(mode, 'gcc', function() require(mod)[fn]('to_camel_case')end)
     k(mode, 'gcs', function() require(mod)[fn]('to_snake_case')end)
     k(mode, 'gck', function() require(mod)[fn]('to_dash_case')end)
-    k(mode, 'gcn', function() require(mod)[fn]('to_constant_case')end)
+    k(mode, 'gcU', function() require(mod)[fn]('to_constant_case')end)
     k(mode, 'gcd', function() require(mod)[fn]('to_dot_case')end)
     k(mode, 'gcp', function() require(mod)[fn]('to_pascal_case')end)
   end
@@ -289,8 +290,8 @@ end
 M.sandwich()
 
 function M.autopairs()
-  k('i', ',', '<Cmd>call plug#autopairs#comma()<CR>')
-  k('i', ';', '<Cmd>call plug#autopairs#semi()<CR>')
+  k('i', ',', function()require('plug.autopairs').comma()end)
+  k('i', ';', function()require('plug.autopairs').semicolon()end)
 end
 M.autopairs()
 

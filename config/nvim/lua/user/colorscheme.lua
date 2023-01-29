@@ -30,6 +30,12 @@ local function adjust()
     hl('PounceAccept', { fg = '#026cf7', bold = true })
     hl('PounceAcceptBest', { fg = '#FF0000', bold = true })
   end
+
+  -- gitsigns
+  hl('GitSignsAddNr', { link = 'DiffAdd' })
+  hl('GitSignsChangeNr', { link = 'DiffChange' })
+  hl('GitSignsDeleteNr', { link = 'DiffDelete' })
+  hl('GitSignsChangeDeleteNr', { link = 'DiffChange' })
 end
 
 adjust()

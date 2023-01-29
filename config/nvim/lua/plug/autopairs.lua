@@ -1,5 +1,6 @@
 local npairs = require 'nvim-autopairs'
 local Rule = require 'nvim-autopairs.rule'
+local feedkeys = require('user.util').feedkeys
 
 npairs.setup {
   map_cr = false,
@@ -18,19 +19,6 @@ local parenRule = npairs.get_rule '('
 local braceRule = npairs.get_rule '{'
 local bracketRule = npairs.get_rule '['
 npairs.add_rules {
-  -- plug#autopairs#(comma|semi)() のための準備
-  parenRule:with_cr(function()
-    vim.b.bracket_cr_done = true
-    return true
-  end),
-  braceRule:with_cr(function()
-    vim.b.bracket_cr_done = true
-    return true
-  end),
-  bracketRule:with_cr(function()
-    vim.b.bracket_cr_done = true
-    return true
-  end),
   -- https://github.com/windwp/nvim-autopairs/wiki/Custom-rules#add-spaces-between-parentheses
   Rule(' ', ' '):with_pair(function(opts)
     local pair = opts.line:sub(opts.col - 1, opts.col)
@@ -48,6 +36,20 @@ npairs.add_rules {
     :with_pair(function() return false end)
     :with_move(function(opts) return opts.prev_char:match '.%]' ~= nil end)
     :use_key ']',
+
+  -- add_char_after_closing_bracket_completed_by_cr のための準備
+  parenRule:with_cr(function()
+    vim.b.bracket_cr_done = true
+    return true
+  end),
+  braceRule:with_cr(function()
+    vim.b.bracket_cr_done = true
+    return true
+  end),
+  bracketRule:with_cr(function()
+    vim.b.bracket_cr_done = true
+    return true
+  end),
 }
 
 local group_oc = vim.api.nvim_create_augroup('AutoPairsObserveComma', {})
@@ -75,3 +77,28 @@ vim.api.nvim_create_autocmd('TextChangedI', {
   end,
   group = group_cd,
 })
+
+local M = {}
+
+function add_char_after_closing_bracket_completed_by_cr(char)
+  if vim.b.bracket_cr_done then
+    -- n is the absolute row number of the next row (0-base)
+    local n = vim.api.nvim_win_get_cursor(0)[1]
+    local next_line_content = vim.api.nvim_buf_get_lines(0, n, n + 1, false)[1]
+    if next_line_content then
+      vim.api.nvim_buf_set_lines(0, n, n + 1, true, {next_line_content .. char})
+    end
+  else
+    feedkeys(char, 'in')
+  end
+end
+
+function M.semicolon()
+  add_char_after_closing_bracket_completed_by_cr(';')
+end
+
+function M.comma()
+  add_char_after_closing_bracket_completed_by_cr(',')
+end
+
+return M

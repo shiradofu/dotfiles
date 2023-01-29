@@ -10,7 +10,6 @@ packer.startup(function(use)
   -- Library
 
   use 'nvim-lua/plenary.nvim' -- do not lazy load
-  use { 'tpope/vim-repeat', opt = true }
   use {
     'kyazdani42/nvim-web-devicons',
     module = 'nvim-web-devicons',
@@ -21,16 +20,10 @@ packer.startup(function(use)
 
   use {
     'lambdalisue/fern.vim',
-    requires = 'antoinemadec/FixCursorHold.nvim',
     branch = 'main',
     setup = function() require 'plug.fern' end,
   }
   use 'lambdalisue/fern-hijack.vim'
-  use 'lewis6991/impatient.nvim'
-  use {
-    'nathom/filetype.nvim',
-    config = function() require 'plug.filetype' end,
-  }
 
   --------------------------------------------------------------
   -- Treesitter & Text Objects
@@ -68,7 +61,6 @@ packer.startup(function(use)
       'TSPlaygroundToggle',
       'TSHighlightCapturesUnderCursor',
     },
-    module = 'user.newline',
   }
 
   --------------------------------
@@ -85,7 +77,7 @@ packer.startup(function(use)
   use { 'glts/vim-textobj-comment', event = 'ModeChanged' }
   use {
     'machakann/vim-sandwich',
-    setup = function() vim.fn['plug#sandwich#setup']() end,
+    config = function() require 'plug.sandwich'() end,
     keys = '<Plug>(sandwich-',
   }
   use {
@@ -136,16 +128,11 @@ packer.startup(function(use)
     requires = 'nvim-treesitter/nvim-treesitter',
     ft = { 'html', 'javascriptreact', 'typescriptreact', 'vue', 'xml' },
   }
-  use {
-    'plasticboy/vim-markdown',
-    setup = function() vim.fn['plug#markdown#setup']() end,
-    ft = 'markdown',
-  }
-  use {
-    'jkramer/vim-checkbox',
-    setup = function() vim.fn['plug#checkbox#setup']() end,
-    ft = 'markdown',
-  }
+  -- use {
+  --   'plasticboy/vim-markdown',
+  --   setup = function() vim.fn['plug#markdown#setup']() end,
+  --   ft = 'markdown',
+  -- }
   use {
     'iamcco/markdown-preview.nvim',
     run = function() vim.fn['mkdp#util#install']() end,
@@ -207,7 +194,6 @@ packer.startup(function(use)
     requires = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
-      'antoinemadec/FixCursorHold.nvim',
     },
     config = function() require 'plug.neotest' end,
     module = 'neotest',
@@ -356,9 +342,8 @@ packer.startup(function(use)
     ft = 'http',
   }
   use {
-    'sentriz/vim-print-debug',
-    fn = 'print_debug#print_debug',
-    config = function() vim.fn['plug#print_debug#config']() end,
+    'shiradofu/print-debug.nvim',
+    module = 'print-debug',
   }
   use {
     'shiradofu/door2note.nvim',
@@ -401,7 +386,6 @@ if pcall(require, 'plug._compiled') then
   vim.defer_fn(function()
     packer.loader(
       -- 依存順序注意
-      'vim-repeat',
       'editorconfig.nvim',
       'typescript.nvim',
       'SchemaStore.nvim',
