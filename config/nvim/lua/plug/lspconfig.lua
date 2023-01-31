@@ -44,14 +44,17 @@ local base_config = {
 M.sumneko_lua = vim.tbl_deep_extend('force', base_config, {
   settings = {
     Lua = {
-      runtime = 'LuaJIT',
-      diagnostics = {
-        globals = { 'vim', 'before_each', 'describe', 'it', 'packer_plugins' },
+      completion = {
+        callSnippet = 'Replace',
       },
-      library = vim.api.nvim_get_runtime_file('', true),
-      telemetry = {
-        enable = false,
-      },
+      -- runtime = 'LuaJIT',
+      -- diagnostics = {
+      --   globals = { 'vim', 'before_each', 'describe', 'it', 'packer_plugins' },
+      -- },
+      -- library = vim.api.nvim_get_runtime_file('', true),
+      -- telemetry = {
+      --   enable = false,
+      -- },
     },
   },
 })

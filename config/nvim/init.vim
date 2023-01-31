@@ -18,7 +18,6 @@ set ttimeoutlen=5             " キーの確定待ちまでの時間
 set guicursor+=c:ver10        " コマンドモードのカーソルをビーム形状に（vertical, width 10%)
 set diffopt=internal,filler,algorithm:histogram,indent-heuristic " diff の設定
 set fileencodings=utf-8,cp932,euc-jp,iso-20220-jp,default,latin  " ファイルエンコーディング候補
-set helplang=ja,en            " ヘルプページの言語
 set termguicolors             " TUIで24bitカラーを有効にする
 set fillchars=vert:\ ,eob:\ , " ステータスライン・バッファの終わりを埋める文字を空白化
 set shada+='10000             " 以前に編集したファイルを最大で10000件記憶
@@ -29,6 +28,7 @@ set fileformat=unix
 set tabstop=4
 set shiftwidth=2
 set expandtab
+set updatetime=500
 
 " ターミナルでのヤンク時文字化け回避
 " https://github.com/neovim/neovim/issues/5683#issuecomment-420833679
@@ -58,13 +58,6 @@ let g:vim_json_conceal         = 0
 let g:vim_markdown_conceal     = 0
 
 let g:config_dir = stdpath('config')
-
-" Log function/command for debugging
-function! Log(var) abort
-  exe 'redir >> ' g:config_dir . '/log' | silent echo a:var | redir END
-endfunction
-command! -nargs=1 Log call Log(<args>)
-lua function Log(...) print(vim.inspect(...)) end
 
 lua require 'plug'
 lua require 'user'

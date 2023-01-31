@@ -67,7 +67,7 @@ packer.startup(function(use)
   -- Text Objects and Operators
   use {
     'kana/vim-textobj-user',
-    config = function() vim.fn['plug#textobj#config']() end,
+    config = function() require('plug.textobj').config() end,
     opt = true,
   }
   use { 'sgur/vim-textobj-parameter', event = 'ModeChanged' }
@@ -77,7 +77,8 @@ packer.startup(function(use)
   use { 'glts/vim-textobj-comment', event = 'ModeChanged' }
   use {
     'machakann/vim-sandwich',
-    config = function() require 'plug.sandwich'() end,
+    setup = function() require('plug.sandwich').setup() end,
+    config = function() require('plug.sandwich').config() end,
     keys = '<Plug>(sandwich-',
   }
   use {
@@ -94,7 +95,8 @@ packer.startup(function(use)
   use {
     'neovim/nvim-lspconfig',
     config = function() require 'plug.lspconfig' end,
-    opt = true,
+    module = 'lspconfig',
+    -- opt = true,
   }
   use {
     'jose-elias-alvarez/null-ls.nvim',
@@ -102,7 +104,7 @@ packer.startup(function(use)
     opt = true,
   }
   use { 'jose-elias-alvarez/typescript.nvim', opt = true }
-  use { 'b0o/SchemaStore.nvim', opt = true }
+  use { 'b0o/SchemaStore.nvim', module = 'schemastore' }
   use { 'gennaro-tedesco/nvim-jqx', opt = true }
   use {
     'ray-x/go.nvim',
@@ -119,6 +121,10 @@ packer.startup(function(use)
     config = function() require 'plug.lsp-signature' end,
     opt = true,
   }
+  use {
+    'folke/neodev.nvim',
+    config = function() require('neodev').setup {} end,
+  }
 
   --------------------------------
   -- Filetype
@@ -128,11 +134,6 @@ packer.startup(function(use)
     requires = 'nvim-treesitter/nvim-treesitter',
     ft = { 'html', 'javascriptreact', 'typescriptreact', 'vue', 'xml' },
   }
-  -- use {
-  --   'plasticboy/vim-markdown',
-  --   setup = function() vim.fn['plug#markdown#setup']() end,
-  --   ft = 'markdown',
-  -- }
   use {
     'iamcco/markdown-preview.nvim',
     run = function() vim.fn['mkdp#util#install']() end,
@@ -167,7 +168,7 @@ packer.startup(function(use)
   use { 'saadparwaiz1/cmp_luasnip', event = cmp_e }
   use { 'lukas-reineke/cmp-rg', event = cmp_e }
   use { 'davidsierradz/cmp-conventionalcommits', event = cmp_e }
-  use { 'hrsh7th/cmp-nvim-lua', event = cmp_e }
+  -- use { 'hrsh7th/cmp-nvim-lua', event = cmp_e }
 
   --------------------------------
   -- Snippet
@@ -275,7 +276,7 @@ packer.startup(function(use)
   }
   use {
     'rhysd/clever-f.vim',
-    setup = function() vim.fn['plug#clever_f#setup']() end,
+    setup = function() require 'plug.clever_f'() end,
     keys = { '<Plug>(clever-f-' },
   }
   use {
@@ -294,7 +295,7 @@ packer.startup(function(use)
   }
   use {
     'ntpeters/vim-better-whitespace',
-    setup = function() vim.fn['plug#whitespace#setup']() end,
+    setup = function() require 'plug.whitespace'() end,
     opt = true,
   }
   use {
@@ -319,6 +320,10 @@ packer.startup(function(use)
     'kevinhwang91/nvim-bqf',
     requires = 'nvim-treesitter/nvim-treesitter',
     config = function() require 'plug.bqf' end,
+    ft = 'qf',
+  }
+  use {
+    'itchyny/vim-qfedit',
     ft = 'qf',
   }
   use {

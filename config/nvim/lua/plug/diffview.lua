@@ -2,6 +2,7 @@ local fn = vim.fn
 local a = require 'diffview.actions'
 local lib = require 'diffview.lib'
 local LogEntry = require('diffview.vcs.log_entry').LogEntry
+local win = require 'user.win'
 
 require('diffview').setup {
   hooks = {
@@ -51,7 +52,7 @@ require('diffview').setup {
       ['<C-t>'] = a.goto_file_tab,
       ['<C-o>'] = a.focus_files,
       ['<C-k>'] = a.focus_files,
-      ['<BS>'] = fn['user#win#tabclose'],
+      ['<BS>'] = win.tabclose,
     },
     file_panel = {
       ['j'] = function()
@@ -70,7 +71,7 @@ require('diffview').setup {
       end,
       ['<C-t>'] = a.goto_file_tab,
       ['<C-g>'] = a.toggle_files,
-      ['<BS>'] = fn['user#win#tabclose'],
+      ['<BS>'] = win.tabclose,
       ['r'] = a.refresh_files,
       ['a'] = a.toggle_stage_entry,
       ['A'] = a.stage_all,
@@ -111,7 +112,7 @@ require('diffview').setup {
       ['<CR>'] = a.focus_entry,
       ['go'] = a.goto_file,
       ['<C-g>'] = a.toggle_files,
-      ['<BS>'] = fn['user#win#tabclose'],
+      ['<BS>'] = win.tabclose,
       ['o'] = a.options,
       ['yy'] = a.copy_hash,
       ['L'] = a.open_commit_log,

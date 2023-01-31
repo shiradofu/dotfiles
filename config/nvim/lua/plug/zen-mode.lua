@@ -20,6 +20,7 @@ require('zen-mode').setup {
     mappings.win_move()
     mappings.tab_move()
 
+    -- ZenMode から split や tabnew したときに正常に動作するようにする
     -- 新しいウィンドウやタブが生成されていたらそちらに移動
     local new_wins = vim.tbl_filter(
       function(win) return not vim.tbl_contains(before_zen.wins, win) end,

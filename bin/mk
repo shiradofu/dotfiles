@@ -7,7 +7,7 @@ for ARG; do
     mkdir -p "$ARG"
   else
     dir="$(printf '%s' "$ARG" | sed 's@[^/]*$@@')"
-    [ -n "$dir" ] && mkdir -p $dir
+    [ -n "$dir" ] && mkdir -p "$dir"
     touch "$ARG"
   fi
 done

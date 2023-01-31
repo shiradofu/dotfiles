@@ -1,8 +1,17 @@
-return function()
-  vim.g.sandwich_no_default_key_mappings = 1
+local M = {}
+function M.setup() vim.g.sandwich_no_default_key_mappings = 1 end
 
+function M.config()
   local recipes = {}
   vim.list_extend(recipes, vim.g['sandwich#default_recipes'])
+
+  local abbr_recipes = {
+    { input = { 'r' }, buns = { '(', ')' }, nesting = 1 },
+    { input = { 'b' }, buns = { '{', '}' }, nesting = 1 },
+    { input = { 's' }, buns = { '[', ']' }, nesting = 1 },
+    { input = { 'a' }, buns = { '<', '>' }, nesting = 1 },
+  }
+  vim.list_extend(recipes, abbr_recipes)
 
   -- スペースを含むレシピ
   vim.list_extend(recipes, {
@@ -61,3 +70,5 @@ return function()
 
   vim.g['sandwich#recipes'] = recipes
 end
+
+return M

@@ -23,16 +23,17 @@ function M.misc()
   k('n', '<Leader>W', '<Cmd>wall<CR>')
   k('n', '<Leader>q', '<Cmd>botright copen<CR>')
   k('n', '<BS>', win.close)
+  k('n', 'g<BS>', win.tabclose)
   k('n', '<Del>', '<Cmd>bp<bar>sp<bar>bn<bar>bd<CR>')
-  k('n', 'g<BS>', '<Cmd>call user#win#tabclose()<CR>')
   k('n', 'gy', "<Cmd>let @+=expand('%:t')<CR>")
-  k('n', 'gY', "<Cmd>let @+=expand('%:p')<CR>'%')<CR>")
+  k('n', 'gY', "<Cmd>let @+=expand('%:p')<CR>")
+  k('n', 'g<C-y>', "<Cmd>let @+=expand('%:p')[len(getcwd())+1:]<CR>")
   k('n', 'zp', function()require('print-debug').add()end)
   k('n', 'zP', function()require('print-debug').clear()end)
   k('n', 'cl', '"_cl')
   k('n', 'ch', '"_ch')
   k('n', 'Y', 'y$', r)
-  k('n', 'gh', '<Cmd>call user#win#focus_float()<CR>')
+  k('n', 'gh', win.focus_float)
   k({'n', 'v'}, 'gx', '<Plug>(openbrowser-smart-search)')
   k({'n', 'v'}, 'gX', ':OpenGithubFile<CR>')
   k('n', '<Leader>-', require'user.readonly')
@@ -61,7 +62,7 @@ M.fzf()
 
 function M.diffview()
   k('n', '<Leader>d', '<Cmd>DiffviewOpen -- %<CR>')
-  k('n', '<Leader>s', function()win.reuse('is_git_status', 'DiffviewOpen')end)
+  k('n', '<Leader>s', function()win.reuse('tab', 'is_git_status', 'DiffviewOpen')end)
   k('n', '<Leader>S', '<Cmd>DiffviewOpen main<CR>')
   k('n', '<Leader>h', '<Cmd>DiffviewFileHistory %<CR>')
   k('v', '<Leader>h', ':DiffviewFileHistory<CR>')
@@ -108,9 +109,8 @@ function M.lsp_format(fn)
   k('n', '=', fn, b)
   k('n', '<Leader>=', '<Cmd>AutoFormatToggleGlobal<CR>')
 end
-local hover = require 'user.lsp-hover'
 function M.lsp_hover()
-  k('n', 'K', hover, b)
+  k('n', 'K', vim.lsp.buf.hover, b)
 end
 function M.lsp_rename() k('n', 'gn', vim.lsp.buf.rename, b) end
 function M.lsp_action() k('n', 'ga', vim.lsp.buf.code_action, b) end
@@ -118,7 +118,7 @@ function M.lsp_action() k('n', 'ga', vim.lsp.buf.code_action, b) end
 function M.tab_move()
   k('n', '<C-n>', 'gt')
   k('n', '<C-p>', 'gT')
-  k('n', 'go', '<Cmd>call user#win#move(v:count)<CR>')
+  k('n', 'go', win.move)
 end
 M.tab_move()
 
@@ -131,15 +131,10 @@ end
 M.win_move()
 
 function M.win_resize()
-  k('n', '<C-w><C-h>', "<Cmd>call user#win#resize('h')<CR><Plug>(wr)", r)
-  k('n', '<C-w><C-j>', "<Cmd>call user#win#resize('j')<CR><Plug>(wr)", r)
-  k('n', '<C-w><C-k>', "<Cmd>call user#win#resize('k')<CR><Plug>(wr)", r)
-  k('n', '<C-w><C-l>', "<Cmd>call user#win#resize('l')<CR><Plug>(wr)", r)
-  k('n', '<Plug>(wr)<C-h>', "<Cmd>call user#win#resize('h')<CR><Plug>(wr)", r)
-  k('n', '<Plug>(wr)<C-j>', "<Cmd>call user#win#resize('j')<CR><Plug>(wr)", r)
-  k('n', '<Plug>(wr)<C-k>', "<Cmd>call user#win#resize('k')<CR><Plug>(wr)", r)
-  k('n', '<Plug>(wr)<C-l>', "<Cmd>call user#win#resize('l')<CR><Plug>(wr)", r)
-  k('n', '<Plug>(wr)', '<Nop>', r)
+  k('n', '(', function()win.resize('h')end)
+  k('n', ')', function()win.resize('l')end)
+  k('n', '{', function()win.resize('k')end)
+  k('n', '}', function()win.resize('j')end)
   k('n', '<C-g>', '<Cmd>ZenMode<CR>')
 end
 M.win_resize()
@@ -157,8 +152,12 @@ function M.motion()
   k('n', 'g,', function()require(n).hook('g,', { countable = true })end)
   k('n', 'n',  function()require(n).hook('n')end)
   k('n', 'N',  function()require(n).hook('N')end)
+  k('n', '<C-i>',  function()require(n).hook('<C-i>', { countable = true })end)
+  k('n', '<C-o>',  function()require(n).hook('<C-o>', { countable = true })end)
   k('n', 'zh', function()require(n).adjust()end)
   k('n', 'zl', function()require(n).adjust('r')end)
+  k('n', '[<Space>', function()require(n).hook('{', { countable = true })end)
+  k('n', ']<Space>', function()require(n).hook('}', { countable = true })end)
 
   local function ts(direction, start_or_end, capture)
     local mod = require('nvim-treesitter.textobjects.move')
@@ -406,21 +405,8 @@ function M.bqf()
   }
 end
 
-function M.ft_quickfix()
-  k('n', 'dd', '<Cmd>call user#quickfix#del()<CR>', b)
-  k('n', 'u',  '<Cmd>call user#quickfix#undo_del()<CR>', b)
-  k('n', 'R',  '<Cmd>Qfreplace topleft split<CR>', b)
-  k('n', 'F',  '<Cmd>FzfLua quickfix<CR>', b)
-  -- k('n', '<C-g>', '<Nop>', b)
-end
-local qf = vim.api.nvim_create_augroup('MapQuickfix', {})
-vim.api.nvim_create_autocmd('FileType',
-  { group = qf, pattern = 'qf', callback = M.ft_quickfix })
-
 function M.ft_markdown()
   k('n', '<Leader><CR>', '<Plug>MarkdownPreviewToggle', b)
-  k('n', 'sh', '<Cmd>call plug#checkbox#toggle()<CR>', b)
-  k('i', '<C-x>', '<Cmd>call plug#checkbox#toggle()<CR>', b)
 end
 local markdown = vim.api.nvim_create_augroup('MapMarkdown', {})
 vim.api.nvim_create_autocmd('FileType',
