@@ -34,11 +34,12 @@ function M.misc()
   k('n', 'ch', '"_ch')
   k('n', 'Y', 'y$', r)
   k('n', 'gh', win.focus_float)
+  k({'n', 'v'}, '#', '^')
   k({'n', 'v'}, 'gx', '<Plug>(openbrowser-smart-search)')
   k({'n', 'v'}, 'gX', ':OpenGithubFile<CR>')
   k('n', '<Leader>-', require'user.readonly')
-  -- k('n', 'Q', 'qq')
-  -- k('n', '@', '@q')
+  k('n', 'Q', 'qq')
+  k('n', '@', '@q')
 end
 M.misc()
 
@@ -97,13 +98,14 @@ M.neotest()
 
 function M.lsp_diagnostic()
   local n = 'nice-scroll'
-  k('n', '[e', function() require(n).hook(vim.diagnostic.goto_prev)end)
-  k('n', ']e', function() require(n).hook(vim.diagnostic.goto_next)end)
+  k('n', '[e', function()require(n).hook_async(vim.diagnostic.goto_prev)end)
+  k('n', ']e', function()require(n).hook_async(vim.diagnostic.goto_next)end)
 end
 function M.lsp_jump()
-  k('n', 'gd', vim.lsp.buf.definition, b)
-  k('n', 'gD', '<Cmd>vs|lua vim.lsp.buf.definition()<CR>', b)
-  k('n', 'gr', vim.lsp.buf.references, b)
+  local n = 'nice-scroll'
+  k('n', 'gd', function()require(n).hook_async(vim.lsp.buf.definition)end, b)
+  k('n', 'gD', function()vim.cmd'vs';require(n).hook_async(vim.lsp.buf.definition)end, b)
+  k('n', 'gr', function()require(n).hook_async(vim.lsp.buf.references)end, b)
 end
 function M.lsp_format(fn)
   k('n', '=', fn, b)
@@ -133,19 +135,17 @@ M.win_move()
 function M.win_resize()
   k('n', '(', function()win.resize('h')end)
   k('n', ')', function()win.resize('l')end)
-  k('n', '{', function()win.resize('k')end)
-  k('n', '}', function()win.resize('j')end)
+  k('n', '+', function()win.resize('k')end)
+  k('n', '_', function()win.resize('j')end)
   k('n', '<C-g>', '<Cmd>ZenMode<CR>')
 end
 M.win_resize()
 
 function M.motion()
   local n = 'nice-scroll'
-  k({'n', 'x'}, ';',  '<Cmd>Pounce<CR>')
+  k({'n', 'x'}, 'q',  '<Cmd>Pounce<CR>')
   k({'n', 'x'}, '*',  "<Plug>(asterisk-z*):<C-u>lua require('hlslens').start()<CR>")
   k({'n', 'x'}, 'g*', "<Plug>(asterisk-gz*):<C-u>lua require('hlslens').start()<CR>")
-  k({'n', 'x'}, '#',  "<Plug>(asterisk-z#):<C-u>lua require('hlslens').start()<CR>")
-  k({'n', 'x'}, 'g#', "<Plug>(asterisk-gz#):<C-u>lua require('hlslens').start()<CR>")
   k('n', ']q', function()require(n).hook('<Cmd>cnext<CR>', { countable = true })end)
   k('n', '[q', function()require(n).hook('<Cmd>cprev<CR>', { countable = true })end)
   k('n', 'g;', function()require(n).hook('g;', { countable = true })end)
@@ -156,13 +156,11 @@ function M.motion()
   k('n', '<C-o>',  function()require(n).hook('<C-o>', { countable = true })end)
   k('n', 'zh', function()require(n).adjust()end)
   k('n', 'zl', function()require(n).adjust('r')end)
-  k('n', '[<Space>', function()require(n).hook('{', { countable = true })end)
-  k('n', ']<Space>', function()require(n).hook('}', { countable = true })end)
 
   local function ts(direction, start_or_end, capture)
     local mod = require('nvim-treesitter.textobjects.move')
     local fn_name = 'goto_' .. direction .. '_' .. start_or_end
-    mod[fn_name](capture, "textobjects")
+    return function() mod[fn_name](capture, "textobjects") end
   end
   k('n', ']f', function()require(n).hook(ts('next', 'start', '@function.outer'), { countable = true })end)
   k('n', '[f', function()require(n).hook(ts('previous', 'start', '@function.outer'), { countable = true })end)
@@ -179,14 +177,15 @@ M.treesitter_textobjects = {
 }
 
 function M.gitsigns(gitsigns)
+  local n = 'nice-scroll'
   k('n', ']d', function()
-    if vim.wo.diff then return ']d' end
-    vim.schedule(function()gitsigns.next_hunk()end)
+    if vim.wo.diff then return ']c' end
+    vim.schedule(function()require(n).hook_async(gitsigns.next_hunk())end)
     return '<Ignore>'
   end, e)
   k('n', '[d', function()
-    if vim.wo.diff then return '[d' end
-    vim.schedule(function()gitsigns.prev_hunk()end)
+    if vim.wo.diff then return '[c' end
+    vim.schedule(function()require(n).hook_async(gitsigns.prev_hunk())end)
     return '<Ignore>'
   end, e)
   k({'n', 'v'}, 'g<', ':Gitsigns stage_hunk<CR>')
