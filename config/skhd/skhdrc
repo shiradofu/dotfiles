@@ -1,3 +1,4 @@
+ctrl - 8 : open -a 'Obsidian'
 ctrl - 9 : open -a 'Google Chrome'
 ctrl - 0 : open -a 'WezTerm'
 cmd + ctrl + shift - return : $HOME/bin/chcs --toggle
