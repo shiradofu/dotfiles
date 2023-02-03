@@ -29,18 +29,12 @@ return {
       note_path = function(root)
         local gh = vim.env.GHQ_ROOT .. '/github.com/'
         if vim.startswith(root, gh) then return root:sub(#gh) .. '.md' end
-        if packer_plugins then
-          local packer_root = require('packer').config.package_root
-          packer_root = ('^%s/packer/[^/]+/'):format(packer_root)
-          local _, packer_n = root:find(packer_root)
-          if packer_n then
-            local name = root:sub(packer_n + 1)
-            local plugin = packer_plugins[name]
-            if not plugin then return '' end
-            local url = plugin.url
-            local fname = url:match 'https://github%.com/(.+)%.git$'
-              or url:match 'https://github%.com/(.+)'
-            if fname then return fname .. '.md' end
+        if vim.startswith(root, LAZY_DIR) then
+          for _, plugin in ipairs(require('lazy').plugins()) do
+            if plugin.name == root:match '[^/]+$' then
+              vim.pretty_print(plugin)
+              return plugin[1] .. '.md'
+            end
           end
         end
         return ''

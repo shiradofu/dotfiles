@@ -1,6 +1,10 @@
 return {
   'kevinhwang91/nvim-hlslens',
-  dependencies = 'shiradofu/nice-scroll.nvim',
+  event = 'CmdlineEnter',
+  dependencies = {
+    'shiradofu/nice-scroll.nvim',
+    config = true,
+  },
   config = function()
     local config = {
       calm_down = true,

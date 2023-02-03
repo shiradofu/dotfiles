@@ -63,9 +63,10 @@ return {
 
   {
     'tyru/open-browser.vim',
-    keys = '<Plug>(openbrowser-',
+    keys = { { '<Plug>(openbrowser-', mode = { 'n', 'v' } } },
+    cmd = 'OpenGithubFile',
     dependencies = {
-      { 'tyru/open-browser-github.vim', cmd = 'OpenGithubFile' },
+      { 'tyru/open-browser-github.vim' },
     },
   },
   {

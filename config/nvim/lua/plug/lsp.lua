@@ -186,13 +186,7 @@ local function create_on_attach()
 end
 
 local function create_lspconfigs(on_attach)
-  local base_config = {
-    on_attach = on_attach,
-    -- lsp_flags = {
-    --   -- This is the default in Nvim 0.7+
-    --   debounce_text_changes = 150,
-    -- },
-  }
+  local base_config = { on_attach = on_attach }
 
   local root_pattern = require('lspconfig').util.root_pattern
   local M = {}
@@ -200,23 +194,13 @@ local function create_lspconfigs(on_attach)
   M.sumneko_lua = vim.tbl_deep_extend('force', base_config, {
     settings = {
       Lua = {
-        completion = {
-          callSnippet = 'Replace',
-        },
+        completion = { callSnippet = 'Replace' },
         runtime = 'LuaJIT',
         diagnostics = {
-          globals = {
-            'vim',
-            'before_each',
-            'describe',
-            'it',
-            'packer_plugins',
-          },
+          globals = { 'vim', 'before_each', 'describe', 'it' },
         },
         library = vim.api.nvim_get_runtime_file('', true),
-        telemetry = {
-          enable = false,
-        },
+        telemetry = { enable = false },
       },
     },
   })
@@ -396,13 +380,11 @@ return {
     local on_attach = create_on_attach()
     local lspconfigs = create_lspconfigs(on_attach)
     local cap = require('cmp_nvim_lsp').default_capabilities()
-    mason.setup {
-      ensure_installed = vim.tbl_keys(lspconfigs),
-    }
+    mason.setup { ensure_installed = vim.tbl_keys(lspconfigs) }
     mason.setup_handlers {
       function(server_name)
         lspconfigs[server_name].capabilities = cap
-        -- if server_name == 'lua-' then require("neodev").setup({}) end
+        if server_name == 'sumneko_lua' then require('neodev').setup {} end
         if server_name == 'tsserver' then
           require('typescript').setup { server = lspconfigs[server_name] }
         else

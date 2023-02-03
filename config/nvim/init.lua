@@ -81,12 +81,15 @@ require 'user.filetype'
 require 'user.mappings'
 require 'user.colorscheme'
 
-local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
-vim.opt.rtp:prepend(lazypath)
-require('lazy').setup('plug', { defaults = { lazy = true }})
-
--- if filereadable(g:config_dir . '/_color.vim')
---   exe 'source ' . g:config_dir . '/_color.vim'
--- endif
--- let s:colorscheme = get(g:, 'colorscheme', 'default')
--- exe 'colorscheme ' . s:colorscheme
+LAZY_DIR = vim.fn.stdpath 'data' .. '/lazy'
+local lazy_path = LAZY_DIR .. '/lazy.nvim'
+vim.opt.rtp:prepend(lazy_path)
+require('lazy').setup(
+  { { import = 'plug' }, { import = 'plug.dev' }, },
+  {
+    defaults = { lazy = true },
+    dev = {
+      path = vim.env.GHQ_ROOT .. '/github.com/shiradofu',
+    },
+  }
+)

@@ -59,7 +59,6 @@ g_aliases=(
   "S"        "| sed"
   "E"        "2>&1 > /dev/null"
   "N"        "> /dev/null"
-  "P"        "$XDG_DATA_HOME/nvim/site/pack/packer"
 )
 
 for abbr in ${(k)r_aliases}; do alias $abbr="${r_aliases[$abbr]}"; done

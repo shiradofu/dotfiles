@@ -1,6 +1,8 @@
 return {
   'rhysd/clever-f.vim',
-  keys = { '<Plug>(clever-f-' },
+  keys = {
+    { '<Plug>(clever-f-', mode = { 'n', 'x', 'o' } },
+  },
   init = function()
     vim.g.clever_f_not_overwrites_standard_mappings = 1
     vim.g.clever_f_across_no_line = 1
