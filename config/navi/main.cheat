@@ -1,7 +1,7 @@
 % main
 
 # Update neovim plugins
-read && ulimit -S -n 200048; nvim -c 'PackerSync'
+read && ulimit -S -n 200048; nvim -c 'Lazy'
 
 # Upgrade wezterm
 brew upgrade --cask wez/wezterm/wezterm-nightly

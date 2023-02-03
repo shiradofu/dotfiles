@@ -36,6 +36,9 @@ local function adjust()
   hl('GitSignsChangeNr', { link = 'DiffChange' })
   hl('GitSignsDeleteNr', { link = 'DiffDelete' })
   hl('GitSignsChangeDeleteNr', { link = 'DiffChange' })
+
+  -- clever-f
+  hl('CleverF', { fg = '#ff0000', underline = true })
 end
 
 adjust()

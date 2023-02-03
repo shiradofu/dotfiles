@@ -44,16 +44,25 @@ __chcs_tmux() {
 }
 
 __chcs_nvim() {
-  local dir; dir="$config_home/nvim"
+  local dir; dir="$config_home/nvim/lua/plug"
   if ! [ -d "$dir" ]; then
-    echo An error occurred in chcs nvim.
+    echo "$dir not found."
     return 1
   fi
-  echo "let g:colorscheme = '$1'" >| "$dir/_color.vim"
-  echo "set background=$2" >> "$dir/_color.vim"
+  cat << EOF >| "$dir/_chcs.lua"
+return {
+  '$1',
+  lazy = false,
+  priority = 1000,
+  config = function()
+    vim.cmd.colorscheme '$2'
+    vim.o.background = '$3'
+  end,
+}
+EOF
   for s in "$XDG_CACHE_HOME"/nvim/*.pipe; do
-    timeout 1 nvim --server "$s" --remote-send "<CMD>set bg=$2<CR>" > /dev/null 2>&1
-    timeout 1 nvim --server "$s" --remote-send "<CMD>colorscheme $1<CR>" > /dev/null 2>&1
+    timeout 1 nvim --server "$s" --remote-send "<CMD>set bg=$3<CR>" > /dev/null 2>&1
+    timeout 1 nvim --server "$s" --remote-send "<CMD>colorscheme $2<CR>" > /dev/null 2>&1
   done
 }
 
@@ -129,19 +138,19 @@ __chcs_delta "$mode"
 case "${name}_${mode}" in
   iceberg_light )
     __chcs_wezterm iceberg-light 0.93
-    __chcs_nvim iceberg light
+    __chcs_nvim cocopon/iceberg.vim iceberg light
     ;;
   iceberg_dark )
     __chcs_wezterm iceberg-dark 0.9
-    __chcs_nvim iceberg dark
+    __chcs_nvim cocopon/iceberg.vim iceberg dark
     ;;
   rose-pine_light ) # does not exist
     __chcs_wezterm 'Rosé Pine Dawn (base16)' 0.93
-    __chcs_nvim rose-pine light
+    __chcs_nvim rose-pine/neovim rose-pine light
     ;;
   rose-pine_dark )
     __chcs_wezterm 'Rosé Pine (base16)' 0.9
-    __chcs_nvim rose-pine dark
+    __chcs_nvim rose-pine/neovim rose-pine dark
     ;;
   * )
     echo colorscheme not found.

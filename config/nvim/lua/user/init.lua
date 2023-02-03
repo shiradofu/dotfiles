@@ -11,13 +11,6 @@ vim.api.nvim_create_autocmd('VimEnter', {
   end,
 })
 
--- quickfix は常に botright で開く
-local cmd = vim.cmd
-vim.cmd = function(str)
-  if str == 'copen' then return cmd [[botright copen]] end
-  return cmd(str)
-end
-
 -- 置換でのレジスタを上書きとハイライトを防止
 local substitute = vim.api.nvim_create_augroup('MySubstitute', {})
 vim.api.nvim_create_autocmd('CmdlineLeave', {

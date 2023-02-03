@@ -129,15 +129,14 @@ go_i github.com/editorconfig-checker/editorconfig-checker/cmd/editorconfig-check
 # Vim
 #
 brew_i vim nvim
-git clone --depth 1 \
-  https://github.com/wbthomason/packer.nvim \
-  "$XDG_DATA_HOME/nvim/site/pack/packer/opt/packer.nvim"
+git clone --filter=blob:none --branch=stable \
+  https://github.com/folke/lazy.nvim.git \
+  "$XDG_DATA_HOME/nvim/lazy/lazy.nvim"
 msg $'\ninstalling neovim plugins...\n'
-nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+nvim --headless "+Lazy! sync" +qa
 msg $'\n\ninstalling treesitter parsers/language servers...\n'
 timeout 300 nvim --headless
 printf '\n'
-pip3_i neovim-remote
 
 asdf reshim
 

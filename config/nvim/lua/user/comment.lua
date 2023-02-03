@@ -12,8 +12,8 @@ local function get_first_non_blank_col_num(file_row_num)
 end
 
 ---与えられた位置の文字のキャプチャがコメントかどうかを判定
----@param file_row_num number | nil
----@param col number | nil
+---@param file_row_num number|nil
+---@param col number|nil
 ---@return boolean
 function M.is_comment(file_row_num, col)
   local captures = vim.treesitter.get_captures_at_pos(0, file_row_num, col)

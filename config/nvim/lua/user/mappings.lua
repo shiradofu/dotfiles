@@ -45,8 +45,8 @@ M.misc()
 
 function M.fzf()
   local fzf = 'fzf-lua'
-  k('n', '<Leader>o', function()require('plug.fzf-project-mru')()end)
-  k('n', '<Leader>t', function()require('plug.fzf-templates')()end)
+  k('n', '<Leader>o', function()require('plug.ex.fzf-project-mru')()end)
+  k('n', '<Leader>t', function()require('plug.ex.fzf-templates')()end)
   k('n', '<Leader>i', function()require(fzf).files{fd_opts = util.fzf_fd_noignore}end)
   k('n', '<Leader>u', function()require(fzf).git_status()end)
   k('n', '<Leader>f', function()require(fzf).live_grep_glob()end)
@@ -143,7 +143,7 @@ M.win_resize()
 
 function M.motion()
   local n = 'nice-scroll'
-  k({'n', 'x'}, 'q',  '<Cmd>Pounce<CR>')
+  k({'n', 'x'}, ';',  '<Cmd>Pounce<CR>')
   k({'n', 'x'}, '*',  "<Plug>(asterisk-z*):<C-u>lua require('hlslens').start()<CR>")
   k({'n', 'x'}, 'g*', "<Plug>(asterisk-gz*):<C-u>lua require('hlslens').start()<CR>")
   k('n', ']q', function()require(n).hook('<Cmd>cnext<CR>', { countable = true })end)
@@ -288,8 +288,8 @@ end
 M.sandwich()
 
 function M.autopairs()
-  k('i', ',', function()require('plug.autopairs').comma()end)
-  k('i', ';', function()require('plug.autopairs').semicolon()end)
+  k('i', ',', function()require('plug.ex.autopairs').comma()end)
+  k('i', ';', function()require('plug.ex.autopairs').semicolon()end)
 end
 M.autopairs()
 
@@ -380,28 +380,9 @@ function M.fern_local()
   k('n', 'gy',    '<Plug>(fern-action-yank:label)',      b)
   k('n', 'gY',    '<Plug>(fern-action-yank:bufname)',    b)
 
-  local fzf_fern = require 'plug.fzf-fern'
+  local fzf_fern = require 'plug.ex.fzf-fern'
   k('n', '<Leader>f', function()fzf_fern()end, b)
   k('n', '<Leader>F', function()fzf_fern(true)end, b)
-end
-
-function M.bqf()
-  return {
-    open = 'l',
-    openc = '<CR>',
-    tab = 't',
-    tabc = '<C-t>',
-    split = '<C-x>',
-    vsplit = '<C-v>',
-    prevfile = '<C-p>',
-    nextfile = '<C-n>',
-    stogglevm = '<Tab>',
-    pscrollup = '<C-y>',
-    pscrolldown = '<C-e>',
-    ptogglemode = '<C-g>',
-    ptoggleitem = '',
-    ptoggleauto = 'p',
-  }
 end
 
 function M.ft_markdown()
