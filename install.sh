@@ -134,8 +134,6 @@ git clone --filter=blob:none --branch=stable \
   "$XDG_DATA_HOME/nvim/lazy/lazy.nvim"
 msg $'\ninstalling neovim plugins...\n'
 nvim --headless "+Lazy! sync" +qa
-msg $'\n\ninstalling treesitter parsers/language servers...\n'
-timeout 300 nvim --headless
 printf '\n'
 
 asdf reshim
