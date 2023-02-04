@@ -271,6 +271,7 @@ docker-rmi() {
 }
 
 export GHQ_ROOT=$(ghq root)
+export MY_REPOS="$GHQ_ROOT/github.com/shiradofu"
 export NVIM_PLUG="$XDG_DATA_HOME/nvim/lazy"
 export PRETTIERD_DEFAULT_CONFIG="$XDG_CONFIG_HOME/prettier/rc.yml"
 export NODE_REPL_HISTORY="$XDG_STATE_HOME/node_history"

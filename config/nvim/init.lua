@@ -88,8 +88,6 @@ require('lazy').setup(
   { { import = 'plug' }, { import = 'plug.dev' }, },
   {
     defaults = { lazy = true },
-    dev = {
-      path = vim.env.GHQ_ROOT .. '/github.com/shiradofu',
-    },
+    dev = { path = vim.env.MY_REPOS },
   }
 )

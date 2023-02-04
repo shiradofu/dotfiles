@@ -71,7 +71,7 @@ git clone --depth 1 https://github.com/zdharma-continuum/zinit "${XDG_STATE_HOME
 brew_i fzf
 "${HOMEBREW_PREFIX}/opt/fzf/install" --xdg --completion --no-update-rc --no-key-bindings
 brew_i cmake starship fd rg bat tree glow git-delta jq yq tmux navi hyperfine tokei \
-  ngrok direnv docker docker-compose gh act awscli aws-cdk
+  ngrok direnv docker docker-compose gh act awscli aws-cdk mackup
 
 #
 # Languages and Package Managers
@@ -146,30 +146,8 @@ msg $'\nsetting colorscheme:'
 #
 # OS-spesific settings
 #
-if is_mac; then
-  brew_i binutils coreutils findutils grep gawk gnu-sed gnu-tar gzip wget gpg
-  dotsync apply alt-tab
-  dotsync apply rectangle
-  git config --global credential.helper osxkeychain
-fi
-
-if is_wsl; then
-  echo "$password" | dotsync -S apply wsl_conf >/dev/null 2>&1
-  if exists wslvar && exists wslpath; then
-    dotsync apply espanso >/dev/null 2>&1
-    dotsync apply wezterm >/dev/null 2>&1
-    dotsync apply wslconfig >/dev/null 2>&1
-  fi
-
-  curl -sLo /tmp/win32yank.zip \
-    https://github.com/equalsraf/win32yank/releases/download/v0.0.4/win32yank-x64.zip
-  unzip -p /tmp/win32yank.zip win32yank.exe > /tmp/win32yank.exe
-  chmod +x /tmp/win32yank.exe
-  mv /tmp/win32yank.exe ./bin
-
-  git config --global credential.helper \
-    "/mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager-core.exe"
-fi
+if is_mac; then "$DOT_ROOT/os/mac/install.sh"; fi
+if is_wsl; then "$DOT_ROOT/os/windows/install.sh" "$password"; fi
 
 longest="- $HOMEBREW_PREFIX/bin/zsh (to install plugins)"
 printf '\n\n\n '

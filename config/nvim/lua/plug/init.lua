@@ -17,6 +17,7 @@ return {
   },
   {
     'lukas-reineke/indent-blankline.nvim',
+    event = 'VeryLazy',
     opts = { show_current_context = true },
   },
   {
@@ -61,14 +62,6 @@ return {
   --------------------------------------------------------------
   -- Others
 
-  {
-    'tyru/open-browser.vim',
-    keys = { { '<Plug>(openbrowser-', mode = { 'n', 'v' } } },
-    cmd = 'OpenGithubFile',
-    dependencies = {
-      { 'tyru/open-browser-github.vim' },
-    },
-  },
   {
     'NTBBloodbath/rest.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },

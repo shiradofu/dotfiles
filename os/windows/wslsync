@@ -1,73 +1,38 @@
 #!/bin/bash
 
 config_home="${XDG_CONFIG_HOME:-~/.config}"
+windows_home=$(cd "$(dirname "$0")";pwd)
 mode=
-d= # dotfiles内のファイルパス
+d= # dotfiles 内のファイルパス
 u= # 実際に使われている設定ファイルのファイルパス
 password=
 prompt='password: '
 
-if echo "$OSTYPE" | grep darwin -q; then
-  platform=mac
-elif [ -e /proc/sys/fs/binfmt_misc/WSLInterop ]; then
-  platform=wsl
-else
-  platform=linux
-fi
-
-__dotsync_alt-tab() {
-  if [[ $platform != 'mac' ]]; then exit 1; fi
-  d="$config_home/alt-tab/com.lwouis.alt-tab-macos.plist"
-  u="$HOME/Library/Preferences/com.lwouis.alt-tab-macos.plist"
-  __dotsync_do
-}
-
-__dotsync_espanso() {
-  if [[ $platform != 'wsl' ]]; then exit 1; fi
-  if ! appdata=$(wslpath "$(wslvar APPDATA)"); then
-    echo 'Failed to get APPDATA'
-    exit 1
-  fi
-  d="$config_home/espanso/config/default.yml"
-  u=$appdata/espanso/config/default.yml
-  __dotsync_do
-}
-
-__dotsync_rectangle() {
-  if [[ $platform != 'mac' ]]; then exit 1; fi
-  d="$config_home/rectangle/config.json"
-  u="$HOME/Library/Application Support/Rectangle/RectangleConfig.json"
-  __dotsync_do
-}
-
-__dotsync_wezterm() {
+__wslsync_wezterm() {
   # wezterm must be installed by winget with `--location %APPDATA%/WezTerm`
-  if [[ $platform != 'wsl' ]]; then exit 1; fi
   if ! appdata=$(wslpath "$(wslvar APPDATA)"); then
     echo 'Failed to get APPDATA'
     exit 1
   fi
   d="$config_home/wezterm/wezterm.lua"
   u="$appdata/WezTerm/wezterm.lua"
-  __dotsync_do
+  __wslsync_do
 }
 
-__dotsync_wslconfig() {
-  if [[ $platform != 'wsl' ]]; then exit 1; fi
+__wslsync_wslconfig() {
   userprofile=$(wslpath "$(wslvar USERPROFILE)")
-  d="$config_home/wsl/.wslconfig"
+  d="$windows_home/.wslconfig"
   u="$userprofile/.wslconfig"
-  __dotsync_do
+  __wslsync_do
 }
 
-__dotsync_wsl_conf() {
-  if [[ $platform != 'wsl' ]]; then exit 1; fi
-  d="$config_home/wsl/wsl.conf"
+__wslsync_wsl_conf() {
+  d="$windows_home/wsl.conf"
   u="/etc/wsl.conf"
-  __dotsync_sudo
+  __wslsync_sudo
 }
 
-__dotsync_do() {
+__wslsync_do() {
   mkdir -p "$(dirname "$u")"
   case "$mode" in
     LINK ) ln -s "$d" "$u";;
@@ -78,7 +43,7 @@ __dotsync_do() {
   esac
 }
 
-__dotsync_sudo() {
+__wslsync_sudo() {
   if [ -z "$password" ]; then
     echo -n "$prompt"
     read -r -s password
@@ -103,7 +68,7 @@ for ARG; do
     restore ) mode=RESTORE;;
     -S ) prompt='';;
     alt-tab | espanso | rectangle | wezterm | wslconfig | wsl_conf )
-      "__dotsync_${ARG}"
+      "__wslsync_${ARG}"
       ;;
     * )
       echo "invalid argument: $ARG"

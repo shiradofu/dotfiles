@@ -10,7 +10,7 @@ return {
     },
   },
   config = function()
-    local note_dir = vim.env.GHQ_ROOT .. '/github.com/shiradofu/_notes'
+    local note_dir = vim.env.MY_REPOS .. '/shiradofu/_notes'
 
     local augroup = vim.api.nvim_create_augroup('MyDoor2Note', {})
     vim.api.nvim_create_autocmd('BufEnter', {

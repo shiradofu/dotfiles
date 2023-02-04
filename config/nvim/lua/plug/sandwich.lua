@@ -1,7 +1,7 @@
 ---@diagnostic disable: missing-parameter
 return {
   'machakann/vim-sandwich',
-  keys = '<Plug>(sandwich-',
+  keys = { { '<Plug>(sandwich-', mode = { 'n', 'x', 'o' } } },
   init = function() vim.g.sandwich_no_default_key_mappings = 1 end,
   config = function()
     local recipes = {}

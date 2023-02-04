@@ -64,12 +64,10 @@ return {
           },
         },
         { name = 'path' },
-      },
-      {
         {
           name = 'rg',
           option = {
-            additional_arguments = '--g !*.svg',
+            additional_arguments = "-g '!*.svg'",
           },
         },
       },
