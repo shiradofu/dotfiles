@@ -7,7 +7,10 @@ return {
   { 'gpanders/editorconfig.nvim', event = 'VeryLazy' },
   { 'gbprod/substitute.nvim', config = true },
   { 'thinca/vim-qfreplace', cmd = 'Qfreplace' },
-  { 't9md/vim-quickhl', keys = '<Plug>(quickhl-' },
+  {
+    't9md/vim-quickhl',
+    keys = { { '<Plug>(quickhl-', mode = { 'n', 'x' } } },
+  },
   { 'norcalli/nvim-colorizer.lua', config = true },
   { 'petertriho/nvim-scrollbar', config = true },
   {

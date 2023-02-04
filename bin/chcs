@@ -60,7 +60,8 @@ return {
   end,
 }
 EOF
-  for s in "$XDG_CACHE_HOME"/nvim/*.pipe; do
+  # List all Nvim servers. see :h serverstart()
+  for s in "${XDG_RUNTIME_DIR:-${TMPDIR}nvim.${USER}}"/*/nvim.*.0; do
     timeout 1 nvim --server "$s" --remote-send "<CMD>set bg=$3<CR>" > /dev/null 2>&1
     timeout 1 nvim --server "$s" --remote-send "<CMD>colorscheme $2<CR>" > /dev/null 2>&1
   done

@@ -74,8 +74,6 @@ vim.g.loaded_python3_provider  = 0
 vim.g.vim_json_conceal         = 0
 vim.g.vim_markdown_conceal     = 0
 
-vim.g.mapleader = ' '
-
 require 'user'
 require 'user.filetype'
 require 'user.mappings'

@@ -1,0 +1,12 @@
+# dev = true を設定するためのフォルダ
+#
+# return {
+#   'shiradofu/nice-scroll.nvim',
+#   dev = true,
+# }
+
+*
+!.gitignore
+
+# 最低一つspecファイルがないとエラーになる
+!_.lua

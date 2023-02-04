@@ -4,17 +4,6 @@ vim.g.material_style = 'lighter'
 
 local function hl(name, val) vim.api.nvim_set_hl(0, name, val) end
 
-local cache_dir = vim.fn.stdpath 'cache'
-
-math.randomseed(os.time())
-while
-  not pcall(
-    vim.fn.serverstart,
-    string.format('%s/server-%d.pipe', cache_dir, math.random(49152, 65535))
-  )
-do
-end
-
 local function adjust()
   -- pounce
   if vim.o.background == 'dark' then
