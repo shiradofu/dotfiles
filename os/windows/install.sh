@@ -1,12 +1,14 @@
 #!/bin/bash
 
 password=$1
+script_dir=$(cd "$(dirname "$0")" && pwd)
 
-echo "$password" | wslsync -S apply wsl_conf >/dev/null 2>&1
-if exists wslvar && exists wslpath; then
-  wslsync apply wezterm >/dev/null 2>&1
-  wslsync apply wslconfig >/dev/null 2>&1
-fi
+ln -s "$script_dir/wslsync" "$HOME/bin/"
+ln -s "$script_dir/_wslsync" "$ZDOTDIR/completions/"
+
+echo "$password" | wslsync -S --to-windows wsl_conf >/dev/null 2>&1
+wslsync --to-windows wezterm
+wslsync --to-windows wslconfig
 
 curl -sLo /tmp/win32yank.zip \
   https://github.com/equalsraf/win32yank/releases/download/v0.0.4/win32yank-x64.zip

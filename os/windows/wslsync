@@ -1,45 +1,46 @@
 #!/bin/bash
 
 config_home="${XDG_CONFIG_HOME:-~/.config}"
-windows_home=$(cd "$(dirname "$0")";pwd)
+script_dir=$(cd "$(dirname "$0")";pwd)
 mode=
 d= # dotfiles 内のファイルパス
-u= # 実際に使われている設定ファイルのファイルパス
+w= # windows/wsl が実際に参照するファイルパス
 password=
 prompt='password: '
 
+__wsl_env_path() {
+  cmd.exe /c echo "%$1%" | tr '\\' '/' | sed -e 's@\(\w\):@/mnt/\L\1@'
+}
+
 __wslsync_wezterm() {
   # wezterm must be installed by winget with `--location %APPDATA%/WezTerm`
-  if ! appdata=$(wslpath "$(wslvar APPDATA)"); then
+  if ! appdata=$(__wsl_env_path APPDATA); then
     echo 'Failed to get APPDATA'
     exit 1
   fi
   d="$config_home/wezterm/wezterm.lua"
-  u="$appdata/WezTerm/wezterm.lua"
+  w="$appdata/WezTerm/wezterm.lua"
   __wslsync_do
 }
 
 __wslsync_wslconfig() {
-  userprofile=$(wslpath "$(wslvar USERPROFILE)")
-  d="$windows_home/.wslconfig"
-  u="$userprofile/.wslconfig"
+  userprofile=$(__wsl_env_path USERPROFILE)
+  d="$script_dir/.wslconfig"
+  w="$userprofile/.wslconfig"
   __wslsync_do
 }
 
 __wslsync_wsl_conf() {
-  d="$windows_home/wsl.conf"
-  u="/etc/wsl.conf"
+  d="$script_dir/wsl.conf"
+  w="/etc/wsl.conf"
   __wslsync_sudo
 }
 
 __wslsync_do() {
-  mkdir -p "$(dirname "$u")"
+  mkdir -p "$(dirname "$w")"
   case "$mode" in
-    LINK ) ln -s "$d" "$u";;
-    APPLY ) cp -f "$d" "$u";;
-    IMPORT ) cp -f "$u" "$d";;
-    BACKUP ) cp -f "$u" "$d.bak";;
-    RESTORE ) cp -f "$d.bak" "$u";;
+    TO_WINDOWS  ) cp -f "$d" "$w";;
+    TO_DOTFILES ) cp -f "$w" "$d";;
   esac
 }
 
@@ -49,25 +50,19 @@ __wslsync_sudo() {
     read -r -s password
     echo
   fi
-  echo "$password" | sudo -S mkdir -p "$(dirname "$u")"
+  echo "$password" | sudo -S mkdir -p "$(dirname "$w")"
   case "$mode" in
-    LINK ) echo "$password" | sudo -S ln -s "$d" "$u";;
-    APPLY ) echo "$password" | sudo -S cp -f "$d" "$u";;
-    IMPORT ) echo "$password" | sudo -S cp -f "$u" "$d";;
-    BACKUP ) echo "$password" | sudo -S cp -f "$u" "$d.bak";;
-    RESTORE ) echo "$password" | sudo -S cp -f "$d.bak" "$u";;
+    TO_WINDOWS  ) echo "$password" | sudo -S cp -f "$d" "$w";;
+    TO_DOTFILES ) echo "$password" | sudo -S cp -f "$w" "$d";;
   esac
 }
 
 for ARG; do
   case $ARG in
-    link ) mode=LINK;;
-    apply ) mode=APPLY;;
-    import ) mode=IMPORT;;
-    backup ) mode=BACKUP;;
-    restore ) mode=RESTORE;;
+    --to-windows  ) mode=TO_WINDOWS;;
+    --to-dotfiles ) mode=TO_DOTFILES;;
     -S ) prompt='';;
-    alt-tab | espanso | rectangle | wezterm | wslconfig | wsl_conf )
+    wezterm | wslconfig | wsl_conf )
       "__wslsync_${ARG}"
       ;;
     * )

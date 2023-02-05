@@ -5,9 +5,6 @@
   required = true
 [init]
   defaultBranch = main
-[user]
-  name =
-  email =
 [color]
   ui = true
 [alias]
@@ -37,4 +34,5 @@
 [diff]
   colorMoved = default
 [include]
-  path = _delta_theme
+  path = user.gitconfig
+  path = _chcs.gitconfig

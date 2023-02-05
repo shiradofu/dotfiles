@@ -21,7 +21,7 @@ DIST=''
 if is_mac; then
   DIST=mac
 else
-  for dist in debian redhat fedora; do
+  for dist in debian redhat; do
     if [ -e "/etc/${dist}-release" ] || [ -e "/etc/${dist}_version" ]; then
       DIST="${dist}"
       break
@@ -97,11 +97,6 @@ case "${DIST}" in
     export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true
     echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections
     echo "${password}" | sudo -S apt -y update
-    if is_wsl && ! exists wslvar; then
-      echo "${password}" | sudo -S apt -y install wslu && : "$(wslvar > /dev/null 2>&1)";
-      # https://github.com/wslutilities/wslu/issues/199
-      [ -d "$HOME/.config/wslu" ] && echo 65001 > "$HOME/.config/wslu/oemcp"
-    fi
     # required by homebrew
     echo "${password}" | sudo -S apt -y install build-essential procps curl file git bash
     # required by asdf-deno and bun
@@ -111,7 +106,7 @@ case "${DIST}" in
       libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
       libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
     ;;
-  redhat | fedora )
+  redhat )
     msg "installing basic packages..."
     echo "${password}" | sudo -S yum -y update
     # required by homebrew

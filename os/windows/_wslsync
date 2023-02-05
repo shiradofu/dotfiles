@@ -1,0 +1,10 @@
+#compdef wslsync
+
+_wslsync() {
+  _arguments \
+    '-S[read password from stdin]' \
+    ': :(--to-windows --to-dotfiles)' \
+    ': :(wezterm wslconfig wsl_conf)'
+}
+
+_wslsync "$@"

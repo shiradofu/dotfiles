@@ -5,11 +5,15 @@
 config_home="${XDG_CONFIG_HOME:-~/.config}"
 is_wsl() { [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; }
 
+__wsl_env_path() {
+  cmd.exe /c echo "%$1%" | tr '\\' '/' | sed -e 's@\(\w\):@/mnt/\L\1@'
+}
+
 __chcs_wezterm() {
   local dir;
   if is_wsl; then
     # wezterm must be installed by winget with `--location %APPDATA%/WezTerm`
-    if ! appdata=$(wslpath "$(wslvar APPDATA)"); then
+    if ! appdata=$(wsl_env_path APPDATA); then
       echo 'Failed to get APPDATA'
       exit 1
     fi
@@ -21,7 +25,7 @@ __chcs_wezterm() {
     echo "$dir is not a directory."
     return 1
   fi
-  cat << EOF >| "$dir/_color.lua"
+  cat << EOF >| "$dir/_chcs.lua"
 return {
   window_background_opacity = $2,
   color_scheme = '$1',
@@ -36,7 +40,7 @@ __chcs_tmux() {
     echo An error occurred in chcs tmux.
     return 1
   fi
-  command cp -f "$file" "$dir/_style.conf"
+  command cp -f "$file" "$dir/_chcs.conf"
 
   if tmux list-clients > /dev/null 2>&1; then
     tmux source "$dir/tmux.conf"
@@ -74,8 +78,8 @@ __chcs_delta() {
     return 1
   fi
   [ "$mode" = 'light' ] && val='true' || val='false'
-  echo "[delta]"        >| "$dir/_delta_theme"
-  echo "  light = $val" >> "$dir/_delta_theme"
+  echo "[delta]"        >| "$dir/_chcs.gitconfig"
+  echo "  light = $val" >> "$dir/_chcs.gitconfig"
 }
 
 __chcs_os() {
