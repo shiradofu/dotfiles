@@ -1,13 +1,13 @@
 #!/bin/bash
 
-MAC_ROOT=$(cd "$(dirname "$0")" && pwd)
+script_dir=$(cd "$(dirname "$0")" && pwd)
 
 brew install binutils coreutils findutils grep gawk gnu-sed gnu-tar gzip wget gpg
-git config --global credential.helper osxkeychain
+git config --file "${XDG_CONFIG_HOME}/git/credentials.gitconfig" credential.helper osxkeychain
 
 if [ ! -e "$HOME/.mackup" ]; then
-  ln -s "$MAC_ROOT/.mackup" "$HOME/.mackup"
+  ln -s "$script_dir/.mackup" "$HOME/.mackup"
 fi
 if [ ! -e "$HOME/.mackup.cfg" ]; then
-  ln -s "$MAC_ROOT/.mackup.cfg" "$HOME/.mackup.cfg"
+  ln -s "$script_dir/.mackup.cfg" "$HOME/.mackup.cfg"
 fi

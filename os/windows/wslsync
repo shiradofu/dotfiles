@@ -1,7 +1,7 @@
 #!/bin/bash
 
 config_home="${XDG_CONFIG_HOME:-~/.config}"
-script_dir=$(cd "$(dirname "$0")";pwd)
+dot_dir="$(ghq root)/github.com/shiradofu/dotfiles/os/windows"
 mode=
 d= # dotfiles 内のファイルパス
 w= # windows/wsl が実際に参照するファイルパス
@@ -9,7 +9,7 @@ password=
 prompt='password: '
 
 __wsl_env_path() {
-  cmd.exe /c echo "%$1%" | tr '\\' '/' | sed -e 's@\(\w\):@/mnt/\L\1@'
+  cmd.exe /c echo "%$1%" 2>/dev/null | tr '\\' '/' | tr -d '\r' | sed -e 's@\(\w\):@/mnt/\L\1@'
 }
 
 __wslsync_wezterm() {
@@ -25,19 +25,20 @@ __wslsync_wezterm() {
 
 __wslsync_wslconfig() {
   userprofile=$(__wsl_env_path USERPROFILE)
-  d="$script_dir/.wslconfig"
+  d="$dot_dir/.wslconfig"
   w="$userprofile/.wslconfig"
   __wslsync_do
 }
 
 __wslsync_wsl_conf() {
-  d="$script_dir/wsl.conf"
+  d="$dot_dir/wsl.conf"
   w="/etc/wsl.conf"
   __wslsync_sudo
 }
 
 __wslsync_do() {
-  mkdir -p "$(dirname "$w")"
+  dir="$(dirname "$w")"
+  [ ! -d "$dir" ] && mkdir -p "$dir"
   case "$mode" in
     TO_WINDOWS  ) cp -f "$d" "$w";;
     TO_DOTFILES ) cp -f "$w" "$d";;

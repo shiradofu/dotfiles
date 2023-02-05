@@ -53,8 +53,8 @@ deploy bin "$HOME" && hash -r
 deploy_all_in data   "$XDG_DATA_HOME"
 deploy_all_in config "$XDG_CONFIG_HOME"
 [ -f ".gitconfig" ] && mv .gitconfig ".gitconfig.$TIME.bak"
-git config --file "${DOT_ROOT}/config/git/user.gitconfig" user.name "$git_name"
-git config --file "${DOT_ROOT}/config/git/user.gitconfig" user.email "$git_email"
+git config --file "${XDG_CONFIG_HOME}/git/user.gitconfig" user.name "$git_name"
+git config --file "${XDG_CONFIG_HOME}/git/user.gitconfig" user.email "$git_email"
 
 #
 # CLI tools

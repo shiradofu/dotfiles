@@ -16,7 +16,8 @@ unzip -p /tmp/win32yank.zip win32yank.exe > /tmp/win32yank.exe
 chmod +x /tmp/win32yank.exe
 mv /tmp/win32yank.exe ./bin
 
-git config --global credential.helper \
+git config --file "${XDG_CONFIG_HOME}/git/credentials.gitconfig" \
+  credential.helper \
   "/mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager-core.exe"
 
 unset password

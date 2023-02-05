@@ -6,14 +6,14 @@ config_home="${XDG_CONFIG_HOME:-~/.config}"
 is_wsl() { [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; }
 
 __wsl_env_path() {
-  cmd.exe /c echo "%$1%" | tr '\\' '/' | sed -e 's@\(\w\):@/mnt/\L\1@'
+  cmd.exe /c echo "%$1%" 2>/dev/null | tr '\\' '/' | sed -e 's@\(\w\):@/mnt/\L\1@'
 }
 
 __chcs_wezterm() {
   local dir;
   if is_wsl; then
     # wezterm must be installed by winget with `--location %APPDATA%/WezTerm`
-    if ! appdata=$(wsl_env_path APPDATA); then
+    if ! appdata=$(__wsl_env_path APPDATA); then
       echo 'Failed to get APPDATA'
       exit 1
     fi

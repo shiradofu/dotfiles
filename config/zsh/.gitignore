@@ -5,3 +5,4 @@
 !.zshrc
 !lazy.zsh
 !/completions/*
+/completions/_wslsync

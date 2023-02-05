@@ -35,4 +35,5 @@
   colorMoved = default
 [include]
   path = user.gitconfig
+  path = credential.gitconfig
   path = _chcs.gitconfig
