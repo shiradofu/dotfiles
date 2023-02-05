@@ -13,7 +13,11 @@ export PAGER="less"
 export LESS="-g -i -M -R -S -W"
 export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 
-if [ -f /usr/local/bin/brew  ]; then
+if [ -d /opt/homebrew ]; then
+  export HOMEBREW_PREFIX="/opt/homebrew";
+  export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
+  export HOMEBREW_REPOSITORY="/opt/homebrew/Homebrew";
+elif [ -f /usr/local/bin/brew  ]; then
   export HOMEBREW_PREFIX="/usr/local";
   export HOMEBREW_CELLAR="/usr/local/Cellar";
   export HOMEBREW_REPOSITORY="/usr/local/Homebrew";
@@ -22,8 +26,6 @@ elif [ -d /home/linuxbrew ]; then
   export HOMEBREW_CELLAR="/home/linuxbrew/.linuxbrew/Cellar";
   export HOMEBREW_REPOSITORY="/home/linuxbrew/.linuxbrew/Homebrew";
 fi
-# { test -d /opt/homebrew && eval $(/opt/homebrew/bin/brew shellenv) } \
-# || { test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv) }
 
 export GOPATH="$XDG_STATE_HOME/go"
 export ASDF_DIR="$XDG_STATE_HOME/asdf/repo"

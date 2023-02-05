@@ -397,13 +397,5 @@ return {
     mappings.lsp_diagnostic()
     init_auto_hover_diagnostics()
     setup_lsp_float_border()
-
-    -- local notify = vim.notify
-    -- vim.notify = function(msg, ...)
-    --   if msg:match 'warning: multiple different client offset_encodings' then
-    --     return
-    --   end
-    --   notify(msg, ...)
-    -- end
   end,
 }

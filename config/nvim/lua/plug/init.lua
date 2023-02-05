@@ -75,7 +75,6 @@ return {
 
   --------------------------------------------------------------
   -- Others
-  { 'vigoux/notifier.nvim', config = true, lazy = false },
   { 'AckslD/messages.nvim', config = true, cmd = 'Message' },
 
   --------------------------------------------------------------

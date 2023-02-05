@@ -6,7 +6,7 @@ config_home="${XDG_CONFIG_HOME:-~/.config}"
 is_wsl() { [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; }
 
 __wsl_env_path() {
-  cmd.exe /c echo "%$1%" 2>/dev/null | tr '\\' '/' | sed -e 's@\(\w\):@/mnt/\L\1@'
+  cmd.exe /c echo "%$1%" 2>/dev/null | tr '\\' '/' | tr -d '\r' | sed -e 's@\(\w\):@/mnt/\L\1@'
 }
 
 __chcs_wezterm() {

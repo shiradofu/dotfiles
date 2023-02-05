@@ -1,0 +1,35 @@
+tap "espanso/espanso"
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/core"
+tap "homebrew/services"
+brew "mas"
+brew "colima"
+cask "adobe-creative-cloud"
+cask "amorphousdiskmark"
+cask "alt-tab"
+cask "anki"
+cask "bitwarden"
+cask "docker"
+cask "dropbox"
+cask "espanso"
+cask "figma"
+cask "google-chrome"
+cask "google-japanese-ime"
+cask "kap"
+cask "karabiner-elements"
+cask "keycastr"
+cask "kindle"
+cask "raycast"
+cask "rectangle"
+cask "slack"
+cask "session-manager-plugin"
+cask "topnotch"
+cask "wezterm"
+cask "zoom"
+mas "AdGuard for Safari", id: 1440147259
+mas "LadioCast", id: 411213048
+mas "LINE", id: 539883307
+mas "Night Eye", id: 1450504903
+mas "Spark", id: 1176895641
+mas "Vimari", id: 1480933944

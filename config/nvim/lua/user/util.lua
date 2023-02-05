@@ -22,7 +22,12 @@ U.win_row_num = {
 ---@return string
 function U.get_line_content(file_row_num, buf)
   if not type(file_row_num) == 'number' then return '' end
-  local line = vim.api.nvim_buf_get_lines(buf or 0, file_row_num, file_row_num + 1, true)[1]
+  local line = vim.api.nvim_buf_get_lines(
+    buf or 0,
+    file_row_num,
+    file_row_num + 1,
+    false
+  )[1]
   return line or ''
 end
 
