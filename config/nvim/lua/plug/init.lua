@@ -7,12 +7,12 @@ return {
   { 'gpanders/editorconfig.nvim', event = 'VeryLazy' },
   { 'gbprod/substitute.nvim', config = true },
   { 'thinca/vim-qfreplace', cmd = 'Qfreplace' },
+  { 'norcalli/nvim-colorizer.lua', config = true },
+  { 'petertriho/nvim-scrollbar', config = true },
   {
     't9md/vim-quickhl',
     keys = { { '<Plug>(quickhl-', mode = { 'n', 'x' } } },
   },
-  { 'norcalli/nvim-colorizer.lua', config = true },
-  { 'petertriho/nvim-scrollbar', config = true },
   {
     'haya14busa/vim-asterisk',
     keys = '<Plug>(asterisk-',
@@ -49,13 +49,24 @@ return {
     keys = '<Plug>MarkdownPreviewToggle',
     cmd = 'MarkdownPreviewToggle',
   },
+  {
+    'NTBBloodbath/rest.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    config = function() require('rest-nvim').setup {} end,
+    ft = 'http',
+  },
 
   --------------------------------------------------------------
   -- Git
 
-  { 'akinsho/git-conflict.nvim', config = true },
+  {
+    'akinsho/git-conflict.nvim',
+    event = 'VeryLazy',
+    config = true,
+  },
   {
     'samoshkin/vim-mergetool',
+    cmd = 'MergetoolStart',
     init = function()
       vim.g.mergetool_layout = 'LmR'
       vim.g.mergetool_prefer_revision = 'base'
@@ -64,13 +75,8 @@ return {
 
   --------------------------------------------------------------
   -- Others
-
-  {
-    'NTBBloodbath/rest.nvim',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    config = function() require('rest-nvim').setup {} end,
-    ft = 'http',
-  },
+  { 'vigoux/notifier.nvim', config = true, lazy = false },
+  { 'AckslD/messages.nvim', config = true, cmd = 'Message' },
 
   --------------------------------------------------------------
   -- Colorscheme

@@ -44,8 +44,8 @@ M.misc()
 
 function M.fzf()
   local fzf = 'fzf-lua'
-  k('n', '<Leader>o', function()require('plug.ex.fzf-project-mru')()end)
-  k('n', '<Leader>t', function()require('plug.ex.fzf-templates')()end)
+  k('n', '<Leader>o', function()require(fzf).project_mru()end)
+  k('n', '<Leader>t', function()require(fzf).templates()end)
   k('n', '<Leader>i', function()require(fzf).files{fd_opts = util.fzf_fd_noignore}end)
   k('n', '<Leader>u', function()require(fzf).git_status()end)
   k('n', '<Leader>f', function()require(fzf).live_grep_glob()end)
@@ -287,8 +287,8 @@ end
 M.sandwich()
 
 function M.autopairs()
-  k('i', ',', function()require('plug.ex.autopairs').comma()end)
-  k('i', ';', function()require('plug.ex.autopairs').semicolon()end)
+  k('i', ',', '<Plug>(autopairs-comma)')
+  k('i', ';', '<Plug>(autopairs-semicolon)')
 end
 M.autopairs()
 
@@ -379,9 +379,13 @@ function M.fern_local()
   k('n', 'gy',    '<Plug>(fern-action-yank:label)',      b)
   k('n', 'gY',    '<Plug>(fern-action-yank:bufname)',    b)
 
-  local fzf_fern = require 'plug.ex.fzf-fern'
-  k('n', '<Leader>f', function()fzf_fern()end, b)
-  k('n', '<Leader>F', function()fzf_fern(true)end, b)
+  if pcall(require, 'fzf-lua') then
+    local fzf = 'fzf-lua'
+    k('n', '<Leader>f', function()require(fzf).grep_fern_dir()end,b)
+    k('n', '<Leader>F', function()
+      require(fzf).grep_fern_dir{rg_opts = util.fzf_rg_noignore}end, b
+    )
+  end
 end
 
 function M.ft_markdown()
