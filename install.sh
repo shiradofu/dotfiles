@@ -128,7 +128,7 @@ git clone --filter=blob:none --branch=stable \
   "$XDG_DATA_HOME/nvim/lazy/lazy.nvim"
 msg $'\nInstalling neovim plugins...\n'
 nvim --headless "+Lazy! sync" +qa
-msg $'\nInstalling Treesitter Parsers...\n'
+msg $'\n\nInstalling Treesitter Parsers...\n'
 timeout 120 nvim --headless +TSUpdateSync
 msg $'\nInstalling Language Servers...\n'
 timeout 120 nvim --headless "+lua require('mason-lspconfig.ensure_installed')()"
