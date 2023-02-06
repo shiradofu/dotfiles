@@ -24,7 +24,7 @@ chmod +x /tmp/win32yank.exe
 mv /tmp/win32yank.exe ./bin
 
 msg $'\n🔑  Setting git credential helper:'
-git config --file "${XDG_CONFIG_HOME}/git/credentials.gitconfig" \
+git config --file "${XDG_CONFIG_HOME}/git/credential.gitconfig" \
   credential.helper \
   "/mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager-core.exe" \
   && printf "ok\n" || printf "failed\n"

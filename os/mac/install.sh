@@ -11,13 +11,8 @@ msg $'\n🔑  Setting git credential helper:'
 git config --file "${XDG_CONFIG_HOME}/git/credentials.gitconfig" credential.helper osxkeychain
 
 msg $'\n☁️  Deploying Mackup config:'
-if [ ! -e "$HOME/.mackup" ]; then
-  ln -s "$script_dir/.mackup" "$HOME/.mackup"
-fi
-if [ ! -e "$HOME/.mackup.cfg" ]; then
-  ln -s "$script_dir/.mackup.cfg" "$HOME/.mackup.cfg"
-fi
-
+if [ ! -e "$HOME/.mackup" ]; then ln -s "$script_dir/.mackup" "$HOME/"; fi
+if [ ! -e "$HOME/.mackup.cfg" ]; then ln -s "$script_dir/.mackup.cfg" "$HOME/"; fi
 
 msg $'\n🧰  System Preference:'
 
@@ -54,9 +49,6 @@ defaults write com.apple.dock static-only -bool true
 
 # 最近使ったアプリを Dock に追加しない
 defaults write com.apple.dock show-recents -bool false
-
-# Mission Control のアニメーションを速くする
-defaults write com.apple.dock expose-animation-duration -float 0.1
 
 # Mission Control で使用頻度に応じた並び替えをしない
 defaults write com.apple.dock mru-spaces -bool false
@@ -164,15 +156,18 @@ add_keyboard_shortcut() {
 }
 
 add_keyboard_shortcut '/Applications/Google Chrome.app' "{
-  'Email Link' = '${CMD}${SHIFT}${OPT}${CTRL}i';
+  'Bookmark This Tab…' = '${CMD}s';
+  'Bookmark All Tabs…' = '${CMD}${SHIFT}s';
+  'Pin Tab' = '${CMD}${SHIFT}p';
+  'Duplicate Tab' = '${CMD}${SHIFT}o';
   'Extensions' = '${CMD}${SHIFT}x';
+  'Downloads' = '${CMD}${SHIFT}d';
+  'Mute Site' = '${CMD}m';
   'Developer Tools' = '${CMD}i';
   'JavaScript Console' = '${CMD}j';
-  'Duplicate Tab' = '${CMD}${SHIFT}o';
-  'Downloads' = '${CMD}${SHIFT}d';
-  'Pin Tab' = '${CMD}${SHIFT}p';
-  'Mute Site' = '${CMD}m';
+  'Save Page As…' = '${CMD}${ALT}s';
   'Minimize' = '${CMD}${SHIFT}${OPT}${CTRL}m';
+  'Email Link' = '${CMD}${SHIFT}${OPT}${CTRL}i';
   'Hide Google Chrome' = '${CMD}${SHIFT}${OPT}h';
   'Hide Others' = '${CMD}${SHIFT}${OPT}${CTRL}h';
 }"

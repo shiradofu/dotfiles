@@ -119,11 +119,6 @@ asdf plugin-add mysql     &&
 asdf install mysql 5.7.38 &&
 asdf global mysql 5.7.38
 
-msg $'\nlinters/formatters:\n'
-brew_i stylua shellcheck cfn-lint actionlint
-npm_i eslint_d @fsouza/prettierd stylelint
-go_i github.com/editorconfig-checker/editorconfig-checker/cmd/editorconfig-checker@latest
-
 #
 # Vim
 #
@@ -131,13 +126,18 @@ brew_i vim nvim
 git clone --filter=blob:none --branch=stable \
   https://github.com/folke/lazy.nvim.git \
   "$XDG_DATA_HOME/nvim/lazy/lazy.nvim"
-msg $'\ninstalling neovim plugins...\n'
+msg $'\nInstalling neovim plugins...\n'
 nvim --headless "+Lazy! sync" +qa
-nvim --headless +TSUpdateSync +qa
+msg $'\nInstalling Treesitter Parsers...\n'
+timeout 120 nvim --headless +TSUpdateSync
+msg $'\nInstalling Language Servers...\n'
+timeout 120 nvim --headless "+lua require('mason-lspconfig.ensure_installed')()"
+msg $'\nInstalling Linting/Formatting tools...\n'
+timeout 60 nvim --headless "+lua require('mason-null-ls.ensure_installed')()"
 printf '\n'
 
 msg $'\nasdf reshim:'
-asdf reshim
+asdf reshim && printf "ok\n" || printf "failed\n"
 
 msg $'\nsetting colorscheme:'
 "$HOME/bin/chcs" --no-os
