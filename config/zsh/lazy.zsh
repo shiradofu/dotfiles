@@ -192,7 +192,7 @@ bindkey -e '^g' ghq-fzf
 ghq-rm() {
   required ghq fzf || return 127
   local repos=$(ghq list | fzf-tmux ${FZF_TMUX_OPTS})
-  [ -n "$repos" ] && echo "$repos" | xargs -I{} rm -rf $(ghq root)/{}
+  [ -n "$repos" ] && echo "$repos" | xargs -I{} sh -c "rm -rf $(ghq root)/{} && echo {} deleted"
 }
 
 navi_dir="$XDG_CONFIG_HOME/navi"
