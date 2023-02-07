@@ -311,6 +311,8 @@ return {
       },
     }
     Null(null_fn.diagnostics.shellcheck.with {
+      -- shellcheck with mason.nvim doesn't support Apple Silicon
+      command = vim.env.HOMEBREW_PREFIX .. '/bin/shellcheck',
       runtime_condition = function()
         local fname = vim.api.nvim_buf_get_name(0)
         return not (fname == '.env' or fname:find '%.env%..+')

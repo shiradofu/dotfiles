@@ -146,6 +146,10 @@ if [ "$DIST" = 'mac' ]; then
   brew install unzip
   # required by asdf-python
   brew install openssl readline sqlite3 xz zlib
+  # `timeout` command is included in `coreutils`
+  brew install binutils coreutils findutils grep gawk gnu-sed gnu-tar gzip wget gpg
+  # used in os/mac/brew.sh
+  brew install expect
 fi
 
 printf '\n'; msg '🍺  Installing git:'; printf '\n'

@@ -10,7 +10,7 @@ return {
     },
   },
   config = function()
-    local note_dir = vim.env.MY_REPOS .. '/shiradofu/_notes'
+    local note_dir = vim.env.MY_REPOS .. '/_notes'
 
     local augroup = vim.api.nvim_create_augroup('MyDoor2Note', {})
     vim.api.nvim_create_autocmd('BufEnter', {
@@ -32,7 +32,6 @@ return {
         if vim.startswith(root, LAZY_DIR) then
           for _, plugin in ipairs(require('lazy').plugins()) do
             if plugin.name == root:match '[^/]+$' then
-              vim.pretty_print(plugin)
               return plugin[1] .. '.md'
             end
           end

@@ -4,7 +4,7 @@ vim.g.material_style = 'lighter'
 
 local function hl(name, val) vim.api.nvim_set_hl(0, name, val) end
 
-local function adjust()
+local function all()
   -- pounce
   if vim.o.background == 'dark' then
     hl('PounceUnmatched', { fg = '#4A4A4A' })
@@ -28,9 +28,17 @@ local function adjust()
 
   -- clever-f
   hl('CleverF', { fg = '#ff0000', underline = true })
+  hl('Search', { fg = '#161821', bg = '#c6c8d1' })
+  hl('IncSearch', { fg = '#392313', bg = '#e4aa80' })
 end
 
-adjust()
+all()
 
 local aug = g('MyColorScheme', {})
-c('ColorScheme', { group = aug, pattern = '*', callback = adjust })
+c('ColorScheme', { group = aug, pattern = '*', callback = all })
+
+local function iceberg()
+  hl('Search', { fg = '#161821', bg = '#c6c8d1' })
+  hl('IncSearch', { fg = '#392313', bg = '#e4aa80' })
+end
+c('ColorScheme', { group = aug, pattern = 'iceberg', callback = iceberg })

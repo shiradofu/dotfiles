@@ -59,7 +59,13 @@ git config --file "${XDG_CONFIG_HOME}/git/user.gitconfig" user.email "$git_email
 #
 # CLI tools
 #
-brew_i zsh
+msg $'\n🍺  Installing zsh:\n'
+expect -c "
+  set timeout -1
+  spawn brew install zsh
+  expect \"\[Pp\]assword\"
+  send -- \"${password}\n\"
+"
 if ! grep -xq "${HOMEBREW_PREFIX}/bin/zsh" /etc/shells; then
   echo "$password" | sudo -S sh -c "printf '${HOMEBREW_PREFIX}/bin/zsh\n' >> /etc/shells"
 fi
@@ -119,10 +125,14 @@ asdf plugin-add mysql     &&
 asdf install mysql 5.7.38 &&
 asdf global mysql 5.7.38
 
+msg $'\nlinters/formatters:\n'
+# installed with mason.nvim doesn't support Apple Silicon
+brew_i shellcheck
+
 #
 # Vim
 #
-brew_i vim nvim
+brew_i vim nvim neovim-remote
 git clone --filter=blob:none --branch=stable \
   https://github.com/folke/lazy.nvim.git \
   "$XDG_DATA_HOME/nvim/lazy/lazy.nvim"

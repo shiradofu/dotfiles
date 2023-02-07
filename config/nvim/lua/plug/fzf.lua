@@ -85,7 +85,9 @@ local function setup_project_mru()
         local function on_event(_, data, event)
           if event == 'stdout' then
             for _, file in ipairs(data) do
-              if file ~= '' and not files_memo[file] then add_entry(file, co) end
+              if file ~= '' and not files_memo[file] then
+                add_entry(file, co)
+              end
             end
           elseif event == 'stderr' then
             vim.cmd 'echohl Error'
@@ -281,8 +283,11 @@ local function setup_grep_fern_dir()
   local util = require 'user.util'
   return function(opts)
     opts = opts or {}
+
+    -- get cursor node
     local lnum = vim.api.nvim_win_get_cursor(0)[1]
     local bufname = vim.b.fern.visible_nodes[lnum].bufname
+
     local dir = ''
     if vim.endswith(bufname, '$') then
       dir = bufname:match 'fern:///file://(.+)%$$'
@@ -369,11 +374,13 @@ return {
     fzf.templates = setup_template()
     fzf.grep_fern_dir = setup_grep_fern_dir()
 
-    vim.lsp.handlers['textDocument/definition'] =
-      function() fzf.lsp_definitions { jump_to_single_result = true } end
+    vim.lsp.handlers['textDocument/definition'] = function()
+      fzf.lsp_definitions { jump_to_single_result = true }
+    end
 
     ---@diagnostic disable-next-line: duplicate-set-field
-    vim.lsp.handlers['textDocument/references'] =
-      function() fzf.lsp_references() end
+    vim.lsp.handlers['textDocument/references'] = function()
+      fzf.lsp_references()
+    end
   end,
 }

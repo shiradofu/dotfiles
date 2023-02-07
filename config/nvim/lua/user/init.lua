@@ -77,10 +77,10 @@ vim.api.nvim_create_autocmd('BufEnter', {
   end,
 })
 
--- テンプレートは自動フォーマットしない
+-- テンプレートと karabiner-elements は自動フォーマットしない
 local template = vim.api.nvim_create_augroup('FtTemplate', {})
 vim.api.nvim_create_autocmd('BufEnter', {
   group = template,
-  pattern = '*/dotfiles/data/templates/*',
+  pattern = { '*/dotfiles/data/templates/*', '*/karabiner/karabiner.json' },
   command = 'let b:enable_auto_format = v:false',
 })

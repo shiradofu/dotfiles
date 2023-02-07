@@ -29,5 +29,29 @@ return {
         mappings()
       end,
     })
+
+    local function fern_diffview_map(map, cmd)
+      vim.keymap.set('n', '<Plug>(fern-diffview-' .. map .. ')', function()
+        local lnum = vim.api.nvim_win_get_cursor(0)[1]
+        local fullpath = vim.b.fern.visible_nodes[lnum].bufname
+        local win_id = vim.api.nvim_get_current_win()
+        if cmd:find '%%' then
+          if vim.fn.isdirectory(fullpath) == 1 then return end
+          vim.cmd('e ' .. fullpath)
+        else
+          vim.cmd 'enew'
+        end
+        vim.cmd(cmd)
+        local diffview = vim.api.nvim_get_current_tabpage()
+        vim.api.nvim_set_current_win(win_id)
+        vim.cmd [[exe "normal! \<C-o>"]]
+        vim.api.nvim_set_current_tabpage(diffview)
+      end, { remap = true })
+    end
+    fern_diffview_map('single-file-diff', 'DiffviewOpen -- %')
+    fern_diffview_map('single-file-history', 'DiffviewFileHistory %')
+    fern_diffview_map('git-status', 'DiffviewOpen')
+    fern_diffview_map('diff-by-main', 'DiffviewOpen main')
+    fern_diffview_map('all-files-history', 'DiffviewFileHistory')
   end,
 }

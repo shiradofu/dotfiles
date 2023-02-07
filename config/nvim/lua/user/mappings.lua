@@ -62,11 +62,11 @@ M.fzf()
 
 function M.diffview()
   k('n', '<Leader>d', '<Cmd>DiffviewOpen -- %<CR>')
-  k('n', '<Leader>s', function()win.reuse('tab', 'is_git_status', 'DiffviewOpen')end)
-  k('n', '<Leader>S', '<Cmd>DiffviewOpen main<CR>')
   k('n', '<Leader>h', '<Cmd>DiffviewFileHistory %<CR>')
   k('v', '<Leader>h', ':DiffviewFileHistory<CR>')
-  k('n', '<Leader>H', '<Cmd>DiffviewFileHistory<CR>')
+  k('n', '<Leader>s', '<Cmd>DiffviewWorkspace git_status<CR>')
+  k('n', '<Leader>S', '<Cmd>DiffviewWorkspace diff_by_main<CR>')
+  k('n', '<Leader>H', '<Cmd>DiffviewWorkspace all_files_history<CR>')
 end
 M.diffview()
 
@@ -386,6 +386,11 @@ function M.fern_local()
       require(fzf).grep_fern_dir{rg_opts = util.fzf_rg_noignore}end, b
     )
   end
+  k('n', '<Leader>d', '<Plug>(fern-diffview-single-file-diff)',    b)
+  k('n', '<Leader>h', '<Plug>(fern-diffview-single-file-history)', b)
+  k('n', '<Leader>s', '<Plug>(fern-diffview-git-status)',          b)
+  k('n', '<Leader>S', '<Plug>(fern-diffview-diff-by-main)',        b)
+  k('n', '<Leader>H', '<Plug>(fern-diffview-all-files-history)',   b)
 end
 
 function M.ft_markdown()

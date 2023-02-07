@@ -1,3 +1,18 @@
+local win = require 'user.win'
+
+vim.api.nvim_create_user_command('DiffviewWorkspace', function(ctx)
+  local kind = ctx.args
+  if kind == 'git_status' then
+    win.reuse('tab', 'is_git_status', 'DiffviewOpen')
+  elseif kind == 'diff_by_main' then
+    win.reuse('tab', 'is_diff_by_main', 'DiffviewOpen main')
+  elseif kind == 'all_files_history' then
+    win.reuse('tab', 'is_all_files_hist', 'DiffviewFileHistory')
+  else
+    vim.notify('Wrong argument for DiffviewWorkspace: ' .. kind, 'error')
+  end
+end, { nargs = 1 })
+
 return {
   'sindrets/diffview.nvim',
   cmd = { 'DiffviewOpen', 'DiffviewFileHistory' },
@@ -12,31 +27,21 @@ return {
       hooks = {
         view_enter = function(view)
           local p = view.panel
+          local path_args = p.adapter.ctx.path_args
           -- path にファイルを指定したかどうか
-          local file_given = (
-            #p.path_args == 1
-            and vim.fn.filereadable(vim.fn.fnamemodify(p.path_args[1], ':p'))
-              == 1
-          )
+          local file_given = #path_args == 1
+            and vim.fn.filereadable(path_args[1])
           -- visual モードで範囲を指定したかどうか
           local range_given = p.log_options
             and #p.log_options.single_file.L == 1
 
-          if vim.fn.bufname():find [[^diffview:///]] ~= nil then
-            if vim.bo.ft ~= 'DiffviewFiles' then a.focus_files() end
-          end
-
-          -- 何も指定しなかったときは git status 相当の表示になる
-          if
-            not p.rev_pretty_name
-            and #p.path_args == 0
-            and not range_given
-          then
-            vim.t.is_git_status = true
-          end
-
           if file_given or range_given then
             vim.t.diffview_single_file = true
+          end
+
+          -- 単体ファイルの diff を表示するときはファイル一覧を閉じておく
+          if vim.bo.ft == 'DiffviewFiles' and vim.t.diffview_single_file then
+            a.toggle_files()
           end
 
           vim.t.door2note_open_fn = 'open_float'
