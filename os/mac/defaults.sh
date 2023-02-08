@@ -140,64 +140,6 @@ sudo defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 52 
 sudo defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "<dict><key>enabled</key><false/></dict>"
 sudo defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 "<dict><key>enabled</key><false/></dict>"
 
-# アプリのキーボードショートカット設定
-# https://gist.github.com/scottrbaxter/8a150546cd4a306cbd8adcf3ce52fe8b
-app_list=""
-CMD="@"
-CTRL="^"
-OPT="~"
-SHIFT="$"
-# UP='\U2191'
-# DOWN='\U2193'
-# LEFT='\U2190'
-# RIGHT='\U2192'
-# TAB='\U21e5'
-
-add_keyboard_shortcut() {
-  app_full_path=$1
-  keybindings=$2
-  if [ ! -e "$app_full_path" ]; then
-    echo "$app_full_path does not exist."
-  fi
-  bundle_id=$(mdls -raw -name kMDItemCFBundleIdentifier "$1")
-  appList+="$bundle_id\n"
-  echo "$app_full_path: $bundle_id"
-  defaults write "$bundle_id" NSUserKeyEquivalents "$keybindings"
-}
-
-add_keyboard_shortcut '/Applications/Google Chrome.app' "{
-  'Bookmark This Tab…' = '${CMD}s';
-  'Bookmark All Tabs…' = '${CMD}${SHIFT}s';
-  'Pin Tab' = '${CMD}${SHIFT}p';
-  'Duplicate Tab' = '${CMD}${SHIFT}o';
-  'Extensions' = '${CMD}${SHIFT}x';
-  'Downloads' = '${CMD}${SHIFT}d';
-  'Mute Site' = '${CMD}m';
-  'Developer Tools' = '${CMD}i';
-  'JavaScript Console' = '${CMD}j';
-  'Save Page As…' = '${CMD}${ALT}s';
-  'Minimize' = '${CMD}${SHIFT}${OPT}${CTRL}m';
-  'Email Link' = '${CMD}${SHIFT}${OPT}${CTRL}i';
-  'Hide Google Chrome' = '${CMD}${SHIFT}${OPT}h';
-  'Hide Others' = '${CMD}${SHIFT}${OPT}${CTRL}h';
-}"
-
-add_keyboard_shortcut '/System/Library/CoreServices/Finder.app' "{
-  'Downloads' = '${CMD}${SHIFT}d';
-}"
-
-add_keyboard_shortcut '/Applications/Obsidian.app' "{
-  'Force Reload' = '${CMD}r';
-}"
-
-# check if universal access / custom menu key exists
-if defaults read com.apple.universalaccess com.apple.custommenu.apps > /dev/null 2>&1; then
-  defaults delete com.apple.universalaccess com.apple.custommenu.apps
-fi
-defaults write com.apple.universalaccess com.apple.custommenu.apps -array
-# write all apps to custommenu
-defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "$(echo -e "$app_list")"
-
 #
 #  Misc
 #
@@ -228,7 +170,7 @@ defaults write com.apple.screencapture location ~/Downloads/
 # 印刷が終了したら、自動的にプリンターアプリを終了する
 # defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
 
-for app in cfprefsd Dock Finder 'Google Chrome' Safari SystemUIServer; do
+for app in cfprefsd Dock Finder Safari SystemUIServer; do
   killall "$app" &> /dev/null
 done
 
