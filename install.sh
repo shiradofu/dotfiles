@@ -69,7 +69,7 @@ expect -c "
 if ! grep -xq "${HOMEBREW_PREFIX}/bin/zsh" /etc/shells; then
   echo "$password" | sudo -S sh -c "printf '${HOMEBREW_PREFIX}/bin/zsh\n' >> /etc/shells"
 fi
-echo "$password" | chsh -s $HOMEBREW_PREFIX/bin/zsh >/dev/null 2>&1
+echo "$password" | chsh -s "$HOMEBREW_PREFIX/bin/zsh" >/dev/null 2>&1
 mkdir -p "$XDG_STATE_HOME/zsh" && touch "$XDG_STATE_HOME/zsh/history"
 git clone --depth 1 https://github.com/zdharma-continuum/zinit "${XDG_STATE_HOME}/zinit/zinit.git"
 

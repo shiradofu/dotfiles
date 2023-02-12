@@ -105,6 +105,8 @@ case "${DIST}" in
     echo "${password}" | sudo -S apt -y install make build-essential libssl-dev zlib1g-dev \
       libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
       libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+    # required by install.sh
+    echo "${password}" | sudo -S apt -y install expect
     ;;
   redhat )
     msg "installing basic packages..."
@@ -117,6 +119,8 @@ case "${DIST}" in
     # required by asdf-python
     echo "${password}" | sudo -S dnf -y install make gcc zlib-devel bzip2 bzip2-devel \
       readline-devel sqlite sqlite-devel openssl-devel tk-devel libffi-devel xz-devel
+    # required by install.sh
+    echo "${password}" | sudo -S yum -y install expect
     ;;
   mac )
     if ! exists "xcode-select"; then
@@ -146,10 +150,12 @@ if [ "$DIST" = 'mac' ]; then
   brew install unzip
   # required by asdf-python
   brew install openssl readline sqlite3 xz zlib
-  # `timeout` command is included in `coreutils`
-  brew install binutils coreutils findutils grep gawk gnu-sed gnu-tar gzip wget gpg
-  # used in os/mac/brew.sh
+  # required by install.sh
   brew install expect
+  # `timeout` command is required by install.sh
+  brew install coreutils
+  # basic packages
+  brew install binutils findutils grep gawk gnu-sed gnu-tar gzip wget gpg
 fi
 
 printf '\n'; msg '🍺  Installing git:'; printf '\n'

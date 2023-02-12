@@ -24,6 +24,7 @@ cask "topnotch"
 cask "wezterm"
 cask "zoom"
 mas "AdGuard for Safari", id: 1440147259
+mas "Bitwarden", id: 1352778147
 mas "LadioCast", id: 411213048
 mas "LINE", id: 539883307
 mas "Night Eye", id: 1450504903

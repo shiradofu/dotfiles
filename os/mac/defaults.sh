@@ -145,6 +145,10 @@ sudo defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 
 #
 ###########################################
 
+# クイックメモを無効化
+defaults write com.apple.dock wvous-br-corner -int 1
+defaults write com.apple.dock wvous-br-modifier -int  1048576
+
 # Safari の開発者機能有効化
 defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
 defaults write com.apple.Safari IncludeDevelopMenu -bool true
