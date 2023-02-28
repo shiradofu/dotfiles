@@ -196,7 +196,7 @@ return {
     -----------------------------
     -----------------------------
     require('neodev').setup {}
-    Lsp.sumneko_lua = {
+    Lsp.lua_ls = {
       settings = {
         Lua = {
           completion = { callSnippet = 'Replace' },

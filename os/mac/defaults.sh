@@ -119,16 +119,19 @@ defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/"
 ###########################################
 
 # キーリピート速度を最大にする
-defaults write -g KeyRepeat 2
+defaults write -g KeyRepeat -int 2
 
 # キーリピート開始までの速度を最短にする
-defaults write -g InitialKeyRepeat 15
+defaults write -g InitialKeyRepeat -int 12
+
+# キー長押し時に特殊文字候補を表示せずにキーリピートする
+defaults write -g ApplePressAndHoldEnabled -bool true
 
 # トラックパッドのカーソル速度を最大にする
-defaults write -g com.apple.trackpad.scaling 3
+defaults write -g com.apple.trackpad.scaling -int 3
 
 # 3本指でタップして検索を無効化
-defaults write com.apple.Apple MultitouchTrackpad 0
+defaults write com.apple.Apple MultitouchTrackpad -int 0
 
 # システム設定のUIをキーボードで操作できるようにする（Tabで移動、Spaceで決定等）
 defaults write -g AppleKeyboardUIMode -int 3
@@ -147,7 +150,7 @@ sudo defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 
 
 # クイックメモを無効化
 defaults write com.apple.dock wvous-br-corner -int 1
-defaults write com.apple.dock wvous-br-modifier -int  1048576
+defaults write com.apple.dock wvous-br-modifier -int 1048576
 
 # Safari の開発者機能有効化
 defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true

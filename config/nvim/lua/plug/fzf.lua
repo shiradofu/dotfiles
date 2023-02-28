@@ -8,9 +8,10 @@ local function setup_project_mru()
   local config = require 'fzf-lua.config'
   local make_entry = require 'fzf-lua.make_entry'
   local path = require 'fzf-lua.path'
+  local defaults = require 'fzf-lua.defaults'
 
   local default_opts = {
-    previewer = config._default_previewer_fn,
+    previewer = defaults._default_previewer_fn,
     prompt = 'MRU> ',
     file_icons = true and config._has_devicons,
     color_icons = true,
@@ -132,6 +133,7 @@ local function setup_template()
   local core = require 'fzf-lua.core'
   local config = require 'fzf-lua.config'
   local path = require 'fzf-lua.path'
+  local defaults = require 'fzf-lua.defaults'
 
   local function actions_read_file(selected, opts)
     local entry = path.entry_to_file(selected[1], opts, opts.force_uri)
@@ -194,7 +196,7 @@ local function setup_template()
   end
 
   local config_globals_templates = {
-    previewer = config._default_previewer_fn,
+    previewer = defaults._default_previewer_fn,
     prompt = 'Templates{}> ',
     prompt_sep = '@',
     -- should use get_files_cmd in fzf-lua.files
