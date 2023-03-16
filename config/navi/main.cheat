@@ -22,3 +22,11 @@ $ asdf_version: asdf list $asdf_name
 
 # clear prettierd cache
 prettierd flush-cache; prettierd restart
+
+# backup
+ read && [ "$REPLY" = 'y' ] && \
+    rsync -av --delete '/Volumes/<backup_from>/' '/Volumes/<backup_to>' \
+    --exclude-from /Volumes/<backup_from>/.rsyncignore
+
+$ backup_from: ls -1 /Volumes | grep -v 'Macintosh HD'
+$ backup_to: ls -1 /Volumes | grep -v -e 'Macintosh HD' -e '<backup_from>'

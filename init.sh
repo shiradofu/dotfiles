@@ -155,7 +155,7 @@ if [ "$DIST" = 'mac' ]; then
   # `timeout` command is required by install.sh
   brew install coreutils
   # basic packages
-  brew install binutils findutils grep gawk gnu-sed gnu-tar gzip wget gpg
+  brew install binutils findutils grep gawk gnu-sed gnu-tar gzip wget gpg rsync
 fi
 
 printf '\n'; msg '🍺  Installing git:'; printf '\n'

@@ -13,3 +13,8 @@ style:
 
 shell:
   command: zsh
+
+finder:
+  command: fzf
+  overrides: --no-select-1
+  overrides_var: --no-select-1
