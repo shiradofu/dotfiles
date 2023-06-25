@@ -67,7 +67,7 @@ return {
         {
           name = 'rg',
           option = {
-            additional_arguments = "-g '!*.svg'",
+            additional_arguments = "-g '!*.svg' -g '!package-lock.json'",
           },
         },
       },

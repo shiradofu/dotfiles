@@ -54,9 +54,7 @@ local function create_fmt_fn(filter)
   if type(filter) == 'table' then
     return function()
       vim.lsp.buf.format {
-        filter = function(client)
-          return vim.tbl_contains(filter, client.name)
-        end,
+        filter = function(client) return vim.tbl_contains(filter, client.name) end,
       }
     end
   end
@@ -392,7 +390,7 @@ return {
         local config = vim.tbl_deep_extend('force', {
           on_attach = on_attach,
           capabilities = cap,
-        }, Lsp[server_name])
+        }, Lsp[server_name] or {})
         if server_name == 'tsserver' then
           return require('typescript').setup { server = config }
         end
