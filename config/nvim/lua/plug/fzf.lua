@@ -381,8 +381,6 @@ return {
     end
 
     ---@diagnostic disable-next-line: duplicate-set-field
-    vim.lsp.handlers['textDocument/references'] = function()
-      fzf.lsp_references()
-    end
+    vim.lsp.handlers['textDocument/references'] = function() fzf.lsp_finder() end
   end,
 }

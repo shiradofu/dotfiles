@@ -94,6 +94,7 @@ asdf install golang latest &&
 asdf global golang latest
 go_i golang.org/x/tools/cmd/goimports@latest
 go_i github.com/x-motemen/gore/cmd/gore@latest
+go_i google.golang.org/protobuf/cmd/protoc-gen-go@latest
 
 msg $'\ndeno:\n'
 asdf plugin add deno     &&
@@ -128,6 +129,9 @@ asdf global mysql 5.7.38
 msg $'\nlinters/formatters:\n'
 # installed with mason.nvim doesn't support Apple Silicon
 brew_i shellcheck
+
+msg $'\nmisc:\n'
+brew_i protobuf
 
 #
 # Vim

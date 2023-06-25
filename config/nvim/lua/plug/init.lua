@@ -80,6 +80,7 @@ return {
   --------------------------------------------------------------
   -- Colorscheme
 
+  { 'xiyaowong/nvim-transparent', event = 'ColorScheme' },
   { 'cocopon/iceberg.vim' },
   { 'rose-pine/neovim', name = 'rose-pine' },
 }

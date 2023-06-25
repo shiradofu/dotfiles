@@ -742,7 +742,7 @@
                     },
                     "to": [
                         {
-                            "consumer_key_code": "al_internet_browser"
+                            "key_code": "caps_lock"
                         }
                     ]
                 },

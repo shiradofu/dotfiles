@@ -54,7 +54,9 @@ local function create_fmt_fn(filter)
   if type(filter) == 'table' then
     return function()
       vim.lsp.buf.format {
-        filter = function(client) return vim.tbl_contains(client, filter) end,
+        filter = function(client)
+          return vim.tbl_contains(filter, client.name)
+        end,
       }
     end
   end
@@ -275,24 +277,10 @@ return {
     -----------------------------
     -----------------------------
     Lsp.gopls = {}
-    Lsp.golangci_lint_ls = {}
+    -- Lsp.golangci_lint_ls = {}
     Fmt.go = function()
-      -- goimports on save
-      -- https://github.com/golang/tools/blob/master/gopls/doc/vim.md#neovim-imports
-      local params = vim.lsp.util.make_range_params()
-      params.context = { only = { 'source.organizeImports' } }
-      local result =
-        ---@diagnostic disable-next-line: missing-parameter
-        vim.lsp.buf_request_sync(0, 'textDocument/codeAction', params)
-      for _, res in pairs(result or {}) do
-        for _, r in pairs(res.result or {}) do
-          if r.edit then
-            vim.lsp.util.apply_workspace_edit(r.edit, 'UTF-8')
-          else
-            vim.lsp.buf.execute_command(r.command)
-          end
-        end
-      end
+      require('go.format').goimport()
+      vim.lsp.buf.format()
     end
 
     --

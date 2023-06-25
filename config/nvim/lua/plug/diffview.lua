@@ -13,6 +13,17 @@ vim.api.nvim_create_user_command('DiffviewWorkspace', function(ctx)
   end
 end, { nargs = 1 })
 
+---@param fn function
+---@param ms number
+local function debounce(fn, ms)
+  local timer = vim.loop.new_timer()
+  return function()
+    timer:start(ms, 0, function()
+      pcall(vim.schedule_wrap(fn))
+    end)
+  end
+end
+
 return {
   'sindrets/diffview.nvim',
   cmd = { 'DiffviewOpen', 'DiffviewFileHistory' },
@@ -21,7 +32,8 @@ return {
     local a = require 'diffview.actions'
     local lib = require 'diffview.lib'
     local LogEntry = require('diffview.vcs.log_entry').LogEntry
-    local win = require 'user.win'
+
+    local debounced_select_entry = debounce(a.select_entry, 50)
 
     require('diffview').setup {
       hooks = {
@@ -74,11 +86,11 @@ return {
         file_panel = {
           ['j'] = function()
             vim.cmd [[normal! j]]
-            pcall(a.select_entry)
+            debounced_select_entry()
           end,
           ['k'] = function()
             vim.cmd [[normal! k]]
-            pcall(a.select_entry)
+            debounced_select_entry()
           end,
           ['l'] = a.select_entry,
           ['<cr>'] = a.focus_entry,
