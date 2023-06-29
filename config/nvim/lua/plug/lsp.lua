@@ -206,6 +206,7 @@ return {
           },
           library = vim.api.nvim_get_runtime_file('', true),
           telemetry = { enable = false },
+          workspace = { checkThirdParty = false },
         },
       },
     }
@@ -275,7 +276,7 @@ return {
     -----------------------------
     -----------------------------
     Lsp.gopls = {}
-    -- Lsp.golangci_lint_ls = {}
+    Lsp.golangci_lint_ls = {}
     Fmt.go = function()
       require('go.format').goimport()
       vim.lsp.buf.format()
@@ -297,11 +298,11 @@ return {
       },
     }
     Null(null_fn.diagnostics.shellcheck.with {
-      -- shellcheck with mason.nvim doesn't support Apple Silicon
+      -- shellcheck installed via mason.nvim doesn't support Apple Silicon
       command = vim.env.HOMEBREW_PREFIX .. '/bin/shellcheck',
       runtime_condition = function()
         local fname = vim.api.nvim_buf_get_name(0)
-        return not (fname == '.env' or fname:find '%.env%..+')
+        return not (vim.endswith(fname, '/.env') or fname:find '/%.env%..+')
       end,
     })
     Null(null_fn.diagnostics.zsh)

@@ -49,7 +49,7 @@ vim.opt.fileencodings = {
 
 -- ターミナルでのヤンク時文字化け回避
 -- https://github.com/neovim/neovim/issues/5683#issuecomment-420833679
-vim.cmd.lang 'en_US.UTF-8'
+-- vim.cmd.lang 'en_US.UTF-8'
 
 -- 不要な機能の無効化
 -- https://lambdalisue.hatenablog.com/entry/2015/12/25/000046

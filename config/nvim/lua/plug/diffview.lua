@@ -18,9 +18,7 @@ end, { nargs = 1 })
 local function debounce(fn, ms)
   local timer = vim.loop.new_timer()
   return function()
-    timer:start(ms, 0, function()
-      pcall(vim.schedule_wrap(fn))
-    end)
+    timer:start(ms, 0, function() pcall(vim.schedule_wrap(fn)) end)
   end
 end
 
@@ -109,6 +107,7 @@ return {
           ['u'] = a.toggle_stage_entry,
           ['U'] = a.unstage_all,
           ['dd'] = a.restore_entry,
+          ['-'] = function() vim.cmd [[wincmd 2-]] end,
         },
         file_history_panel = {
           ['j'] = function()

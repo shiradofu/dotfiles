@@ -1,0 +1,4 @@
+% mac
+
+# colima start
+colima start --dns 8.8.8.8,8.8.4.4 --mount-inotify

@@ -11,6 +11,10 @@ infopath=("$HOMEBREW_PREFIX/share/info" $infopath)
 export LDFLAGS="-L$HOMEBREW_PREFIX/opt/llvm/lib"
 export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/llvm/include"
 
+export CGO_LDFLAGS="-O2 -g -L$HOMEBREW_PREFIX/lib"
+export CGO_CFLAGS="-O2 -g -I$HOMEBREW_PREFIX/include"
+export CGO_CXXFLAGS="-O2 -g -I$HOMEBREW_PREFIX/include"
+
 if is_mac; then
   # export PATH="$HOMEBREW_PREFIX/opt/binutils/libexec/gnubin:$PATH"
   export PATH="$HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin:$PATH"
@@ -118,7 +122,7 @@ required() {
 #
 # 各種ツール・ウィジェットの設定
 #
-source "${ASDF_DIR}/lib/asdf.sh"
+source "${ASDF_DIR}/asdf.sh"
 export FZF_TMUX=1
 export FZF_TMUX_OPTS='-p50%,70%'
 export FZF_DEFAULT_OPTS="--height 50% --reverse --border=sharp --multi \
@@ -198,6 +202,9 @@ ghq-rm() {
 navi_dir="$XDG_CONFIG_HOME/navi"
 export NAVI_CONFIG="$navi_dir/config.yml"
 export NAVI_PATH="$navi_dir/main.cheat"
+if is_mac; then
+  NAVI_PATH="$NAVI_PATH:$navi_dir/mac.cheat"
+fi
 if is_pure_linux; then
   NAVI_PATH="$NAVI_PATH:$navi_dir/linux.cheat"
 fi

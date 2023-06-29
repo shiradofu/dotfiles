@@ -76,7 +76,7 @@ git clone --depth 1 https://github.com/zdharma-continuum/zinit "${XDG_STATE_HOME
 brew_i fzf
 "${HOMEBREW_PREFIX}/opt/fzf/install" --xdg --completion --no-update-rc --no-key-bindings
 brew_i cmake starship fd rg bat tree glow git-delta jq yq tmux navi hyperfine tokei \
-  ngrok direnv docker docker-compose gh act awscli aws-cdk mackup tako8ki/tap/gobang
+  direnv docker docker-compose gh act awscli aws-cdk mackup tako8ki/tap/gobang
 
 #
 # Languages and Package Managers
@@ -104,8 +104,8 @@ asdf global deno latest
 msg $'\nnodejs:\n'
 asdf plugin add nodejs
 asdf list-all nodejs > /dev/null
-asdf install nodejs lts &&
-asdf global nodejs lts  &&
+asdf install nodejs latest &&
+asdf global nodejs latest  &&
 npm_i npm yarn pnpm
 msg $'\n🍔  Installing bun:\n'
 # SHELL='' は zshrc の自動アップデート防止のため
@@ -129,6 +129,7 @@ asdf global mysql 5.7.38
 msg $'\nlinters/formatters:\n'
 # installed with mason.nvim doesn't support Apple Silicon
 brew_i shellcheck
+brew_i golangci-lint
 
 msg $'\nmisc:\n'
 brew_i protobuf
