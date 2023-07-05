@@ -40,7 +40,7 @@ add_keyboard_shortcut '/Applications/Google Chrome.app' "{
   'Downloads' = '${CMD}${SHIFT}d';
   'Mute Site' = '${CMD}m';
   'Developer Tools' = '${CMD}i';
-  'JavaScript Console' = '${CMD}j';
+  'JavaScript Console' = '${CMD}${SHIFT}j';
   'Save Page As…' = '${CMD}${ALT}s';
   'Minimize' = '${CMD}${SHIFT}${OPT}${CTRL}m';
   'Email Link' = '${CMD}${SHIFT}${OPT}${CTRL}i';

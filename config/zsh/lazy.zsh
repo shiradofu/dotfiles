@@ -30,6 +30,7 @@ if is_mac; then
   export MANPATH="$HOMEBREW_PREFIX/opt/grep/libexec/gnuman:$MANPATH"
   export MANPATH="$HOMEBREW_PREFIX/opt/gnu-sed/libexec/gnuman:$MANPATH"
   export MANPATH="$HOMEBREW_PREFIX/opt/gnu-tar/libexec/gnuman:$MANPATH"
+  export DOCKER_HOST="unix://$HOME/.colima/default/docker.sock" # for lazydocker
 fi
 
 if is_wsl; then
