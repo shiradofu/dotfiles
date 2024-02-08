@@ -76,7 +76,8 @@ git clone --depth 1 https://github.com/zdharma-continuum/zinit "${XDG_STATE_HOME
 brew_i fzf
 "${HOMEBREW_PREFIX}/opt/fzf/install" --xdg --completion --no-update-rc --no-key-bindings
 brew_i cmake starship fd rg bat tree glow git-delta jq yq tmux navi hyperfine tokei \
-  direnv docker docker-buildx docker-compose lazydocker gh act awscli aws-cdk mackup tako8ki/tap/gobang
+  direnv docker docker-buildx docker-compose lazydocker gh act awscli aws-cdk aws-sam-cli \
+  mackup tako8ki/tap/gobang
 
 #
 # Languages and Package Managers
@@ -138,6 +139,7 @@ brew_i protobuf
 # Vim
 #
 brew_i vim nvim neovim-remote
+mkdir -p "$XDG_CACHE_HOME"/vim/{undo,swap,backup}
 git clone --filter=blob:none --branch=stable \
   https://github.com/folke/lazy.nvim.git \
   "$XDG_DATA_HOME/nvim/lazy/lazy.nvim"

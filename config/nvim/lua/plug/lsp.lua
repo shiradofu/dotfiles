@@ -8,13 +8,13 @@ local mappings = require 'user.mappings'
 local format_aug = vim.api.nvim_create_augroup('LspAutoFormatting', {})
 local function init_auto_formatting()
   local function is_enabled(scope)
-    local val = vim[scope].enable_auto_format
+    local val = vim[scope].auto_format_enabled
     if val == nil then return true end
     return val
   end
   local function toggle_enabled(scope)
     local bool = not is_enabled(scope)
-    vim[scope].enable_auto_format = bool
+    vim[scope].auto_format_enabled = bool
     return bool
   end
   vim.api.nvim_create_user_command(
@@ -49,7 +49,11 @@ end
 
 local function create_fmt_fn(filter)
   if type(filter) == 'string' then
-    return function() vim.lsp.buf.format { name = filter } end
+    return function()
+      vim.lsp.buf.format {
+        filter = function(client) return client.name == filter end,
+      }
+    end
   end
   if type(filter) == 'table' then
     return function()
@@ -157,7 +161,7 @@ return {
   dependencies = {
     'neovim/nvim-lspconfig',
     'williamboman/mason-lspconfig.nvim',
-    'jose-elias-alvarez/null-ls.nvim',
+    'nvimtools/none-ls.nvim',
     'jay-babu/mason-null-ls.nvim',
     { 'weilbith/nvim-code-action-menu', config = setup_code_action_menu },
     {
@@ -166,7 +170,7 @@ return {
     },
     'jose-elias-alvarez/typescript.nvim',
     'b0o/SchemaStore.nvim',
-    { 'folke/neodev.nvim', config = true },
+    -- { 'folke/neodev.nvim', config = true },
   },
   config = function()
     require('mason').setup {
@@ -186,16 +190,13 @@ return {
     local Lsp = {}
     local Fmt = {}
     local Diag = {}
-    local Null = {}
-    setmetatable(Null, {
-      __call = function(tbl, source) table.insert(tbl, source) end,
-    })
+    local Null = setmetatable({}, { __index = table })
 
     --
     -- Lua
     -----------------------------
     -----------------------------
-    require('neodev').setup {}
+    -- require('neodev').setup {}
     Lsp.lua_ls = {
       settings = {
         Lua = {
@@ -210,7 +211,7 @@ return {
         },
       },
     }
-    Null(null_fn.formatting.stylua)
+    Null:insert(null_fn.formatting.stylua)
     Fmt.lua = create_fmt_fn 'null-ls'
 
     --
@@ -219,6 +220,7 @@ return {
     -----------------------------
     Lsp.tsserver = {
       root_dir = root_pattern('package.json', 'tsconfig.json', 'jsconfig.json'),
+      single_file_support = false,
     }
     Lsp.denols = {
       root_dir = root_pattern('deno.json', 'deno.jsonc'),
@@ -235,8 +237,8 @@ return {
         },
       },
     }
-    Null(null_fn.code_actions.eslint_d)
-    Null(null_fn.diagnostics.eslint_d.with {
+    Null:insert(null_fn.code_actions.eslint_d)
+    Null:insert(null_fn.diagnostics.eslint_d.with {
       filter = function(d)
         return not vim.startswith(
           d.message,
@@ -244,7 +246,7 @@ return {
         )
       end,
     })
-    Null(null_fn.formatting.prettierd.with {
+    Null:insert(null_fn.formatting.prettierd.with {
       env = { PRETTIERD_DEFAULT_CONFIG = vim.env.PRETTIERD_DEFAULT_CONFIG },
       condition = function(utils)
         return not utils.has_file { 'deno.json', 'deno.jsonc' }
@@ -269,7 +271,14 @@ return {
     Fmt.sass = create_fmt_fn 'null-ls'
     Fmt.scss = create_fmt_fn 'null-ls'
     Fmt.less = create_fmt_fn 'null-ls'
-    Null(null_fn.diagnostics.stylelint)
+    Null:insert(null_fn.diagnostics.stylelint.with {
+      filter = function(diagnostic)
+        return not vim.startswith(
+          diagnostic.message,
+          'Error: No configuration provided for '
+        )
+      end,
+    })
 
     --
     -- Golang
@@ -277,10 +286,7 @@ return {
     -----------------------------
     Lsp.gopls = {}
     Lsp.golangci_lint_ls = {}
-    Fmt.go = function()
-      require('go.format').goimport()
-      vim.lsp.buf.format()
-    end
+    Fmt.go = function() require('go.format').goimport() end
 
     --
     -- C
@@ -297,7 +303,7 @@ return {
         ['textDocument/publishDiagnostics'] = function(...) end,
       },
     }
-    Null(null_fn.diagnostics.shellcheck.with {
+    Null:insert(null_fn.diagnostics.shellcheck.with {
       -- shellcheck installed via mason.nvim doesn't support Apple Silicon
       command = vim.env.HOMEBREW_PREFIX .. '/bin/shellcheck',
       runtime_condition = function()
@@ -305,7 +311,7 @@ return {
         return not (vim.endswith(fname, '/.env') or fname:find '/%.env%..+')
       end,
     })
-    Null(null_fn.diagnostics.zsh)
+    Null:insert(null_fn.diagnostics.zsh)
 
     --
     -- PHP
@@ -316,11 +322,11 @@ return {
         ['textDocument/publishDiagnostics'] = function(...) end,
       },
     }
-    Null(null_fn.diagnostics.phpstan.with {
+    Null:insert(null_fn.diagnostics.phpstan.with {
       only_local = 'vendor/bin',
       extra_args = { '--memory-limit=2G' },
     })
-    Null(null_fn.formatting.phpcsfixer.with {
+    Null:insert(null_fn.formatting.phpcsfixer.with {
       only_local = 'vendor/bin',
     })
     Fmt.php = create_fmt_fn 'null-ls'
@@ -332,8 +338,22 @@ return {
     Lsp.jsonls = {
       settings = {
         json = {
-          schemas = require('schemastore').json.schemas(),
+          schemas = require('schemastore').json.schemas {},
           validate = { enable = true },
+        },
+      },
+    }
+    Fmt.json = create_fmt_fn 'null-ls'
+
+    --
+    -- JSON
+    -----------------------------
+    -----------------------------
+    Lsp.yamlls = {
+      settings = {
+        yaml = {
+          schemaStore = { enable = false },
+          schemas = require('schemastore').json.schemas(),
         },
       },
     }
@@ -345,14 +365,13 @@ return {
     -----------------------------
     Lsp.vimls = {}
     Lsp.dockerls = {}
-    Lsp.yamlls = {}
     Lsp.sqlls = {}
     Lsp.graphql = {}
     Lsp.grammarly = {}
-    Null(null_fn.code_actions.gitsigns)
-    Null(null_fn.diagnostics.cfn_lint)
-    Null(null_fn.diagnostics.actionlint)
-    Null(null_fn.diagnostics.editorconfig_checker.with {
+    Null:insert(null_fn.code_actions.gitsigns)
+    Null:insert(null_fn.diagnostics.cfn_lint)
+    Null:insert(null_fn.diagnostics.actionlint)
+    Null:insert(null_fn.diagnostics.editorconfig_checker.with {
       command = 'editorconfig-checker',
     })
 

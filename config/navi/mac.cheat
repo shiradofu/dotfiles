@@ -1,4 +1,9 @@
-% mac
+% colima
 
-# colima start
-colima start --dns 8.8.8.8,8.8.4.4 --vm-type vz --vz-rosetta --mount-type virtiofs --mount-inotify
+# start
+colima start --dns 1.1.1.1,8.8.8.8 --vm-type vz --vz-rosetta --mount-type virtiofs --mount-inotify
+
+% defaults
+
+# diff
+vimdiff <(defaults read) <(sleep 5; defaults read)

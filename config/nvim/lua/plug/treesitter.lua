@@ -7,7 +7,6 @@ return {
     'tpope/vim-commentary',
     'yioneko/nvim-yati', -- improve indentation
     'nvim-treesitter/nvim-treesitter-textobjects',
-    'JoosepAlviste/nvim-ts-context-commentstring',
     'nvim-treesitter/playground',
     {
       'RRethy/nvim-treesitter-endwise',
@@ -17,7 +16,6 @@ return {
   config = function()
     local mappings = require 'user.mappings'
     local ts_map = mappings.treesitter_textobjects
-    local ctx_comment_map = mappings.commentary()
 
     require('nvim-treesitter.configs').setup {
       ensure_installed = 'all',
@@ -34,13 +32,6 @@ return {
         move = {
           enable = true,
           set_jumps = true, -- whether to set jumps in the jumplist
-        },
-      },
-      context_commentstring = {
-        enable = true,
-        commentary_integration = ctx_comment_map,
-        config = {
-          cpp = { __default = '// %s', __multiline = '/* %s */' },
         },
       },
     }

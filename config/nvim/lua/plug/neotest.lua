@@ -13,7 +13,7 @@ return {
   config = function()
     require('neotest').setup {
       adapters = {
-        -- require 'neotest-jest',
+        require 'neotest-jest',
         require 'neotest-vitest',
         require 'neotest-phpunit',
         require 'neotest-go' {

@@ -87,5 +87,9 @@ require('lazy').setup(
   {
     defaults = { lazy = true },
     dev = { path = vim.env.MY_REPOS },
+    change_detection = {
+      enabled = false,
+      notify = false,
+    },
   }
 )

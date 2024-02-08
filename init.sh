@@ -107,6 +107,8 @@ case "${DIST}" in
       libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
     # required by install.sh
     echo "${password}" | sudo -S apt -y install expect
+    # required by dockerd-rootless-setuptool.sh
+    echo "${password}" | sudo -S apt -y install uidmap
     ;;
   redhat )
     msg "installing basic packages..."
@@ -121,10 +123,12 @@ case "${DIST}" in
       readline-devel sqlite sqlite-devel openssl-devel tk-devel libffi-devel xz-devel
     # required by install.sh
     echo "${password}" | sudo -S yum -y install expect
+    # required by dockerd-rootless-setuptool.sh
+    echo "${password}" | sudo -S yum -y install uidmap
     ;;
   mac )
     if ! exists "xcode-select"; then
-        msg "installing xcode-select..."
+        msg "xcode-select --install"
         xcode-select --install
     fi
     ;;

@@ -4,3 +4,4 @@ pager: less -R -F -X
 aliases:
     # 今のブランチに対応するPR、なければリポジトリを開く
     w: "!gh pr view --web $(gh pr list --state=all | grep $(git branch --show-current) | cut -f 1) || gh browse"
+version: "1"

@@ -16,5 +16,5 @@ shell:
 
 finder:
   command: fzf
-  overrides: --no-select-1
-  overrides_var: --no-select-1
+  overrides: --no-select-1 --color bg+:-1 --tiebreak length,begin,index --height 100%
+  overrides_var: --no-select-1 --color bg+:-1  --tiebreak length,begin,index --height 100%

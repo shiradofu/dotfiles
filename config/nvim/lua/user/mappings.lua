@@ -168,8 +168,8 @@ function M.motion()
   k('n', '[f', function()require(n).hook(ts('previous', 'start', '@function.outer'), { countable = true })end)
   k('n', ']]', function()require(n).hook(ts('next', 'start', '@class.outer'), { countable = true })end)
   k('n', '[[', function()require(n).hook(ts('previous', 'start', '@class.outer'), { countable = true })end)
-  k('n', ']c', function()require(n).hook(ts('next', 'start', '@comment'), { countable = true })end)
-  k('n', '[c', function()require(n).hook(ts('previous', 'start', '@comment'), { countable = true })end)
+  k('n', ']s', function()require(n).hook(ts('next', 'start', '@comment'), { countable = true })end)
+  k('n', '[s', function()require(n).hook(ts('previous', 'start', '@comment'), { countable = true })end)
 end
 M.motion()
 
@@ -180,12 +180,12 @@ M.treesitter_textobjects = {
 
 function M.gitsigns(gitsigns)
   local n = 'nice-scroll'
-  k('n', ']d', function()
+  k('n', ']c', function()
     if vim.wo.diff then return ']c' end
     vim.schedule(function()require(n).hook_async(gitsigns.next_hunk())end)
     return '<Ignore>'
   end, e)
-  k('n', '[d', function()
+  k('n', '[c', function()
     if vim.wo.diff then return '[c' end
     vim.schedule(function()require(n).hook_async(gitsigns.prev_hunk())end)
     return '<Ignore>'
@@ -300,8 +300,10 @@ function M.newline()
   k('n', 'O', "O<Cmd>lua require('user.newline').prev()<CR>")
   k('i', '<CR>', function()
     local p = require('nvim-autopairs').autopairs_cr()
-    return p .. "<Cmd>lua require('user.newline').next()<CR>"
-  end, e)
+    return p .. vim.api.nvim_replace_termcodes(
+      "<Cmd>lua require('user.newline').next()<CR>", true, false, true
+    )
+  end, { expr = true, replace_keycodes = false})
 end
 M.newline()
 

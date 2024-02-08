@@ -1,0 +1,20 @@
+# style:
+#   tag:
+#     color: cyan
+#     width_percentage: 10
+#     min_width: 5
+#   comment:
+#     color: blue
+#     width_percentage: 30
+#     min_width: 30
+#   snippet:
+#     color: white
+#     width_percentage: 60
+
+shell:
+  command: zsh
+
+finder:
+  command: fzf
+  overrides: --no-exact --no-select-1 --color bw
+  overrides_var: --no-exact --no-select-1 --color bw

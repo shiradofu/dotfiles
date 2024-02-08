@@ -28,6 +28,7 @@ end
 ---@return boolean
 function M.is_line_comment(file_row_num)
   local col = get_first_non_blank_col_num(file_row_num)
+  if col == nil then return false end
   return M.is_comment(file_row_num, col)
 end
 

@@ -1,21 +1,29 @@
-% main
+% nvim
 
-# Update neovim plugins
-read && ulimit -S -n 200048; nvim "+lua require('lazy').sync()"
+# update plugins
+ulimit -S -n 200048; nvim "+lua require('lazy').sync()"
 
-# Upgrade wezterm
-brew upgrade --cask wez/wezterm/wezterm-nightly
+% git
+
+# undo the last commit (to staged)
+git reset --soft HEAD^
+
+# stash including unmodified file with name
+git stash save -u ""
+
+% zsh
 
 # Reload zsh completion functions
 rm -f $ZDOTDIR/.zcompdump && exec -l $SHELL
 
-# Time zsh initialization
-for i in $(seq 1 10); do time zsh -i -c exit > /dev/null 2>&1 ; done
+% wez
 
-# Time nvim initialization
-hyperfine 'nvim --headless +qa' --warmup 5
+# upgrade
+brew upgrade --cask wez/wezterm/wezterm-nightly
 
-# asdf local [tool] [version]
+% asdf
+
+# local [tool] [version]
 asdf local <asdf_name> <asdf_version>
 $ asdf_name: asdf plugin-list
 $ asdf_version: asdf list $asdf_name
@@ -23,10 +31,20 @@ $ asdf_version: asdf list $asdf_name
 # clear prettierd cache
 prettierd flush-cache; prettierd restart
 
+% time
+
+# zsh initialization
+for i in $(seq 1 10); do time zsh -i -c exit > /dev/null 2>&1 ; done
+
+# nvim initialization
+hyperfine 'nvim --headless +qa' --warmup 5
+
+% misc
+
 # backup
- read && [ "$REPLY" = 'y' ] && \
-    rsync -av --delete '/Volumes/<backup_from>/' '/Volumes/<backup_to>' \
-    --exclude-from /Volumes/<backup_from>/.rsyncignore
+read && [ "$REPLY" = 'y' ] && \
+  rsync -av --delete '/Volumes/<backup_from>/' '/Volumes/<backup_to>' \
+  --exclude-from /Volumes/<backup_from>/.rsyncignore
 
 $ backup_from: ls -1 /Volumes | grep -v 'Macintosh HD'
 $ backup_to: ls -1 /Volumes | grep -v -e 'Macintosh HD' -e '<backup_from>'

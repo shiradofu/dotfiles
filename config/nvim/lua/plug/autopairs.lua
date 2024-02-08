@@ -103,16 +103,16 @@ return {
       end
     end
 
-    vim.keymap.set('i', '<Plug>(autopairs-comma)',
-      function()
-        add_char_after_closing_bracket_completed_by_cr ','
-      end,
+    vim.keymap.set(
+      'i',
+      '<Plug>(autopairs-comma)',
+      function() add_char_after_closing_bracket_completed_by_cr ',' end,
       { remap = true }
     )
-    vim.keymap.set('i', '<Plug>(autopairs-semicolon)',
-      function()
-        add_char_after_closing_bracket_completed_by_cr ';'
-      end,
+    vim.keymap.set(
+      'i',
+      '<Plug>(autopairs-semicolon)',
+      function() add_char_after_closing_bracket_completed_by_cr ';' end,
       { remap = true }
     )
   end,

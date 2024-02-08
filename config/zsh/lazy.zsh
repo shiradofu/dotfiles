@@ -218,16 +218,14 @@ navi-widget() {
     rm -f "$pipe"
     mkfifo "$pipe"
     (tmux popup -E -w 80% -h 70% \
-      "NAVI_CONFIG=$NAVI_CONFIG navi --path '$NAVI_PATH' --print --fzf-overrides '--height 100%' > $pipe" &)
+      "NAVI_CONFIG=$NAVI_CONFIG navi --path '$NAVI_PATH' --print > $pipe" &)
     cmd=$(cat "$pipe")
     rm -f "$pipe"
   else
     cmd=$(navi --print)
   fi
   if [ -z "$cmd" ]; then return; fi
-  BUFFER="$cmd"
-  zle accept-line
-  zle reset-prompt
+  LBUFFER=" $cmd"
 }
 zle -N navi-widget
 bindkey -e '^t' navi-widget
@@ -273,6 +271,8 @@ docker-rm() {
 docker-rmi() {
   if [ "$#" -eq 0 ]; then
     command docker images | fzf --exit-0 --multi --header-lines=1 | awk '{ print $3 }' | xargs -r docker rmi --
+  elif [ "$#" -eq 1 -a "$1" = "-f" ]; then
+    command docker images | fzf --exit-0 --multi --header-lines=1 | awk '{ print $3 }' | xargs -r docker rmi -f --
   else
     command docker rmi "$@"
   fi

@@ -8,7 +8,6 @@ return {
   { 'gbprod/substitute.nvim', config = true },
   { 'thinca/vim-qfreplace', cmd = 'Qfreplace' },
   { 'norcalli/nvim-colorizer.lua', config = true },
-  { 'petertriho/nvim-scrollbar', config = true },
   {
     't9md/vim-quickhl',
     keys = { { '<Plug>(quickhl-', mode = { 'n', 'x' } } },
@@ -20,8 +19,9 @@ return {
   },
   {
     'lukas-reineke/indent-blankline.nvim',
+    main = 'ibl',
     event = 'VeryLazy',
-    opts = { show_current_context = true },
+    opts = {},
   },
   {
     'danymat/neogen',
@@ -33,9 +33,14 @@ return {
   --------------------------------------------------------------
   -- FileType
 
-  { 'ray-x/go.nvim', ft = 'go', config = true },
   { 'itchyny/vim-qfedit', ft = 'qf' },
   { 'Decodetalkers/csv-tools.lua', ft = 'csv' },
+  {
+    'ray-x/go.nvim',
+    ft = { 'go', 'gomod' },
+    config = true,
+    build = ':lua require("go.install").update_all_sync()',
+  },
   {
     'windwp/nvim-ts-autotag',
     config = true,

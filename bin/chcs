@@ -142,11 +142,11 @@ __chcs_delta "$mode"
 
 case "${name}_${mode}" in
   iceberg_light )
-    __chcs_wezterm iceberg-light 0.93
+    __chcs_wezterm iceberg-light 0.85
     __chcs_nvim cocopon/iceberg.vim iceberg light
     ;;
   iceberg_dark )
-    __chcs_wezterm iceberg-dark 0.9
+    __chcs_wezterm iceberg-dark 0.8
     __chcs_nvim cocopon/iceberg.vim iceberg dark
     ;;
   rose-pine_light ) # does not exist

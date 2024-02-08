@@ -2,7 +2,7 @@ return {
   'lewis6991/gitsigns.nvim',
   event = 'VeryLazy',
   config = function()
-    local mappgins = require('user.mappings').gitsigns
+    local mappings = require('user.mappings').gitsigns
 
     require('gitsigns').setup {
       signcolumn = false,
@@ -12,7 +12,7 @@ return {
         if vim.startswith(vim.api.nvim_buf_get_name(bufnr), note_dir) then
           return false
         end
-        mappgins(package.loaded.gitsigns)
+        mappings(package.loaded.gitsigns)
       end,
     }
   end,
