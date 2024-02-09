@@ -167,10 +167,10 @@ msg $'\nsetting colorscheme:'
 "$HOME/bin/chcs" --no-os
 
 #
-# OS-spesific settings
+# Environment-spesific settings
 #
-if is_mac; then "$DOT_ROOT/os/mac/install.sh"; fi
-if is_wsl; then "$DOT_ROOT/os/windows/install.sh" "$password"; fi
+if is_mac; then "$DOT_ROOT/env/mac/install.sh"; fi
+if is_wsl; then "$DOT_ROOT/env/wsl/install.sh" "$password"; fi
 
 longest="- $HOMEBREW_PREFIX/bin/zsh (to install plugins)"
 printf '\n\n\n '

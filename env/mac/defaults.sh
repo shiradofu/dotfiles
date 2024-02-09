@@ -180,4 +180,3 @@ defaults write com.apple.screencapture location ~/Downloads/
 for app in cfprefsd Dock Finder Safari SystemUIServer; do
   killall "$app" &> /dev/null
 done
-

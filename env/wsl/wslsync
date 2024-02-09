@@ -1,7 +1,7 @@
 #!/bin/bash
 
 config_home="${XDG_CONFIG_HOME:-~/.config}"
-dot_dir="$(ghq root)/github.com/shiradofu/dotfiles/os/windows"
+dot_dir="$(ghq root)/github.com/shiradofu/dotfiles/env/wsl"
 mode=
 d= # dotfiles 内のファイルパス
 w= # windows/wsl が実際に参照するファイルパス
@@ -13,7 +13,7 @@ __wsl_env_path() {
 }
 
 __wslsync_wezterm() {
-  # wezterm must be installed by winget with `--location %APPDATA%/WezTerm`
+  # wezterm must be installed via winget with `--location %APPDATA%/WezTerm`
   if ! appdata=$(__wsl_env_path APPDATA); then
     echo 'Failed to get APPDATA'
     exit 1
@@ -36,9 +36,14 @@ __wslsync_wsl_conf() {
   __wslsync_sudo
 }
 
+__wslsync_resolv_conf() {
+  d="$dot_dir/resolv.conf"
+  w="/etc/resolv.conf"
+  __wslsync_sudo
+}
+
 __wslsync_do() {
-  dir="$(dirname "$w")"
-  [ ! -d "$dir" ] && mkdir -p "$dir"
+  mkdir -p "$(dirname "$w")"
   case "$mode" in
     TO_WINDOWS  ) cp -f "$d" "$w";;
     TO_DOTFILES ) cp -f "$w" "$d";;
@@ -63,7 +68,7 @@ for ARG; do
     --to-windows  ) mode=TO_WINDOWS;;
     --to-dotfiles ) mode=TO_DOTFILES;;
     -S ) prompt='';;
-    wezterm | wslconfig | wsl_conf )
+    wezterm | wslconfig | wsl_conf | resolv_conf )
       "__wslsync_${ARG}"
       ;;
     * )

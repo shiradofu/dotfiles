@@ -9,6 +9,7 @@ cask "amorphousdiskmark"
 cask "alt-tab"
 cask "anki"
 cask "bitwarden"
+cask "cyberduck"
 cask "dropbox"
 cask "espanso"
 cask "figma"
@@ -24,10 +25,12 @@ cask "slack"
 cask "topnotch"
 cask "wezterm"
 cask "zoom"
-mas "AdGuard for Safari", id: 1440147259
 mas "Bitwarden", id: 1352778147
+mas "Kindle", id: 302584613
 mas "LadioCast", id: 411213048
 mas "LINE", id: 539883307
-mas "Night Eye", id: 1450504903
 mas "Spark", id: 1176895641
+mas "AdGuard for Safari", id: 1440147259
+mas "Dark Reader for Safari", id: 1438243180
+mas "Keepa - Price Tracker", id: 1533805339
 mas "Vimari", id: 1480933944

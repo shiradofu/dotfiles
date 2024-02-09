@@ -14,7 +14,7 @@ brew_interactive() {
 }
 brew_interactive adobe-creative-cloud
 brew_interactive session-manager-plugin
-if [ "$(uname -m)" != "arm64" ]; then
+if [ "$(uname -m)" != "arm64" ] || [ -f /usr/libexec/rosetta/oahd ]; then
   brew_interactive google-japanese-ime
 fi
 
