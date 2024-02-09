@@ -2,14 +2,14 @@ BASE=dotfiles-test
 NAME=$(BASE)-$*
 
 build.%:
-	@docker build --target $* -t $(NAME) .
+	@docker build --platform linux/amd64 --target $* -t $(NAME) .
 
 build.i:
 	@# https://www.robario.com/2017/02/22
 	@{ git ls-files | sed 's@^@+ /@' ; printf '+ */\n- *\n'; } | \
 		rsync -aR --prune-empty-dirs --filter='. -' . ./test/
 	@rsync -a ./.git ./test/
-	@docker build --target i -t $(BASE)-i .
+	@docker build --platform linux/amd64 --target i -t $(BASE)-i .
 	@test -d ./test && rm -rf test/
 
 new.%: del.%

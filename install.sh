@@ -49,6 +49,7 @@ deploy_all_in() {
 # Deploy files
 #
 deploy config/zsh/.zshenv "$HOME"
+deploy config/vim/.vimrc "$HOME"
 deploy bin "$HOME" && hash -r
 deploy_all_in data   "$XDG_DATA_HOME"
 deploy_all_in config "$XDG_CONFIG_HOME"
@@ -76,7 +77,7 @@ git clone --depth 1 https://github.com/zdharma-continuum/zinit "${XDG_STATE_HOME
 brew_i fzf
 "${HOMEBREW_PREFIX}/opt/fzf/install" --xdg --completion --no-update-rc --no-key-bindings
 brew_i cmake starship fd rg bat tree glow git-delta jq yq tmux navi hyperfine tokei \
-  direnv docker docker-buildx docker-compose lazydocker gh act awscli aws-cdk aws-sam-cli \
+  direnv gh act awscli aws-cdk aws-sam-cli \
   mackup tako8ki/tap/gobang
 
 #
@@ -126,6 +127,12 @@ msg $'\nmysql:\n'
 asdf plugin-add mysql     &&
 asdf install mysql 5.7.38 &&
 asdf global mysql 5.7.38
+
+msg $'\ndocker:\n'
+brew_i docker docker-buildx docker-compose lazydocker
+mkdir ~/.docker/cli-plugins
+ln -sfn "$(which docker-buildx)" ~/.docker/cli-plugins/docker-buildx
+docker buildx install
 
 msg $'\nlinters/formatters:\n'
 # installed with mason.nvim doesn't support Apple Silicon
