@@ -12,24 +12,24 @@ __wsl_env_path() {
 __chcs_wezterm() {
   local dir;
   if is_wsl; then
-    # wezterm must be installed by winget with `--location %APPDATA%/WezTerm`
-    if ! appdata=$(__wsl_env_path APPDATA); then
-      echo 'Failed to get APPDATA'
+    if ! home=$(__wsl_env_path HOMEPATH); then
+      echo 'Failed to get %HOMEPATH%'
       exit 1
     fi
-    dir="$appdata/WezTerm"
+    dir="$home/.config/wezterm"
   else
     dir="$config_home/wezterm"
   fi
+  mkdir -p "$dir"
   if ! [ -d "$dir" ]; then
     echo "$dir is not a directory."
     return 1
   fi
   cat << EOF >| "$dir/_chcs.lua"
-return {
-  window_background_opacity = $2,
-  color_scheme = '$1',
-}
+return function(c)
+  c.window_background_opacity = $2
+  c.color_scheme = '$1'
+end
 EOF
 }
 

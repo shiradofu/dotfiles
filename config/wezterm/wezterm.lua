@@ -56,8 +56,8 @@ local config = {
   enable_csi_u_key_encoding = true,
 }
 
-local ok, color = pcall(require, '_chcs')
-if ok then merge(config, color) end
+local ok, chcs = pcall(require, '_chcs')
+if ok then chcs(config) end
 
 if is_unix() then
   merge(config, {
