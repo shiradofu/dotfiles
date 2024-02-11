@@ -28,6 +28,11 @@ curl -fsSL https://get.docker.com -o get-docker.sh && \
   systemctl --user restart docker && \
   printf "ok\n" || printf "failed\n"
 rm get-docker.sh
+nsenter -U --preserve-credentials -n -m -t "$(cat "$XDG_RUNTIME_DIR/docker.pid")" \
+  bash -c "
+    printf '%s\n' 'nameserver 1.1.1.1' > /etc/resolv.conf
+    printf '%s\n' 'nameserver 8.8.8.8' >> /etc/resolv.conf
+  "
 
 msg $'\n📎  Installing win32yank:'
 curl -sLo /tmp/win32yank.zip \
