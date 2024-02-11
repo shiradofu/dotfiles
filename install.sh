@@ -95,7 +95,6 @@ asdf plugin add golang     &&
 asdf install golang latest &&
 asdf global golang latest
 go_i golang.org/x/tools/cmd/goimports@latest
-go_i github.com/x-motemen/gore/cmd/gore@latest
 go_i google.golang.org/protobuf/cmd/protoc-gen-go@latest
 
 msg $'\ndeno:\n'
@@ -130,8 +129,9 @@ asdf global mysql 5.7.38
 
 msg $'\ndocker:\n'
 brew_i docker docker-buildx docker-compose lazydocker
-mkdir ~/.docker/cli-plugins
-ln -sfn "$(which docker-buildx)" ~/.docker/cli-plugins/docker-buildx
+# https://github.com/abiosoft/colima/discussions/273
+mkdir -p "$DOCKER_CONFIG/cli-plugins"
+ln -sfn "$(which docker-buildx)" "$DOCKER_CONFIG/cli-plugins/docker-buildx"
 docker buildx install
 
 msg $'\nlinters/formatters:\n'

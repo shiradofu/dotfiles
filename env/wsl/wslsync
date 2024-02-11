@@ -13,19 +13,16 @@ __wsl_env_path() {
 }
 
 __wslsync_wezterm() {
-  if ! home=$(__wsl_env_path HOMEPATH); then
-    echo 'Failed to get %HOMEPATH%'
-    exit 1
-  fi
+  home=$(__wsl_env_path USERPROFILE)
   d="$config_home/wezterm/wezterm.lua"
   w="$home/.config/wezterm/wezterm.lua"
   __wslsync_do
 }
 
 __wslsync_wslconfig() {
-  userprofile=$(__wsl_env_path USERPROFILE)
+  home=$(__wsl_env_path USERPROFILE)
   d="$dot_dir/.wslconfig"
-  w="$userprofile/.wslconfig"
+  w="$home/.wslconfig"
   __wslsync_do
 }
 

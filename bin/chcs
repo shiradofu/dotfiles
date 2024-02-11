@@ -12,10 +12,7 @@ __wsl_env_path() {
 __chcs_wezterm() {
   local dir;
   if is_wsl; then
-    if ! home=$(__wsl_env_path HOMEPATH); then
-      echo 'Failed to get %HOMEPATH%'
-      exit 1
-    fi
+    home=$(__wsl_env_path USERPROFILE)
     dir="$home/.config/wezterm"
   else
     dir="$config_home/wezterm"
@@ -65,9 +62,12 @@ return {
 }
 EOF
   # List all Nvim servers. see :h serverstart()
-  for s in "${XDG_RUNTIME_DIR:-${TMPDIR}nvim.${USER}}"/*/nvim.*.0; do
-    timeout 1 nvim --server "$s" --remote-send "<CMD>set bg=$3<CR>" > /dev/null 2>&1
-    timeout 1 nvim --server "$s" --remote-send "<CMD>colorscheme $2<CR>" > /dev/null 2>&1
+  local r; r="${XDG_RUNTIME_DIR:-${TMPDIR}nvim.${USER}}"
+  for s in "$r"/nvim.*.0 "$r"/*/nvim.*.0; do
+    if [ -e "$s" ]; then
+      timeout 1 nvim --server "$s" --remote-send "<CMD>set bg=$3<CR>" > /dev/null 2>&1
+      timeout 1 nvim --server "$s" --remote-send "<CMD>colorscheme $2<CR>" > /dev/null 2>&1
+    fi
   done
 }
 

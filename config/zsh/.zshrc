@@ -26,7 +26,7 @@ SAVEHIST=1000000
 # lazy に置いてもよいが alias 系をまとめておきたいのでこちらに
 alias ls='ls --color'
 alias ll='ls -lahF'
-alias tmux='direnv exec / tmux -f $XDG_CONFIG_HOME/tmux/tmux.conf'
+alias tmux='direnv exec / tmux'
 alias d='direnv edit .'
 # https://apple.stackexchange.com/questions/31872/how-do-i-reset-the-scrollback-in-the-terminal-via-a-shell-command
 alias clear="clear && printf '\e[3J'"

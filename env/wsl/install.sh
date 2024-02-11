@@ -14,7 +14,7 @@ echo "$password" | wslsync -S --to-windows wsl_conf >/dev/null 2>&1 \
 msg $'\n🔧  Copying .wslconfig: '
 wslsync --to-windows wslconfig && printf "ok\n" || printf "failed\n"
 msg $'\n🔧  Copying resolv.conf: '
-wslsync --to-windows resolv_conf && printf "ok\n" || printf "failed\n"
+echo "$password" | wslsync -S --to-windows resolv_conf && printf "ok\n" || printf "failed\n"
 msg $'\n🔩  Copying wezterm config: '
 wslsync --to-windows wezterm && printf "ok\n" || printf "failed\n"
 

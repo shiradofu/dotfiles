@@ -111,15 +111,6 @@ _direnv_hook() {
 chpwd_functions=( _direnv_hook ${chpwd_functions[@]} )
 _direnv_hook >/dev/null 2>&1
 
-required() {
-  for arg; do
-    if ! (( $+commands[$arg] )); then
-      >&2 printf "${arg} required.\n"
-      return 127
-    fi
-  done
-}
-
 #
 # 各種ツール・ウィジェットの設定
 #
@@ -141,32 +132,35 @@ export FZF_COMPLETION_OPTS="$FZF_DEFAULT_OPTS --info=inline"
 # fzf補完機能の対象となるコマンドを見つけるための関数
 # 2番目以降のコマンドでもできるだけ使用できるように調整
 # case-inのワンライナーとコマンド後の文字列内に区切り文字を含む場合は動作しない
+# サブコマンドにも対応できるよう調整
+__fzf_cmd_sub1=(docker ghq)
 __fzf_extract_command() {
-  local token tokens _token
-  _token=$(echo "$1" | sed -e 's/^.*[&|;<>]\s*\(.\{1,\}\)/\1/')
-  tokens=(${(z)_token})
-  for token in $tokens; do
-    token=${(Q)token}
-    if [[ "$token" =~ [[:alnum:]] && ! "$token" =~ "=" ]]; then
-      echo "$token"
+  local tokens ts t sub1
+  tokens=$(echo "$1" | sed -e 's/^.*[&|;<>]\s*\(.\{1,\}\)/\1/')
+  ts=(${(z)tokens})
+  for ((i=0; i < ${#ts[@]}; i++)); do
+    t=${(Q)ts[i]}
+    if [[ "$t" =~ [[:alnum:]] && ! "$t" =~ "=" ]]; then
+      sub1="${ts[i+1]}"
+      if (($__fzf_cmd_sub1[(Ie)$t])) && [[ "$sub1" =~ [[:alnum:]] ]]; then
+        echo "${t}-${sub1}"
+      else
+        echo "$t";
+      fi
       return
     fi
   done
-  echo "${tokens[1]}"
+  echo "${ts[1]}"
 }
 
 if (( $+commands[fd] )); then
   _fzf_compgen_path() { fd --hidden --follow . "$1"; }
   _fzf_compgen_dir() { fd --type d --hidden --follow -E '.git/*' . "$1"; }
   _fzf_complete_mk() {
-    local l_save
     zle backward-delete-char
-    l_save="$LBUFFER"
-    _fzf_complete -- "$@" < <( fd --type d --hidden -E ".git/*" . )
-    if [ "$?" = 0 ] && [ "$l_save" != "$LBUFFER" ]; then
-      zle backward-delete-char
-      LBUFFER+=/
-    fi
+    local l_save; l_save="$LBUFFER"
+    _fzf_complete -- "$@" < <( fd --type d --hidden -E ".git/*" . ) \
+      && [ "$l_save" != "$LBUFFER" ] && zle backward-delete-char
   }
 fi
 
@@ -176,66 +170,26 @@ _fzf_comprun() {
     cd)           fzf "$@" --preview 'tree -C {} | head -200' ;;
     export|unset) fzf "$@" --preview "eval 'echo \$'{}" ;;
     ssh)          fzf "$@" --preview 'dig {}' ;;
+    docker-rm)    docker ps -a | fzf "$@" --header-lines=1 | awk '{ print $1 }';;
+    docker-rmi)   docker images | fzf "$@" --header-lines=1 | awk '{ print $3 }';;
+    ghq-rm)       ghq list | fzf --no-multi;;
     *)            fzf "$@" ;;
   esac
 }
-
-bindkey -s '^[a' '^Qtms^M'
-
-ghq-fzf() {
-  required ghq fzf || return 127
-  local repo=$(ghq list | fzf-tmux ${FZF_TMUX_OPTS} --no-multi)
-  if [ -n "${repo}" ]; then
-    BUFFER="cd $(ghq root | sed -e "s@${HOME}@~@")/${repo}"
-    zle accept-line
-  fi
-  zle reset-prompt
-}
-zle -N ghq-fzf
-bindkey -e '^g' ghq-fzf
-
-ghq-rm() {
-  required ghq fzf || return 127
-  local repos=$(ghq list | fzf-tmux ${FZF_TMUX_OPTS})
-  [ -n "$repos" ] && echo "$repos" | xargs -I{} sh -c "rm -rf $(ghq root)/{} && echo {} deleted"
-}
-
-navi_dir="$XDG_CONFIG_HOME/navi"
-export NAVI_CONFIG="$navi_dir/config.yml"
-export NAVI_PATH="$navi_dir/main.cheat"
-if is_mac; then
-  NAVI_PATH="$NAVI_PATH:$navi_dir/mac.cheat"
-fi
-if is_pure_linux; then
-  NAVI_PATH="$NAVI_PATH:$navi_dir/linux.cheat"
-fi
-alias navi="navi --path '$NAVI_PATH'"
-navi-widget() {
-  local cmd
-  local pipe; pipe="${XDG_CACHE_HOME:-~/.cache}/navi_cmd"
-  if [ -n "$TMUX" ]; then
-    required navi fzf || return 127
-    rm -f "$pipe"
-    mkfifo "$pipe"
-    (tmux popup -E -w 80% -h 70% \
-      "NAVI_CONFIG=$NAVI_CONFIG navi --path '$NAVI_PATH' --print > $pipe" &)
-    cmd=$(cat "$pipe")
-    rm -f "$pipe"
-  else
-    cmd=$(navi --print)
-  fi
-  if [ -z "$cmd" ]; then return; fi
-  LBUFFER=" $cmd"
-}
-zle -N navi-widget
-bindkey -e '^t' navi-widget
 
 # fzf のキーバインドは CTRL-R のみ取り出して使用
 fzf-history-widget() {
   local selected num
   setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
   selected=( $(fc -rl 1 | perl -ne 'print if !$seen{(/^\s*[0-9]+\s+(.*)/, $1)}++' |
-    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" fzf-tmux ${FZF_TMUX_OPTS} --) )
+    FZF_DEFAULT_OPTS=" $FZF_DEFAULT_OPTS $FZF_CTRL_R_OPTS
+      -n2..,..
+      --query=${(qqq)LBUFFER}
+      --tiebreak=index
+      --height ${FZF_TMUX_HEIGHT:-40%}
+      --bind=ctrl-r:toggle-sort
+      --no-multi
+    " fzf-tmux ${FZF_TMUX_OPTS} --) )
   local ret=$?
   if [ -n "$selected" ]; then
     num=$selected[1]
@@ -249,46 +203,26 @@ fzf-history-widget() {
 zle -N fzf-history-widget
 bindkey -e '^R' fzf-history-widget
 
-# https://www.m3tech.blog/entry/dotfiles-bonsai#Zsh%E5%B0%8F%E3%83%8D%E3%82%BF%E7%B7%A8
-docker() {
-  if [ "$1" = "compose" ] || ! command -v "docker-$1" >/dev/null; then
-    command docker "${@:1}" # 通常通りdockerコマンドを呼び出す
-  else
-    "docker-$1" "${@:2}" # docker-foo というコマンドが存在するときはそちらを起動する
+bindkey -s '^[a' '^Qtms^M'
+
+ghq-fzf() {
+  { (( $+commands[ghq] )) && (($+commands[fzf])) } || return 127
+  local repo=$(ghq list | fzf-tmux ${FZF_TMUX_OPTS} --no-multi)
+  if [ -n "${repo}" ]; then
+    BUFFER="cd $(ghq root | sed -e "s@${HOME}@~@")/${repo}"
+    zle accept-line
   fi
+  zle reset-prompt
 }
-# docker rm (上書き)
-# 引数なしで呼び出したときはプロセスを fzf で選択して削除する
-docker-rm() {
-  if [ "$#" -eq 0 ]; then
-    command docker ps -a | fzf --exit-0 --multi --header-lines=1 | awk '{ print $1 }' | xargs -r docker rm --
-  else
-    command docker rm "$@"
-  fi
-}
-# docker rmi (上書き)
-# 引数なしで呼び出したときはイメージを fzf で選択して削除する
-docker-rmi() {
-  if [ "$#" -eq 0 ]; then
-    command docker images | fzf --exit-0 --multi --header-lines=1 | awk '{ print $3 }' | xargs -r docker rmi --
-  elif [ "$#" -eq 1 -a "$1" = "-f" ]; then
-    command docker images | fzf --exit-0 --multi --header-lines=1 | awk '{ print $3 }' | xargs -r docker rmi -f --
-  else
-    command docker rmi "$@"
-  fi
-}
+zle -N ghq-fzf
+bindkey -e '^g' ghq-fzf
+
+navidir="$XDG_CONFIG_HOME/navi"
+export NAVI_CONFIG="$navidir/config.yml"
+export NAVI_PATH="$navidir/main.cheat\
+$(is_mac && printf ":%s/mac.cheat" $navidir)\
+$(is_pure_linux && printf ":%s/linux.cheat" $navidir)"
 
 export GHQ_ROOT=$(ghq root)
 export MY_REPOS="$GHQ_ROOT/github.com/shiradofu"
 export NVIM_PLUG="$XDG_DATA_HOME/nvim/lazy"
-
-export AWS_CONFIG_FILE="$XDG_CONFIG_HOME/aws/config"
-export AWS_SHARED_CREDENTIALS_FILE="$XDG_CONFIG_HOME/aws/credentials"
-export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
-export GNUPGHOME="$XDG_STATE_HOME/gnupg"
-export LESSHISTFILE="$XDG_STATE_HOME/less/history"
-export MYSQL_HISTFILE="$XDG_STATE_HOME/mysql_history"
-export NODE_REPL_HISTORY="$XDG_STATE_HOME/node_history"
-export PRETTIERD_DEFAULT_CONFIG="$XDG_CONFIG_HOME/prettier/rc.yml"
-export PSQL_HISTORY="$XDG_STATE_HOME/psql_history"
-export SQLITE_HISTORY="$XDG_STATE_HOME/sqlite_history"
