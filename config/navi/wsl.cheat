@@ -1,0 +1,8 @@
+% docker
+
+# start rootless dockerd
+systemctl --user start docker
+
+# enter the rootless-docker namespaces
+nsenter -U --preserve-credentials -n -m -t $(cat $XDG_RUNTIME_DIR/docker.pid)
+; https://docs.docker.com/engine/security/rootless/#tips-for-debugging

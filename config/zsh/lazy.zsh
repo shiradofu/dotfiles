@@ -221,6 +221,7 @@ navidir="$XDG_CONFIG_HOME/navi"
 export NAVI_CONFIG="$navidir/config.yml"
 export NAVI_PATH="$navidir/main.cheat\
 $(is_mac && printf ":%s/mac.cheat" $navidir)\
+$(is_wsl && printf ":%s/wsl.cheat" $navidir)\
 $(is_pure_linux && printf ":%s/linux.cheat" $navidir)"
 
 export GHQ_ROOT=$(ghq root)

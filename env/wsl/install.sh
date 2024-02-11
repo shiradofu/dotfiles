@@ -21,8 +21,11 @@ wslsync --to-windows wezterm && printf "ok\n" || printf "failed\n"
 msg $'\n🐳  Installing Docker Engine:'
 curl -fsSL https://get.docker.com -o get-docker.sh && \
 { echo "$password" | sudo -S sh get-docker.sh; } && \
+{ echo "$password" | sudo -S systemctl disable --now docker.service docker.socket; } && \
   dockerd-rootless-setuptool.sh install --skip-iptables && \
   sed -i 's/  --iptables=false//' "$XDG_CONFIG_HOME/systemd/user/docker.service" && \
+  systemctl --user daemon-reload && \
+  systemctl --user restart docker && \
   printf "ok\n" || printf "failed\n"
 rm get-docker.sh
 
