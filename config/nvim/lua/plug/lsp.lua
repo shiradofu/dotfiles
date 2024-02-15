@@ -185,12 +185,12 @@ return {
     }
 
     local root_pattern = require('lspconfig').util.root_pattern
-    local null = require 'null-ls'
-    local null_fn = null.builtins
+    local nls = require 'null-ls'
+    local nfn = nls.builtins
     local Lsp = {}
     local Fmt = {}
     local Diag = {}
-    local Null = setmetatable({}, { __index = table })
+    local Nls = setmetatable({}, { __index = table })
 
     --
     -- Lua
@@ -211,7 +211,7 @@ return {
         },
       },
     }
-    Null:insert(null_fn.formatting.stylua)
+    Nls:insert(nfn.formatting.stylua)
     Fmt.lua = create_fmt_fn 'null-ls'
 
     --
@@ -221,6 +221,9 @@ return {
     Lsp.tsserver = {
       root_dir = root_pattern('package.json', 'tsconfig.json', 'jsconfig.json'),
       single_file_support = false,
+      -- on_attach = function(client)
+      --   client.server_capabilities.documentFormattingProvider = false
+      -- end,
     }
     Lsp.denols = {
       root_dir = root_pattern('deno.json', 'deno.jsonc'),
@@ -237,8 +240,27 @@ return {
         },
       },
     }
-    Null:insert(null_fn.code_actions.eslint_d)
-    Null:insert(null_fn.diagnostics.eslint_d.with {
+    Lsp.biome = {}
+    Nls:insert(nfn.formatting.biome) --.with {
+    -- condition = function(utils) return utils.root_has_file 'biome.json' end,
+    -- })
+    Nls:insert(nfn.code_actions.eslint_d.with {
+      condition = function(utils)
+        return not utils.root_has_file {
+          'deno.json',
+          'deno.jsonc',
+          'biome.json',
+        }
+      end,
+    })
+    Nls:insert(nfn.diagnostics.eslint_d.with {
+      condition = function(utils)
+        return not utils.root_has_file {
+          'deno.json',
+          'deno.jsonc',
+          'biome.json',
+        }
+      end,
       filter = function(d)
         return not vim.startswith(
           d.message,
@@ -246,10 +268,14 @@ return {
         )
       end,
     })
-    Null:insert(null_fn.formatting.prettierd.with {
+    Nls:insert(nfn.formatting.prettierd.with {
       env = { PRETTIERD_DEFAULT_CONFIG = vim.env.PRETTIERD_DEFAULT_CONFIG },
       condition = function(utils)
-        return not utils.has_file { 'deno.json', 'deno.jsonc' }
+        return not utils.root_has_file {
+          'deno.json',
+          'deno.jsonc',
+          'biome.json',
+        }
       end,
     })
     Fmt.javascript = create_fmt_fn { 'null-ls', 'denols' }
@@ -271,7 +297,7 @@ return {
     Fmt.sass = create_fmt_fn 'null-ls'
     Fmt.scss = create_fmt_fn 'null-ls'
     Fmt.less = create_fmt_fn 'null-ls'
-    Null:insert(null_fn.diagnostics.stylelint.with {
+    Nls:insert(nfn.diagnostics.stylelint.with {
       filter = function(diagnostic)
         return not vim.startswith(
           diagnostic.message,
@@ -303,7 +329,7 @@ return {
         ['textDocument/publishDiagnostics'] = function(...) end,
       },
     }
-    Null:insert(null_fn.diagnostics.shellcheck.with {
+    Nls:insert(nfn.diagnostics.shellcheck.with {
       -- shellcheck installed via mason.nvim doesn't support Apple Silicon
       command = vim.env.HOMEBREW_PREFIX .. '/bin/shellcheck',
       runtime_condition = function()
@@ -311,7 +337,7 @@ return {
         return not (vim.endswith(fname, '/.env') or fname:find '/%.env%..+')
       end,
     })
-    Null:insert(null_fn.diagnostics.zsh)
+    Nls:insert(nfn.diagnostics.zsh)
 
     --
     -- PHP
@@ -322,11 +348,11 @@ return {
         ['textDocument/publishDiagnostics'] = function(...) end,
       },
     }
-    Null:insert(null_fn.diagnostics.phpstan.with {
+    Nls:insert(nfn.diagnostics.phpstan.with {
       only_local = 'vendor/bin',
       extra_args = { '--memory-limit=2G' },
     })
-    Null:insert(null_fn.formatting.phpcsfixer.with {
+    Nls:insert(nfn.formatting.phpcsfixer.with {
       only_local = 'vendor/bin',
     })
     Fmt.php = create_fmt_fn 'null-ls'
@@ -349,11 +375,12 @@ return {
     -- JSON
     -----------------------------
     -----------------------------
+    -- https://github.com/b0o/SchemaStore.nvim?tab=readme-ov-file#usage
     Lsp.yamlls = {
       settings = {
         yaml = {
-          schemaStore = { enable = false },
-          schemas = require('schemastore').json.schemas(),
+          schemaStore = { enable = false, url = '' },
+          schemas = require('schemastore').yaml.schemas(),
         },
       },
     }
@@ -368,10 +395,10 @@ return {
     Lsp.sqlls = {}
     Lsp.graphql = {}
     Lsp.grammarly = {}
-    Null:insert(null_fn.code_actions.gitsigns)
-    Null:insert(null_fn.diagnostics.cfn_lint)
-    Null:insert(null_fn.diagnostics.actionlint)
-    Null:insert(null_fn.diagnostics.editorconfig_checker.with {
+    Nls:insert(nfn.code_actions.gitsigns)
+    Nls:insert(nfn.diagnostics.cfn_lint)
+    Nls:insert(nfn.diagnostics.actionlint)
+    Nls:insert(nfn.diagnostics.editorconfig_checker.with {
       command = 'editorconfig-checker',
     })
 
@@ -401,7 +428,7 @@ return {
     mn.setup {
       ensure_installed = vim.tbl_map(
         function(source) return source.name end,
-        Null
+        Nls
       ),
     }
 
@@ -417,8 +444,8 @@ return {
         require('lspconfig')[server_name].setup(config)
       end,
     }
-    null.setup {
-      sources = Null,
+    nls.setup {
+      sources = Nls,
       on_attach = on_attach,
     }
   end,

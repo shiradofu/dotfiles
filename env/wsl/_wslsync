@@ -4,7 +4,7 @@ _wslsync() {
   _arguments \
     '-S[read password from stdin]' \
     ': :(--to-windows --to-dotfiles)' \
-    ': :(wezterm wslconfig wsl_conf)'
+    ': :(wezterm wslconfig wsl_conf resolv_conf)'
 }
 
 _wslsync "$@"

@@ -78,7 +78,7 @@ brew_i fzf
 "${HOMEBREW_PREFIX}/opt/fzf/install" --xdg --completion --no-update-rc --no-key-bindings
 brew_i cmake starship fd rg bat tree glow git-delta jq yq tmux navi hyperfine tokei \
   direnv gh act awscli aws-cdk aws-sam-cli \
-  mackup tako8ki/tap/gobang
+  marp-cli mackup tako8ki/tap/gobang
 
 #
 # Languages and Package Managers

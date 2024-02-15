@@ -80,6 +80,104 @@ zshaddhistory() {
   [[ ${#line} -ge 7 ]] && [[ ! "$line" =~ "^(rm|mkdir|mk|tms)( |$)" ]]
 }
 
+# 基本的なキーバインド
+bindkey -e                   # emacsキーバインド
+bindkey '^[[3~' delete-char  # deleteキー有効化
+bindkey -e '^d' delete-char  # ^dで補完候補を出さない
+
+# カーソル左に何もなければ C-u で tmux copy-mode
+function _backward-kill-line_or_copy_mode() {
+  if [[ $#LBUFFER -gt 0 ]]; then zle backward-kill-line
+  elif [[ ! -z ${TMUX} ]]; then tmux copy-mode; fi
+}
+zle -N backward-kill-line_or_copy_mode _backward-kill-line_or_copy_mode
+bindkey '^u' backward-kill-line_or_copy_mode
+
+#
+# Alias
+#
+alias ls='ls --color'
+alias ll='ls -lahF'
+alias d='direnv edit .'
+
+# https://apple.stackexchange.com/questions/31872/how-do-i-reset-the-scrollback-in-the-terminal-via-a-shell-command
+alias clear="clear && printf '\e[3J'"
+if is_wsl; then alias open=wslview; fi
+
+typeset -gA r_aliases
+r_aliases=(
+  "v"    "nvim"
+  "gg"   "ghq get --shallow --update"
+  "tmkt" "tmux kill-session -t"
+)
+
+typeset -gA g_aliases
+g_aliases=(
+  # directory
+  "..."      "../.."
+  "...."     "../../.."
+  "....."    "../../../.."
+  "......"   "../../../../.."
+  # pipe
+  "G"        "| grep"
+  "R"        "| rg"
+  "X"        "| xargs"
+  "L"        "| less"
+  "A"        "| awk"
+  "S"        "| sed"
+  "E"        "2>&1 > /dev/null"
+  "N"        "> /dev/null"
+)
+
+for abbr in ${(k)r_aliases}; do alias $abbr="${r_aliases[$abbr]}"; done
+for abbr in ${(k)g_aliases}; do alias -g $abbr="${g_aliases[$abbr]}"; done
+
+abbrev-expand() {
+  [[ $LBUFFER =~ "[^ ]  *[^ ]" ]] && first=false || first=true
+  local abbr; abbr=$(echo $LBUFFER | grep -o '[-_a-zA-Z0-9\.]*$')
+  if "${first}" && [[ -n "${r_aliases[$abbr]}" ]]; then
+    zle backward-kill-word
+    LBUFFER+=${r_aliases[$abbr]}
+  elif [[ $LBUFFER =~ " *go +[a-z]+ +\./\.\.\." ]]; then
+    return
+  elif [ -n "${g_aliases[$abbr]}" ]; then
+    zle backward-kill-word
+    LBUFFER+=${g_aliases[$abbr]}
+  fi
+}
+
+spacekey() { abbrev-expand; zle self-insert; }
+zle -N spacekey
+bindkey " " spacekey
+
+enterkey() { abbrev-expand; zle accept-line; }
+zle -N enterkey
+bindkey "^m" enterkey
+
+no-expand-space() { LBUFFER+=' '; }
+zle -N no-expand-space
+bindkey "^x " no-expand-space
+bindkey "^x^m" accept-line
+
+# suffix alias
+# ref: https://itchyny.hatenablog.com/entry/20130227/1361933011
+function kaito() {
+  case $1 in
+    *.tar.gz|*.tgz) tar xzvf $1;;
+    *.tar.xz) tar Jxvf $1;;
+    *.zip) unzip $1;;
+    *.lzh) lha e $1;;
+    *.tar.bz2|*.tbz) tar xjvf $1;;
+    *.tar.Z) tar zxvf $1;;
+    *.gz) gzip -d $1;;
+    *.bz2) bzip2 -dc $1;;
+    *.Z) uncompress $1;;
+    *.tar) tar xvf $1;;
+    *.arj) unarj $1;;
+  esac
+}
+alias -s {gz,tgz,zip,bz2,tbz,Z,tar,xz}=kaito
+
 #
 # zinit
 #

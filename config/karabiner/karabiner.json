@@ -522,30 +522,33 @@
                         ]
                     },
                     {
-                        "description": "Slack: Option-n/p でチャンネル上下移動",
+                        "description": "LINE: Raycast で隠す前に Esc を挟む",
                         "manipulators": [
                             {
                                 "conditions": [
                                     {
                                         "bundle_identifiers": [
-                                            "^com\\.tinyspeck\\.slackmacgap$"
+                                            "^jp\\.naver\\.line.mac$"
                                         ],
                                         "type": "frontmost_application_if"
                                     }
                                 ],
                                 "from": {
-                                    "key_code": "n",
+                                    "key_code": "3",
                                     "modifiers": {
                                         "mandatory": [
-                                            "option"
+                                            "control"
                                         ]
                                     }
                                 },
                                 "to": [
                                     {
-                                        "key_code": "down_arrow",
+                                        "key_code": "escape"
+                                    },
+                                    {
+                                        "key_code": "3",
                                         "modifiers": [
-                                            "option"
+                                            "control"
                                         ]
                                     }
                                 ],
@@ -555,24 +558,28 @@
                                 "conditions": [
                                     {
                                         "bundle_identifiers": [
-                                            "^com\\.tinyspeck\\.slackmacgap$"
+                                            "^com\\.google\\.Chrome$",
+                                            "^com\\.apple\\.Safari$"
                                         ],
                                         "type": "frontmost_application_if"
                                     }
                                 ],
                                 "from": {
-                                    "key_code": "p",
+                                    "key_code": "t",
                                     "modifiers": {
                                         "mandatory": [
-                                            "option"
+                                            "command"
                                         ]
                                     }
                                 },
                                 "to": [
                                     {
-                                        "key_code": "up_arrow",
+                                        "key_code": "japanese_eisuu"
+                                    },
+                                    {
+                                        "key_code": "t",
                                         "modifiers": [
-                                            "option"
+                                            "command"
                                         ]
                                     }
                                 ],

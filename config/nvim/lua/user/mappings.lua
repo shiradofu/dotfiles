@@ -143,7 +143,6 @@ M.win_resize()
 
 function M.motion()
   local n = 'nice-scroll'
-  k({'n', 'x'}, ';',  '<Cmd>Pounce<CR>')
   k({'n', 'x'}, '*',  "<Plug>(asterisk-z*):<C-u>lua require('hlslens').start()<CR>")
   k({'n', 'x'}, '#',  "<Plug>(asterisk-z#):<C-u>lua require('hlslens').start()<CR>")
   k({'n', 'x'}, 'g*', "<Plug>(asterisk-gz*):<C-u>lua require('hlslens').start()<CR>")
@@ -196,14 +195,6 @@ function M.gitsigns(gitsigns)
   k({ 'o', 'x' }, 'ad', ':<C-u>Gitsigns select_hunk<CR>')
   k('n', '<leader>b', gitsigns.toggle_current_line_blame)
 end
-
-function M.clever_f()
-  k({'n', 'x', 'o'}, 'f', '<Plug>(clever-f-f)')
-  k({'n', 'x', 'o'}, 'F', '<Plug>(clever-f-F)')
-  k({'x', 'o'},      't', '<Plug>(clever-f-t)')
-  k({'x', 'o'},      'T', '<Plug>(clever-f-T)')
-end
-M.clever_f()
 
 function M.quickhl()
   k('n', 'gl',     '<Plug>(quickhl-manual-this-whole-word)')

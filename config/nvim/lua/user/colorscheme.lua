@@ -5,29 +5,15 @@ vim.g.material_style = 'lighter'
 local function hl(name, val) vim.api.nvim_set_hl(0, name, val) end
 
 local function all()
-  -- pounce
-  if vim.o.background == 'dark' then
-    hl('PounceUnmatched', { fg = '#4A4A4A' })
-    hl('PounceGap', { fg = '#888888' })
-    hl('PounceMatch', { fg = '#E9E9E9' })
-    hl('PounceAccept', { fg = '#FFAF60', bold = true })
-    hl('PounceAcceptBest', { fg = '#FF0000', bold = true })
-  else
-    hl('PounceUnmatched', { fg = '#BBBBBB' })
-    hl('PounceGap', { fg = '#888888' })
-    hl('PounceMatch', { fg = '#555555' })
-    hl('PounceAccept', { fg = '#026cf7', bold = true })
-    hl('PounceAcceptBest', { fg = '#FF0000', bold = true })
-  end
-
-  -- gitsigns
+  -- lewis6991/gitsigns.nvim
   hl('GitSignsAddNr', { link = 'DiffAdd' })
   hl('GitSignsChangeNr', { link = 'DiffChange' })
   hl('GitSignsDeleteNr', { link = 'DiffDelete' })
   hl('GitSignsChangeDeleteNr', { link = 'DiffChange' })
 
-  -- clever-f
-  hl('CleverF', { fg = '#ff0000', underline = true })
+  -- folke/flash.nvim
+  hl('FlashLabel', { fg = '#ff0000', underline = true })
+
   hl('Search', { fg = '#161821', bg = '#c6c8d1' })
   hl('IncSearch', { fg = '#392313', bg = '#e4aa80' })
 end
