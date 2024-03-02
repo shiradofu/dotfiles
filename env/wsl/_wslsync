@@ -1,10 +1,8 @@
-#compdef wslsync
+#compdef ghrsync
 
-_wslsync() {
+_ghrsync() {
   _arguments \
-    '-S[read password from stdin]' \
-    ': :(--to-windows --to-dotfiles)' \
-    ': :(wezterm wslconfig wsl_conf resolv_conf)'
+    ': :(send-to receive-from)' \
 }
 
-_wslsync "$@"
+_ghrsync "$@"

@@ -2,22 +2,22 @@
 # shellcheck disable=SC2029
 
 msg() {
-    from="$1"
-    to="$2"
-    repo=$3
-    dui=$4
+  from="$1"
+  to="$2"
+  repo=$3
+  dui=$4
 
-    echo "[Direction]"
-    echo "$from -> $to"
-    echo
-    echo "[Repo]"
-    echo "$repo"
-    echo
-    echo "[Status on $to]"
-    [ -z "$dui" ] \
-      && echo "No dirty, untracked, or ignored files." \
-      || printf "\033[1;31mListed files will be overridden!\n%s\033[0m\n" "$dui"
-    echo
+  echo "[Direction]"
+  echo "$from -> $to"
+  echo
+  echo "[Repo]"
+  echo "$repo"
+  echo
+  echo "[Status on $to]"
+  [ -z "$dui" ] \
+    && echo "No dirty, untracked, or ignored files." \
+    || printf "\033[1;31mListed files will be overridden!\n%s\033[0m\n" "$dui"
+  echo
 }
 
 confirm() {

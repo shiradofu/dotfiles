@@ -7,6 +7,8 @@ WSL_ROOT=$(cd "$(dirname "$0")" && pwd)
 
 ln -s "$WSL_ROOT/wslsync" "$HOME/bin/"
 ln -s "$WSL_ROOT/_wslsync" "$ZDOTDIR/completions/"
+ln -s "$WSL_ROOT/ghrsync" "$HOME/bin/"
+ln -s "$WSL_ROOT/_ghrsync" "$ZDOTDIR/completions/"
 
 msg $'\n🔧  Copying wsl.conf: '
 echo "$password" | wslsync -S --to-windows wsl_conf >/dev/null 2>&1 \
