@@ -18,10 +18,12 @@
 #   フラグは -d も可
 
 delete=false
+force=false
 
 for ARG; do
   case "$ARG" in
     -d | --delete ) delete=true;;
+    -f | --force  ) force=true;;
     *             ) branch=$ARG;;
   esac
 done
@@ -82,6 +84,7 @@ __git_wt_del() {
     exit 1
   fi
 
+  if [ "$force" = "true" ]; then rm -rf "$wtdir"; fi
   git worktree remove "$wtdir"
 }
 

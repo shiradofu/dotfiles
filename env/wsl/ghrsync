@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2029
+
+msg() {
+    from="$1"
+    to="$2"
+    repo=$3
+    dui=$4
+
+    echo "[Direction]"
+    echo "$from -> $to"
+    echo
+    echo "[Repo]"
+    echo "$repo"
+    echo
+    echo "[Status on $to]"
+    [ -z "$dui" ] \
+      && echo "No dirty, untracked, or ignored files." \
+      || printf "\033[1;31mListed files will be overridden!\n%s\033[0m\n" "$dui"
+    echo
+}
+
+confirm() {
+  printf "OK? (yes/dry-run/no): "
+}
+
+cancel() {
+  echo "canceled." >&2
+  exit 1
+}
+
+# main()
+cmd=$1
+remote=$2
+case "$cmd" in
+send-to|receive-from);;
+* ) echo "$cmd: invalid command" >&2 && exit 1
+esac
+if [ -z "$remote" ]; then
+  echo "remote is required" >&2 && exit 1
+fi
+
+lroot="$(ghq root)"
+RROOT="$(ssh "$remote" ghq root)"
+# shellcheck disable=SC2181
+if [ "$?" != "0" ] || [ -z "$RROOT" ]; then
+  echo "failed to get ghq root on remote" >&2
+  exit 1
+fi
+
+case "$cmd" in
+send-to )
+  repo=$(ghq list | fzf --no-multi)
+  dui=$(ssh "$remote" "test -d \"$RROOT/$repo\" && git -C \"$RROOT/$repo\" status --ignored -s")
+  msg "WSL" "$remote" "$repo" "$dui"
+
+  while true; do
+    confirm
+    read -r yn
+    case "$yn" in
+      no ) cancel;;
+      dry-run )
+        ssh "$remote" mkdir -p "$RROOT/$repo"
+        rsync -ahv --delete -n "$lroot/$repo/" "$remote:$RROOT/$repo/" | less
+        ssh "$remote" rmdir "$RROOT/$repo" 2>/dev/null || true; echo
+        ;;
+      yes )
+        ssh "$remote" mkdir -p "$RROOT/$repo"
+        rsync -ahv --delete "$lroot/$repo/" "$remote:$RROOT/$repo/"
+        break
+        ;;
+    esac
+  done
+  ;;
+receive-from )
+  repo=$(ssh "$remote" ghq list | fzf --no-multi)
+  dui=$(test -d "$lroot/$repo" && git -C "$lroot/$repo" status --ignored -s)
+  msg "$remote" "WSL" "$repo" "$dui"
+
+  while true; do
+    confirm
+    read -r yn
+    case "$yn" in
+      no ) cancel;;
+      dry-run )
+        rsync -ahv --delete -n "$remote:$RROOT/$repo/" "$lroot/$repo/" | less
+        ;;
+      yes )
+        rsync -ahv --delete "$remote:$RROOT/$repo/" "$lroot/$repo/"
+        break
+        ;;
+    esac
+  done
+  ;;
+esac
