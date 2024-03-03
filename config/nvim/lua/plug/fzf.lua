@@ -40,7 +40,7 @@ local function setup_project_mru()
         if
           #file > 0
           and fs_stat
-          and path.is_relative(file, cwd)
+          and path.is_relative_to(file, cwd)
           and not opts.exclude(file)
         then
           files_memo[file] = true
@@ -74,7 +74,7 @@ local function setup_project_mru()
           if
             fs_stat
             and not files_memo[file]
-            and path.is_relative(file, cwd)
+            and path.is_relative_to(file, cwd)
             and not opts.exclude(file)
           then
             files_memo[file] = true

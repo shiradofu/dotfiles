@@ -136,7 +136,7 @@ docker buildx install
 
 msg $'\nlinters/formatters:\n'
 # installed with mason.nvim doesn't support Apple Silicon
-brew_i shellcheck
+# TODO: check necessity
 brew_i golangci-lint
 
 msg $'\nmisc:\n'

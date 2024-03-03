@@ -36,6 +36,16 @@ nsenter -U --preserve-credentials -n -m -t "$(cat "$XDG_RUNTIME_DIR/docker.pid")
     printf '%s\n' 'nameserver 8.8.8.8' >> /etc/resolv.conf
   "
 
+msg $'\n📎  Installing wslutil:'
+# https://github.com/wslutilities/wslu/blob/2cc1c20ea5188ce93581eeddd3f73aa46c1b6c6e/extras/scripts/wslu-install
+WSLU_BUILD_DIR=$(mktemp --tmpdir --directory wslu-install.XXXX)
+if git clone --depth=1 --recursive --b v4.1.1 https://github.com/wslutilities/wslu "$WSLU_BUILD_DIR" \
+  && cd "$WSLU_BUILD_DIR" \
+  && make \
+  && echo "$password" | sudo -S make install \
+  && echo "$password" | sudo -S install -m755 extras/scripts/wslu-uninstall /usr/bin
+then printf "ok\n"; else printf "failed\n"; fi
+
 msg $'\n📎  Installing win32yank:'
 curl -sLo /tmp/win32yank.zip \
   https://github.com/equalsraf/win32yank/releases/download/v0.0.4/win32yank-x64.zip

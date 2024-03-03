@@ -6,3 +6,4 @@
 !lazy.zsh
 !/completions/*
 /completions/_wslsync
+/completions/_ghrsync

@@ -241,32 +241,9 @@ return {
       },
     }
     Lsp.biome = {}
-    Nls:insert(nfn.formatting.biome) --.with {
-    -- condition = function(utils) return utils.root_has_file 'biome.json' end,
-    -- })
-    Nls:insert(nfn.code_actions.eslint_d.with {
-      condition = function(utils)
-        return not utils.root_has_file {
-          'deno.json',
-          'deno.jsonc',
-          'biome.json',
-        }
-      end,
-    })
-    Nls:insert(nfn.diagnostics.eslint_d.with {
-      condition = function(utils)
-        return not utils.root_has_file {
-          'deno.json',
-          'deno.jsonc',
-          'biome.json',
-        }
-      end,
-      filter = function(d)
-        return not vim.startswith(
-          d.message,
-          'Error: No ESLint configuration found '
-        )
-      end,
+    Lsp.eslint = {}
+    Nls:insert(nfn.formatting.biome.with {
+      condition = function(utils) return utils.root_has_file 'biome.json' end,
     })
     Nls:insert(nfn.formatting.prettierd.with {
       env = { PRETTIERD_DEFAULT_CONFIG = vim.env.PRETTIERD_DEFAULT_CONFIG },
@@ -325,18 +302,18 @@ return {
     -----------------------------
     -----------------------------
     Lsp.bashls = {
-      handlers = {
-        ['textDocument/publishDiagnostics'] = function(...) end,
-      },
+      -- handlers = {
+      --   ['textDocument/publishDiagnostics'] = function(...) end,
+      -- },
     }
-    Nls:insert(nfn.diagnostics.shellcheck.with {
-      -- shellcheck installed via mason.nvim doesn't support Apple Silicon
-      command = vim.env.HOMEBREW_PREFIX .. '/bin/shellcheck',
-      runtime_condition = function()
-        local fname = vim.api.nvim_buf_get_name(0)
-        return not (vim.endswith(fname, '/.env') or fname:find '/%.env%..+')
-      end,
-    })
+    -- Nls:insert(nfn.diagnostics.shellcheck.with {
+    --   -- shellcheck installed via mason.nvim doesn't support Apple Silicon
+    --   command = vim.env.HOMEBREW_PREFIX .. '/bin/shellcheck',
+    --   runtime_condition = function()
+    --     local fname = vim.api.nvim_buf_get_name(0)
+    --     return not (vim.endswith(fname, '/.env') or fname:find '/%.env%..+')
+    --   end,
+    -- })
     Nls:insert(nfn.diagnostics.zsh)
 
     --
