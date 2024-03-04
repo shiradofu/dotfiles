@@ -100,11 +100,17 @@ __chcs_os() {
     case "$1" in
       dark )
         # shellcheck disable=SC1001
-        $ps -c 'Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme -Value 0';;
+        $ps -c 'Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme -Value 0'
+        $ps -c 'Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name SystemUsesLightTheme -Value 0'
+        ;;
       light )
         # shellcheck disable=SC1001
-        $ps -c 'Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme -Value 1';;
+        $ps -c 'Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme -Value 1'
+        $ps -c 'Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name SystemUsesLightTheme -Value 1'
+        ;;
     esac
+    # refresh taskbar
+    $ps -c 'Get-process explorer | Stop-process'
   fi
 }
 
