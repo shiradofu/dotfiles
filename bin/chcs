@@ -152,7 +152,7 @@ case "${name}_${mode}" in
     __chcs_nvim cocopon/iceberg.vim iceberg light
     ;;
   iceberg_dark )
-    __chcs_wezterm iceberg-dark 0.8
+    __chcs_wezterm iceberg-dark 0.85
     __chcs_nvim cocopon/iceberg.vim iceberg dark
     ;;
   rose-pine_light ) # does not exist

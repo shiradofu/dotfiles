@@ -13,7 +13,7 @@ local function setup_project_mru()
   local default_opts = {
     previewer = defaults._default_previewer_fn,
     prompt = 'MRU> ',
-    file_icons = true and config._has_devicons,
+    file_icons = true,
     color_icons = true,
     git_icons = false,
     stat_file = true,
@@ -202,7 +202,7 @@ local function setup_template()
     -- should use get_files_cmd in fzf-lua.files
     cmd = [[fd --color=never --type f --hidden --follow --exclude .git]],
     multiprocess = true,
-    file_icons = true and config._has_devicons,
+    file_icons = true,
     color_icons = true,
     git_icons = false,
     find_opts = [[-type f -not -path '*/\.git/*' -printf '%P\n']],
@@ -309,7 +309,7 @@ end
 ------------------------------
 return {
   'ibhagwan/fzf-lua',
-  dependencies = 'kyazdani42/nvim-web-devicons',
+  dependencies = 'nvim-tree/nvim-web-devicons',
   config = function()
     local fzf = require 'fzf-lua'
     local actions = require 'fzf-lua.actions'

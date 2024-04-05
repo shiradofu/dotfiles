@@ -32,8 +32,6 @@ export ASDF_DIR="$XDG_STATE_HOME/asdf/repo"
 export ASDF_DATA_DIR="$XDG_STATE_HOME/asdf/data"
 export BUN_INSTALL="$XDG_STATE_HOME/bun"
 
-export AWS_CONFIG_FILE="$XDG_CONFIG_HOME/aws/config"
-export AWS_SHARED_CREDENTIALS_FILE="$XDG_CONFIG_HOME/aws/credentials"
 export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
 export GNUPGHOME="$XDG_STATE_HOME/gnupg"
 export LESSHISTFILE="$XDG_STATE_HOME/less/history"

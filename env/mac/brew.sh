@@ -2,6 +2,7 @@
 
 password="$1"
 
+# shellcheck disable=SC2164
 brew bundle --file "$(cd "$(dirname "$0")"; pwd)/Brewfile"
 
 brew_interactive() {

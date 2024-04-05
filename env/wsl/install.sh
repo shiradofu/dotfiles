@@ -15,8 +15,8 @@ echo "$password" | wslsync -S --to-windows wsl_conf >/dev/null 2>&1 \
   && printf "ok\n" || printf "failed\n"
 msg $'\n🔧  Copying .wslconfig: '
 wslsync --to-windows wslconfig && printf "ok\n" || printf "failed\n"
-msg $'\n🔧  Copying resolv.conf: '
-echo "$password" | wslsync -S --to-windows resolv_conf && printf "ok\n" || printf "failed\n"
+# msg $'\n🔧  Copying resolv.conf: '
+# echo "$password" | wslsync -S --to-windows resolv_conf && printf "ok\n" || printf "failed\n"
 msg $'\n🔩  Copying wezterm config: '
 wslsync --to-windows wezterm && printf "ok\n" || printf "failed\n"
 
@@ -48,7 +48,7 @@ then printf "ok\n"; else printf "failed\n"; fi
 
 msg $'\n📎  Installing win32yank:'
 curl -sLo /tmp/win32yank.zip \
-  https://github.com/equalsraf/win32yank/releases/download/v0.0.4/win32yank-x64.zip
+  https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x64.zip
 unzip -p /tmp/win32yank.zip win32yank.exe > /tmp/win32yank.exe
 chmod +x /tmp/win32yank.exe
 mv /tmp/win32yank.exe "$HOME/bin/" && printf "ok\n" || printf "failed\n"

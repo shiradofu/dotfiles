@@ -8,6 +8,7 @@ return {
     'yioneko/nvim-yati', -- improve indentation
     'nvim-treesitter/nvim-treesitter-textobjects',
     'nvim-treesitter/playground',
+    'windwp/nvim-ts-autotag',
     {
       'RRethy/nvim-treesitter-endwise',
       ft = { 'ruby', 'lua', 'vim', 'sh', 'zsh' },
@@ -34,6 +35,7 @@ return {
           set_jumps = true, -- whether to set jumps in the jumplist
         },
       },
+      autotag = { enable = true },
     }
   end,
 }

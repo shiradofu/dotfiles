@@ -82,7 +82,11 @@ local function init_auto_hover_diagnostics()
   vim.api.nvim_create_autocmd({ 'CursorHold' }, {
     group = g,
     callback = function()
-      if vim.lsp.buf.server_ready() and not is_another_hover_win_existing() then
+      if
+        not vim.b.auto_hover_diagnostics_disabled
+        and vim.lsp.buf.server_ready()
+        and not is_another_hover_win_existing()
+      then
         vim.diagnostic.open_float()
       end
     end,
@@ -240,7 +244,11 @@ return {
         },
       },
     }
+    -- NOTE: Biome can be also used as a LSP server, but it requires
+    --  dynamic registration of capabilities which is supported in
+    --  Neovim 0.10.
     Lsp.biome = {}
+    Nls:insert(nfn.formatting.biome)
     Lsp.eslint = {}
     Nls:insert(nfn.formatting.biome.with {
       condition = function(utils) return utils.root_has_file 'biome.json' end,
@@ -258,7 +266,7 @@ return {
     Fmt.javascript = create_fmt_fn { 'null-ls', 'denols' }
     Fmt.typescript = create_fmt_fn { 'null-ls', 'denols' }
     Fmt.javascriptreact = create_fmt_fn { 'null-ls', 'denols' }
-    Fmt.typescriptreact = create_fmt_fn { 'null-ls', 'denols' }
+    Fmt.typescriptreact = create_fmt_fn { 'null-ls', 'biome', 'denols' }
     Fmt.vue = create_fmt_fn { 'null-ls', 'denols' }
 
     --
@@ -301,19 +309,17 @@ return {
     -- Shellscript
     -----------------------------
     -----------------------------
-    Lsp.bashls = {
-      -- handlers = {
-      --   ['textDocument/publishDiagnostics'] = function(...) end,
-      -- },
-    }
-    -- Nls:insert(nfn.diagnostics.shellcheck.with {
-    --   -- shellcheck installed via mason.nvim doesn't support Apple Silicon
-    --   command = vim.env.HOMEBREW_PREFIX .. '/bin/shellcheck',
-    --   runtime_condition = function()
-    --     local fname = vim.api.nvim_buf_get_name(0)
-    --     return not (vim.endswith(fname, '/.env') or fname:find '/%.env%..+')
-    --   end,
-    -- })
+    Lsp.bashls = {}
+    local group =
+      vim.api.nvim_create_augroup('dotenv-vs-bashls', { clear = true })
+    vim.api.nvim_create_autocmd('BufEnter', {
+      pattern = { '.env', '.env.*' },
+      group = group,
+      callback = function(args)
+        vim.b.auto_hover_diagnostics_disabled = true
+        vim.diagnostic.disable(args.buf)
+      end,
+    })
     Nls:insert(nfn.diagnostics.zsh)
 
     --

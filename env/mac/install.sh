@@ -1,7 +1,6 @@
 #!/bin/bash
 
 msg()    { printf "\033[1;3$((i++%6+1))m%s\033[0m\n" "$1"; }
-brew_i() { for X; do msg $'\n🍺  Installing '"$X"$':\n'; brew install "$X"; done }
 
 MAC_ROOT=$(cd "$(dirname "$0")" && pwd)
 
