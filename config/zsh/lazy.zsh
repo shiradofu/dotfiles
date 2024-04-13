@@ -236,7 +236,7 @@ __fzf_extract_command() {
   local tokens ts t sub1
   tokens=$(echo "$1" | sed -e 's/^.*[&|;<>]\s*\(.\{1,\}\)/\1/')
   ts=(${(z)tokens})
-  for ((i=0; i < ${#ts[@]}; i++)); do
+  for ((i=1; i < ${#ts[@]}; i++)); do
     t=${(Q)ts[i]}
     if [[ "$t" =~ [[:alnum:]] && ! "$t" =~ "=" ]]; then
       sub1="${ts[i+1]}"
@@ -299,9 +299,6 @@ fzf-history-widget() {
   return $ret
 }
 zle -N fzf-history-widget
-bindkey -e '^R' fzf-history-widget
-
-bindkey -s '^[a' '^Qtms^M'
 
 ghq-fzf() {
   { (( $+commands[ghq] )) && (($+commands[fzf])) } || return 127
@@ -313,7 +310,6 @@ ghq-fzf() {
   zle reset-prompt
 }
 zle -N ghq-fzf
-bindkey -e '^g' ghq-fzf
 
 navidir="$XDG_CONFIG_HOME/navi"
 export NAVI_CONFIG="$navidir/config.yml"

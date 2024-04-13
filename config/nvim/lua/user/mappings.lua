@@ -38,6 +38,7 @@ function M.misc()
   k('v', 'gx', '<Plug>(openbrowser-smart-search)')
   k({'n', 'v'}, 'gX', '<Cmd>OpenGithubFile<CR>')
   k('n', '<Leader>-', require'user.readonly')
+  k('n', 'gG', 'G')
   k('n', 'Q', 'qq')
   k('n', '@', '@q')
 end
@@ -70,11 +71,6 @@ function M.diffview()
   k('n', '<Leader>H', '<Cmd>DiffviewWorkspace all_files_history<CR>')
 end
 M.diffview()
-
-function M.door2note()
-  k('n', '<Leader>n', '<Cmd>Door2NoteOpen<CR>')
-end
-M.door2note()
 
 function M.fern()
   k('n', '<Leader>r', '<Cmd>Fern . -reveal=%<CR>')
@@ -387,6 +383,25 @@ function M.fern_local()
   k('n', '<Leader>s', '<Plug>(fern-diffview-git-status)',          b)
   k('n', '<Leader>S', '<Plug>(fern-diffview-diff-by-main)',        b)
   k('n', '<Leader>H', '<Plug>(fern-diffview-all-files-history)',   b)
+end
+
+function M.bqf()
+  return {
+    open = 'l',
+    openc = '<CR>',
+    tab = 't',
+    tabc = '<C-t>',
+    split = '<C-x>',
+    vsplit = '<C-v>',
+    prevfile = '<C-p>',
+    nextfile = '<C-n>',
+    stogglevm = '<Tab>',
+    pscrollup = '<C-y>',
+    pscrolldown = '<C-e>',
+    ptogglemode = '<C-g>',
+    ptoggleitem = '',
+    ptoggleauto = 'p',
+  }
 end
 
 function M.ft_markdown()

@@ -268,6 +268,7 @@ return {
     Fmt.javascriptreact = create_fmt_fn { 'null-ls', 'denols' }
     Fmt.typescriptreact = create_fmt_fn { 'null-ls', 'biome', 'denols' }
     Fmt.vue = create_fmt_fn { 'null-ls', 'denols' }
+    Lsp.prismals = {}
 
     --
     -- HTML/CSS

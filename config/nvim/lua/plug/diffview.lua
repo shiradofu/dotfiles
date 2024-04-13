@@ -53,8 +53,6 @@ return {
           if vim.bo.ft == 'DiffviewFiles' and vim.t.diffview_single_file then
             a.toggle_files()
           end
-
-          vim.t.door2note_open_fn = 'open_float'
         end,
       },
       file_panel = {

@@ -105,9 +105,9 @@ asdf global deno latest
 msg $'\nnodejs:\n'
 asdf plugin add nodejs
 asdf list-all nodejs > /dev/null
-asdf install nodejs latest &&
-asdf global nodejs latest  &&
-npm_i npm yarn pnpm
+asdf install nodejs "$(asdf nodejs resolve lts --latest-available)" &&
+asdf global nodejs "$(asdf nodejs resolve lts --latest-available)"   &&
+npm_i npm yarn pnpm npm-check-updates
 msg $'\n🍔  Installing bun:\n'
 # SHELL='' は zshrc の自動アップデート防止のため
 curl https://bun.sh/install | BUN_INSTALL="$XDG_STATE_HOME/bun" SHELL='' bash
@@ -115,22 +115,18 @@ curl https://bun.sh/install | BUN_INSTALL="$XDG_STATE_HOME/bun" SHELL='' bash
 msg $'\npython:\n'
 asdf plugin add python
 asdf install python 2.7.18
-asdf install python 3.10.6 &&
-asdf global python 3.10.6
+asdf install python latest &&
+asdf global python latest
 pip3 install --upgrade pip
 
 msg $'\nphp:\n'
 brew install php composer
 
-msg $'\nmysql:\n'
-asdf plugin-add mysql     &&
-asdf install mysql 5.7.38 &&
-asdf global mysql 5.7.38
-
 msg $'\ndocker:\n'
 brew_i docker docker-buildx docker-compose lazydocker
 # https://github.com/abiosoft/colima/discussions/273
 mkdir -p "$DOCKER_CONFIG/cli-plugins"
+ln -sfn "$(which docker-compose)" "$DOCKER_CONFIG/cli-plugins/docker-compose"
 ln -sfn "$(which docker-buildx)" "$DOCKER_CONFIG/cli-plugins/docker-buildx"
 docker buildx install
 

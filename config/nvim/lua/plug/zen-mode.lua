@@ -17,8 +17,6 @@ return {
         for key in string.gmatch('hjklnp', '.') do
           pcall(vim.keymap.del, 'n', '<C-' .. key .. '>')
         end
-
-        vim.w.door2note_open_fn = 'open_float'
       end,
       on_close = function()
         mappings.win_move()

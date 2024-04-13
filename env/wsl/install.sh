@@ -1,6 +1,7 @@
 #!/bin/bash
 
 msg() { printf "\033[1;3$((i++%6+1))m%s\033[0m\n" "$1"; }
+brew_i() { for X; do msg $'\n🍺  Installing '"$X"$':\n'; brew install "$X"; done }
 
 password=$1
 WSL_ROOT=$(cd "$(dirname "$0")" && pwd)
@@ -46,12 +47,7 @@ if git clone --depth=1 --recursive --b v4.1.1 https://github.com/wslutilities/ws
   && echo "$password" | sudo -S install -m755 extras/scripts/wslu-uninstall /usr/bin
 then printf "ok\n"; else printf "failed\n"; fi
 
-msg $'\n📎  Installing win32yank:'
-curl -sLo /tmp/win32yank.zip \
-  https://github.com/equalsraf/win32yank/releases/download/v0.1.1/win32yank-x64.zip
-unzip -p /tmp/win32yank.zip win32yank.exe > /tmp/win32yank.exe
-chmod +x /tmp/win32yank.exe
-mv /tmp/win32yank.exe "$HOME/bin/" && printf "ok\n" || printf "failed\n"
+brew_i xsel
 
 msg $'\n🔑  Setting git credential helper:'
 git config --file "${XDG_CONFIG_HOME}/git/credential.gitconfig" \

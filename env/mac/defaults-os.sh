@@ -127,6 +127,9 @@ defaults write -g InitialKeyRepeat -int 12
 # キー長押し時に特殊文字候補を表示せずにキーリピートする
 defaults write -g ApplePressAndHoldEnabled -bool true
 
+# IME切り替え時に表示されるツールチップを消す
+defaults write kCFPreferencesAnyApplication TSMLanguageIndicatorEnabled 0
+
 # トラックパッドのカーソル速度を最大にする
 defaults write -g com.apple.trackpad.scaling -int 3
 
