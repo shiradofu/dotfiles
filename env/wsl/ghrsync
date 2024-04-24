@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2029
 
+warn() { printf "\033[1;31m%s\033[0m\n" "$1"; }
+
 msg() {
   from="$1"
   to="$2"
   repo=$3
   dui=$4
+  stash=$5
+  unpushed=$6
 
   echo "[Direction]"
   echo "$from -> $to"
@@ -14,9 +18,22 @@ msg() {
   echo "$repo"
   echo
   echo "[Status on $to]"
-  [ -z "$dui" ] \
-    && echo "No dirty, untracked, or ignored files." \
-    || printf "\033[1;31mListed files will be overridden!\n%s\033[0m\n" "$dui"
+  if [ -z "$dui" ]
+    then echo "No dirty, untracked, or ignored files."
+    else warn $'Listed files will be overridden:\n'"$dui"$'\n'
+  fi
+  echo
+  echo "[Stashes on $to]"
+  if [ -z "$stash" ]
+    then echo "No stash found"
+    else warn $'Listed stashes will be lost:\n'"$stash"$'\n'
+  fi
+  echo
+  echo "[Unpushed commits on $to]"
+  if [ -z "$unpushed" ]
+    then echo "No unpushed commits found"
+    else warn $'Listed unpushed commits will be lost:\n'"$unpushed"$'\n'
+  fi
   echo
 }
 
@@ -51,8 +68,20 @@ fi
 case "$cmd" in
 send-to )
   repo=$(ghq list | fzf --no-multi)
-  dui=$(ssh "$remote" "test -d \"$RROOT/$repo\" && git -C \"$RROOT/$repo\" status --ignored -s")
-  msg "WSL" "$remote" "$repo" "$dui"
+  x=$(ssh "$remote" "test -d \"$RROOT/$repo\" && { \
+    git -C \"$RROOT/$repo\" status --ignored -s; printf '_\n'
+    git -C \"$RROOT/$repo\" stash list; printf '_\n'
+    git -C \"$RROOT/$repo\" log --branches --not --remotes --date=iso --pretty=tformat:\"[%cd] %s\"
+  }")
+  if [ -n "$x" ]; then
+    sepNum=$(printf "%s" "$x" | grep '^_$' -n | cut -d':' -f1)
+    i=$(printf "%s" "$sepNum" | head -n 1)
+    j=$(printf "%s" "$sepNum" | tail -n 1)
+    dui=$([ "$i" = "1" ] || echo "$x" | head -n $((i-1)))
+    stash=$([ "$j" = "$((i+1))" ] || echo "$x" | tail -n +$((i+1)) | head -n $((j-i-1)))
+    unpushed=$([ "$j" = "$(echo "$x" | wc -l)" ] || printf "%s" "$x" | tail -n +$((j+1)))
+  fi
+  msg "WSL" "$remote" "$repo" "$dui" "$stash" "$unpushed"
 
   while true; do
     confirm
@@ -61,12 +90,12 @@ send-to )
       no ) cancel;;
       dry-run )
         ssh "$remote" mkdir -p "$RROOT/$repo"
-        rsync -ahv --delete -n "$lroot/$repo/" "$remote:$RROOT/$repo/" | less
+        rsync -ahv --delete --stats -n "$@" "$lroot/$repo/" "$remote:$RROOT/$repo/" | less
         ssh "$remote" rmdir "$RROOT/$repo" 2>/dev/null || true; echo
         ;;
       yes )
         ssh "$remote" mkdir -p "$RROOT/$repo"
-        rsync -ahv --delete "$lroot/$repo/" "$remote:$RROOT/$repo/"
+        rsync -ahvz --delete "$@" "$lroot/$repo/" "$remote:$RROOT/$repo/"
         break
         ;;
     esac
@@ -74,7 +103,11 @@ send-to )
   ;;
 receive-from )
   repo=$(ssh "$remote" ghq list | fzf --no-multi)
-  dui=$(test -d "$lroot/$repo" && git -C "$lroot/$repo" status --ignored -s)
+  if [ -d "$lroot/$repo" ]; then
+    dui=$(git -C "$lroot/$repo" status --ignored -s)
+    stash=$(git -C "$lroot/$repo" git stash list)
+    unpushed=$(git -C "$lroot/$repo" git log --branches --not --remotes --date=iso --pretty=tformat:"[%cd] %s")
+  fi
   msg "$remote" "WSL" "$repo" "$dui"
 
   while true; do
@@ -83,7 +116,7 @@ receive-from )
     case "$yn" in
       no ) cancel;;
       dry-run )
-        rsync -ahv --delete -n "@" "$remote:$RROOT/$repo/" "$lroot/$repo/" | less
+        rsync -ahv --delete --stats -n "$@" "$remote:$RROOT/$repo/" "$lroot/$repo/" | less
         ;;
       yes )
         rsync -ahvz --delete "$@" "$remote:$RROOT/$repo/" "$lroot/$repo/"

@@ -13,7 +13,8 @@
   st = status
   co = checkout
   br = branch
-  lg = log --graph --date=relative --pretty=tformat:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%an %ad)%Creset'
+  lg = log --date=iso --pretty=tformat:'%C(magenta)[%cd] %C(yellow)%h%C(auto)%d %s %C(cyan)[%an]'
+  lgraph = lg --graph
 [push]
   default = simple
 [core]
