@@ -138,7 +138,7 @@ local function setup_template()
   local function actions_read_file(selected, opts)
     local entry = path.entry_to_file(selected[1], opts, opts.force_uri)
     local fullpath = entry.path or entry.uri and entry.uri:match '^%a+://(.*)'
-    if not path.starts_with_separator(fullpath) then
+    if not path.is_absolute(fullpath) then
       fullpath = path.join { opts.cwd, fullpath }
     end
     local tmpbuf = vim.api.nvim_create_buf(false, true)
@@ -282,7 +282,6 @@ end
 --                         --
 -----------------------------
 local function setup_grep_fern_dir()
-  local util = require 'user.util'
   return function(opts)
     opts = opts or {}
 

@@ -356,7 +356,7 @@ return {
     Fmt.json = create_fmt_fn 'null-ls'
 
     --
-    -- JSON
+    -- YAML
     -----------------------------
     -----------------------------
     -- https://github.com/b0o/SchemaStore.nvim?tab=readme-ov-file#usage
@@ -384,6 +384,7 @@ return {
     Nls:insert(nfn.diagnostics.actionlint)
     Nls:insert(nfn.diagnostics.editorconfig_checker.with {
       command = 'editorconfig-checker',
+      extra_args = { '--exclude', 'node_modules' },
     })
 
     mappings.lsp_diagnostic()

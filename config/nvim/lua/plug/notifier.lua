@@ -4,6 +4,7 @@ local ignore_str = {
 local ignore_patterns = {
   'warning: multiple different client offset_encodings',
   'failed to run generator: .+ diffview', -- none-ls
+  'No information available',
 }
 
 return {

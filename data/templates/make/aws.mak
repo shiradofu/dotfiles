@@ -1,3 +1,4 @@
+MAKEFLAGS += --always-make
 CLUSTER_NAME := app-name-stateless
 
 # Makefile as a deploy script

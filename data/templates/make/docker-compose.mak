@@ -1,5 +1,4 @@
-# すべてのターゲットを擬似ターゲットとする
-.PHONY: $(shell egrep -o ^[a-zA-Z_-]+: $(MAKEFILE_LIST) | sed 's/://')
+MAKEFLAGS += --always-make
 
 # ターゲットを指定しなかったときに実行するものを指定する
 .DEFAULT_GOAL := daemon

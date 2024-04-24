@@ -98,7 +98,8 @@ bindkey '^u' backward-kill-line_or_copy_mode
 #
 alias ls='ls --color'
 alias ll='ls -lahF'
-alias d='direnv edit .'
+alias de='direnv edit .'
+alias da='direnv allow . && cd .'
 
 # https://apple.stackexchange.com/questions/31872/how-do-i-reset-the-scrollback-in-the-terminal-via-a-shell-command
 alias clear="clear && printf '\e[3J'"
@@ -205,6 +206,7 @@ typeset -agU chpwd_functions;
 _direnv_hook() {
   (( $+commands[direnv] )) || return
   trap -- '' SIGINT;eval "$(direnv export zsh)";trap - SIGINT;
+  [ -f .envrc ] && grep -q '^ *alias ' .envrc || rm -rf .direnv
 }
 chpwd_functions=( _direnv_hook ${chpwd_functions[@]} )
 _direnv_hook >/dev/null 2>&1

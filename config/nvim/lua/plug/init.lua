@@ -4,7 +4,6 @@ return {
 
   'johmsalas/text-case.nvim',
   'shiradofu/print-debug.nvim',
-  { 'gpanders/editorconfig.nvim', event = 'VeryLazy' },
   { 'gbprod/substitute.nvim', config = true },
   { 'thinca/vim-qfreplace', cmd = 'Qfreplace' },
   { 'norcalli/nvim-colorizer.lua', config = true },

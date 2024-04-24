@@ -12,11 +12,17 @@ alias_dir=$PWD/.direnv/aliases
 rm -rf "$alias_dir"
 
 alias() {
+  if [ -z "$alias_init" ]; then
+    oldpath="$PATH"
+    mkdir -p "$alias_dir"
+    PATH_add "$alias_dir"
+  fi
+  alias_init="true"
+
   name=$1; shift
   target="$alias_dir/$name"
-  mkdir -p "$alias_dir"
-  PATH_add "$alias_dir"
   echo "#!$SHELL" > "$target"
+  echo "PATH=\"$oldpath\"" >> "$target"
   echo "$* \"\$@\"" >> "$target"
   chmod +x "$target"
 }

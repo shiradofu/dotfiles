@@ -1,6 +1,6 @@
 # Makefile as a test runner
 
-.PHONY: $(shell egrep -o ^[a-zA-Z_-]+: $(MAKEFILE_LIST) | sed 's/://')
+MAKEFLAGS += --always-make
 
 TEMPFILE = .test_output.tmp
 

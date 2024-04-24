@@ -49,4 +49,7 @@ export PATH="$ASDF_DIR/bin:$PATH"
 export PATH="$GOPATH/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
 
+export YTMOC_DIR="$MY_REPOS/ytmoclist"
+export YTMOC_MOCOPT="-M $XDG_CONFIG_HOME/moc"
+
 skip_global_compinit=1

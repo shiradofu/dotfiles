@@ -92,7 +92,11 @@ return {
           ['<cr>'] = a.focus_entry,
 
           ['<C-j>'] = function()
-            if not pcall(a.focus_entry) then vim.cmd [[wincmd p]] end
+            local wid = vim.api.nvim_get_current_win()
+            a.focus_entry()
+            if wid == vim.api.nvim_get_current_win() then
+              vim.cmd [[wincmd p]]
+            end
           end,
           ['<C-t>'] = a.goto_file_tab,
           ['<C-g>'] = a.toggle_files,

@@ -30,8 +30,8 @@ cancel() {
 }
 
 # main()
-cmd=$1
-remote=$2
+cmd=$1;shift
+remote=$1;shift
 case "$cmd" in
 send-to|receive-from);;
 * ) echo "$cmd: invalid command" >&2 && exit 1
@@ -83,10 +83,10 @@ receive-from )
     case "$yn" in
       no ) cancel;;
       dry-run )
-        rsync -ahv --delete -n "$remote:$RROOT/$repo/" "$lroot/$repo/" | less
+        rsync -ahv --delete -n "@" "$remote:$RROOT/$repo/" "$lroot/$repo/" | less
         ;;
       yes )
-        rsync -ahv --delete "$remote:$RROOT/$repo/" "$lroot/$repo/"
+        rsync -ahvz --delete "$@" "$remote:$RROOT/$repo/" "$lroot/$repo/"
         break
         ;;
     esac

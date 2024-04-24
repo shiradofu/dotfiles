@@ -1,7 +1,7 @@
 -- stylua: ignore start
 vim.opt.fileformat  = 'unix'
 vim.opt.encoding    = 'utf-8'
-vim.opt.tabstop     = 4
+vim.opt.tabstop     = 3
 vim.opt.shiftwidth  = 2
 vim.opt.expandtab   = true
 vim.opt.smartindent = true      -- C言語風のプログラミング言語向けの自動インデント
