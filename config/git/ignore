@@ -102,10 +102,3 @@ docker-compose.override.yml
 
 .envrc
 .direnv/
-
-
-########
-# asdf #
-########
-
-.tool-versions

@@ -19,6 +19,7 @@ return {
     local ts_map = mappings.treesitter_textobjects
 
     require('nvim-treesitter.configs').setup {
+      -- TODO: へらす
       ensure_installed = 'all',
       highlight = { enable = true },
       indent = { enable = false },

@@ -38,3 +38,5 @@
   path = user.gitconfig
   path = credential.gitconfig
   path = _chcs.gitconfig
+[http]
+	postBuffer = 524288000

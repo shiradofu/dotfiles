@@ -175,7 +175,8 @@ return {
       lazy = false,
     },
     'b0o/SchemaStore.nvim',
-    -- { 'folke/neodev.nvim', config = true },
+    'bitpoke/wordpress.nvim',
+    { 'folke/lazydev.nvim', ft = 'lua' },
   },
   config = function()
     require('mason').setup {
@@ -216,8 +217,8 @@ return {
         },
       },
     }
-    Nls:insert(nfn.formatting.stylua)
-    Fmt.lua = create_fmt_fn 'null-ls'
+    -- Nls:insert(nfn.formatting.stylua)
+    -- Fmt.lua = create_fmt_fn 'null-ls'
 
     --
     -- JavaScript/TypeScript
@@ -230,6 +231,7 @@ return {
       --   client.server_capabilities.documentFormattingProvider = false
       -- end,
     }
+
     Lsp.denols = {
       root_dir = root_pattern('deno.json', 'deno.jsonc'),
       single_file_support = false,
@@ -354,8 +356,15 @@ return {
     -----------------------------
     -----------------------------
     Lsp.intelephense = {
-      handlers = {
-        ['textDocument/publishDiagnostics'] = function(...) end,
+      -- handlers = {
+      --   ['textDocument/publishDiagnostics'] = function(...) end,
+      -- },
+      settings = {
+        intelephense = {
+          format = {
+            braces = 'k&r',
+          },
+        },
       },
     }
     Nls:insert(nfn.diagnostics.phpstan.with {
@@ -365,7 +374,8 @@ return {
     Nls:insert(nfn.formatting.phpcsfixer.with {
       only_local = 'vendor/bin',
     })
-    Fmt.php = create_fmt_fn 'null-ls'
+    -- Fmt.php = create_fmt_fn 'null-ls'
+    Fmt.php = create_fmt_fn 'intelephense'
 
     --
     -- JSON
@@ -452,6 +462,15 @@ return {
         if server_name == 'rust_analyzer' then
           vim.g.rustaceanvim = { server = config }
           return
+        end
+        if server_name == 'intelephense' then
+          if root_pattern '.wp-env.json'(vim.fn.getcwd()) then
+            local wp = require 'wordpress'
+            require('lspconfig')[server_name].setup(
+              vim.tbl_deep_extend('keep', config, wp.intelephense)
+            )
+            return
+          end
         end
         require('lspconfig')[server_name].setup(config)
       end,

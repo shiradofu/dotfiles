@@ -99,11 +99,11 @@ case "${DIST}" in
     echo "${password}" | sudo -S apt -y update
     # required by homebrew
     echo "${password}" | sudo -S apt -y install build-essential procps curl file git bash
-    # required by asdf-deno and bun
+    # required by deno and bun
     echo "${password}" | sudo -S apt -y install unzip
-    # required by asdf-python
-    echo "${password}" | sudo -S apt -y install make build-essential libssl-dev zlib1g-dev \
-      libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
+    # required by python
+    echo "${password}" | sudo -S apt -y install make build-essential libssl-dev \
+      zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
       libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
     # required by install.sh
     echo "${password}" | sudo -S apt -y install expect
@@ -116,9 +116,9 @@ case "${DIST}" in
     # required by homebrew
     echo "${password}" | sudo -S yum -y groupinstall 'Development Tools'
     echo "${password}" | sudo -S yum -y install procps-ng curl file git bash
-    # required by asdf-deno and bun
+    # required by deno and bun
     echo "${password}" | sudo -S dnf -y install unzip
-    # required by asdf-python
+    # required by python
     echo "${password}" | sudo -S dnf -y install make gcc zlib-devel bzip2 bzip2-devel \
       readline-devel sqlite sqlite-devel openssl-devel tk-devel libffi-devel xz-devel
     # required by install.sh
@@ -150,9 +150,9 @@ if ! exists "brew"; then
 fi
 
 if [ "$DIST" = 'mac' ]; then
-  # required by asdf-deno and bun
+  # required by deno and bun
   brew install unzip
-  # required by asdf-python
+  # required by python
   brew install openssl readline sqlite3 xz zlib
   # required by install.sh
   brew install expect

@@ -21,6 +21,7 @@ end)
 local config = {
   use_ime = true,
   macos_forward_to_ime_modifier_mask = 'CTRL',
+  macos_window_background_blur = 20,
   window_decorations = 'RESIZE',
   hide_tab_bar_if_only_one_tab = true,
   window_padding = { left = 0, right = 0, top = 0, bottom = 0 },

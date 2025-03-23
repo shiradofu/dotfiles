@@ -36,10 +36,14 @@ local function setup_project_mru()
       local bufnr = tonumber(buffer:match '%s*(%d+)')
       if bufnr then
         local file = vim.api.nvim_buf_get_name(bufnr)
-        local fs_stat = not opts.stat_file and true or vim.loop.fs_stat(file)
+        local is_valid_file = true
+        if opts.fs_stat then
+          local fs_stat = vim.loop.fs_stat(file)
+          is_valid_file = fs_stat == nil and false or fs_stat.type == 'file'
+        end
         if
           #file > 0
-          and fs_stat
+          and is_valid_file
           and path.is_relative_to(file, cwd)
           and not opts.exclude(file)
         then

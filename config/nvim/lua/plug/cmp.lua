@@ -17,22 +17,7 @@ return {
     local compare = cmp.config.compare
 
     cmp.setup {
-      sorting = {
-        comparators = {
-          compare.offset,
-          compare.exact,
-          compare.scopes,
-          compare.score,
-          compare.recently_used,
-          require('cmp-under-comparator').under,
-          compare.kind,
-          compare.locality,
-          compare.sort_text,
-          compare.length,
-          compare.order,
-        },
-      },
-      completion = { autocomplete = false },
+      -- completion = { autocomplete = false },
       snippet = { expand = function(args) vim.snippet.expand(args.body) end },
       window = {
         completion = cmp.config.window.bordered(),
@@ -88,6 +73,7 @@ return {
         { name = 'path' },
         {
           name = 'rg',
+          max_item_count = 5,
           option = {
             additional_arguments = "-g '!*.svg'"
               .. " -g '!composer.lock'"
@@ -124,6 +110,21 @@ return {
     })
 
     cmp.setup.filetype('rust', {
+      sorting = {
+        comparators = {
+          compare.offset,
+          compare.exact,
+          compare.scopes,
+          compare.score,
+          compare.recently_used,
+          require('cmp-under-comparator').under,
+          compare.kind,
+          compare.locality,
+          compare.sort_text,
+          compare.length,
+          compare.order,
+        },
+      },
       snippet = {
         expand = function(args)
           args.body = args.body:gsub('…(.*)$', '$0%1')

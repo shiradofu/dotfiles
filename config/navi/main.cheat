@@ -1,6 +1,9 @@
-% nvim
+% update
 
-# update plugins
+# update all
+[ -n "$TMUX" ] && { tmux splitw 'zsh -c "mise upgrade"; exec zsh'; tmux splitw "zsh -c \"ulimit -S -n 200049; nvim \\\"+lua require('lazy').sync()\\\"\"; exec zsh"; tmux select-layout even-horizontal; brew upgrade; }
+
+# update nvim plugins
 ulimit -S -n 200048; nvim "+lua require('lazy').sync()"
 
 % git
@@ -51,12 +54,15 @@ $ backup_to: ls -1 /Volumes | grep -v -e 'Macintosh HD' -e '<backup_from>'
 
 % yt
 
-# download youtube videoes as mp3 and copy them to Apple Music
-read && [ "$REPLY" = 'y' ] && \
-yt-dlp -x --audio-format mp3 \
-  --parse-metadata "playlist_index:%(track_number)s" \
-  --add-metadata \
-  -o "%(title)s.%(ext)s" \
-  "<URL>" && \
-mv ./*.mp3 "${HOME}/Music/Music/Media.localized/Automatically Add to Music.localized/"
+# download youtube videoes as mp3
+ yt-dlp -x --audio-format mp3 -o "<title>.%(ext)s" "<URL>"
 
+$ title: echo "%(title)s" --- --fzf-overrides '--no-select-1'
+
+# download youtube videoes as mp3 and copy them to Apple Music
+ yt-dlp -x --audio-format mp3
+  --parse-metadata "playlist_index:%(track_number)s"
+  --add-metadata
+  -o "%(title)s.%(ext)s"
+  "<URL>" &&
+mv ./*.mp3 "${HOME}/Music/Music/Media.localized/Automatically Add to Music.localized/"

@@ -15,6 +15,8 @@ export CGO_LDFLAGS="-O2 -g -L$HOMEBREW_PREFIX/lib"
 export CGO_CFLAGS="-O2 -g -I$HOMEBREW_PREFIX/include"
 export CGO_CXXFLAGS="-O2 -g -I$HOMEBREW_PREFIX/include"
 
+export DOCKER_HOST=
+
 if is_mac; then
   # export PATH="$HOMEBREW_PREFIX/opt/binutils/libexec/gnubin:$PATH"
   export PATH="$HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin:$PATH"
@@ -30,7 +32,7 @@ if is_mac; then
   export MANPATH="$HOMEBREW_PREFIX/opt/grep/libexec/gnuman:$MANPATH"
   export MANPATH="$HOMEBREW_PREFIX/opt/gnu-sed/libexec/gnuman:$MANPATH"
   export MANPATH="$HOMEBREW_PREFIX/opt/gnu-tar/libexec/gnuman:$MANPATH"
-  export DOCKER_HOST="unix://$HOME/.colima/default/docker.sock" # for lazydocker
+  export DOCKER_HOST="unix://$XDG_CONFIG_HOME/colima/default/docker.sock"
 fi
 
 if is_wsl; then
